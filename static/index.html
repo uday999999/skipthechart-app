@@ -81,12 +81,12 @@
         <span class="text-slate-600">→</span>
         <button type="button" onclick="goToStep(2)" id="step-pill-2" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 shrink-0 cursor-pointer hover:opacity-90 transition">
           <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 text-[11px] flex items-center justify-center font-bold">2</span>
-          <span>2. Capital & Equity</span>
+          <span>2. Choose Strategy</span>
         </button>
         <span class="text-slate-600">→</span>
         <button type="button" onclick="goToStep(3)" id="step-pill-3" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 shrink-0 cursor-pointer hover:opacity-90 transition">
           <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 text-[11px] flex items-center justify-center font-bold">3</span>
-          <span>3. Trading Goal</span>
+          <span>3. Capital & Equity</span>
         </button>
         <span class="text-slate-600">→</span>
         <button type="button" onclick="goToStep(4)" id="step-pill-4" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 shrink-0 cursor-pointer hover:opacity-90 transition">
@@ -290,11 +290,12 @@
       </div>
     </div>
 
+    <!-- ===============================    <!-- ========================================================================= -->
+    <!-- SCREEN 2: CHOOSE YOUR TRADING STRATEGY (CLEAR MINIMUM CAPITAL & 30% BUFFER)-->
+    <!-- User prompt: shift equity panel after strategy so user has clear idea      -->
+    <!-- of minimum required money (e.g. 70,000 margin requires 1,00,000 capital)   -->
     <!-- ========================================================================= -->
-    <!-- SCREEN 2: ALLOCATED CAPITAL & EQUITY UTILIZATION (10% to 70%)             -->
-    <!-- Appears after broker is chosen; broker grid has disappeared               -->
-    <!-- ========================================================================= -->
-    <div id="screen-capital" class="space-y-5 hidden">
+    <div id="screen-strategy" class="space-y-5 hidden">
       <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
           <div class="flex items-center gap-3">
@@ -302,38 +303,355 @@
               2
             </div>
             <div>
-              <h2 class="text-lg font-black text-white">Step 2: Allocate Capital & Set Equity Utilization</h2>
-              <p class="text-xs text-slate-400">Decide how much trading capital to allocate and how much active margin to use.</p>
+              <h2 class="text-lg font-black text-white">Step 2: Choose Your Trading Strategy (Pick 1 Goal)</h2>
+              <p class="text-xs text-slate-400 mt-0.5">
+                Every strategy specifies its <strong>broker margin requirement</strong> and mandatory <strong>30% cash buffer</strong> for SEBI peak margin rules.
+              </p>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <span class="text-xs text-slate-400">Selected Broker:</span>
-            <span id="capital-screen-broker-tag" class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/50 text-cyan-300 font-mono font-bold text-xs rounded-lg">
+            <!-- Return to Live Dashboard (shown for active subscribers) -->
+            <button type="button" id="btn-return-to-dash" onclick="returnToLiveDashboard()" class="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-bold text-xs rounded-lg transition flex items-center gap-1.5 hidden shadow-sm">
+              <span>⚡</span> Return to Live Dashboard
+            </button>
+            <span class="text-xs text-slate-400">Connected Broker:</span>
+            <span id="strat-screen-broker-tag" class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/50 text-cyan-300 font-mono font-bold text-xs rounded-lg">
               Flattrade
             </span>
             <button type="button" onclick="goToStep(1)" class="text-[11px] text-slate-400 hover:text-cyan-300 underline ml-1">Change</button>
           </div>
         </div>
 
-        <!-- Capital Amount Input -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div class="lg:col-span-7 space-y-4">
+        <!-- SEBI 30% Buffer Policy Banner -->
+        <div class="bg-gradient-to-r from-cyan-950/40 via-slate-900 to-indigo-950/40 border border-cyan-500/30 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs shadow-lg">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold text-lg">
+              🛡️
+            </div>
             <div>
-              <label class="text-xs font-semibold text-slate-300 block mb-2">How much total capital is in your trading account?</label>
-              <div class="relative">
-                <span class="absolute left-4 top-3 text-cyan-400 font-bold text-lg font-mono">₹</span>
-                <input type="number" id="capital-input" value="25000" step="5000" min="5000" oninput="updateCapitalCalculations()" class="w-full bg-slate-950 border-2 border-slate-700 rounded-2xl py-3 pl-10 pr-4 text-white font-mono text-xl font-bold outline-none focus:border-cyan-500">
+              <div class="text-white font-bold text-sm">SEBI Peak Margin & Liquid Buffer Requirement:</div>
+              <p class="text-slate-300 text-[11px] mt-0.5">
+                To prevent margin penalty rejections and absorb daily MTM drawdowns, the bot operates at a <strong class="text-cyan-300 font-semibold">max 70% active margin utilization</strong> and retains a <strong class="text-emerald-400 font-semibold">mandatory 30% cash buffer</strong> in your trading account.
+              </p>
+            </div>
+          </div>
+          <div class="text-[11px] text-slate-400 font-mono px-3 py-1.5 bg-slate-950/80 rounded-xl border border-slate-800">
+            Formula: <span class="text-cyan-300 font-bold">Active Margin ÷ 70% = Total Account Capital</span>
+          </div>
+        </div>
+
+        <!-- 4 Strategy Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+          <!-- Strategy 1: Daily Income Theta Harvester (Featured Hedged Strategy) -->
+          <div onclick="selectStrategyAndProceedToCapital('theta_harvester')" id="card-theta_harvester" class="p-5 bg-slate-950 border-2 border-cyan-500/80 rounded-2xl cursor-pointer space-y-3 hover:border-cyan-400 transition-all hover:scale-[1.01] shadow-lg shadow-cyan-500/10 relative flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold rounded-md uppercase">
+                  ⭐ Flagship Hedged
+                </span>
+                <span class="text-indigo-400 font-mono text-xs font-semibold">NSE: NIFTY/BANKNIFTY</span>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span>💰</span> Daily Income Theta Harvester
+                </h3>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Zero direction guessing! Sells options away from market price at 9:20 AM with bought hedge wings, collecting daily time decay (theta).
+                </p>
+              </div>
+
+              <!-- Mandatory Minimum Capital Box -->
+              <div class="p-3 bg-slate-900 rounded-xl border border-cyan-500/40 space-y-1.5">
+                <div class="flex justify-between items-center">
+                  <span class="text-[11px] text-slate-300 font-bold uppercase tracking-wider">Min. Account Capital:</span>
+                  <span class="font-black text-cyan-300 font-mono text-base">₹ 1,00,000</span>
+                </div>
+                <div class="text-[10px] text-slate-400 space-y-0.5 pt-1 border-t border-slate-800">
+                  <div class="flex justify-between">
+                    <span>Active Margin (1 Lot):</span>
+                    <span class="font-mono text-white font-semibold">₹ 70,000</span>
+                  </div>
+                  <div class="flex justify-between text-emerald-400">
+                    <span>Mandatory 30% Cash Buffer:</span>
+                    <span class="font-mono font-semibold">₹ 30,000</span>
+                  </div>
+                </div>
+                <div class="text-[9.5px] text-slate-500 font-mono text-center pt-0.5">
+                  ₹70,000 margin ÷ 70% util = ₹1,00,000 total
+                </div>
+              </div>
+
+              <div class="text-[11px] space-y-1 text-slate-300">
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Trading Style:</span>
+                  <span class="text-indigo-300 font-medium">Non-Directional Hedged</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Margin Discount:</span>
+                  <span class="text-emerald-400 font-mono font-bold">70% Hedged (SPAN)</span>
+                </div>
               </div>
             </div>
 
-            <!-- Quick Capital Chips -->
-            <div class="flex flex-wrap gap-2 text-xs">
-              <span class="text-slate-400 py-1 text-[11px]">Quick presets:</span>
-              <button type="button" onclick="setCapitalPreset(15000)" class="px-3 py-1 bg-slate-900 border border-slate-800 hover:border-cyan-500 rounded-xl font-mono text-slate-300">₹ 15,000</button>
-              <button type="button" onclick="setCapitalPreset(25000)" class="px-3 py-1 bg-cyan-950 border border-cyan-500 text-cyan-300 rounded-xl font-mono font-bold">₹ 25,000</button>
-              <button type="button" onclick="setCapitalPreset(50000)" class="px-3 py-1 bg-slate-900 border border-slate-800 hover:border-cyan-500 rounded-xl font-mono text-slate-300">₹ 50,000</button>
-              <button type="button" onclick="setCapitalPreset(100000)" class="px-3 py-1 bg-slate-900 border border-slate-800 hover:border-cyan-500 rounded-xl font-mono text-slate-300">₹ 1,00,000</button>
-              <button type="button" onclick="setCapitalPreset(200000)" class="px-3 py-1 bg-slate-900 border border-slate-800 hover:border-cyan-500 rounded-xl font-mono text-slate-300">₹ 2,00,000</button>
+            <div class="space-y-1.5 mt-2">
+              <button type="button" onclick="event.stopPropagation(); selectStrategyAndProceedToCapital('theta_harvester')" class="w-full py-2 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
+                <span>Select & Allocate Capital</span>
+                <span>→</span>
+              </button>
+              <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('theta_harvester')" class="w-full py-1 text-[11px] text-slate-400 hover:text-cyan-300 transition text-center underline">
+                ⚙️ View / Edit Rulebook
+              </button>
+            </div>
+          </div>
+
+          <!-- Strategy 2: BankNifty Fast Scalper -->
+          <div onclick="selectStrategyAndProceedToCapital('banknifty_scalp')" id="card-banknifty_scalp" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-amber-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold rounded-md uppercase">
+                  ⚡ High Action
+                </span>
+                <span class="text-amber-400 font-mono text-xs font-semibold">NSE: BANKNIFTY</span>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span>⚡</span> BankNifty Fast Scalper
+                </h3>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Fast 15-minute momentum strikes on BankNifty index. In and out before 3:15 PM with tight trailing stop-loss. High profit potential.
+                </p>
+              </div>
+
+              <!-- Mandatory Minimum Capital Box -->
+              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5">
+                <div class="flex justify-between items-center">
+                  <span class="text-[11px] text-slate-300 font-bold uppercase tracking-wider">Min. Account Capital:</span>
+                  <span class="font-black text-amber-300 font-mono text-base">₹ 50,000</span>
+                </div>
+                <div class="text-[10px] text-slate-400 space-y-0.5 pt-1 border-t border-slate-800">
+                  <div class="flex justify-between">
+                    <span>Active Margin (1 Lot):</span>
+                    <span class="font-mono text-white font-semibold">₹ 35,000</span>
+                  </div>
+                  <div class="flex justify-between text-emerald-400">
+                    <span>Mandatory 30% Cash Buffer:</span>
+                    <span class="font-mono font-semibold">₹ 15,000</span>
+                  </div>
+                </div>
+                <div class="text-[9.5px] text-slate-500 font-mono text-center pt-0.5">
+                  ₹35,000 margin ÷ 70% util = ₹50,000 total
+                </div>
+              </div>
+
+              <div class="text-[11px] space-y-1 text-slate-300">
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Trading Style:</span>
+                  <span class="text-amber-300 font-medium">Momentum Breakouts</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Exit Rule:</span>
+                  <span class="text-amber-400 font-mono font-bold">Auto Square-off 3:15 PM</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-1.5 mt-2">
+              <button type="button" onclick="event.stopPropagation(); selectStrategyAndProceedToCapital('banknifty_scalp')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 text-slate-200 font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
+                <span>Select & Allocate Capital</span>
+                <span>→</span>
+              </button>
+              <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('banknifty_scalp')" class="w-full py-1 text-[11px] text-slate-400 hover:text-cyan-300 transition text-center underline">
+                ⚙️ View / Edit Rulebook
+              </button>
+            </div>
+          </div>
+
+          <!-- Strategy 3: Nifty Safe Trend Rider -->
+          <div onclick="selectStrategyAndProceedToCapital('trend_rider')" id="card-trend_rider" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold rounded-md uppercase">
+                  ⭐ Directional
+                </span>
+                <span class="text-cyan-400 font-mono text-xs font-semibold">NSE: NIFTY 50</span>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span>🚀</span> Nifty Safe Trend Rider
+                </h3>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Automatically buys Calls (CE) during rallies and Puts (PE) during market falls. Exits instantly if stop-loss is hit.
+                </p>
+              </div>
+
+              <!-- Mandatory Minimum Capital Box -->
+              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5">
+                <div class="flex justify-between items-center">
+                  <span class="text-[11px] text-slate-300 font-bold uppercase tracking-wider">Min. Account Capital:</span>
+                  <span class="font-black text-cyan-300 font-mono text-base">₹ 25,000</span>
+                </div>
+                <div class="text-[10px] text-slate-400 space-y-0.5 pt-1 border-t border-slate-800">
+                  <div class="flex justify-between">
+                    <span>Active Margin (1 Lot):</span>
+                    <span class="font-mono text-white font-semibold">₹ 17,500</span>
+                  </div>
+                  <div class="flex justify-between text-emerald-400">
+                    <span>Mandatory 30% Cash Buffer:</span>
+                    <span class="font-mono font-semibold">₹ 7,500</span>
+                  </div>
+                </div>
+                <div class="text-[9.5px] text-slate-500 font-mono text-center pt-0.5">
+                  ₹17,500 margin ÷ 70% util = ₹25,000 total
+                </div>
+              </div>
+
+              <div class="text-[11px] space-y-1 text-slate-300">
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Trading Style:</span>
+                  <span class="text-cyan-300 font-medium">Automatic 2-Way (CE / PE)</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Risk-to-Reward:</span>
+                  <span class="text-emerald-400 font-mono font-bold">1 : 2 Target</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-1.5 mt-2">
+              <button type="button" onclick="event.stopPropagation(); selectStrategyAndProceedToCapital('trend_rider')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 text-slate-200 font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
+                <span>Select & Allocate Capital</span>
+                <span>→</span>
+              </button>
+              <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('trend_rider')" class="w-full py-1 text-[11px] text-slate-400 hover:text-cyan-300 transition text-center underline">
+                ⚙️ View / Edit Rulebook
+              </button>
+            </div>
+          </div>
+
+          <!-- Strategy 4: FinNifty & Midcap Expiry Hunter -->
+          <div onclick="selectStrategyAndProceedToCapital('expiry_hunter')" id="card-expiry_hunter" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-purple-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 bg-purple-500/20 border border-purple-500/30 text-purple-300 text-[10px] font-bold rounded-md uppercase">
+                  🔥 Expiry Momentum
+                </span>
+                <span class="text-purple-400 font-mono text-xs font-semibold">NSE: FINNIFTY/MIDCAP</span>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span>🎯</span> FinNifty & Midcap Expiry Hunter
+                </h3>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Specialized for weekly expiries. Catches explosive gamma spikes with tight trailing stop-loss.
+                </p>
+              </div>
+
+              <!-- Mandatory Minimum Capital Box -->
+              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5">
+                <div class="flex justify-between items-center">
+                  <span class="text-[11px] text-slate-300 font-bold uppercase tracking-wider">Min. Account Capital:</span>
+                  <span class="font-black text-purple-300 font-mono text-base">₹ 15,000</span>
+                </div>
+                <div class="text-[10px] text-slate-400 space-y-0.5 pt-1 border-t border-slate-800">
+                  <div class="flex justify-between">
+                    <span>Active Margin (1 Lot):</span>
+                    <span class="font-mono text-white font-semibold">₹ 10,500</span>
+                  </div>
+                  <div class="flex justify-between text-emerald-400">
+                    <span>Mandatory 30% Cash Buffer:</span>
+                    <span class="font-mono font-semibold">₹ 4,500</span>
+                  </div>
+                </div>
+                <div class="text-[9.5px] text-slate-500 font-mono text-center pt-0.5">
+                  ₹10,500 margin ÷ 70% util = ₹15,000 total
+                </div>
+              </div>
+
+              <div class="text-[11px] space-y-1 text-slate-300">
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Trading Style:</span>
+                  <span class="text-purple-300 font-medium">Expiry Breakouts (CE/PE)</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Market:</span>
+                  <span class="text-purple-400 font-mono font-bold">NSE Weekly Options</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-1.5 mt-2">
+              <button type="button" onclick="event.stopPropagation(); selectStrategyAndProceedToCapital('expiry_hunter')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-purple-500/50 text-slate-200 font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
+                <span>Select & Allocate Capital</span>
+                <span>→</span>
+              </button>
+              <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('expiry_hunter')" class="w-full py-1 text-[11px] text-slate-400 hover:text-cyan-300 transition text-center underline">
+                ⚙️ View / Edit Rulebook
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SCREEN 3: ALLOCATE CAPITAL & EQUITY UTILIZATION (SCOPED TO CHOSEN STRATEGY)-->
+    <!-- Shifted after strategy so user has clear idea of minimum required money   -->
+    <!-- ========================================================================= -->
+    <div id="screen-capital" class="space-y-5 hidden">
+      <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-sm font-bold">
+              3
+            </div>
+            <div>
+              <h2 class="text-lg font-black text-white">Step 3: Allocate Capital & Set Equity Utilization</h2>
+              <p class="text-xs text-slate-400" id="capital-screen-subheading">
+                Configuring capital for <strong class="text-cyan-300" id="capital-selected-strat-name">Daily Income Theta Harvester</strong>.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-400">Selected Strategy:</span>
+            <span id="capital-screen-strat-tag" class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/50 text-cyan-300 font-mono font-bold text-xs rounded-lg">
+              💰 Daily Income Theta Harvester
+            </span>
+            <button type="button" onclick="goToStep(2)" class="text-[11px] text-slate-400 hover:text-cyan-300 underline ml-1">Change Strategy</button>
+          </div>
+        </div>
+
+        <!-- Strategy Requirement Notice Banner -->
+        <div id="capital-strat-requirement-box" class="p-4 bg-gradient-to-r from-cyan-950/30 to-indigo-950/30 border border-cyan-500/40 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xl" id="req-box-icon">💰</span>
+            <div>
+              <div class="text-white font-bold" id="req-box-title">Daily Income Theta Harvester Requirement</div>
+              <div class="text-slate-300 text-[11px]" id="req-box-desc">
+                Requires <strong class="text-white font-mono">₹ 70,000</strong> active margin (1 lot). With mandatory 30% cash buffer, minimum required capital is <strong class="text-cyan-300 font-mono">₹ 1,00,000</strong>.
+              </div>
+            </div>
+          </div>
+          <div class="font-mono text-xs px-3 py-1 bg-slate-900 border border-slate-700 rounded-xl text-slate-300">
+            Min. Required: <span class="font-bold text-cyan-300" id="req-box-min">₹ 1,00,000</span>
+          </div>
+        </div>
+
+        <!-- Capital Amount Input & Controller -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7 space-y-4">
+            <div>
+              <label class="text-xs font-semibold text-slate-300 block mb-2">How much total trading capital will you keep in your broker account?</label>
+              <div class="relative">
+                <span class="absolute left-4 top-3 text-cyan-400 font-bold text-lg font-mono">₹</span>
+                <input type="number" id="capital-input" value="100000" step="5000" min="15000" oninput="updateCapitalCalculations()" class="w-full bg-slate-950 border-2 border-slate-700 rounded-2xl py-3 pl-10 pr-4 text-white font-mono text-xl font-bold outline-none focus:border-cyan-500">
+              </div>
+            </div>
+
+            <!-- Quick Capital Presets (Dynamically populated based on Strategy!) -->
+            <div id="capital-quick-presets" class="flex flex-wrap gap-2 text-xs">
+              <!-- Populated by updateCapitalScreenForStrategy() -->
             </div>
 
             <!-- Equity Utilization Controller (10% to 70%, default 70%) -->
@@ -376,7 +694,7 @@
             </div>
           </div>
 
-          <!-- Right 5 cols: Live Split Breakdown & Advance Button -->
+          <!-- Right 5 cols: Live Split Breakdown & Validation -->
           <div class="lg:col-span-5 flex flex-col justify-between space-y-4 bg-slate-950 p-5 rounded-2xl border border-slate-800">
             <div class="space-y-3">
               <h3 class="text-xs font-bold text-white flex items-center gap-1.5 border-b border-slate-800 pb-2">
@@ -389,7 +707,7 @@
                     <span>Active Margin</span>
                     <span id="breakdown-active-pct" class="font-mono">70%</span>
                   </div>
-                  <div class="text-lg font-black font-mono text-white" id="breakdown-active-amount">₹ 17,500</div>
+                  <div class="text-lg font-black font-mono text-white" id="breakdown-active-amount">₹ 70,000</div>
                   <div class="text-[10px] text-slate-400">Deployed for positions</div>
                 </div>
 
@@ -398,7 +716,7 @@
                     <span>Cash Buffer</span>
                     <span id="breakdown-buffer-pct" class="font-mono">30%</span>
                   </div>
-                  <div class="text-lg font-black font-mono text-white" id="breakdown-buffer-amount">₹ 7,500</div>
+                  <div class="text-lg font-black font-mono text-white" id="breakdown-buffer-amount">₹ 30,000</div>
                   <div class="text-[10px] text-slate-400">Absorbs MTM & peak margin</div>
                 </div>
               </div>
@@ -407,11 +725,11 @@
               <div class="space-y-1.5 text-[11px] text-slate-300 pt-1">
                 <div class="flex justify-between">
                   <span class="text-slate-500">Daily Max Loss Limit:</span>
-                  <span class="text-rose-400 font-mono font-bold" id="breakdown-max-loss">-₹ 1,050 (Auto Shut-off)</span>
+                  <span class="text-rose-400 font-mono font-bold" id="breakdown-max-loss">-₹ 4,200 (Auto Shut-off)</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-slate-500">Daily Profit Lock Target:</span>
-                  <span class="text-emerald-400 font-mono font-bold" id="breakdown-profit-target">+₹ 2,100</span>
+                  <span class="text-emerald-400 font-mono font-bold" id="breakdown-profit-target">+₹ 8,400</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-slate-500">Execution Lot Size:</span>
@@ -419,281 +737,18 @@
                 </div>
               </div>
 
-              <!-- Real-time Strategy Availability Preview -->
-              <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl space-y-1.5">
-                <div class="flex justify-between items-center text-[11px]">
-                  <span class="text-slate-400 font-semibold">Strategies Accessible with Current Allotment:</span>
-                  <span id="capital-supported-count" class="font-bold text-cyan-300 font-mono text-xs">2 of 4 Ready</span>
-                </div>
-                <div id="capital-strategy-pills" class="flex flex-wrap gap-1.5 text-[10px]">
-                  <!-- Injected via JS based on active margin -->
-                </div>
+              <!-- Real-time Strategy Validation Pill -->
+              <div id="capital-strategy-validation-status">
+                <!-- Injected via updateCapitalCalculations() -->
               </div>
             </div>
 
             <!-- Advance Button -->
-            <button type="button" onclick="confirmCapitalAndProceed()" class="w-full py-3.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-sm rounded-xl shadow-xl shadow-cyan-600/25 transition flex items-center justify-center gap-2">
-              <span>Continue to Choose Trading Goal</span>
+            <button type="button" onclick="confirmCapitalAndProceed()" id="btn-confirm-capital" class="w-full py-3.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-sm rounded-xl shadow-xl shadow-cyan-600/25 transition flex items-center justify-center gap-2">
+              <span>Continue to Mandatory 1-Year Backtest</span>
               <span>→</span>
             </button>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- SCREEN 3: CHOOSE YOUR TRADING GOAL (PICK 1 STRATEGY)                       -->
-    <!-- User prompt: Pre-built, thoroughly backtested, and optimized for Indian   -->
-    <!-- retail traders or build from the scratch from 100+ indicators available   -->
-    <!-- ========================================================================= -->
-    <div id="screen-strategy" class="space-y-5 hidden">
-      <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
-          <div>
-            <h2 class="text-lg font-black text-white">Choose Your Trading Goal (Pick 1 Strategy)</h2>
-            <p class="text-xs text-slate-400 mt-0.5">
-              Pre-built, thoroughly backtested, and optimized for Indian retail traders <span class="text-slate-500">or</span> <button type="button" onclick="openProBuilderModal()" class="text-cyan-400 hover:text-cyan-300 font-bold underline decoration-cyan-500/40 hover:decoration-cyan-400 underline-offset-2 transition inline-flex items-center gap-1">build from the scratch from 100+ indicators available <span>→</span></button>
-            </p>
-          </div>
-          <div class="flex items-center gap-2">
-            <!-- Return to Live Dashboard (shown for active subscribers) -->
-            <button type="button" id="btn-return-to-dash" onclick="returnToLiveDashboard()" class="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-bold text-xs rounded-lg transition flex items-center gap-1.5 hidden shadow-sm">
-              <span>⚡</span> Return to Live Dashboard
-            </button>
-            <span class="text-xs text-slate-400">Trading Capital:</span>
-            <span id="strat-screen-cap-tag" class="px-2.5 py-1 bg-slate-900 border border-slate-700 text-cyan-300 font-mono font-bold text-xs rounded-lg">
-              ₹ 25,000 (@ 70% util)
-            </span>
-            <button type="button" onclick="goToStep(2)" class="text-[11px] text-slate-400 hover:text-cyan-300 underline ml-1">Edit</button>
-          </div>
-        </div>
-
-        <!-- Allotted Margin Summary Banner -->
-        <div class="bg-gradient-to-r from-cyan-950/40 via-slate-900 to-indigo-950/40 border border-cyan-500/30 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs shadow-lg">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold text-lg">
-              ⚖️
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="text-white font-bold text-sm">Your Allotted Trading Margin:</span>
-                <span id="strat-summary-active" class="font-black text-cyan-300 font-mono text-base">₹ 17,500</span>
-              </div>
-              <p class="text-slate-400 text-[11px] mt-0.5">
-                Calculated from <span id="strat-summary-total" class="font-mono text-slate-300 font-semibold">₹ 25,000</span> total capital × <span id="strat-summary-pct" class="font-mono text-cyan-400 font-bold">70%</span> equity allotment (<span id="strat-summary-buffer" class="font-mono text-emerald-400 font-semibold">₹ 7,500</span> liquid cash buffer).
-              </p>
-            </div>
-          </div>
-          <div class="flex items-center gap-2">
-            <button type="button" onclick="goToStep(2)" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
-              <span>✏️</span> Edit Capital / Equity %
-            </button>
-          </div>
-        </div>
-
-        <!-- 4 Strategy Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-
-          <!-- Strategy 1: Nifty Safe Trend Rider -->
-          <div onclick="selectAndCustomizeStrategy('trend_rider')" id="card-trend_rider" class="p-5 bg-slate-950 border-2 border-cyan-500 rounded-2xl cursor-pointer space-y-3 hover:border-cyan-400 transition-all hover:scale-[1.01] shadow-lg shadow-cyan-500/10 relative flex flex-col justify-between">
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="px-2 py-0.5 bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold rounded-md uppercase">
-                  ⭐ Most Popular
-                </span>
-                <span class="text-cyan-400 font-mono text-xs font-semibold">NSE: NIFTY 50</span>
-              </div>
-              <div>
-                <h3 class="text-base font-bold text-white flex items-center gap-2">
-                  <span>🚀</span> Nifty Safe Trend Rider
-                </h3>
-                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Automatically buys Calls (CE) during rallies and Puts (PE) during market falls. Exits instantly if stop-loss is hit.
-                </p>
-              </div>
-
-              <!-- Dynamic Min Capital & Margin Requirement -->
-              <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1.5">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] text-slate-400 font-medium">Min. Capital Req:</span>
-                  <span class="font-black text-cyan-300 font-mono text-sm" id="min-cap-trend_rider">₹ 21,500</span>
-                </div>
-                <div class="text-[10px] text-slate-400 font-mono flex items-center justify-between">
-                  <span id="min-cap-math-trend_rider">₹15,000 margin ÷ 70% eq</span>
-                  <span class="text-slate-500">1 Lot base</span>
-                </div>
-                <div id="min-cap-status-trend_rider" class="pt-1 border-t border-slate-800/80 text-[10.5px]">
-                  <!-- Injected via updateStrategyCardsMinCap() -->
-                </div>
-              </div>
-
-              <div class="text-[11px] space-y-1 text-slate-300">
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Trading Style:</span>
-                  <span class="text-cyan-300 font-medium">Automatic 2-Way (CE / PE)</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Risk-to-Reward:</span>
-                  <span class="text-emerald-400 font-mono font-bold">1 : 2 Target</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="w-full py-2 bg-gradient-to-r from-cyan-600/40 to-indigo-600/40 text-cyan-300 text-center font-bold text-xs rounded-xl border border-cyan-500/50 flex items-center justify-center gap-1.5 mt-2">
-              <span>⚙️</span> Select & View/Edit Rules →
-            </div>
-          </div>
-
-          <!-- Strategy 2: Daily Income Theta Harvester -->
-          <div onclick="selectAndCustomizeStrategy('theta_harvester')" id="card-theta_harvester" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-indigo-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative flex flex-col justify-between">
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="px-2 py-0.5 bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-[10px] font-bold rounded-md uppercase">
-                  🛡️ Low Stress
-                </span>
-                <span class="text-indigo-400 font-mono text-xs font-semibold">NSE: NIFTY/BANKNIFTY</span>
-              </div>
-              <div>
-                <h3 class="text-base font-bold text-white flex items-center gap-2">
-                  <span>💰</span> Daily Income Harvester
-                </h3>
-                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Zero direction guessing! Sells options away from market price at 9:20 AM and pockets daily time decay (theta) without caring if market goes up or down.
-                </p>
-              </div>
-
-              <!-- Dynamic Min Capital & Margin Requirement -->
-              <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1.5">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] text-slate-400 font-medium">Min. Capital Req:</span>
-                  <span class="font-black text-indigo-300 font-mono text-sm" id="min-cap-theta_harvester">₹ 64,300</span>
-                </div>
-                <div class="text-[10px] text-slate-400 font-mono flex items-center justify-between">
-                  <span id="min-cap-math-theta_harvester">₹45,000 margin ÷ 70% eq</span>
-                  <span class="text-slate-500">1 Lot base</span>
-                </div>
-                <div id="min-cap-status-theta_harvester" class="pt-1 border-t border-slate-800/80 text-[10.5px]">
-                  <!-- Injected via updateStrategyCardsMinCap() -->
-                </div>
-              </div>
-
-              <div class="text-[11px] space-y-1 text-slate-300">
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Trading Style:</span>
-                  <span class="text-indigo-300 font-medium">Non-Directional Straddle</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Margin Discount:</span>
-                  <span class="text-emerald-400 font-mono font-bold">70% Hedged</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="w-full py-2 bg-slate-900 text-slate-300 text-center font-bold text-xs rounded-xl border border-slate-800 hover:border-indigo-500/50 flex items-center justify-center gap-1.5 mt-2">
-              <span>⚙️</span> Select & View/Edit Rules →
-            </div>
-          </div>
-
-          <!-- Strategy 3: BankNifty Fast Scalper -->
-          <div onclick="selectAndCustomizeStrategy('banknifty_scalp')" id="card-banknifty_scalp" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-amber-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative flex flex-col justify-between">
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="px-2 py-0.5 bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold rounded-md uppercase">
-                  ⚡ High Action
-                </span>
-                <span class="text-amber-400 font-mono text-xs font-semibold">NSE: BANKNIFTY</span>
-              </div>
-              <div>
-                <h3 class="text-base font-bold text-white flex items-center gap-2">
-                  <span>⚡</span> BankNifty Fast Scalper
-                </h3>
-                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Fast 15-minute momentum strikes on BankNifty. In and out before 3:15 PM with tight trailing stop-loss. High profit potential.
-                </p>
-              </div>
-
-              <!-- Dynamic Min Capital & Margin Requirement -->
-              <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1.5">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] text-slate-400 font-medium">Min. Capital Req:</span>
-                  <span class="font-black text-amber-300 font-mono text-sm" id="min-cap-banknifty_scalp">₹ 35,800</span>
-                </div>
-                <div class="text-[10px] text-slate-400 font-mono flex items-center justify-between">
-                  <span id="min-cap-math-banknifty_scalp">₹25,000 margin ÷ 70% eq</span>
-                  <span class="text-slate-500">1 Lot base</span>
-                </div>
-                <div id="min-cap-status-banknifty_scalp" class="pt-1 border-t border-slate-800/80 text-[10.5px]">
-                  <!-- Injected via updateStrategyCardsMinCap() -->
-                </div>
-              </div>
-
-              <div class="text-[11px] space-y-1 text-slate-300">
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Trading Style:</span>
-                  <span class="text-amber-300 font-medium">Momentum Breakouts</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Exit Rule:</span>
-                  <span class="text-amber-400 font-mono font-bold">Auto Square-off 3:15 PM</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="w-full py-2 bg-slate-900 text-slate-300 text-center font-bold text-xs rounded-xl border border-slate-800 hover:border-amber-500/50 flex items-center justify-center gap-1.5 mt-2">
-              <span>⚙️</span> Select & View/Edit Rules →
-            </div>
-          </div>
-
-          <!-- Strategy 4: FinNifty & Midcap Expiry Hunter -->
-          <div onclick="selectAndCustomizeStrategy('expiry_hunter')" id="card-expiry_hunter" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-purple-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative flex flex-col justify-between">
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="px-2 py-0.5 bg-purple-500/20 border border-purple-500/30 text-purple-300 text-[10px] font-bold rounded-md uppercase">
-                  🔥 Expiry Momentum
-                </span>
-                <span class="text-purple-400 font-mono text-xs font-semibold">NSE: FINNIFTY/MIDCAP</span>
-              </div>
-              <div>
-                <h3 class="text-base font-bold text-white flex items-center gap-2">
-                  <span>🎯</span> FinNifty & Midcap Expiry Hunter
-                </h3>
-                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Specialized for NSE weekly expiries (Monday Midcap, Tuesday FinNifty). Catches explosive gamma spikes with tight trailing stop-loss.
-                </p>
-              </div>
-
-              <!-- Dynamic Min Capital & Margin Requirement -->
-              <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1.5">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] text-slate-400 font-medium">Min. Capital Req:</span>
-                  <span class="font-black text-purple-300 font-mono text-sm" id="min-cap-expiry_hunter">₹ 14,300</span>
-                </div>
-                <div class="text-[10px] text-slate-400 font-mono flex items-center justify-between">
-                  <span id="min-cap-math-expiry_hunter">₹10,000 margin ÷ 70% eq</span>
-                  <span class="text-slate-500">1 Lot base</span>
-                </div>
-                <div id="min-cap-status-expiry_hunter" class="pt-1 border-t border-slate-800/80 text-[10.5px]">
-                  <!-- Injected via updateStrategyCardsMinCap() -->
-                </div>
-              </div>
-
-              <div class="text-[11px] space-y-1 text-slate-300">
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Trading Style:</span>
-                  <span class="text-purple-300 font-medium">Expiry Breakouts (CE/PE)</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Market:</span>
-                  <span class="text-purple-400 font-mono font-bold">NSE Weekly Options</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="w-full py-2 bg-slate-900 text-slate-300 text-center font-bold text-xs rounded-xl border border-slate-800 hover:border-purple-500/50 flex items-center justify-center gap-1.5 mt-2">
-              <span>⚙️</span> Select & View/Edit Rules →
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
@@ -704,7 +759,7 @@
     <!-- backtest and also the stratagies stays on page to choose between them too -->
     <!-- ========================================================================= -->
     <div id="screen-backtest" class="space-y-5 hidden">
-      <!-- Active Configuration & Previous Selections Bar (User request: choose from previous options like broker, equity allotment, or strategy) -->
+      <!-- Active Configuration & Previous Selections Bar (Order: 1. Broker, 2. Strategy, 3. Capital) -->
       <div class="bg-gradient-to-r from-[#0d1627] via-[#0d1322] to-[#0d1627] border border-cyan-500/40 rounded-2xl p-4 shadow-xl">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2">
@@ -716,7 +771,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
           <!-- Option 1: Selected Broker -->
           <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between hover:border-cyan-500/50 transition">
             <div class="space-y-0.5">
@@ -726,39 +781,39 @@
               </div>
             </div>
             <button type="button" onclick="goToStep(1)" class="px-2.5 py-1 bg-slate-900 hover:bg-cyan-950 text-cyan-400 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 rounded-lg text-[11px] font-bold transition flex items-center gap-1">
-              <span>↻</span> Change Broker
+              <span>↻</span> Change
             </button>
           </div>
 
-          <!-- Option 2: Capital & Equity Allotment -->
+          <!-- Option 2: Chosen Strategy (Step 2) -->
           <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between hover:border-cyan-500/50 transition">
             <div class="space-y-0.5">
-              <div class="text-[10px] text-slate-400 font-medium">2. Capital & Equity Allotment</div>
-              <div class="text-xs font-bold text-white font-mono" id="bt-summary-capital">
-                ₹ 25,000 <span class="text-cyan-400 font-sans text-[11px] font-medium">(70% Active Util)</span>
-              </div>
-            </div>
-            <button type="button" onclick="goToStep(2)" class="px-2.5 py-1 bg-slate-900 hover:bg-cyan-950 text-cyan-400 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 rounded-lg text-[11px] font-bold transition flex items-center gap-1">
-              <span>✎</span> Adjust Capital
-            </button>
-          </div>
-
-          <!-- Option 3: Chosen Strategy -->
-          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between hover:border-cyan-500/50 transition">
-            <div class="space-y-0.5">
-              <div class="text-[10px] text-slate-400 font-medium">3. Selected Trading Strategy</div>
+              <div class="text-[10px] text-slate-400 font-medium">2. Selected Trading Strategy</div>
               <div class="text-xs font-bold text-white truncate max-w-[140px]" id="bt-summary-strat">
-                🚀 Nifty Safe Trend Rider
+                💰 Daily Income Theta Harvester
               </div>
             </div>
             <div class="flex items-center gap-1.5">
-              <button type="button" onclick="goToStep(3)" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 rounded-lg text-[11px] font-bold transition">
-                All Strategies
+              <button type="button" onclick="goToStep(2)" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 rounded-lg text-[11px] font-bold transition">
+                Change Strategy
               </button>
               <button type="button" onclick="openCurrentStrategyCustomizer()" class="px-2 py-1 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-500/50 rounded-lg text-[11px] font-bold transition">
-                ⚙️ Edit Rules
+                ⚙️ Rules
               </button>
             </div>
+          </div>
+
+          <!-- Option 3: Capital & Equity Allotment (Step 3) -->
+          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between hover:border-cyan-500/50 transition">
+            <div class="space-y-0.5">
+              <div class="text-[10px] text-slate-400 font-medium">3. Capital & Equity Allotment</div>
+              <div class="text-xs font-bold text-white font-mono" id="bt-summary-capital">
+                ₹ 1,00,000 <span class="text-cyan-400 font-sans text-[11px] font-medium">(70% Active Util)</span>
+              </div>
+            </div>
+            <button type="button" onclick="goToStep(3)" class="px-2.5 py-1 bg-slate-900 hover:bg-cyan-950 text-cyan-400 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 rounded-lg text-[11px] font-bold transition flex items-center gap-1">
+              <span>✎</span> Adjust Capital
+            </button>
           </div>
         </div>
       </div>
@@ -1874,12 +1929,14 @@
       dailySwitchesRemaining: 3
     };
 
-    // Strategy Configurations & Base Margins
+    // Strategy Configurations & Exact Margin Requirements (with 30% cash buffer)
     const STRATEGY_DATA = {
       trend_rider: {
         name: "Nifty Safe Trend Rider",
         icon: "🚀",
-        baseMargin: 15000,
+        baseMargin: 17500,
+        minCapital: 25000,
+        bufferAmount: 7500,
         dataset: "nifty50",
         style: "Automatic 2-Way (CE / PE)",
         entry: "Buys Nifty ATM Call (CE) when 7-EMA crosses above 50-EMA on 5-min chart. Buys Put (PE) on bear crossover.",
@@ -1890,18 +1947,22 @@
       theta_harvester: {
         name: "Daily Income Theta Harvester",
         icon: "💰",
-        baseMargin: 45000,
+        baseMargin: 70000,
+        minCapital: 100000,
+        bufferAmount: 30000,
         dataset: "nifty50",
-        style: "Non-Directional Straddle",
-        entry: "Sells 1 OTM Call and 1 OTM Put at 9:20 AM with 25 delta, collecting daily premium time decay.",
+        style: "Non-Directional Hedged Straddle",
+        entry: "Sells 1 OTM Call and 1 OTM Put at 9:20 AM with bought hedge wings, collecting daily theta decay.",
         sl: "Combined premium stop-loss of 25% on each leg.",
-        tp: "Pockets daily theta decay if Nifty stays within 1.5% range.",
+        tp: "Pockets daily theta decay if index stays within range.",
         exit: "Auto square-off at 3:15 PM IST or target hit."
       },
       banknifty_scalp: {
         name: "BankNifty Fast Scalper",
         icon: "⚡",
-        baseMargin: 25000,
+        baseMargin: 35000,
+        minCapital: 50000,
+        bufferAmount: 15000,
         dataset: "banknifty",
         style: "Momentum Breakouts",
         entry: "Fast 15-minute high/low breakout momentum trigger on BankNifty index.",
@@ -1912,7 +1973,9 @@
       expiry_hunter: {
         name: "FinNifty & Midcap Expiry Hunter",
         icon: "🎯",
-        baseMargin: 10000,
+        baseMargin: 10500,
+        minCapital: 15000,
+        bufferAmount: 4500,
         dataset: "nifty50",
         style: "Expiry Breakouts (CE/PE)",
         entry: "Explosive gamma breakout trades on Monday Midcap & Tuesday FinNifty expiries.",
@@ -2271,13 +2334,13 @@
       if (stepNum === 1) {
         showScreen('screen-broker');
       } else if (stepNum === 2) {
-        showScreen('screen-capital');
-        document.getElementById('capital-screen-broker-tag').innerText = userState.selectedBrokerName;
-        updateCapitalCalculations();
-      } else if (stepNum === 3) {
         showScreen('screen-strategy');
-        document.getElementById('strat-screen-cap-tag').innerText = `₹ ${userState.totalCapital.toLocaleString('en-IN')} (@ ${userState.equityUtilizationPct}% util)`;
-        updateStrategyCardsMinCap();
+        const stratBrokerTag = document.getElementById('strat-screen-broker-tag');
+        if (stratBrokerTag) stratBrokerTag.innerText = userState.selectedBrokerName || 'Flattrade';
+        highlightSelectedStrategyCard(userState.selectedStrategy);
+      } else if (stepNum === 3) {
+        showScreen('screen-capital');
+        updateCapitalScreenForStrategy();
       } else if (stepNum === 4) {
         showScreen('screen-backtest');
         runSimpleBacktestSimulation();
@@ -2322,26 +2385,124 @@
         }
       });
 
-      // Advance to Step 2 (brokers disappear, capital appears)
+      // Advance to Step 2 (Choose Strategy)
       setTimeout(() => {
         goToStep(2);
       }, 350);
     }
 
-    // Step 2: Capital & Equity Utilization
+    // Highlight Strategy Card on Step 2
+    function highlightSelectedStrategyCard(stratKey) {
+      ['trend_rider', 'theta_harvester', 'banknifty_scalp', 'expiry_hunter'].forEach(k => {
+        const card = document.getElementById('card-' + k);
+        if (card) {
+          if (k === stratKey) {
+            card.className = "p-5 bg-slate-950 border-2 border-cyan-400 rounded-2xl cursor-pointer space-y-3 transition-all scale-[1.01] shadow-lg shadow-cyan-500/20 relative flex flex-col justify-between";
+          } else {
+            card.className = "p-5 bg-slate-950 border-2 border-slate-800 hover:border-slate-700 rounded-2xl cursor-pointer space-y-3 transition-all relative flex flex-col justify-between";
+          }
+        }
+      });
+    }
+
+    // Step 2 Action: Select Strategy and Advance to Step 3 (Capital Allocation)
+    function selectStrategyAndProceedToCapital(stratKey) {
+      const data = STRATEGY_DATA[stratKey] || STRATEGY_DATA.theta_harvester;
+      userState.selectedStrategy = stratKey;
+      userState.selectedStrategyName = data.name;
+
+      // Automatically pre-populate capital to at least the strategy's minimum capital requirement
+      if (!userState.totalCapital || userState.totalCapital < data.minCapital) {
+        userState.totalCapital = data.minCapital;
+      }
+      saveState();
+
+      highlightSelectedStrategyCard(stratKey);
+
+      setTimeout(() => {
+        goToStep(3);
+      }, 250);
+    }
+
+    // Step 3 Setup: Synchronize Screen 3 to the chosen strategy
+    function updateCapitalScreenForStrategy() {
+      const stratKey = userState.selectedStrategy || 'theta_harvester';
+      const strat = STRATEGY_DATA[stratKey] || STRATEGY_DATA.theta_harvester;
+
+      // Ensure capital input meets or exceeds minCapital if currently lower
+      if (!userState.totalCapital || userState.totalCapital < strat.minCapital) {
+        userState.totalCapital = strat.minCapital;
+      }
+
+      // Update Headings & Tags
+      const subheadName = document.getElementById('capital-selected-strat-name');
+      if (subheadName) subheadName.innerText = strat.name;
+
+      const stratTag = document.getElementById('capital-screen-strat-tag');
+      if (stratTag) stratTag.innerText = `${strat.icon} ${strat.name}`;
+
+      // Update Strategy Requirement Banner
+      const reqIcon = document.getElementById('req-box-icon');
+      if (reqIcon) reqIcon.innerText = strat.icon;
+
+      const reqTitle = document.getElementById('req-box-title');
+      if (reqTitle) reqTitle.innerText = `${strat.name} Minimum Requirement`;
+
+      const reqDesc = document.getElementById('req-box-desc');
+      if (reqDesc) {
+        reqDesc.innerHTML = `Requires <strong class="text-white font-mono">₹ ${strat.baseMargin.toLocaleString('en-IN')}</strong> active margin (1 lot). With mandatory 30% cash buffer (max 70% utilization), minimum required capital is <strong class="text-cyan-300 font-mono">₹ ${strat.minCapital.toLocaleString('en-IN')}</strong>.`;
+      }
+
+      const reqMin = document.getElementById('req-box-min');
+      if (reqMin) reqMin.innerText = `₹ ${strat.minCapital.toLocaleString('en-IN')}`;
+
+      // Set input value
+      const capInput = document.getElementById('capital-input');
+      if (capInput) {
+        capInput.value = userState.totalCapital;
+        capInput.min = strat.minCapital;
+      }
+
+      // Generate dynamic presets tailored to this strategy's lot size requirements
+      const presetsContainer = document.getElementById('capital-quick-presets');
+      if (presetsContainer) {
+        const base = strat.minCapital;
+        const presets = [
+          { lots: 1, amount: base, label: `₹${(base / 1000).toFixed(0)}k (1 Lot Min)` },
+          { lots: 2, amount: base * 2, label: `₹${(base * 2 / 1000).toFixed(0)}k (2 Lots)` },
+          { lots: 3, amount: base * 3, label: `₹${(base * 3 / 1000).toFixed(0)}k (3 Lots)` },
+          { lots: 5, amount: base * 5, label: `₹${(base * 5 / 100000).toFixed(1)}L (5 Lots)` }
+        ];
+
+        presetsContainer.innerHTML = presets.map(p => `
+          <button type="button" onclick="setCapitalPreset(${p.amount})" class="px-2.5 py-1 rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-mono transition text-xs">
+            ${p.label}
+          </button>
+        `).join('');
+      }
+
+      // Set equity utilization slider
+      const utilPct = userState.equityUtilizationPct || 70;
+      setEquityUtilization(utilPct);
+    }
+
+    // Step 3: Capital & Equity Utilization Handlers
     function setCapitalPreset(amount) {
-      document.getElementById('capital-input').value = amount;
+      const capInput = document.getElementById('capital-input');
+      if (capInput) capInput.value = amount;
       updateCapitalCalculations();
     }
 
     function setEquityUtilization(pct) {
       const clamped = Math.max(10, Math.min(70, parseInt(pct) || 70));
       userState.equityUtilizationPct = clamped;
-      document.getElementById('capital-equity-slider').value = clamped;
+      const slider = document.getElementById('capital-equity-slider');
+      if (slider) slider.value = clamped;
 
       // Update badge
       const buf = 100 - clamped;
-      document.getElementById('capital-equity-badge').innerText = `${clamped}% Equity in Use (${buf}% Cash Buffer)`;
+      const badge = document.getElementById('capital-equity-badge');
+      if (badge) badge.innerText = `${clamped}% Equity in Use (${buf}% Cash Buffer)`;
 
       // Update Preset Chips
       document.querySelectorAll('.eq-preset-chip').forEach(btn => {
@@ -2357,7 +2518,10 @@
     }
 
     function updateCapitalCalculations() {
-      const cap = parseFloat(document.getElementById('capital-input')?.value) || 25000;
+      const stratKey = userState.selectedStrategy || 'theta_harvester';
+      const strat = STRATEGY_DATA[stratKey] || STRATEGY_DATA.theta_harvester;
+
+      const cap = parseFloat(document.getElementById('capital-input')?.value) || strat.minCapital;
       userState.totalCapital = cap;
       saveState();
 
@@ -2369,7 +2533,9 @@
 
       const maxLoss = Math.round(activeCap * 0.06);
       const profitTarget = Math.round(activeCap * 0.12);
-      const lots = Math.max(1, Math.floor(activeCap / 25000));
+      
+      // Calculate lots based on strategy's base active margin
+      const lots = Math.max(1, Math.floor(activeCap / strat.baseMargin));
 
       const actPct = document.getElementById('breakdown-active-pct');
       if (actPct) actPct.innerText = `${utilPct}%`;
@@ -2392,90 +2558,58 @@
       const lt = document.getElementById('breakdown-lots');
       if (lt) lt.innerText = `${lots} Lot${lots > 1 ? 's' : ''} (${lots * 50} Qty)`;
 
-      // Update Step 2 Strategy Availability Preview
-      let readyCount = 0;
-      const pillsContainer = document.getElementById('capital-strategy-pills');
-      if (pillsContainer) {
-        let pillsHtml = '';
-        for (const [key, data] of Object.entries(STRATEGY_DATA)) {
-          const reqMinCap = Math.ceil((data.baseMargin / utilFrac) / 100) * 100;
-          if (activeCap >= data.baseMargin) {
-            readyCount++;
-            pillsHtml += `<span class="px-2 py-0.5 bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 rounded font-mono">✓ ${data.name.split(' ')[0]}</span>`;
-          } else {
-            pillsHtml += `<span class="px-2 py-0.5 bg-slate-900 border border-slate-800 text-slate-400 rounded font-mono" title="Requires ₹${reqMinCap.toLocaleString('en-IN')} total capital at ${utilPct}%">✗ ${data.name.split(' ')[0]} (Min ₹${(reqMinCap/1000).toFixed(0)}k)</span>`;
+      // Dynamic Validation Pill for the chosen strategy
+      const validationContainer = document.getElementById('capital-strategy-validation-status');
+      const confirmBtn = document.getElementById('btn-confirm-capital');
+      if (validationContainer) {
+        // Total required capital at current utilization:
+        const currentReqMinCap = Math.ceil((strat.baseMargin / utilFrac) / 100) * 100;
+        if (activeCap >= strat.baseMargin) {
+          const surplusLots = Math.floor(activeCap / strat.baseMargin);
+          validationContainer.innerHTML = `
+            <div class="p-3 bg-emerald-950/40 border border-emerald-500/50 rounded-xl text-xs space-y-1">
+              <div class="flex items-center justify-between text-emerald-400 font-bold">
+                <span class="flex items-center gap-1.5"><span>🟢</span> Sufficient Capital for ${strat.name}</span>
+                <span class="font-mono">${surplusLots} Lot${surplusLots > 1 ? 's' : ''}</span>
+              </div>
+              <p class="text-[11px] text-slate-300 leading-tight">
+                Active margin ₹${activeCap.toLocaleString('en-IN')} comfortably covers the ₹${(strat.baseMargin * surplusLots).toLocaleString('en-IN')} required for ${surplusLots} lot${surplusLots > 1 ? 's' : ''} with a ₹${bufferCap.toLocaleString('en-IN')} (${bufferPct}%) buffer.
+              </p>
+            </div>
+          `;
+          if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.className = "w-full py-3.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-sm rounded-xl shadow-xl shadow-cyan-600/25 transition flex items-center justify-center gap-2 cursor-pointer";
+            confirmBtn.innerHTML = `<span>Continue to Mandatory 1-Year Backtest</span> <span>→</span>`;
+          }
+        } else {
+          const shortfall = currentReqMinCap - cap;
+          validationContainer.innerHTML = `
+            <div class="p-3 bg-amber-950/40 border border-amber-500/50 rounded-xl text-xs space-y-1.5">
+              <div class="flex items-center justify-between text-amber-300 font-bold">
+                <span class="flex items-center gap-1.5"><span>⚠️</span> Capital Below Minimum Requirement</span>
+                <span class="font-mono text-rose-400">-₹${shortfall.toLocaleString('en-IN')} Short</span>
+              </div>
+              <p class="text-[11px] text-slate-300 leading-tight">
+                <strong>${strat.name}</strong> requires at least <strong class="text-white font-mono">₹${strat.baseMargin.toLocaleString('en-IN')}</strong> active margin for 1 lot. At ${utilPct}% utilization, you need at least <strong class="text-amber-300 font-mono">₹${currentReqMinCap.toLocaleString('en-IN')}</strong> total capital to ensure a 30% cash buffer.
+              </p>
+              <button type="button" onclick="setCapitalPreset(${currentReqMinCap})" class="w-full py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-200 rounded-lg text-[11px] font-bold transition">
+                Click to Set Minimum to ₹${currentReqMinCap.toLocaleString('en-IN')}
+              </button>
+            </div>
+          `;
+          if (confirmBtn) {
+            confirmBtn.disabled = false; // still allow, but warn
+            confirmBtn.className = "w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-sm rounded-xl border border-amber-500/40 shadow-xl transition flex items-center justify-center gap-2 cursor-pointer";
+            confirmBtn.innerHTML = `<span>Proceed with Lower Capital (At Your Own Risk)</span> <span>→</span>`;
           }
         }
-        pillsContainer.innerHTML = pillsHtml;
       }
-      const supportedCountEl = document.getElementById('capital-supported-count');
-      if (supportedCountEl) {
-        supportedCountEl.innerText = `${readyCount} of 4 Ready`;
-      }
-
-      // Synchronize Step 3 Cards in real time
-      updateStrategyCardsMinCap();
     }
 
+    // Step 3 Confirmation: Advance to Step 4 (Mandatory Backtest)
     function confirmCapitalAndProceed() {
-      goToStep(3);
-    }
-
-    // Step 3: Strategy Minimum Capital Updates Based on Equity Alloted
-    function updateStrategyCardsMinCap() {
-      const utilPct = userState.equityUtilizationPct || 70;
-      const utilFrac = utilPct / 100;
-      const totalCap = userState.totalCapital || 25000;
-      const activeEquity = Math.round(totalCap * utilFrac);
-      const bufferCap = totalCap - activeEquity;
-      const bufferPct = 100 - utilPct;
-
-      // Update Screen 3 Header Tag and Summary Banner
-      const stratCapTag = document.getElementById('strat-screen-cap-tag');
-      if (stratCapTag) {
-        stratCapTag.innerText = `₹ ${totalCap.toLocaleString('en-IN')} (@ ${utilPct}% util)`;
-      }
-      const sumActive = document.getElementById('strat-summary-active');
-      if (sumActive) sumActive.innerText = `₹ ${activeEquity.toLocaleString('en-IN')}`;
-      const sumTotal = document.getElementById('strat-summary-total');
-      if (sumTotal) sumTotal.innerText = `₹ ${totalCap.toLocaleString('en-IN')}`;
-      const sumPct = document.getElementById('strat-summary-pct');
-      if (sumPct) sumPct.innerText = `${utilPct}%`;
-      const sumBuffer = document.getElementById('strat-summary-buffer');
-      if (sumBuffer) sumBuffer.innerText = `₹ ${bufferCap.toLocaleString('en-IN')} (${bufferPct}%)`;
-
-      // Update each of the 4 Strategy Cards
-      for (const [key, data] of Object.entries(STRATEGY_DATA)) {
-        // Minimum Total Capital required so that: Total Capital * (utilPct / 100) >= baseMargin
-        const minCap = Math.ceil((data.baseMargin / utilFrac) / 100) * 100;
-        
-        const capEl = document.getElementById(`min-cap-${key}`);
-        if (capEl) capEl.innerText = `₹ ${minCap.toLocaleString('en-IN')}`;
-
-        const mathEl = document.getElementById(`min-cap-math-${key}`);
-        if (mathEl) {
-          mathEl.innerText = `₹${data.baseMargin.toLocaleString('en-IN')} margin ÷ ${utilPct}% eq`;
-        }
-
-        const statusEl = document.getElementById(`min-cap-status-${key}`);
-        if (statusEl) {
-          if (activeEquity >= data.baseMargin) {
-            const surplus = activeEquity - data.baseMargin;
-            statusEl.className = "pt-1 border-t border-slate-800/80 text-[10.5px] flex items-center justify-between font-medium text-emerald-400";
-            statusEl.innerHTML = `
-              <span class="flex items-center gap-1"><span>🟢</span> <span>Capital Ready</span></span>
-              <span class="font-mono text-[10px] text-emerald-400/90">+₹${surplus.toLocaleString('en-IN')} buffer</span>
-            `;
-          } else {
-            const shortfall = minCap - totalCap;
-            statusEl.className = "pt-1 border-t border-slate-800/80 text-[10.5px] flex items-center justify-between font-medium text-amber-400";
-            statusEl.innerHTML = `
-              <span class="flex items-center gap-1"><span>⚠️</span> <span>Needs +₹${shortfall.toLocaleString('en-IN')}</span></span>
-              <button type="button" onclick="event.stopPropagation(); goToStep(2);" class="text-[10px] text-cyan-400 hover:text-cyan-300 underline font-semibold ml-1">Adjust →</button>
-            `;
-          }
-        }
-      }
+      goToStep(4);
     }
 
     // Select Strategy & Open Customizer Modal
@@ -2541,8 +2675,8 @@
             </div>
             <div class="flex items-center gap-2">
               <span class="font-mono text-[11px] text-amber-300 font-semibold">Min. Capital: ₹${minCap.toLocaleString('en-IN')}</span>
-              <button type="button" onclick="closeStrategyCustomizerModal(); goToStep(2);" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-200 rounded-lg text-[11px] font-bold transition">
-                Adjust in Step 2 →
+              <button type="button" onclick="closeStrategyCustomizerModal(); goToStep(3);" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-200 rounded-lg text-[11px] font-bold transition">
+                Allocate Capital in Step 3 →
               </button>
             </div>
           `;
@@ -2585,11 +2719,9 @@
       const retBtn = document.getElementById('btn-return-to-dash');
       if (retBtn) retBtn.classList.remove('hidden');
 
-      const stratCapTag = document.getElementById('strat-screen-cap-tag');
-      if (stratCapTag) {
-        stratCapTag.innerText = `₹ ${userState.totalCapital.toLocaleString('en-IN')} (@ ${userState.equityUtilizationPct}% util)`;
-      }
-      updateStrategyCardsMinCap();
+      const stratBrokerTag = document.getElementById('strat-screen-broker-tag');
+      if (stratBrokerTag) stratBrokerTag.innerText = userState.selectedBrokerName || 'Flattrade';
+      highlightSelectedStrategyCard(userState.selectedStrategy);
     }
 
     // Return back to Live Dashboard
@@ -2608,7 +2740,7 @@
         alert(`💾 Strategy Settings for "${userState.selectedStrategyName}" saved and synchronized with your dedicated droplet (159.65.12.84)!`);
         openedFromDashboard = false;
       } else {
-        goToStep(4); // Advance to Mandatory Backtest
+        goToStep(3); // Advance to Step 3: Capital & Equity Allocation
       }
     }
 
