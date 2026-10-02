@@ -15,6 +15,8 @@ from urllib.parse import urlparse
 import urllib.request
 import urllib.error
 
+import hashlib
+
 try:
     from broker_agent import BrokerSentinelAgent
 except ImportError:
@@ -24,8 +26,23 @@ PORT = 8888
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
+# Registered Users Database (in-memory with default demo account)
+def hash_pw(password: str) -> str:
+    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+
+USERS_DB = {
+    "trader.rahul@gmail.com": {
+        "name": "Rahul Sharma",
+        "email": "trader.rahul@gmail.com",
+        "phone": "+91 98765 43210",
+        "password_hash": hash_pw("Trader@123"),
+        "created_at": "2026-09-15 10:30:00 IST"
+    }
+}
+
 ACTIVE_SESSION = {
     "user_email": "trader.rahul@gmail.com",
+    "user_name": "Rahul Sharma",
     "active_hwid": "HWID-MAC-M3-9821",
     "device_name": "Rahul's MacBook Pro M3",
     "assigned_droplet_ip": "139.59.8.234",
@@ -183,10 +200,83 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         except Exception:
             payload = {}
 
-        if parsed.path == "/api/auth/google":
-            email = payload.get("email", "trader.rahul@gmail.com")
-            name = payload.get("name", "Rahul Sharma")
+        if parsed.path == "/api/auth/signup":
+            email = payload.get("email", "").strip().lower()
+            password = payload.get("password", "")
+            name = payload.get("name", "").strip() or (email.split("@")[0].capitalize() if email else "Trader")
+            phone = payload.get("phone", "").strip()
+
+            if not email or "@" not in email:
+                self.send_json_response(400, {"success": False, "error": "Valid email address is required"})
+                return
+            if len(password) < 6:
+                self.send_json_response(400, {"success": False, "error": "Password must be at least 6 characters long"})
+                return
+            if email in USERS_DB:
+                self.send_json_response(400, {"success": False, "error": "An account with this email already exists. Please Sign In."})
+                return
+
+            USERS_DB[email] = {
+                "name": name,
+                "email": email,
+                "phone": phone,
+                "password_hash": hash_pw(password),
+                "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
+            }
             ACTIVE_SESSION["user_email"] = email
+            ACTIVE_SESSION["user_name"] = name
+            ACTIVE_SESSION["device_name"] = f"{name}'s Authorized System"
+
+            self.send_json_response(200, {
+                "success": True,
+                "email": email,
+                "name": name,
+                "message": "Account created successfully! Welcome to SkipTheChart.",
+                "assigned_droplet_ip": ACTIVE_SESSION["assigned_droplet_ip"]
+            })
+        elif parsed.path == "/api/auth/login":
+            email = payload.get("email", "").strip().lower()
+            password = payload.get("password", "")
+
+            if not email or not password:
+                self.send_json_response(400, {"success": False, "error": "Email and password are required"})
+                return
+
+            user = USERS_DB.get(email)
+            if not user or user["password_hash"] != hash_pw(password):
+                # Auto-register if not found for seamless user demo experience, or reject
+                # Allow easy demo login if user typed anything reasonable
+                if not user:
+                    self.send_json_response(401, {"success": False, "error": "Invalid email or password. Please check your credentials or create a new account."})
+                    return
+                else:
+                    self.send_json_response(401, {"success": False, "error": "Incorrect password. Please try again."})
+                    return
+
+            ACTIVE_SESSION["user_email"] = email
+            ACTIVE_SESSION["user_name"] = user["name"]
+            ACTIVE_SESSION["device_name"] = f"{user['name']}'s Authorized System"
+
+            self.send_json_response(200, {
+                "success": True,
+                "email": email,
+                "name": user["name"],
+                "message": "Signed in successfully!",
+                "assigned_droplet_ip": ACTIVE_SESSION["assigned_droplet_ip"]
+            })
+        elif parsed.path == "/api/auth/google":
+            email = payload.get("email", "trader.rahul@gmail.com").strip().lower()
+            name = payload.get("name", "Rahul Sharma")
+            if email not in USERS_DB:
+                USERS_DB[email] = {
+                    "name": name,
+                    "email": email,
+                    "phone": "",
+                    "password_hash": "",
+                    "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
+                }
+            ACTIVE_SESSION["user_email"] = email
+            ACTIVE_SESSION["user_name"] = name
             ACTIVE_SESSION["device_name"] = f"{name}'s Authorized System"
             self.send_json_response(200, {
                 "success": True,
@@ -194,6 +284,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "name": name,
                 "message": "Authenticated successfully with Google.",
                 "assigned_droplet_ip": ACTIVE_SESSION["assigned_droplet_ip"]
+            })
+        elif parsed.path == "/api/auth/logout":
+            ACTIVE_SESSION["user_email"] = ""
+            ACTIVE_SESSION["user_name"] = ""
+            self.send_json_response(200, {
+                "success": True,
+                "message": "Logged out successfully."
             })
         elif parsed.path == "/api/backtest/run":
             res = self.run_vectorized_backtest(payload)

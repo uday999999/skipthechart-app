@@ -52,7 +52,7 @@
           <div class="font-semibold text-slate-200" id="nav-user-email">trader.rahul@gmail.com</div>
           <div class="text-[10px] text-emerald-400 font-mono" id="nav-server-status">Server Active (₹1,599/mo)</div>
         </div>
-        <div class="w-9 h-9 rounded-full bg-cyan-600/30 border border-cyan-500/50 flex items-center justify-center text-xs font-bold text-cyan-300">
+        <div class="w-9 h-9 rounded-full bg-cyan-600/30 border border-cyan-500/50 flex items-center justify-center text-xs font-bold text-cyan-300" id="nav-user-avatar">
           R
         </div>
         <button type="button" onclick="openSentinelDiagnosticModal()" id="nav-btn-sentinel" class="px-3 py-1.5 bg-gradient-to-r from-emerald-950 to-cyan-950 hover:border-cyan-400 border border-cyan-500/40 text-cyan-300 hover:text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Run Sentinel Diagnostic Agent across 16 Indian brokers & deployed strategy">
@@ -64,6 +64,9 @@
         <button type="button" onclick="returnToLiveDashboard()" id="nav-btn-live-dash" class="px-3 py-1.5 bg-cyan-950 border border-cyan-500/60 text-cyan-300 font-bold rounded-xl text-xs transition flex items-center gap-1.5 hidden" title="Return to Live Bot Command Center">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>Live Bot Dashboard</span>
+        </button>
+        <button type="button" onclick="handleAuthButtonClick()" id="nav-btn-auth" class="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/40 text-slate-300 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1">
+          <span id="nav-auth-btn-icon">🚪</span> <span id="nav-auth-btn-text">Sign Out</span>
         </button>
         <button type="button" onclick="resetDemoFlow()" title="Reset onboarding to test flow again" class="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 rounded-xl text-[11px] font-mono transition flex items-center gap-1">
           <span>↻</span> Reset
@@ -102,44 +105,147 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- SCREEN 0: SIGN IN / SIGN UP (CONTINUE WITH GMAIL)                          -->
+    <!-- SCREEN 0: SIGN IN / SIGN UP AUTHENTICATION PORTAL                         -->
+    <!-- Tabbed interface: Sign In (Email/Pass or Google) & Sign Up (Registration)  -->
     <!-- ========================================================================= -->
-    <div id="screen-auth" class="min-h-[60vh] flex items-center justify-center p-4">
-      <div class="max-w-md w-full bg-[#0d1322] border border-cyan-500/30 rounded-3xl p-8 space-y-6 shadow-2xl relative overflow-hidden">
-        <div class="absolute -right-10 -top-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
+    <div id="screen-auth" class="min-h-[70vh] flex items-center justify-center p-4">
+      <div class="max-w-md w-full bg-[#0d1322] border border-cyan-500/30 rounded-3xl p-7 space-y-5 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-12 -top-12 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Header -->
         <div class="text-center space-y-2">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-emerald-400 flex items-center justify-center text-2xl font-black text-white mx-auto shadow-lg shadow-cyan-500/30">
+          <div class="w-13 h-13 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-emerald-400 flex items-center justify-center text-2xl font-black text-white mx-auto shadow-lg shadow-cyan-500/30 p-3">
             ⚡
           </div>
-          <h2 class="text-2xl font-black text-white">Sign In to SkipTheChart</h2>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            The automated algorithmic execution engine for Indian retail traders. Zero coding needed.
+          <h2 class="text-2xl font-black text-white tracking-wide" id="auth-main-heading">Welcome to SkipTheChart</h2>
+          <p class="text-xs text-slate-400 leading-relaxed" id="auth-main-subheading">
+            Automated algorithmic execution engine for Indian retail traders. Zero coding needed.
           </p>
         </div>
 
-        <div class="space-y-3 pt-2">
-          <!-- Continue with Google Button -->
-          <button type="button" onclick="performGoogleSignIn()" class="w-full py-3.5 px-4 bg-white hover:bg-slate-100 text-slate-900 rounded-2xl font-bold text-sm shadow-xl transition flex items-center justify-center gap-3">
-            <svg class="w-5 h-5" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-            </svg>
-            <span>Continue with Google (Gmail)</span>
+        <!-- Auth Tabs: Sign In / Create Account -->
+        <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-bold">
+          <button type="button" onclick="switchAuthTab('signin')" id="tab-auth-signin" class="flex-1 py-2 rounded-lg bg-cyan-600 text-white shadow transition text-center">
+            Sign In
           </button>
-          <div class="text-[11px] text-center text-slate-500 font-mono">1-Click Instant Access • No Password Required</div>
+          <button type="button" onclick="switchAuthTab('signup')" id="tab-auth-signup" class="flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition text-center">
+            Create Free Account
+          </button>
         </div>
 
-        <div class="border-t border-slate-800 pt-4 space-y-2 text-xs text-slate-400">
+        <!-- Feedback Alert Box -->
+        <div id="auth-alert-box" class="hidden p-3 rounded-xl text-xs border"></div>
+
+        <!-- 1. SIGN IN FORM -->
+        <form id="form-auth-signin" onsubmit="event.preventDefault(); submitSignInForm();" class="space-y-3.5">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1">Email Address</label>
+            <div class="relative">
+              <span class="absolute left-3.5 top-2.5 text-slate-500 text-sm">✉️</span>
+              <input type="email" id="signin-email" required placeholder="trader.rahul@gmail.com" value="trader.rahul@gmail.com" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl py-2.5 pl-10 pr-3 text-xs text-white outline-none font-mono">
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider">Password</label>
+              <button type="button" onclick="fillDemoCredentials()" class="text-[10px] text-cyan-400 hover:text-cyan-300 underline font-mono">Use Demo: Trader@123</button>
+            </div>
+            <div class="relative">
+              <span class="absolute left-3.5 top-2.5 text-slate-500 text-sm">🔒</span>
+              <input type="password" id="signin-password" required placeholder="••••••••" value="Trader@123" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl py-2.5 pl-10 pr-10 text-xs text-white outline-none font-mono">
+              <button type="button" onclick="togglePasswordVisibility('signin-password', this)" class="absolute right-3 top-2.5 text-slate-400 hover:text-white text-xs">👁️</button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs pt-0.5">
+            <label class="flex items-center gap-1.5 text-slate-400 cursor-pointer">
+              <input type="checkbox" id="signin-remember" checked class="rounded bg-slate-900 border-slate-700 text-cyan-500 accent-cyan-500">
+              <span class="text-[11px]">Remember me</span>
+            </label>
+            <a href="javascript:void(0)" onclick="alert('Password reset link has been dispatched to your registered email.')" class="text-[11px] text-slate-400 hover:text-cyan-300 underline">Forgot password?</a>
+          </div>
+
+          <button type="submit" id="btn-submit-signin" class="w-full py-3 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white rounded-xl font-bold text-xs shadow-lg shadow-cyan-600/25 transition flex items-center justify-center gap-2">
+            <span>Sign In to Terminal</span>
+            <span>→</span>
+          </button>
+        </form>
+
+        <!-- 2. SIGN UP FORM (Initially Hidden) -->
+        <form id="form-auth-signup" onsubmit="event.preventDefault(); submitSignUpForm();" class="space-y-3 hidden">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1">Full Name</label>
+            <div class="relative">
+              <span class="absolute left-3.5 top-2.5 text-slate-500 text-sm">👤</span>
+              <input type="text" id="signup-name" required placeholder="Rahul Sharma" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl py-2.5 pl-10 pr-3 text-xs text-white outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1">Email Address</label>
+            <div class="relative">
+              <span class="absolute left-3.5 top-2.5 text-slate-500 text-sm">✉️</span>
+              <input type="email" id="signup-email" required placeholder="your.name@gmail.com" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl py-2.5 pl-10 pr-3 text-xs text-white outline-none font-mono">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1">Mobile (WhatsApp)</label>
+              <div class="relative">
+                <span class="absolute left-3 top-2.5 text-slate-500 text-[11px] font-mono">+91</span>
+                <input type="tel" id="signup-phone" placeholder="9876543210" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl py-2.5 pl-10 pr-2 text-xs text-white outline-none font-mono">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1">Password</label>
+              <div class="relative">
+                <input type="password" id="signup-password" required minlength="6" placeholder="Min 6 chars" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl py-2.5 px-3 text-xs text-white outline-none font-mono">
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-0.5 text-[10.5px] text-slate-400 leading-tight">
+            By signing up, you agree to our <a href="#" class="text-cyan-400 underline">Terms of Service</a> & <a href="#" class="text-cyan-400 underline">SEBI Risk Disclosure</a>.
+          </div>
+
+          <button type="submit" id="btn-submit-signup" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:opacity-95 text-white rounded-xl font-bold text-xs shadow-lg shadow-emerald-600/25 transition flex items-center justify-center gap-2">
+            <span>Create Account & Start Free</span>
+            <span>→</span>
+          </button>
+        </form>
+
+        <!-- Divider with OR -->
+        <div class="relative flex py-1 items-center">
+          <div class="flex-grow border-t border-slate-800"></div>
+          <span class="flex-shrink mx-3 text-[10px] uppercase font-mono text-slate-500">Or continue with</span>
+          <div class="flex-grow border-t border-slate-800"></div>
+        </div>
+
+        <!-- 1-Click Google Sign-in Button -->
+        <button type="button" onclick="performGoogleSignIn()" class="w-full py-2.5 px-4 bg-white hover:bg-slate-100 text-slate-900 rounded-xl font-bold text-xs shadow-md transition flex items-center justify-center gap-2.5">
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Continue with Google (Gmail)</span>
+        </button>
+
+        <!-- Compliance & Security Trust Badges -->
+        <div class="border-t border-slate-800 pt-3.5 space-y-1.5 text-[11px] text-slate-400">
           <div class="flex items-center gap-2">
-            <span class="text-emerald-400 font-bold">✓</span> <span><strong>100% Client Directed:</strong> Your capital stays inside your broker</span>
+            <span class="text-emerald-400 font-bold">✓</span> <span><strong>100% Client Directed:</strong> Your funds remain safely inside your broker</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="text-emerald-400 font-bold">✓</span> <span><strong>SEBI Compliant:</strong> Isolated dedicated private execution cloud</span>
+            <span class="text-emerald-400 font-bold">✓</span> <span><strong>SEBI Compliant:</strong> Dedicated private cloud droplet isolation</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="text-emerald-400 font-bold">✓</span> <span><strong>Automated Stop-Loss:</strong> Pre-programmed discipline with zero emotion</span>
+            <span class="text-emerald-400 font-bold">✓</span> <span><strong>Auto Stop-Loss:</strong> Pre-programmed discipline with zero emotion</span>
           </div>
         </div>
       </div>
@@ -1917,7 +2023,9 @@
     // State Machine
     let userState = {
       isLoggedIn: true,
-      currentStep: 1, // 0: Auth, 1: Broker, 2: Capital, 3: Strategy, 4: Backtest, 5: Payment, 6: Live Dashboard
+      userEmail: 'trader.rahul@gmail.com',
+      userName: 'Rahul Sharma',
+      currentStep: 1, // 0: Auth, 1: Broker, 2: Strategy, 3: Capital, 4: Backtest, 5: Payment, 6: Live Dashboard
       selectedBroker: 'flattrade',
       selectedBrokerName: 'Flattrade',
       totalCapital: 25000,
@@ -2223,13 +2331,16 @@
         }
       } catch (e) {}
 
+      updateHeaderUserInfo();
+
       // If user has active subscription, skip onboarding and jump straight to live dashboard!
       if (userState.subscriptionActive) {
         showScreen('screen-live-dashboard');
         updateLiveDashboardUI();
         startLiveMarketTickSimulation();
-      } else if (userState.currentStep === 0) {
+      } else if (userState.currentStep === 0 || !userState.isLoggedIn) {
         showScreen('screen-auth');
+        switchAuthTab('signin');
       } else {
         goToStep(userState.currentStep || 1);
       }
@@ -2245,6 +2356,8 @@
       localStorage.removeItem('algoforge_state_v3');
       userState = {
         isLoggedIn: true,
+        userEmail: 'trader.rahul@gmail.com',
+        userName: 'Rahul Sharma',
         currentStep: 1,
         selectedBroker: 'flattrade',
         selectedBrokerName: 'Flattrade',
@@ -2257,6 +2370,7 @@
         dailySwitchesRemaining: 3
       };
       saveState();
+      updateHeaderUserInfo();
       goToStep(1);
     }
 
@@ -2349,18 +2463,246 @@
       }
     }
 
-    // Google Sign-in Handler
+    // Authentication State & UI Functions
+    function switchAuthTab(tab) {
+      const btnIn = document.getElementById('tab-auth-signin');
+      const btnUp = document.getElementById('tab-auth-signup');
+      const formIn = document.getElementById('form-auth-signin');
+      const formUp = document.getElementById('form-auth-signup');
+      const head = document.getElementById('auth-main-heading');
+      const subhead = document.getElementById('auth-main-subheading');
+      const alertBox = document.getElementById('auth-alert-box');
+      if (alertBox) alertBox.className = "hidden";
+
+      if (tab === 'signin') {
+        if (btnIn) btnIn.className = "flex-1 py-2 rounded-lg bg-cyan-600 text-white shadow transition text-center font-bold";
+        if (btnUp) btnUp.className = "flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition text-center font-bold";
+        if (formIn) formIn.classList.remove('hidden');
+        if (formUp) formUp.classList.add('hidden');
+        if (head) head.innerText = "Sign In to SkipTheChart";
+        if (subhead) subhead.innerText = "Automated algorithmic execution engine for Indian retail traders. Zero coding needed.";
+      } else {
+        if (btnUp) btnUp.className = "flex-1 py-2 rounded-lg bg-emerald-600 text-white shadow transition text-center font-bold";
+        if (btnIn) btnIn.className = "flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition text-center font-bold";
+        if (formUp) formUp.classList.remove('hidden');
+        if (formIn) formIn.classList.add('hidden');
+        if (head) head.innerText = "Create Your Free Account";
+        if (subhead) subhead.innerText = "Start zero-commission algo trading in less than 2 minutes. No credit card required.";
+      }
+    }
+
+    function showAuthAlert(msg, isError = true) {
+      const el = document.getElementById('auth-alert-box');
+      if (!el) return;
+      if (isError) {
+        el.className = "p-3 rounded-xl text-xs border border-rose-500/50 bg-rose-950/40 text-rose-300 flex items-center gap-2";
+        el.innerHTML = `<span>⚠️</span> <span>${msg}</span>`;
+      } else {
+        el.className = "p-3 rounded-xl text-xs border border-emerald-500/50 bg-emerald-950/40 text-emerald-300 flex items-center gap-2";
+        el.innerHTML = `<span>✓</span> <span>${msg}</span>`;
+      }
+      el.classList.remove('hidden');
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerText = '🙈';
+      } else {
+        input.type = 'password';
+        btn.innerText = '👁️';
+      }
+    }
+
+    function fillDemoCredentials() {
+      const emailInput = document.getElementById('signin-email');
+      const passInput = document.getElementById('signin-password');
+      if (emailInput) emailInput.value = 'trader.rahul@gmail.com';
+      if (passInput) passInput.value = 'Trader@123';
+      showAuthAlert("Demo credentials populated: trader.rahul@gmail.com / Trader@123", false);
+    }
+
+    // Sign In with Email & Password
+    async function submitSignInForm() {
+      const email = document.getElementById('signin-email')?.value.trim();
+      const password = document.getElementById('signin-password')?.value;
+      const btn = document.getElementById('btn-submit-signin');
+
+      if (!email || !password) {
+        showAuthAlert("Please enter both email and password.");
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="animate-spin text-sm">↻</span> <span>Signing In...</span>`;
+      }
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          userState.isLoggedIn = true;
+          userState.userEmail = data.email || email;
+          userState.userName = data.name || (email.split('@')[0]);
+          saveState();
+          updateHeaderUserInfo();
+          showAuthAlert("✓ Signed in successfully! Loading terminal...", false);
+
+          setTimeout(() => {
+            goToStep(1); // Proceed to Step 1: Choose Broker
+          }, 400);
+        } else {
+          showAuthAlert(data.error || "Authentication failed. Please check your credentials.");
+        }
+      } catch (e) {
+        // Fallback for offline/local simulation
+        userState.isLoggedIn = true;
+        userState.userEmail = email;
+        userState.userName = email.split('@')[0];
+        saveState();
+        updateHeaderUserInfo();
+        goToStep(1);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<span>Sign In to Terminal</span> <span>→</span>`;
+        }
+      }
+    }
+
+    // Sign Up for Free Account
+    async function submitSignUpForm() {
+      const name = document.getElementById('signup-name')?.value.trim();
+      const email = document.getElementById('signup-email')?.value.trim();
+      const phone = document.getElementById('signup-phone')?.value.trim();
+      const password = document.getElementById('signup-password')?.value;
+      const btn = document.getElementById('btn-submit-signup');
+
+      if (!email || !password) {
+        showAuthAlert("Please provide both email and password.");
+        return;
+      }
+      if (password.length < 6) {
+        showAuthAlert("Password must be at least 6 characters long.");
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="animate-spin text-sm">↻</span> <span>Creating Account...</span>`;
+      }
+
+      try {
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, phone, password })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          userState.isLoggedIn = true;
+          userState.userEmail = data.email || email;
+          userState.userName = data.name || name || 'Trader';
+          saveState();
+          updateHeaderUserInfo();
+          showAuthAlert("✓ Welcome to SkipTheChart! Launching onboarding setup...", false);
+
+          setTimeout(() => {
+            goToStep(1); // Advance to Step 1: Choose Broker
+          }, 450);
+        } else {
+          showAuthAlert(data.error || "Could not register account. Please check your details.");
+        }
+      } catch (e) {
+        // Fallback
+        userState.isLoggedIn = true;
+        userState.userEmail = email;
+        userState.userName = name || 'Trader';
+        saveState();
+        updateHeaderUserInfo();
+        goToStep(1);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<span>Create Account & Start Free</span> <span>→</span>`;
+        }
+      }
+    }
+
+    // 1-Click Google Sign-In Handler
     async function performGoogleSignIn() {
       try {
-        await fetch('/api/auth/google', {
+        const res = await fetch('/api/auth/google', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: 'trader.rahul@gmail.com', name: 'Rahul Sharma' })
         });
-      } catch (e) {}
+        const data = await res.json();
+        if (data.email) userState.userEmail = data.email;
+        if (data.name) userState.userName = data.name;
+      } catch (e) {
+        userState.userEmail = 'trader.rahul@gmail.com';
+        userState.userName = 'Rahul Sharma';
+      }
+
       userState.isLoggedIn = true;
       saveState();
+      updateHeaderUserInfo();
       goToStep(1);
+    }
+
+    // Top Header Auth Button Handler (Sign In / Sign Out)
+    function handleAuthButtonClick() {
+      if (userState.isLoggedIn) {
+        // Sign Out
+        try {
+          fetch('/api/auth/logout', { method: 'POST' });
+        } catch (e) {}
+
+        userState.isLoggedIn = false;
+        userState.userEmail = '';
+        userState.userName = 'Guest';
+        saveState();
+        updateHeaderUserInfo();
+        showScreen('screen-auth');
+        switchAuthTab('signin');
+      } else {
+        // Navigate to Sign In screen
+        showScreen('screen-auth');
+        switchAuthTab('signin');
+      }
+    }
+
+    // Update Header User Profile and Status Display
+    function updateHeaderUserInfo() {
+      const emailEl = document.getElementById('nav-user-email');
+      const avatarEl = document.getElementById('nav-user-avatar');
+      const authBtnIcon = document.getElementById('nav-auth-btn-icon');
+      const authBtnText = document.getElementById('nav-auth-btn-text');
+
+      if (userState.isLoggedIn && userState.userEmail) {
+        if (emailEl) emailEl.innerText = userState.userEmail;
+        if (avatarEl) {
+          const firstChar = (userState.userName || userState.userEmail || 'U').charAt(0).toUpperCase();
+          avatarEl.innerText = firstChar;
+        }
+        if (authBtnIcon) authBtnIcon.innerText = '🚪';
+        if (authBtnText) authBtnText.innerText = 'Sign Out';
+      } else {
+        if (emailEl) emailEl.innerText = 'Not Signed In';
+        if (avatarEl) avatarEl.innerText = '?';
+        if (authBtnIcon) authBtnIcon.innerText = '🔑';
+        if (authBtnText) authBtnText.innerText = 'Sign In';
+      }
     }
 
     // Step 1: Select Broker
