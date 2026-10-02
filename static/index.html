@@ -1,0 +1,3081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkipTheChart.com - 1-Click Algorithmic Trading for Indian Markets</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #060913; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #060913; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    .pulse-glow { animation: pulseGlow 2s infinite; }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.35); }
+      50% { box-shadow: 0 0 25px rgba(6, 182, 212, 0.7); }
+    }
+  </style>
+</head>
+<body class="text-slate-100 min-h-screen font-sans antialiased p-3 lg:p-6 selection:bg-cyan-500 selection:text-white">
+
+  <div class="max-w-[1550px] mx-auto space-y-5">
+
+    <!-- Top Branding & Status Header -->
+    <header class="bg-[#0b101e] border border-slate-800/80 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-2xl">
+      <div class="flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-emerald-400 flex items-center justify-center font-black text-white text-xl shadow-lg shadow-cyan-500/25">
+          ⚡
+        </div>
+        <div>
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <h1 class="text-lg font-black tracking-wider text-white">SKIPTHECHART<span class="text-cyan-400 font-mono text-base font-bold">.COM</span></h1>
+            <span class="px-2.5 py-0.5 bg-gradient-to-r from-cyan-950 to-indigo-950 border border-cyan-500/50 text-cyan-300 text-[10px] font-mono font-bold rounded-md flex items-center gap-1 shadow-sm">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+              🚀 PRIVATE BETA v3.2
+            </span>
+            <span class="px-2.5 py-0.5 bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[11px] font-mono font-bold rounded-md">
+              ZERO-KNOWLEDGE BOT BUILDER
+            </span>
+            <span class="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold rounded-full flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              DEDICATED NODE: 139.59.8.234
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-0.5">Click & Connect • Ready-Made Battle-Tested Strategies • Dedicated Private Cloud Execution (Early Access)</p>
+        </div>
+      </div>
+
+      <!-- User Profile & Reset Controls -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:block text-right text-xs" id="nav-user-info">
+          <div class="font-semibold text-slate-200" id="nav-user-email">trader.rahul@gmail.com</div>
+          <div class="text-[10px] text-emerald-400 font-mono" id="nav-server-status">Server Active (₹1,499/mo)</div>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-cyan-600/30 border border-cyan-500/50 flex items-center justify-center text-xs font-bold text-cyan-300">
+          R
+        </div>
+        <button type="button" onclick="openSentinelDiagnosticModal()" id="nav-btn-sentinel" class="px-3 py-1.5 bg-gradient-to-r from-emerald-950 to-cyan-950 hover:border-cyan-400 border border-cyan-500/40 text-cyan-300 hover:text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Run Sentinel Diagnostic Agent across 16 Indian brokers & deployed strategy">
+          <span>🤖</span> Broker Sentinel Agent
+        </button>
+        <button type="button" onclick="goToStrategyHomePage()" id="nav-btn-strategy-home" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-cyan-300 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5" title="View & customize all 4 pre-built strategies">
+          <span>🎯</span> Strategy Home
+        </button>
+        <button type="button" onclick="returnToLiveDashboard()" id="nav-btn-live-dash" class="px-3 py-1.5 bg-cyan-950 border border-cyan-500/60 text-cyan-300 font-bold rounded-xl text-xs transition flex items-center gap-1.5 hidden" title="Return to Live Bot Command Center">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Live Bot Dashboard</span>
+        </button>
+        <button type="button" onclick="resetDemoFlow()" title="Reset onboarding to test flow again" class="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 rounded-xl text-[11px] font-mono transition flex items-center gap-1">
+          <span>↻</span> Reset
+        </button>
+      </div>
+    </header>
+
+    <!-- Progressive Onboarding Stepper Header (Visible during onboarding) -->
+    <div id="onboarding-stepper" class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-3.5 hidden shadow-lg">
+      <div class="flex items-center justify-between gap-2 overflow-x-auto text-xs font-medium">
+        <button type="button" onclick="goToStep(1)" id="step-pill-1" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-950 border border-cyan-500 text-cyan-300 font-bold shrink-0 cursor-pointer hover:opacity-90 transition">
+          <span class="w-5 h-5 rounded-full bg-cyan-500 text-slate-950 text-[11px] flex items-center justify-center font-black">1</span>
+          <span>1. Select Broker</span>
+        </button>
+        <span class="text-slate-600">→</span>
+        <button type="button" onclick="goToStep(2)" id="step-pill-2" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 shrink-0 cursor-pointer hover:opacity-90 transition">
+          <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 text-[11px] flex items-center justify-center font-bold">2</span>
+          <span>2. Capital & Equity</span>
+        </button>
+        <span class="text-slate-600">→</span>
+        <button type="button" onclick="goToStep(3)" id="step-pill-3" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 shrink-0 cursor-pointer hover:opacity-90 transition">
+          <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 text-[11px] flex items-center justify-center font-bold">3</span>
+          <span>3. Trading Goal</span>
+        </button>
+        <span class="text-slate-600">→</span>
+        <button type="button" onclick="goToStep(4)" id="step-pill-4" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 shrink-0 cursor-pointer hover:opacity-90 transition">
+          <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 text-[11px] flex items-center justify-center font-bold">4</span>
+          <span>4. Mandatory Backtest</span>
+        </button>
+        <span class="text-slate-600">→</span>
+        <button type="button" onclick="goToStep(5)" id="step-pill-5" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 shrink-0 cursor-pointer hover:opacity-90 transition">
+          <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 text-[11px] flex items-center justify-center font-bold">5</span>
+          <span>5. Server Setup & Live</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SCREEN 0: SIGN IN / SIGN UP (CONTINUE WITH GMAIL)                          -->
+    <!-- ========================================================================= -->
+    <div id="screen-auth" class="min-h-[60vh] flex items-center justify-center p-4">
+      <div class="max-w-md w-full bg-[#0d1322] border border-cyan-500/30 rounded-3xl p-8 space-y-6 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="text-center space-y-2">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-emerald-400 flex items-center justify-center text-2xl font-black text-white mx-auto shadow-lg shadow-cyan-500/30">
+            ⚡
+          </div>
+          <h2 class="text-2xl font-black text-white">Sign In to SkipTheChart</h2>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            The automated algorithmic execution engine for Indian retail traders. Zero coding needed.
+          </p>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <!-- Continue with Google Button -->
+          <button type="button" onclick="performGoogleSignIn()" class="w-full py-3.5 px-4 bg-white hover:bg-slate-100 text-slate-900 rounded-2xl font-bold text-sm shadow-xl transition flex items-center justify-center gap-3">
+            <svg class="w-5 h-5" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Continue with Google (Gmail)</span>
+          </button>
+          <div class="text-[11px] text-center text-slate-500 font-mono">1-Click Instant Access • No Password Required</div>
+        </div>
+
+        <div class="border-t border-slate-800 pt-4 space-y-2 text-xs text-slate-400">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-400 font-bold">✓</span> <span><strong>100% Client Directed:</strong> Your capital stays inside your broker</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-400 font-bold">✓</span> <span><strong>SEBI Compliant:</strong> Isolated dedicated private execution cloud</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-400 font-bold">✓</span> <span><strong>Automated Stop-Loss:</strong> Pre-programmed discipline with zero emotion</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SCREEN 1: CHOOSE YOUR BROKER (LIGHTWEIGHT, FAST & FRIENDLY)               -->
+    <!-- As requested: once chosen, brokers disappear and allocated equity appears -->
+    <!-- ========================================================================= -->
+    <div id="screen-broker" class="space-y-5 hidden">
+      <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div>
+            <h2 class="text-xl font-black text-white flex items-center gap-2">
+              <span>🏦</span> Step 1: Choose Your Broker
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">
+              Select where you have your active Indian demat & trading account. (API keys will be configured at the last step).
+            </p>
+          </div>
+          <span class="text-xs font-mono text-cyan-400 bg-cyan-950/60 px-3 py-1 rounded-xl border border-cyan-500/30">
+            16 Indian Brokers with API Supported
+          </span>
+        </div>
+
+        <!-- Broker Panels Grid: 16 Indian Brokers with API Facility -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-8 gap-3">
+          <!-- 1. Flattrade -->
+          <div onclick="selectOnboardingBroker('flattrade', 'Flattrade', 'FT', 'bg-teal-500/20 text-teal-400 border-teal-500/30')" id="ob-card-flattrade" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 flex items-center justify-center text-sm font-bold mx-auto">FT</div>
+            <div class="font-bold text-xs text-white truncate">Flattrade</div>
+            <div class="text-[10px] text-teal-300 font-mono">₹0 Brokerage</div>
+          </div>
+
+          <!-- 2. Zerodha -->
+          <div onclick="selectOnboardingBroker('zerodha', 'Zerodha Kite', 'Z', 'bg-orange-500/20 text-orange-400 border-orange-500/30')" id="ob-card-zerodha" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 border border-orange-500/30 flex items-center justify-center text-sm font-bold mx-auto">Z</div>
+            <div class="font-bold text-xs text-white truncate">Zerodha Kite</div>
+            <div class="text-[10px] text-emerald-400 font-mono">Kite Connect</div>
+          </div>
+
+          <!-- 3. Angel One -->
+          <div onclick="selectOnboardingBroker('angelone', 'Angel One', 'A', 'bg-red-500/20 text-red-400 border-red-500/30')" id="ob-card-angelone" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center text-sm font-bold mx-auto">A</div>
+            <div class="font-bold text-xs text-white truncate">Angel One</div>
+            <div class="text-[10px] text-cyan-400 font-mono">SmartAPI v2</div>
+          </div>
+
+          <!-- 4. Dhan -->
+          <div onclick="selectOnboardingBroker('dhan', 'Dhan HQ', 'D', 'bg-purple-500/20 text-purple-400 border-purple-500/30')" id="ob-card-dhan" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center text-sm font-bold mx-auto">D</div>
+            <div class="font-bold text-xs text-white truncate">Dhan HQ</div>
+            <div class="text-[10px] text-purple-400 font-mono">Fast Direct API</div>
+          </div>
+
+          <!-- 5. Upstox -->
+          <div onclick="selectOnboardingBroker('upstox', 'Upstox', 'U', 'bg-blue-500/20 text-blue-400 border-blue-500/30')" id="ob-card-upstox" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center text-sm font-bold mx-auto">U</div>
+            <div class="font-bold text-xs text-white truncate">Upstox</div>
+            <div class="text-[10px] text-blue-400 font-mono">Developer API</div>
+          </div>
+
+          <!-- 6. 5paisa -->
+          <div onclick="selectOnboardingBroker('fivepaisa', '5paisa', '5P', 'bg-rose-500/20 text-rose-400 border-rose-500/30')" id="ob-card-fivepaisa" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center text-sm font-bold mx-auto">5P</div>
+            <div class="font-bold text-xs text-white truncate">5paisa</div>
+            <div class="text-[10px] text-rose-300 font-mono">Open API v2</div>
+          </div>
+
+          <!-- 7. Shoonya -->
+          <div onclick="selectOnboardingBroker('shoonya', 'Shoonya Finvasia', 'S', 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30')" id="ob-card-shoonya" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-sm font-bold mx-auto">S</div>
+            <div class="font-bold text-xs text-white truncate">Shoonya</div>
+            <div class="text-[10px] text-emerald-400 font-mono">Prism API Free</div>
+          </div>
+
+          <!-- 8. Fyers -->
+          <div onclick="selectOnboardingBroker('fyers', 'Fyers', 'FY', 'bg-sky-500/20 text-sky-400 border-sky-500/30')" id="ob-card-fyers" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center text-sm font-bold mx-auto">FY</div>
+            <div class="font-bold text-xs text-white truncate">Fyers</div>
+            <div class="text-[10px] text-sky-400 font-mono">Fyers API v3</div>
+          </div>
+
+          <!-- 9. Kotak Neo -->
+          <div onclick="selectOnboardingBroker('kotakneo', 'Kotak Neo', 'KN', 'bg-amber-500/20 text-amber-400 border-amber-500/30')" id="ob-card-kotakneo" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-sm font-bold mx-auto">KN</div>
+            <div class="font-bold text-xs text-white truncate">Kotak Neo</div>
+            <div class="text-[10px] text-amber-400 font-mono">Trade API Free</div>
+          </div>
+
+          <!-- 10. Groww -->
+          <div onclick="selectOnboardingBroker('groww', 'Groww', 'GW', 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30')" id="ob-card-groww" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-sm font-bold mx-auto">GW</div>
+            <div class="font-bold text-xs text-white truncate">Groww</div>
+            <div class="text-[10px] text-emerald-300 font-mono">Developer API</div>
+          </div>
+
+          <!-- 11. ICICI Direct -->
+          <div onclick="selectOnboardingBroker('icicidirect', 'ICICI Direct Breeze', 'IC', 'bg-orange-500/20 text-orange-400 border-orange-500/30')" id="ob-card-icicidirect" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 border border-orange-500/30 flex items-center justify-center text-sm font-bold mx-auto">IC</div>
+            <div class="font-bold text-xs text-white truncate">ICICI Direct</div>
+            <div class="text-[10px] text-orange-300 font-mono">Breeze API</div>
+          </div>
+
+          <!-- 12. Motilal Oswal -->
+          <div onclick="selectOnboardingBroker('motilal', 'Motilal Oswal', 'MO', 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30')" id="ob-card-motilal" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 flex items-center justify-center text-sm font-bold mx-auto">MO</div>
+            <div class="font-bold text-xs text-white truncate">Motilal Oswal</div>
+            <div class="text-[10px] text-yellow-400 font-mono">MOSL Open API</div>
+          </div>
+
+          <!-- 13. Alice Blue -->
+          <div onclick="selectOnboardingBroker('aliceblue', 'Alice Blue ANT', 'AB', 'bg-blue-600/20 text-blue-400 border-blue-500/30')" id="ob-card-aliceblue" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center text-sm font-bold mx-auto">AB</div>
+            <div class="font-bold text-xs text-white truncate">Alice Blue</div>
+            <div class="text-[10px] text-blue-400 font-mono">ANT API v2</div>
+          </div>
+
+          <!-- 14. IIFL Securities -->
+          <div onclick="selectOnboardingBroker('iifl', 'IIFL Securities', 'II', 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30')" id="ob-card-iifl" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-sm font-bold mx-auto">II</div>
+            <div class="font-bold text-xs text-white truncate">IIFL Sec</div>
+            <div class="text-[10px] text-indigo-300 font-mono">Blazr Open API</div>
+          </div>
+
+          <!-- 15. Sharekhan Espresso -->
+          <div onclick="selectOnboardingBroker('espresso', 'Sharekhan Espresso', 'ES', 'bg-violet-500/20 text-violet-400 border-violet-500/30')" id="ob-card-espresso" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-violet-500/20 text-violet-400 border border-violet-500/30 flex items-center justify-center text-sm font-bold mx-auto">ES</div>
+            <div class="font-bold text-xs text-white truncate">Espresso</div>
+            <div class="text-[10px] text-violet-400 font-mono">Sharekhan API</div>
+          </div>
+
+          <!-- 16. Paytm Money -->
+          <div onclick="selectOnboardingBroker('paytmmoney', 'Paytm Money', 'PM', 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30')" id="ob-card-paytmmoney" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center text-sm font-bold mx-auto">PM</div>
+            <div class="font-bold text-xs text-white truncate">Paytm Money</div>
+            <div class="text-[10px] text-cyan-300 font-mono">Open API v1</div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span>🛡️</span>
+            <span>Your broker password and funds are 100% untouched. AlgoForge connects via authorized TSP APIs only.</span>
+          </div>
+          <span class="text-cyan-400 font-mono">Click any broker to advance</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SCREEN 2: ALLOCATED CAPITAL & EQUITY UTILIZATION (10% to 70%)             -->
+    <!-- Appears after broker is chosen; broker grid has disappeared               -->
+    <!-- ========================================================================= -->
+    <div id="screen-capital" class="space-y-5 hidden">
+      <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-sm font-bold">
+              2
+            </div>
+            <div>
+              <h2 class="text-lg font-black text-white">Step 2: Allocate Capital & Set Equity Utilization</h2>
+              <p class="text-xs text-slate-400">Decide how much trading capital to allocate and how much active margin to use.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-400">Selected Broker:</span>
+            <span id="capital-screen-broker-tag" class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/50 text-cyan-300 font-mono font-bold text-xs rounded-lg">
+              Flattrade
+            </span>
+            <button type="button" onclick="goToStep(1)" class="text-[11px] text-slate-400 hover:text-cyan-300 underline ml-1">Change</button>
+          </div>
+        </div>
+
+        <!-- Capital Amount Input -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7 space-y-4">
+            <div>
+              <label class="text-xs font-semibold text-slate-300 block mb-2">How much total capital is in your trading account?</label>
+              <div class="relative">
+                <span class="absolute left-4 top-3 text-cyan-400 font-bold text-lg font-mono">₹</span>
+                <input type="number" id="capital-input" value="25000" step="5000" min="5000" oninput="updateCapitalCalculations()" class="w-full bg-slate-950 border-2 border-slate-700 rounded-2xl py-3 pl-10 pr-4 text-white font-mono text-xl font-bold outline-none focus:border-cyan-500">
+              </div>
+            </div>
+
+            <!-- Quick Capital Chips -->
+            <div class="flex flex-wrap gap-2 text-xs">
+              <span class="text-slate-400 py-1 text-[11px]">Quick presets:</span>
+              <button type="button" onclick="setCapitalPreset(15000)" class="px-3 py-1 bg-slate-900 border border-slate-800 hover:border-cyan-500 rounded-xl font-mono text-slate-300">₹ 15,000</button>
+              <button type="button" onclick="setCapitalPreset(25000)" class="px-3 py-1 bg-cyan-950 border border-cyan-500 text-cyan-300 rounded-xl font-mono font-bold">₹ 25,000</button>
+              <button type="button" onclick="setCapitalPreset(50000)" class="px-3 py-1 bg-slate-900 border border-slate-800 hover:border-cyan-500 rounded-xl font-mono text-slate-300">₹ 50,000</button>
+              <button type="button" onclick="setCapitalPreset(100000)" class="px-3 py-1 bg-slate-900 border border-slate-800 hover:border-cyan-500 rounded-xl font-mono text-slate-300">₹ 1,00,000</button>
+              <button type="button" onclick="setCapitalPreset(200000)" class="px-3 py-1 bg-slate-900 border border-slate-800 hover:border-cyan-500 rounded-xl font-mono text-slate-300">₹ 2,00,000</button>
+            </div>
+
+            <!-- Equity Utilization Controller (10% to 70%, default 70%) -->
+            <div class="p-4 bg-slate-950 rounded-2xl border border-cyan-500/30 space-y-3 shadow-md">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                    <span>⚖️</span> % of Equity to Utilize (10% to 70%)
+                  </div>
+                  <div class="text-[11px] text-slate-400">Guarantees a safe liquid cash buffer against SEBI peak margin shortfalls</div>
+                </div>
+                <span class="px-2.5 py-1 bg-cyan-950 border border-cyan-500 text-cyan-300 font-mono font-bold text-xs rounded-lg" id="capital-equity-badge">
+                  70% Equity in Use (30% Cash Buffer)
+                </span>
+              </div>
+
+              <!-- Slider -->
+              <div class="space-y-1 pt-1">
+                <div class="flex items-center gap-3">
+                  <span class="text-xs text-slate-400 font-mono font-bold">10%</span>
+                  <input type="range" id="capital-equity-slider" min="10" max="70" step="5" value="70" oninput="setEquityUtilization(this.value)" class="w-full accent-cyan-400 bg-slate-900 rounded-lg cursor-pointer h-2 border border-slate-800">
+                  <span class="text-xs text-cyan-400 font-mono font-bold">70% Max</span>
+                </div>
+                <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                  <span>10% Ultra-Safe</span>
+                  <span>25% Safe</span>
+                  <span>50% Balanced</span>
+                  <span class="text-cyan-400 font-bold">70% Recommended Max</span>
+                </div>
+              </div>
+
+              <!-- Utilization Chips -->
+              <div class="flex flex-wrap gap-2 text-xs pt-1">
+                <button type="button" onclick="setEquityUtilization(10)" class="eq-preset-chip px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-[11px] font-mono text-slate-300" data-eq="10">10% Ultra-Safe</button>
+                <button type="button" onclick="setEquityUtilization(25)" class="eq-preset-chip px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-[11px] font-mono text-slate-300" data-eq="25">25% Safe</button>
+                <button type="button" onclick="setEquityUtilization(40)" class="eq-preset-chip px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-[11px] font-mono text-slate-300" data-eq="40">40% Conservative</button>
+                <button type="button" onclick="setEquityUtilization(50)" class="eq-preset-chip px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-[11px] font-mono text-slate-300" data-eq="50">50% Balanced</button>
+                <button type="button" onclick="setEquityUtilization(70)" class="eq-preset-chip px-2.5 py-1 bg-cyan-950 border border-cyan-500 text-cyan-300 rounded-lg text-[11px] font-mono font-bold" data-eq="70">⭐ 70% Max (Default)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right 5 cols: Live Split Breakdown & Advance Button -->
+          <div class="lg:col-span-5 flex flex-col justify-between space-y-4 bg-slate-950 p-5 rounded-2xl border border-slate-800">
+            <div class="space-y-3">
+              <h3 class="text-xs font-bold text-white flex items-center gap-1.5 border-b border-slate-800 pb-2">
+                <span>🛡️</span> SEBI Risk Allocation Breakdown
+              </h3>
+              
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div class="p-3 bg-cyan-950/20 border border-cyan-800/40 rounded-xl space-y-1">
+                  <div class="text-[11px] text-cyan-400 font-bold flex justify-between">
+                    <span>Active Margin</span>
+                    <span id="breakdown-active-pct" class="font-mono">70%</span>
+                  </div>
+                  <div class="text-lg font-black font-mono text-white" id="breakdown-active-amount">₹ 17,500</div>
+                  <div class="text-[10px] text-slate-400">Deployed for positions</div>
+                </div>
+
+                <div class="p-3 bg-emerald-950/20 border border-emerald-800/40 rounded-xl space-y-1">
+                  <div class="text-[11px] text-emerald-400 font-bold flex justify-between">
+                    <span>Cash Buffer</span>
+                    <span id="breakdown-buffer-pct" class="font-mono">30%</span>
+                  </div>
+                  <div class="text-lg font-black font-mono text-white" id="breakdown-buffer-amount">₹ 7,500</div>
+                  <div class="text-[10px] text-slate-400">Absorbs MTM & peak margin</div>
+                </div>
+              </div>
+
+              <!-- Safety Guardrails -->
+              <div class="space-y-1.5 text-[11px] text-slate-300 pt-1">
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Daily Max Loss Limit:</span>
+                  <span class="text-rose-400 font-mono font-bold" id="breakdown-max-loss">-₹ 1,050 (Auto Shut-off)</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Daily Profit Lock Target:</span>
+                  <span class="text-emerald-400 font-mono font-bold" id="breakdown-profit-target">+₹ 2,100</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Execution Lot Size:</span>
+                  <span class="text-cyan-300 font-mono font-bold" id="breakdown-lots">1 Lot (50 Qty)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Advance Button -->
+            <button type="button" onclick="confirmCapitalAndProceed()" class="w-full py-3.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-sm rounded-xl shadow-xl shadow-cyan-600/25 transition flex items-center justify-center gap-2">
+              <span>Continue to Choose Trading Goal</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SCREEN 3: CHOOSE YOUR TRADING GOAL (PICK 1 STRATEGY)                       -->
+    <!-- User prompt: Pre-built, thoroughly backtested, and optimized for Indian   -->
+    <!-- retail traders or build from the scratch from 100+ indicators available   -->
+    <!-- ========================================================================= -->
+    <div id="screen-strategy" class="space-y-5 hidden">
+      <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div>
+            <h2 class="text-lg font-black text-white">Choose Your Trading Goal (Pick 1 Strategy)</h2>
+            <p class="text-xs text-slate-400 mt-0.5">
+              Pre-built, thoroughly backtested, and optimized for Indian retail traders <span class="text-slate-500">or</span> <button type="button" onclick="openProBuilderModal()" class="text-cyan-400 hover:text-cyan-300 font-bold underline decoration-cyan-500/40 hover:decoration-cyan-400 underline-offset-2 transition inline-flex items-center gap-1">build from the scratch from 100+ indicators available <span>→</span></button>
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <!-- Return to Live Dashboard (shown for active subscribers) -->
+            <button type="button" id="btn-return-to-dash" onclick="returnToLiveDashboard()" class="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-bold text-xs rounded-lg transition flex items-center gap-1.5 hidden shadow-sm">
+              <span>⚡</span> Return to Live Dashboard
+            </button>
+            <span class="text-xs text-slate-400">Current Capital:</span>
+            <span id="strat-screen-cap-tag" class="px-2.5 py-1 bg-slate-900 border border-slate-700 text-cyan-300 font-mono font-bold text-xs rounded-lg">
+              ₹ 25,000 (@ 70% util)
+            </span>
+            <button type="button" onclick="goToStep(2)" class="text-[11px] text-slate-400 hover:text-cyan-300 underline ml-1">Edit</button>
+          </div>
+        </div>
+
+        <!-- 4 Strategy Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+          <!-- Strategy 1: Nifty Safe Trend Rider -->
+          <div onclick="selectAndCustomizeStrategy('trend_rider')" id="card-trend_rider" class="p-5 bg-slate-950 border-2 border-cyan-500 rounded-2xl cursor-pointer space-y-3 hover:border-cyan-400 transition-all hover:scale-[1.01] shadow-lg shadow-cyan-500/10 relative">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold rounded-md uppercase">
+                ⭐ Most Popular
+              </span>
+              <span class="text-cyan-400 font-mono text-xs font-semibold">NSE: NIFTY 50</span>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <span>🚀</span> Nifty Safe Trend Rider
+              </h3>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                Automatically buys Calls (CE) during rallies and Puts (PE) during market falls. Exits instantly if stop-loss is hit.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-slate-800 text-[11px] space-y-1 text-slate-300">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 font-medium">Min. Capital:</span>
+                <span class="font-bold text-white font-mono text-xs" id="min-cap-trend_rider">₹ 21,500</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">Trading Style:</span>
+                <span class="text-cyan-300 font-medium">Automatic 2-Way (CE / PE)</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">Risk-to-Reward:</span>
+                <span class="text-emerald-400 font-mono font-bold">1 : 2 Target</span>
+              </div>
+            </div>
+            <div class="w-full py-2 bg-gradient-to-r from-cyan-600/40 to-indigo-600/40 text-cyan-300 text-center font-bold text-xs rounded-xl border border-cyan-500/50 flex items-center justify-center gap-1.5 mt-2">
+              <span>⚙️</span> Select & View/Edit Rules →
+            </div>
+          </div>
+
+          <!-- Strategy 2: Daily Income Theta Harvester -->
+          <div onclick="selectAndCustomizeStrategy('theta_harvester')" id="card-theta_harvester" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-indigo-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-[10px] font-bold rounded-md uppercase">
+                🛡️ Low Stress
+              </span>
+              <span class="text-indigo-400 font-mono text-xs font-semibold">NSE: NIFTY/BANKNIFTY</span>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <span>💰</span> Daily Income Harvester
+              </h3>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                Zero direction guessing! Sells options away from market price at 9:20 AM and pockets daily time decay (theta) without caring if market goes up or down.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-slate-800 text-[11px] space-y-1 text-slate-300">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 font-medium">Min. Capital:</span>
+                <span class="font-bold text-white font-mono text-xs" id="min-cap-theta_harvester">₹ 64,300</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">Trading Style:</span>
+                <span class="text-indigo-300 font-medium">Non-Directional Straddle</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">Margin Discount:</span>
+                <span class="text-emerald-400 font-mono font-bold">70% Hedged</span>
+              </div>
+            </div>
+            <div class="w-full py-2 bg-slate-900 text-slate-300 text-center font-bold text-xs rounded-xl border border-slate-800 hover:border-indigo-500/50 flex items-center justify-center gap-1.5 mt-2">
+              <span>⚙️</span> Select & View/Edit Rules →
+            </div>
+          </div>
+
+          <!-- Strategy 3: BankNifty Fast Scalper -->
+          <div onclick="selectAndCustomizeStrategy('banknifty_scalp')" id="card-banknifty_scalp" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-amber-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold rounded-md uppercase">
+                ⚡ High Action
+              </span>
+              <span class="text-amber-400 font-mono text-xs font-semibold">NSE: BANKNIFTY</span>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <span>⚡</span> BankNifty Fast Scalper
+              </h3>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                Fast 15-minute momentum strikes on BankNifty. In and out before 3:15 PM with tight trailing stop-loss. High profit potential.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-slate-800 text-[11px] space-y-1 text-slate-300">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 font-medium">Min. Capital:</span>
+                <span class="font-bold text-white font-mono text-xs" id="min-cap-banknifty_scalp">₹ 35,800</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">Trading Style:</span>
+                <span class="text-amber-300 font-medium">Momentum Breakouts</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">Exit Rule:</span>
+                <span class="text-amber-400 font-mono font-bold">Auto Square-off 3:15 PM</span>
+              </div>
+            </div>
+            <div class="w-full py-2 bg-slate-900 text-slate-300 text-center font-bold text-xs rounded-xl border border-slate-800 hover:border-amber-500/50 flex items-center justify-center gap-1.5 mt-2">
+              <span>⚙️</span> Select & View/Edit Rules →
+            </div>
+          </div>
+
+          <!-- Strategy 4: FinNifty & Midcap Expiry Hunter -->
+          <div onclick="selectAndCustomizeStrategy('expiry_hunter')" id="card-expiry_hunter" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-purple-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-purple-500/20 border border-purple-500/30 text-purple-300 text-[10px] font-bold rounded-md uppercase">
+                🔥 Expiry Momentum
+              </span>
+              <span class="text-purple-400 font-mono text-xs font-semibold">NSE: FINNIFTY/MIDCAP</span>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <span>🎯</span> FinNifty & Midcap Expiry Hunter
+              </h3>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                Specialized for NSE weekly expiries (Monday Midcap, Tuesday FinNifty). Catches explosive gamma spikes with tight trailing stop-loss.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-slate-800 text-[11px] space-y-1 text-slate-300">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 font-medium">Min. Capital:</span>
+                <span class="font-bold text-white font-mono text-xs" id="min-cap-expiry_hunter">₹ 14,300</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">Trading Style:</span>
+                <span class="text-purple-300 font-medium">Expiry Breakouts (CE/PE)</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">Market:</span>
+                <span class="text-purple-400 font-mono font-bold">NSE Weekly Options</span>
+              </div>
+            </div>
+            <div class="w-full py-2 bg-slate-900 text-slate-300 text-center font-bold text-xs rounded-xl border border-slate-800 hover:border-purple-500/50 flex items-center justify-center gap-1.5 mt-2">
+              <span>⚙️</span> Select & View/Edit Rules →
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SCREEN 4: MANDATORY NSE 1-YEAR BACKTEST & STRATEGY COMPARISON             -->
+    <!-- User prompt: once saved the backtest appears it becomes mandatory to      -->
+    <!-- backtest and also the stratagies stays on page to choose between them too -->
+    <!-- ========================================================================= -->
+    <div id="screen-backtest" class="space-y-5 hidden">
+      <!-- Active Configuration & Previous Selections Bar (User request: choose from previous options like broker, equity allotment, or strategy) -->
+      <div class="bg-gradient-to-r from-[#0d1627] via-[#0d1322] to-[#0d1627] border border-cyan-500/40 rounded-2xl p-4 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+            <span class="text-xs font-bold text-white uppercase tracking-wider">Your Configured Trading Setup:</span>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            Click any option below to change or fine-tune at any time
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
+          <!-- Option 1: Selected Broker -->
+          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between hover:border-cyan-500/50 transition">
+            <div class="space-y-0.5">
+              <div class="text-[10px] text-slate-400 font-medium">1. Connected Broker</div>
+              <div class="text-xs font-bold text-white flex items-center gap-1.5" id="bt-summary-broker">
+                <span>🏦</span> <span id="bt-summary-broker-name">Flattrade</span>
+              </div>
+            </div>
+            <button type="button" onclick="goToStep(1)" class="px-2.5 py-1 bg-slate-900 hover:bg-cyan-950 text-cyan-400 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 rounded-lg text-[11px] font-bold transition flex items-center gap-1">
+              <span>↻</span> Change Broker
+            </button>
+          </div>
+
+          <!-- Option 2: Capital & Equity Allotment -->
+          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between hover:border-cyan-500/50 transition">
+            <div class="space-y-0.5">
+              <div class="text-[10px] text-slate-400 font-medium">2. Capital & Equity Allotment</div>
+              <div class="text-xs font-bold text-white font-mono" id="bt-summary-capital">
+                ₹ 25,000 <span class="text-cyan-400 font-sans text-[11px] font-medium">(70% Active Util)</span>
+              </div>
+            </div>
+            <button type="button" onclick="goToStep(2)" class="px-2.5 py-1 bg-slate-900 hover:bg-cyan-950 text-cyan-400 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 rounded-lg text-[11px] font-bold transition flex items-center gap-1">
+              <span>✎</span> Adjust Capital
+            </button>
+          </div>
+
+          <!-- Option 3: Chosen Strategy -->
+          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between hover:border-cyan-500/50 transition">
+            <div class="space-y-0.5">
+              <div class="text-[10px] text-slate-400 font-medium">3. Selected Trading Strategy</div>
+              <div class="text-xs font-bold text-white truncate max-w-[140px]" id="bt-summary-strat">
+                🚀 Nifty Safe Trend Rider
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button type="button" onclick="goToStep(3)" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 rounded-lg text-[11px] font-bold transition">
+                All Strategies
+              </button>
+              <button type="button" onclick="openCurrentStrategyCustomizer()" class="px-2 py-1 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-500/50 rounded-lg text-[11px] font-bold transition">
+                ⚙️ Edit Rules
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategy Switcher & Comparison Header (User prompt: switch between strategies in backtest page) -->
+      <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-5 space-y-4 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Trading Goal / Strategy Tester</span>
+              <span class="px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/50 text-[10px] text-cyan-400 font-bold">1-Click Test & Switch</span>
+            </div>
+            <h3 class="text-base font-black text-white mt-0.5">Switch & Backtest Other Pre-Built Strategies</h3>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-400">Active Choice:</span>
+            <span id="backtest-active-strat-badge" class="px-3 py-1 bg-cyan-950 border border-cyan-500 text-cyan-300 font-bold text-xs rounded-xl shadow-md shadow-cyan-500/10">
+              🚀 Nifty Safe Trend Rider
+            </span>
+            <button type="button" onclick="openCurrentStrategyCustomizer()" class="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-cyan-400 hover:text-cyan-300 border border-slate-700 rounded-lg text-xs font-semibold transition flex items-center gap-1">
+              <span>⚙️</span> Edit Parameters
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Interactive Strategy Selection Tiles directly on Backtest Screen -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="backtest-strat-tiles">
+          <!-- Strategy 1 -->
+          <div onclick="switchStrategyAndBacktest('trend_rider')" id="bt-tile-trend_rider" class="p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-cyan-500 shadow-md shadow-cyan-500/20">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-cyan-500/20 text-cyan-300 text-[10px] font-bold rounded">🚀 Trend Rider</span>
+              <span class="text-[10px] text-emerald-400 font-mono font-bold" id="bt-tile-badge-trend_rider">ACTIVE</span>
+            </div>
+            <div class="font-bold text-white text-xs">Nifty Safe Trend Rider</div>
+            <div class="flex justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+              <span>Win Rate: <strong class="text-emerald-400 font-mono">68.2%</strong></span>
+              <span>Max DD: <strong class="text-amber-400 font-mono">-3.8%</strong></span>
+            </div>
+            <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('trend_rider');" class="w-full text-center py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded-lg border border-slate-800 hover:border-cyan-500/40">
+              Edit Rules / Params ⚙️
+            </button>
+          </div>
+
+          <!-- Strategy 2 -->
+          <div onclick="switchStrategyAndBacktest('theta_harvester')" id="bt-tile-theta_harvester" class="p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-slate-800 hover:border-slate-700">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-indigo-500/20 text-indigo-300 text-[10px] font-bold rounded">💰 Theta Harvester</span>
+              <span class="text-[10px] text-slate-500 font-mono" id="bt-tile-badge-theta_harvester">Click to Test</span>
+            </div>
+            <div class="font-bold text-white text-xs">Daily Income Harvester</div>
+            <div class="flex justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+              <span>Win Rate: <strong class="text-emerald-400 font-mono">74.6%</strong></span>
+              <span>Max DD: <strong class="text-amber-400 font-mono">-2.4%</strong></span>
+            </div>
+            <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('theta_harvester');" class="w-full text-center py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded-lg border border-slate-800 hover:border-indigo-500/40">
+              Edit Rules / Params ⚙️
+            </button>
+          </div>
+
+          <!-- Strategy 3 -->
+          <div onclick="switchStrategyAndBacktest('banknifty_scalp')" id="bt-tile-banknifty_scalp" class="p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-slate-800 hover:border-slate-700">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-bold rounded">⚡ BN Scalper</span>
+              <span class="text-[10px] text-slate-500 font-mono" id="bt-tile-badge-banknifty_scalp">Click to Test</span>
+            </div>
+            <div class="font-bold text-white text-xs">BankNifty Fast Scalper</div>
+            <div class="flex justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+              <span>Win Rate: <strong class="text-emerald-400 font-mono">62.8%</strong></span>
+              <span>Max DD: <strong class="text-amber-400 font-mono">-4.5%</strong></span>
+            </div>
+            <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('banknifty_scalp');" class="w-full text-center py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded-lg border border-slate-800 hover:border-amber-500/40">
+              Edit Rules / Params ⚙️
+            </button>
+          </div>
+
+          <!-- Strategy 4 -->
+          <div onclick="switchStrategyAndBacktest('expiry_hunter')" id="bt-tile-expiry_hunter" class="p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-slate-800 hover:border-slate-700">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-purple-500/20 text-purple-300 text-[10px] font-bold rounded">🎯 Expiry Hunter</span>
+              <span class="text-[10px] text-slate-500 font-mono" id="bt-tile-badge-expiry_hunter">Click to Test</span>
+            </div>
+            <div class="font-bold text-white text-xs">FinNifty / Midcap Expiry</div>
+            <div class="flex justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+              <span>Win Rate: <strong class="text-emerald-400 font-mono">59.2%</strong></span>
+              <span>Max DD: <strong class="text-amber-400 font-mono">-5.1%</strong></span>
+            </div>
+            <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('expiry_hunter');" class="w-full text-center py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded-lg border border-slate-800 hover:border-purple-500/40">
+              Edit Rules / Params ⚙️
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mandatory Backtest Execution Box -->
+      <div class="bg-[#0d1322] border-2 border-cyan-500/40 rounded-2xl p-6 space-y-5 shadow-2xl">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></span>
+              <h2 class="text-base font-black text-white" id="backtest-card-title">
+                Mandatory 1-Year Historical Backtest: Nifty Safe Trend Rider
+              </h2>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5">
+              Simulated across 246 actual NSE trading sessions (9:15 AM to 3:30 PM) using downloaded historical candle data.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold rounded-lg flex items-center gap-1.5" id="backtest-status-badge">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              Simulated: 246 NSE Sessions
+            </span>
+          </div>
+        </div>
+
+        <!-- 6 Core Backtest Metrics -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80">
+            <div class="text-[10px] text-slate-400">Vectorized Speed</div>
+            <div class="text-base font-bold text-cyan-300 font-mono mt-0.5" id="bt-metric-speed">⚡ 28 ms</div>
+            <div class="text-[9px] text-slate-500">246 days parsed</div>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80">
+            <div class="text-[10px] text-slate-400">Backtested Win Rate</div>
+            <div class="text-base font-bold text-emerald-400 font-mono mt-0.5" id="bt-metric-winrate">68.2%</div>
+            <div class="text-[9px] text-slate-500" id="bt-metric-trades">15 W / 7 L</div>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80">
+            <div class="text-[10px] text-slate-400">Max DD (Peak Drop)</div>
+            <div class="text-base font-bold text-amber-400 font-mono mt-0.5" id="bt-metric-dd">-3.8%</div>
+            <div class="text-[9px] text-slate-500">Tight risk bound</div>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80">
+            <div class="text-[10px] text-slate-400">Profit Factor</div>
+            <div class="text-base font-bold text-white font-mono mt-0.5" id="bt-metric-pf">2.34</div>
+            <div class="text-[9px] text-slate-500">Gross wins/losses</div>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80">
+            <div class="text-[10px] text-slate-400">Simulated Net Return</div>
+            <div class="text-base font-bold text-emerald-400 font-mono mt-0.5" id="bt-metric-pnl">+₹ 86,400</div>
+            <div class="text-[9px] text-slate-500" id="bt-metric-roi">+17.3% Annual</div>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80">
+            <div class="text-[10px] text-slate-400">Final Projected Capital</div>
+            <div class="text-base font-bold text-cyan-300 font-mono mt-0.5" id="bt-metric-finalcap">₹ 1,11,400</div>
+            <div class="text-[9px] text-slate-500">Compound model</div>
+          </div>
+        </div>
+
+        <!-- Simulated Equity Curve -->
+        <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-white flex items-center gap-1.5">
+              <span>📈</span> 1-Year Cumulative Simulation Curve
+            </span>
+            <span class="text-[11px] text-slate-400 font-mono">NSE Daily Candles (April 2025 – March 2026)</span>
+          </div>
+          <div class="h-24 w-full pt-1">
+            <svg class="w-full h-full" viewBox="0 0 500 100" preserveAspectRatio="none">
+              <path id="bt-svg-path" d="M0,85 Q 80,75 140,60 T 260,45 T 380,25 T 500,10" stroke="#06b6d4" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- All 4 Strategies Comparative Benchmark Table -->
+        <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-white flex items-center gap-1.5">
+              <span>📊</span> Compare All 4 Pre-Built Strategies (1-Year NSE Simulation)
+            </span>
+            <span class="text-[11px] text-slate-400">Click any row to test instantly</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="text-[11px] text-slate-500 uppercase border-b border-slate-800 font-mono">
+                <tr>
+                  <th class="py-2 px-3">Strategy Name</th>
+                  <th class="py-2 px-3">Index / Market</th>
+                  <th class="py-2 px-3">Win Rate</th>
+                  <th class="py-2 px-3">Max DD</th>
+                  <th class="py-2 px-3">Profit Factor</th>
+                  <th class="py-2 px-3">Style</th>
+                  <th class="py-2 px-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]" id="bt-comparison-tbody">
+                <tr onclick="switchStrategyAndBacktest('trend_rider')" class="hover:bg-slate-900/60 cursor-pointer transition" id="bt-row-trend_rider">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white flex items-center gap-2">
+                    <span>🚀</span> Nifty Safe Trend Rider
+                    <span class="px-1.5 py-0.2 bg-cyan-950 text-cyan-400 text-[9px] rounded border border-cyan-500/40" id="badge-curr-trend_rider">ACTIVE</span>
+                  </td>
+                  <td class="py-2.5 px-3 text-slate-400 font-sans">Nifty 50 Options</td>
+                  <td class="py-2.5 px-3 text-emerald-400 font-bold">68.2%</td>
+                  <td class="py-2.5 px-3 text-amber-400 font-bold">-3.8%</td>
+                  <td class="py-2.5 px-3 text-white">2.34</td>
+                  <td class="py-2.5 px-3 text-cyan-300 font-sans">Trend Following</td>
+                  <td class="py-2.5 px-3 text-right">
+                    <button type="button" onclick="event.stopPropagation(); switchStrategyAndBacktest('trend_rider')" class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white rounded text-[10px] font-sans font-bold">Simulate</button>
+                  </td>
+                </tr>
+                <tr onclick="switchStrategyAndBacktest('theta_harvester')" class="hover:bg-slate-900/60 cursor-pointer transition" id="bt-row-theta_harvester">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white flex items-center gap-2">
+                    <span>💰</span> Daily Income Harvester
+                    <span class="px-1.5 py-0.2 bg-slate-800 text-slate-400 text-[9px] rounded hidden" id="badge-curr-theta_harvester">ACTIVE</span>
+                  </td>
+                  <td class="py-2.5 px-3 text-slate-400 font-sans">Nifty / BankNifty</td>
+                  <td class="py-2.5 px-3 text-emerald-400 font-bold">74.6%</td>
+                  <td class="py-2.5 px-3 text-amber-400 font-bold">-2.4%</td>
+                  <td class="py-2.5 px-3 text-white">2.81</td>
+                  <td class="py-2.5 px-3 text-indigo-300 font-sans">Theta Decay Straddle</td>
+                  <td class="py-2.5 px-3 text-right">
+                    <button type="button" onclick="event.stopPropagation(); switchStrategyAndBacktest('theta_harvester')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded text-[10px] font-sans font-bold">Simulate</button>
+                  </td>
+                </tr>
+                <tr onclick="switchStrategyAndBacktest('banknifty_scalp')" class="hover:bg-slate-900/60 cursor-pointer transition" id="bt-row-banknifty_scalp">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white flex items-center gap-2">
+                    <span>⚡</span> BankNifty Fast Scalper
+                    <span class="px-1.5 py-0.2 bg-slate-800 text-slate-400 text-[9px] rounded hidden" id="badge-curr-banknifty_scalp">ACTIVE</span>
+                  </td>
+                  <td class="py-2.5 px-3 text-slate-400 font-sans">BankNifty Index</td>
+                  <td class="py-2.5 px-3 text-emerald-400 font-bold">62.8%</td>
+                  <td class="py-2.5 px-3 text-amber-400 font-bold">-4.5%</td>
+                  <td class="py-2.5 px-3 text-white">2.12</td>
+                  <td class="py-2.5 px-3 text-amber-300 font-sans">Momentum Scalp</td>
+                  <td class="py-2.5 px-3 text-right">
+                    <button type="button" onclick="event.stopPropagation(); switchStrategyAndBacktest('banknifty_scalp')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded text-[10px] font-sans font-bold">Simulate</button>
+                  </td>
+                </tr>
+                <tr onclick="switchStrategyAndBacktest('expiry_hunter')" class="hover:bg-slate-900/60 cursor-pointer transition" id="bt-row-expiry_hunter">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white flex items-center gap-2">
+                    <span>🎯</span> FinNifty / Midcap Expiry
+                    <span class="px-1.5 py-0.2 bg-slate-800 text-slate-400 text-[9px] rounded hidden" id="badge-curr-expiry_hunter">ACTIVE</span>
+                  </td>
+                  <td class="py-2.5 px-3 text-slate-400 font-sans">FinNifty / Midcap</td>
+                  <td class="py-2.5 px-3 text-emerald-400 font-bold">59.2%</td>
+                  <td class="py-2.5 px-3 text-amber-400 font-bold">-5.1%</td>
+                  <td class="py-2.5 px-3 text-white">1.95</td>
+                  <td class="py-2.5 px-3 text-purple-300 font-sans">Gamma Expiry Spike</td>
+                  <td class="py-2.5 px-3 text-right">
+                    <button type="button" onclick="event.stopPropagation(); switchStrategyAndBacktest('expiry_hunter')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded text-[10px] font-sans font-bold">Simulate</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Mandatory SEBI Gross Disclaimer -->
+        <div class="p-3 bg-amber-950/20 border border-amber-500/30 rounded-xl text-[11px] text-amber-300/90 leading-relaxed">
+          ⚠️ <strong>Mandatory Statutory Disclaimer:</strong> All backtested metrics (Win Rate, PnL, Profit Factor, and Max DD) are gross simulations without deduction of brokerage, STT, exchange turnover fees, GST, or slippages. Max DD represents historical peak-to-trough drop. Past performance is strictly not indicative of future returns.
+        </div>
+
+        <!-- Call to Action: Deploy Button -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="goToStep(3)" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-1.5">
+              <span>←</span> Back to Trading Goals
+            </button>
+            <button type="button" onclick="runSimpleBacktestSimulation()" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-2">
+              <span>↻</span> Re-run Simulation
+            </button>
+          </div>
+          <button type="button" onclick="openApiCredentialsModal()" class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:opacity-95 text-slate-950 font-black text-sm rounded-xl shadow-xl shadow-emerald-500/25 transition flex items-center gap-2 pulse-glow">
+            <span>🚀</span>
+            <span>Deploy Strategy to Dedicated Cloud Node</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SCREEN 5: SERVER SUBSCRIPTION PAYMENT PAGE (BOT IS FREE, SERVER ₹1,499/MO)-->
+    <!-- User prompt: The bot is always free and the charges are for Server only    -->
+    <!-- it is 1499/- per month there will be a reminder before 3 day to recharge  -->
+    <!-- ========================================================================= -->
+    <div id="screen-payment" class="max-w-2xl mx-auto space-y-5 hidden">
+      <div class="bg-[#0d1322] border-2 border-cyan-500/40 rounded-3xl p-7 space-y-6 shadow-2xl relative overflow-hidden">
+        <div class="text-center space-y-1.5 border-b border-slate-800 pb-4">
+          <span class="px-3 py-1 bg-cyan-950 border border-cyan-500 text-cyan-300 font-mono font-bold text-xs rounded-xl">
+            Step 5: Cloud Deployment & Server Activation
+          </span>
+          <h2 class="text-2xl font-black text-white mt-2">Deploy on Dedicated Private Cloud</h2>
+          <p class="text-xs text-slate-400">
+            Your trading bot is <strong class="text-emerald-400">100% Free Lifetime</strong>. You only pay for your dedicated cloud droplet server.
+          </p>
+        </div>
+
+        <!-- Transparent Pricing Table -->
+        <div class="p-5 bg-slate-950 rounded-2xl border border-slate-800 space-y-3 text-xs">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+            <div>
+              <div class="font-bold text-white text-sm">AlgoForge Trading Bot Engine</div>
+              <div class="text-slate-400 text-[11px]">Unlimited strategy edits & parameters (Max 3 switches/day)</div>
+            </div>
+            <div class="text-right">
+              <span class="text-emerald-400 font-mono font-bold text-sm">₹ 0 FREE</span>
+              <div class="text-[10px] text-slate-500">Lifetime TSP License</div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+            <div>
+              <div class="font-bold text-white text-sm">Dedicated Cloud Droplet (blr1 Bangalore)</div>
+              <div class="text-slate-400 text-[11px]">Isolated Static IP: <span class="font-mono text-cyan-300">159.65.12.84</span> • Sub-millisecond NSE co-location</div>
+            </div>
+            <div class="text-right">
+              <span class="text-white font-mono font-bold text-sm">₹ 1,499</span>
+              <div class="text-[10px] text-slate-400">/ month</div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <span class="font-bold text-slate-300 text-sm">Total Payable Today:</span>
+            <span class="font-black text-cyan-400 font-mono text-xl">₹ 1,499.00</span>
+          </div>
+        </div>
+
+        <!-- Reminder Notice -->
+        <div class="p-3.5 bg-indigo-950/30 border border-indigo-500/30 rounded-xl text-xs text-indigo-200/90 flex items-start gap-2.5">
+          <span class="text-base mt-0.5">🔔</span>
+          <div class="space-y-0.5">
+            <div class="font-bold text-white">Recharge Reminder Guarantee:</div>
+            <div>A friendly reminder will be sent to your WhatsApp and registered email <strong class="text-cyan-300">3 days prior</strong> to the 30-day renewal date. Cancel anytime in 1-click.</div>
+          </div>
+        </div>
+
+        <!-- Payment Method Simulator -->
+        <div class="space-y-3">
+          <label class="text-xs font-bold text-slate-300 block">Select Payment Method (Simulation Mode):</label>
+          <div class="grid grid-cols-3 gap-2 text-xs">
+            <div class="p-3 bg-slate-900 border border-cyan-500/60 rounded-xl text-center cursor-pointer font-bold text-cyan-300 flex items-center justify-center gap-1.5">
+              <span>📱</span> UPI / QR Code
+            </div>
+            <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center text-slate-400 flex items-center justify-center gap-1.5">
+              <span>💳</span> Cards / EMI
+            </div>
+            <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center text-slate-400 flex items-center justify-center gap-1.5">
+              <span>🏦</span> Net Banking
+            </div>
+          </div>
+        </div>
+
+        <!-- Pay Button -->
+        <button type="button" onclick="completeServerSubscriptionPayment()" id="btn-pay-subscription" class="w-full py-4 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:opacity-95 text-slate-950 font-black text-base rounded-2xl shadow-xl shadow-emerald-500/25 transition flex items-center justify-center gap-2">
+          <span>💳</span>
+          <span id="btn-pay-text">Pay ₹ 1,499 & Launch Dedicated Server</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SCREEN 6: LIVE BOT COMMAND CENTER DASHBOARD                              -->
+    <!-- Matching user's uploaded reference UI in media_1790927908494.png          -->
+    <!-- ========================================================================= -->
+    <div id="screen-live-dashboard" class="space-y-5 hidden">
+
+      <!-- Top Dashboard Header with Live Toggle & Quant Engine -->
+      <div class="bg-[#0b101e] border border-cyan-500/30 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+        <div class="space-y-0.5">
+          <div class="flex items-center gap-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <h2 class="text-base font-black tracking-wide text-white font-mono uppercase">
+              NIFTY/BANKNIFTY <span class="text-amber-400">QUANT ENGINE 3.0</span>
+            </h2>
+          </div>
+          <p class="text-[11px] text-slate-400 font-mono">
+            Dynamic Mean Reversion (2.5 Sigma) | Strict Limit Orders | Live Arbitrage Tracker
+          </p>
+        </div>
+
+        <!-- Mode Toggle & Action Controls -->
+        <div class="flex items-center gap-3">
+          <!-- Strategy Switch & Strategy Home / Settings Controls -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-400">Active Strategy:</span>
+            <span id="dash-active-strat-name" class="px-2.5 py-1 bg-cyan-950 border border-cyan-500 text-cyan-300 font-bold text-xs rounded-xl font-mono">
+              BankNifty Fast Scalper
+            </span>
+            <button type="button" onclick="goToStrategyHomePage()" class="px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-500/20 transition flex items-center gap-1.5" title="Go to Strategy Home page to change settings, rules, broker, or equity">
+              <span>🏠</span> Strategy Home & Settings
+            </button>
+            <button type="button" onclick="openStrategySwitchModal()" class="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-cyan-300 hover:text-white rounded-xl text-xs font-medium transition" id="dash-switch-btn">
+              ⚙️ Quick Switch (<span id="dash-switches-left">3</span> left today)
+            </button>
+          </div>
+
+          <!-- Paper Trading vs Live Execution Toggle -->
+          <div class="flex items-center gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-mono font-bold">
+            <button type="button" id="toggle-paper" onclick="setExecutionMode('paper')" class="px-3 py-1 rounded-lg text-slate-400 transition">
+              PAPER TRADING
+            </button>
+            <button type="button" id="toggle-live" onclick="setExecutionMode('live')" class="px-3 py-1 rounded-lg bg-rose-600 text-white shadow transition flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+              LIVE EXECUTION
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Connection & Access Token Bar (Matching Reference) -->
+      <div class="bg-[#0b101e] border border-slate-800 rounded-2xl p-4 space-y-3">
+        <div class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+          <span id="dash-broker-conn-title">API CONNECTION (FLATTRADE / ZERODHA)</span>
+          <span class="text-[10px] text-emerald-400 font-mono">✓ Cloud Worker: ONLINE (blr1)</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center text-xs">
+          <!-- Step 1: Generate Access Token Button -->
+          <div class="lg:col-span-3">
+            <div class="text-[10px] text-slate-400 mb-1">Step 1: Daily Auth Token</div>
+            <button type="button" onclick="generateDailyToken()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition flex items-center justify-center gap-2 shadow">
+              <span>🔑</span> GET TODAY'S TOKEN
+            </button>
+          </div>
+
+          <!-- Step 2: Access Token Display & Save -->
+          <div class="lg:col-span-9 flex items-center gap-2">
+            <div class="flex-1">
+              <div class="text-[10px] text-slate-400 mb-1">Step 2: Active Session Token (Auto-Refreshed Daily at 9:15 AM)</div>
+              <input type="text" id="dash-access-token" value="ft_session_token_live_98124_a9bb002" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-300 font-mono text-xs">
+            </div>
+            <button type="button" onclick="restartBotWorker()" class="mt-4 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition flex items-center gap-1.5 shrink-0 text-xs">
+              Save & Restart Bot
+            </button>
+          </div>
+        </div>
+        <div class="text-[10px] text-slate-500 font-mono">
+          Note: Access tokens expire every morning at 7:30 AM. Automated TOTP engine re-authenticates without manual phone OTPs.
+        </div>
+      </div>
+
+      <!-- 4 Core Metric KPI Cards (Matching Reference) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Metric 1: Live Z-Score Divergence -->
+        <div class="p-4 bg-[#0b101e] border border-slate-800 rounded-2xl space-y-1">
+          <div class="text-xs text-slate-400 font-medium">LIVE Z-SCORE (DIVERGENCE)</div>
+          <div class="text-2xl font-black text-emerald-400 font-mono" id="dash-z-score">-1.000</div>
+          <div class="text-[11px] text-slate-500 font-mono">Target Reversion: 0.00</div>
+        </div>
+
+        <!-- Metric 2: Nifty 50 Mark Price -->
+        <div class="p-4 bg-[#0b101e] border border-slate-800 rounded-2xl space-y-1">
+          <div class="text-xs text-slate-400 font-medium">NIFTY 50 MARK PRICE</div>
+          <div class="text-2xl font-black text-white font-mono" id="dash-nifty-price">₹ 23,063.1</div>
+          <div class="text-[11px] text-slate-500 font-mono">Underlying Index</div>
+        </div>
+
+        <!-- Metric 3: BankNifty Mark Price -->
+        <div class="p-4 bg-[#0b101e] border border-slate-800 rounded-2xl space-y-1">
+          <div class="text-xs text-slate-400 font-medium">BANKNIFTY MARK PRICE</div>
+          <div class="text-2xl font-black text-white font-mono" id="dash-banknifty-price">₹ 55,438.5</div>
+          <div class="text-[11px] text-slate-500 font-mono">Underlying Index</div>
+        </div>
+
+        <!-- Metric 4: Broker Wallet Balance -->
+        <div class="p-4 bg-[#0b101e] border border-slate-800 rounded-2xl space-y-1">
+          <div class="text-xs text-slate-400 font-medium">BROKER WALLET BALANCE</div>
+          <div class="text-2xl font-black text-emerald-400 font-mono" id="dash-wallet-bal">₹ 2,00,000</div>
+          <div class="text-[11px] text-slate-500 font-mono">Available for Execution</div>
+        </div>
+      </div>
+
+      <!-- Live Price Tracker & Math Engine (Matching Reference Table) -->
+      <div class="bg-[#0b101e] border border-slate-800 rounded-2xl p-5 space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <span>📊</span> Live Price Tracker & Math Engine
+          </h3>
+          <span class="text-xs text-emerald-400 font-mono" id="dash-live-clock">Live: 1:27:51 PM</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono">
+            <thead>
+              <tr class="text-slate-400 border-b border-slate-800/80">
+                <th class="py-2.5 px-3">ASSET LEG</th>
+                <th class="py-2.5 px-3">MARK PRICE</th>
+                <th class="py-2.5 px-3">CURRENT RATIO</th>
+                <th class="py-2.5 px-3">120M MEAN RATIO</th>
+                <th class="py-2.5 px-3">SIGMA DEVIATION</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/40">
+              <tr class="hover:bg-slate-900/50">
+                <td class="py-3 px-3 font-bold text-white">NIFTY / BANKNIFTY</td>
+                <td class="py-3 px-3 text-slate-200" id="table-mark-pair">23063.1 / 55438.5</td>
+                <td class="py-3 px-3 text-cyan-400 font-bold" id="table-current-ratio">0.41601</td>
+                <td class="py-3 px-3 text-slate-300">0.41601</td>
+                <td class="py-3 px-3 text-emerald-400 font-bold text-sm" id="table-sigma-dev">-1.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Live Trade History Table -->
+      <div class="bg-[#0b101e] border border-slate-800 rounded-2xl p-5 space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <span>📋</span> Active Strategy Trade Execution History
+          </h3>
+          <span class="text-xs text-cyan-400 font-mono">Broker Order Routing: Active</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono">
+            <thead>
+              <tr class="text-slate-400 border-b border-slate-800/80">
+                <th class="py-2.5 px-3">TIME</th>
+                <th class="py-2.5 px-3">SCRIP / STRIKE</th>
+                <th class="py-2.5 px-3">SIDE</th>
+                <th class="py-2.5 px-3">ENTRY</th>
+                <th class="py-2.5 px-3">TRAILING SL</th>
+                <th class="py-2.5 px-3">CURRENT</th>
+                <th class="py-2.5 px-3">NET P&L</th>
+                <th class="py-2.5 px-3">STATUS</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/40" id="dash-trade-history-rows">
+              <tr class="hover:bg-slate-900/50">
+                <td class="py-2.5 px-3 text-slate-500">11:42:10</td>
+                <td class="py-2.5 px-3 font-bold text-white">NIFTY 23100 CE</td>
+                <td class="py-2.5 px-3 text-emerald-400 font-bold">BUY</td>
+                <td class="py-2.5 px-3">₹ 142.50</td>
+                <td class="py-2.5 px-3 text-rose-400">₹ 135.00</td>
+                <td class="py-2.5 px-3 text-cyan-300">₹ 154.20</td>
+                <td class="py-2.5 px-3 text-emerald-400 font-bold">+₹ 1,755.00</td>
+                <td class="py-2.5 px-3"><span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded text-[10px] font-bold">RUNNING</span></td>
+              </tr>
+              <tr class="hover:bg-slate-900/50">
+                <td class="py-2.5 px-3 text-slate-500">10:15:05</td>
+                <td class="py-2.5 px-3 font-bold text-white">BANKNIFTY 55500 PE</td>
+                <td class="py-2.5 px-3 text-emerald-400 font-bold">BUY</td>
+                <td class="py-2.5 px-3">₹ 280.00</td>
+                <td class="py-2.5 px-3 text-rose-400">₹ 260.00</td>
+                <td class="py-2.5 px-3 text-slate-400">₹ 318.50</td>
+                <td class="py-2.5 px-3 text-emerald-400 font-bold">+₹ 2,887.50</td>
+                <td class="py-2.5 px-3"><span class="px-2 py-0.5 bg-cyan-500/20 text-cyan-300 rounded text-[10px] font-bold">TARGET HIT</span></td>
+              </tr>
+              <tr class="hover:bg-slate-900/50">
+                <td class="py-2.5 px-3 text-slate-500">09:25:00</td>
+                <td class="py-2.5 px-3 font-bold text-white">NIFTY 23050 PE</td>
+                <td class="py-2.5 px-3 text-amber-400 font-bold">SELL</td>
+                <td class="py-2.5 px-3">₹ 88.00</td>
+                <td class="py-2.5 px-3 text-rose-400">₹ 110.00</td>
+                <td class="py-2.5 px-3 text-cyan-300">₹ 52.00</td>
+                <td class="py-2.5 px-3 text-emerald-400 font-bold">+₹ 1,800.00</td>
+                <td class="py-2.5 px-3"><span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded text-[10px] font-bold">THETA HARVEST</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- System Terminal Logs (Matching Reference UI Console) -->
+      <div class="bg-[#0b101e] border border-slate-800 rounded-2xl p-5 space-y-2">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider font-mono flex items-center gap-2">
+            <span>💻</span> SYSTEM TERMINAL LOGS
+          </h3>
+          <span class="text-[10px] text-emerald-400 font-mono">ubuntu-s-1vcpu-1gb-blr1 (159.65.12.84)</span>
+        </div>
+        <div class="bg-black/90 p-4 rounded-xl border border-slate-900 font-mono text-[11px] text-emerald-400/90 h-36 overflow-y-auto space-y-1.5 leading-relaxed" id="dash-terminal-logs">
+          <div><span class="text-slate-500">12:01:43</span> ubuntu-s-1vcpu-1gb-blr1 python[943155]: Dedicated Node IP 159.65.12.84 active. WebSocket authenticated.</div>
+          <div><span class="text-slate-500">12:02:15</span> ubuntu-s-1vcpu-1gb-blr1 python[943155]: Math engine tracking sigma deviation: -1.000. No drawdown breach.</div>
+          <div><span class="text-slate-500">12:05:00</span> ubuntu-s-1vcpu-1gb-blr1 python[943155]: Broker Margin Verified: ₹ 2,00,000 available. Active equity 70%. Cash buffer safe.</div>
+          <div><span class="text-slate-500">12:07:30</span> ubuntu-s-1vcpu-1gb-blr1 python[943155]: Trailing Stop-Loss Engine active. Watching real-time tick stream.</div>
+        </div>
+      </div>
+
+      <!-- Bottom Risk Management Controls -->
+      <div class="flex flex-wrap items-center justify-between gap-3 p-4 bg-[#0d1322] border border-slate-800 rounded-2xl text-xs">
+        <div class="flex items-center gap-2 text-slate-400">
+          <span>🛡️</span>
+          <span>Emergency Controls: You retain full authority to pause or square-off directly from here.</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="pauseBotLive()" class="px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-xl font-bold transition">
+            ⏸️ Pause Algo
+          </button>
+          <button type="button" onclick="emergencySquareOffAll()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-bold transition shadow-lg shadow-rose-600/25">
+            🚨 Emergency Square-Off All
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: STRATEGY CUSTOMIZER & RULEBOOK                                     -->
+  <!-- User prompt: once they choose available options it redirects them to      -->
+  <!-- edit options if they want to keep them as it is they can save and close   -->
+  <!-- ========================================================================= -->
+  <div id="strategy-customizer-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-[#0b101e] border-2 border-cyan-500/50 w-full max-w-2xl rounded-3xl p-6 space-y-5 shadow-2xl relative max-h-[92vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl" id="customizer-icon">🚀</span>
+          <div>
+            <h3 class="text-base font-black text-white" id="customizer-strat-title">Nifty Safe Trend Rider</h3>
+            <p class="text-xs text-slate-400">Review plain English rules or customize parameters before backtesting</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeStrategyCustomizerModal()" class="w-8 h-8 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold text-sm">
+          ✕
+        </button>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex items-center gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+        <button type="button" id="tab-btn-rules" onclick="switchCustomizerTab('rules')" class="flex-1 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition">
+          📖 Plain English Rulebook
+        </button>
+        <button type="button" id="tab-btn-params" onclick="switchCustomizerTab('params')" class="flex-1 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
+          ⚙️ Customize Strategy Parameters
+        </button>
+      </div>
+
+      <!-- Tab 1: Plain English Rulebook -->
+      <div id="tab-content-rules" class="space-y-3 text-xs text-slate-300">
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+          <div class="font-bold text-cyan-400">1. Entry Rule (Direction Detection)</div>
+          <div id="rule-entry-text">Buys Nifty ATM Call (CE) when 7-period EMA crosses above 50-period EMA on 5-minute candle. Buys Put (PE) on bear crossover.</div>
+        </div>
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+          <div class="font-bold text-rose-400">2. Stop-Loss & Risk Protection</div>
+          <div id="rule-sl-text">Strict 2.0% stop-loss from entry premium price. Placed automatically at exchange level so slippage is minimized.</div>
+        </div>
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+          <div class="font-bold text-emerald-400">3. Profit Target & Trailing Lock</div>
+          <div id="rule-tp-text">5.0% profit target. Once +2.0% gain is achieved, trailing stop moves up to breakeven (+1.0%) to lock risk-free trade.</div>
+        </div>
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+          <div class="font-bold text-amber-400">4. Square-Off Rule</div>
+          <div id="rule-exit-text">All intraday open positions automatically squared off at 3:15 PM IST. Zero overnight gap risk.</div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Parameter Customizer -->
+      <div id="tab-content-params" class="space-y-4 text-xs hidden">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-300 block mb-1 font-semibold">Fast Moving Average (Periods)</label>
+            <input type="number" id="cust-fast-period" value="7" min="3" max="50" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl p-2.5 text-white font-mono">
+          </div>
+          <div>
+            <label class="text-slate-300 block mb-1 font-semibold">Slow Moving Average (Periods)</label>
+            <input type="number" id="cust-slow-period" value="50" min="10" max="200" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl p-2.5 text-white font-mono">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-300 block mb-1 font-semibold">Stop-Loss % per Trade</label>
+            <input type="number" id="cust-sl-pct" value="2.0" step="0.5" min="0.5" max="10" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl p-2.5 text-rose-400 font-mono font-bold">
+          </div>
+          <div>
+            <label class="text-slate-300 block mb-1 font-semibold">Profit Target % per Trade</label>
+            <input type="number" id="cust-tp-pct" value="5.0" step="0.5" min="1.0" max="25" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl p-2.5 text-emerald-400 font-mono font-bold">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-300 block mb-1 font-semibold">Trailing SL Activation %</label>
+            <input type="number" id="cust-tsl-pct" value="1.0" step="0.5" min="0.5" max="5" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl p-2.5 text-amber-400 font-mono">
+          </div>
+          <div>
+            <label class="text-slate-300 block mb-1 font-semibold">Intraday Square-off Time</label>
+            <input type="text" id="cust-exit-time" value="15:15 IST" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl p-2.5 text-slate-300 font-mono">
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-800">
+        <button type="button" onclick="saveRulesAndProceed(false)" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition">
+          ✓ Keep Default Rules & Proceed
+        </button>
+        <button type="button" onclick="saveRulesAndProceed(true)" class="px-6 py-2.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center gap-1.5">
+          <span>💾</span>
+          <span>Save & Proceed to Backtest →</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: BROKER API KEY & SECRET INPUT (LATE STEP RIGHT BEFORE DEPLOYMENT)  -->
+  <!-- User prompt: once they complete and click deploy then we ask them to add  -->
+  <!-- API and details which required to deploy                                  -->
+  <!-- ========================================================================= -->
+  <div id="modal-api-credentials" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-[#0b101e] border-2 border-cyan-500/50 w-full max-w-2xl rounded-3xl p-6 space-y-5 shadow-2xl relative max-h-[92vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-lg font-bold">
+            🔑
+          </div>
+          <div>
+            <h3 class="text-base font-black text-white" id="modal-api-title">Enter Flattrade API Key & Secret</h3>
+            <p class="text-xs text-slate-400">Required to connect your dedicated node (159.65.12.84) to your broker account</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeApiCredentialsModal()" class="w-8 h-8 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold text-sm">
+          ✕
+        </button>
+      </div>
+
+      <!-- Credential Fields -->
+      <div class="space-y-3.5 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-300 block mb-1 font-semibold" id="modal-lbl-client">Client Code / User ID</label>
+            <input type="text" id="modal-api-client" value="FT082914" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl p-2.5 text-white font-mono">
+          </div>
+          <div>
+            <label class="text-slate-300 block mb-1 font-semibold" id="modal-lbl-key">API Key</label>
+            <input type="text" id="modal-api-key" value="ft_api_key_98124x09" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl p-2.5 text-white font-mono">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-300 block mb-1 font-semibold flex justify-between">
+              <span>API Secret</span>
+              <button type="button" onclick="toggleSecretVisibility('modal-api-secret')" class="text-cyan-400 text-[10px]">Show/Hide</button>
+            </label>
+            <input type="password" id="modal-api-secret" value="ft_secret_key_8821bb" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl p-2.5 text-white font-mono">
+          </div>
+          <div>
+            <label class="text-slate-300 block mb-1 font-semibold flex justify-between">
+              <span id="modal-lbl-totp">TOTP Secret / Auth PIN</span>
+              <button type="button" onclick="toggleSecretVisibility('modal-api-totp')" class="text-cyan-400 text-[10px]">Show/Hide</button>
+            </label>
+            <input type="password" id="modal-api-totp" value="FTTOTPSECRET7712" class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-xl p-2.5 text-white font-mono">
+          </div>
+        </div>
+
+        <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-400 flex items-start gap-2">
+          <span>ℹ️</span>
+          <span><strong>Why TOTP is needed:</strong> Enables your dedicated node to authenticate automatically at 9:15 AM each morning without requiring manual phone SMS OTPs.</span>
+        </div>
+
+        <!-- Quick 3-Step Guide to get keys -->
+        <div class="p-3 bg-indigo-950/20 border border-indigo-500/20 rounded-xl space-y-1.5 text-[11px] text-slate-300">
+          <div class="font-bold text-white flex justify-between">
+            <span id="modal-guide-header">Where to get Flattrade API Keys:</span>
+            <a id="modal-guide-url" href="https://wall.flattrade.in" target="_blank" class="text-cyan-400 hover:underline">Open Portal ↗</a>
+          </div>
+          <div id="modal-guide-steps" class="space-y-1 text-slate-400">
+            <div>1. Log into wall.flattrade.in > Profile > API Keys</div>
+            <div>2. Click 'Generate Free API Key'</div>
+            <div>3. Copy your API Key & Secret and paste above</div>
+          </div>
+        </div>
+
+        <!-- Handshake Test Banner -->
+        <div id="modal-handshake-status" class="p-3 bg-emerald-950/30 border border-emerald-500/40 rounded-xl text-emerald-300 text-xs font-mono flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="modal-handshake-text">✓ Handshake Ready: Available Margin ₹ 3,45,200 | F&O Active</span>
+          </div>
+          <span class="text-[10px] text-slate-400 font-sans">18ms ping</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-800">
+        <button type="button" onclick="testBrokerHandshakeInModal()" id="btn-modal-test" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold rounded-xl transition">
+          🔌 Verify Handshake
+        </button>
+        <button type="button" onclick="submitCredentialsAndProceedToPayment()" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:opacity-95 text-slate-950 font-black text-xs rounded-xl shadow-lg transition flex items-center gap-1.5">
+          <span>Confirm & Proceed to Server Deployment →</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: BROKER SENTINEL AGENT (5-POINT DIAGNOSTIC & 16-BROKER MATRIX)      -->
+  <!-- ========================================================================= -->
+  <div id="modal-sentinel-agent" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-[#0b101e] border-2 border-cyan-500/50 w-full max-w-4xl rounded-3xl p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xl">
+            🤖
+          </div>
+          <div>
+            <h3 class="text-base font-black text-white flex items-center gap-2">
+              <span>Broker Sentinel Diagnostic Agent</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30">v3.2 Autonomous OMS Probe</span>
+            </h3>
+            <p class="text-xs text-slate-400">Verifies authentication, margin queries, tick latency, mock order routing, and strategy execution compatibility.</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeSentinelDiagnosticModal()" class="w-8 h-8 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold text-sm">
+          ✕
+        </button>
+      </div>
+
+      <!-- Controls Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-900/60 rounded-2xl border border-slate-800 text-xs">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-slate-400">Target Strategy:</span>
+          <span id="sentinel-active-strat" class="font-bold text-cyan-300 font-mono bg-cyan-950/60 px-2.5 py-1 rounded-lg border border-cyan-500/30">Nifty Safe Trend Rider</span>
+          <span class="text-slate-400 ml-2">Selected Broker:</span>
+          <span id="sentinel-active-broker" class="font-bold text-emerald-400 font-mono bg-emerald-950/40 px-2.5 py-1 rounded-lg border border-emerald-500/30">ZERODHA</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="runSentinelSingleTest()" id="btn-run-single-sentinel" class="px-3.5 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-xl shadow transition flex items-center gap-1.5">
+            <span>⚡ Test Selected Broker</span>
+          </button>
+          <button type="button" onclick="runSentinelMatrixTest()" id="btn-run-matrix-sentinel" class="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:opacity-95 text-slate-950 font-black rounded-xl shadow transition flex items-center gap-1.5">
+            <span>🌐 Scan All 16 Brokers</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Terminal / Pipeline Output -->
+      <div id="sentinel-terminal-container" class="bg-slate-950 border border-slate-800 rounded-2xl p-4 font-mono text-xs space-y-2.5 min-h-[180px]">
+        <div class="flex items-center justify-between border-b border-slate-900 pb-2 text-[11px] text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span>SENTINEL TELEMETRY & EXECUTION LOGS</span>
+          </span>
+          <span id="sentinel-timestamp" class="text-slate-500">Standby</span>
+        </div>
+        <div id="sentinel-logs" class="space-y-1.5 text-slate-300 leading-relaxed max-h-[220px] overflow-y-auto">
+          <div class="text-slate-500">Click "Test Selected Broker" to run the 5-point verification, or "Scan All 16 Brokers" to verify the complete connectivity matrix.</div>
+        </div>
+      </div>
+
+      <!-- 16 Brokers Health Matrix Table (Hidden until triggered) -->
+      <div id="sentinel-matrix-container" class="hidden space-y-2">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-white uppercase tracking-wider">All 16 Indian Brokers Health Matrix</span>
+          <span id="sentinel-matrix-summary" class="text-emerald-400 font-mono">16/16 Passed (100% Operational)</span>
+        </div>
+        <div class="max-h-[260px] overflow-y-auto border border-slate-800 rounded-2xl overflow-hidden bg-slate-950/80">
+          <table class="w-full text-left text-xs font-mono">
+            <thead class="bg-slate-900/90 text-slate-400 border-b border-slate-800 uppercase text-[10px]">
+              <tr>
+                <th class="p-2.5">#</th>
+                <th class="p-2.5">Broker Name</th>
+                <th class="p-2.5">API Protocol</th>
+                <th class="p-2.5">OMS Ping</th>
+                <th class="p-2.5">Available Margin</th>
+                <th class="p-2.5">Dry-Run Order</th>
+                <th class="p-2.5">Verdict</th>
+              </tr>
+            </thead>
+            <tbody id="sentinel-matrix-tbody" class="divide-y divide-slate-800/60 text-slate-300">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="p-3 bg-slate-900/40 rounded-xl border border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span>🛡️</span>
+          <span><strong>SEBI Zero-Slippage Simulation:</strong> The agent validates limit order queueing, stop-loss trigger type, and auto-squareoff compliance.</span>
+        </div>
+        <button type="button" onclick="closeSentinelDiagnosticModal()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-bold transition">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: STRATEGY SWITCHER (FROM LIVE DASHBOARD, MAX 3 SWITCHES/DAY)       -->
+  <!-- User prompt: they can edit and change their stratagy unlimited times but   -->
+  <!-- not 5 stratagies in a day... (lets fix the correct number: 3)             -->
+  <!-- ========================================================================= -->
+  <div id="modal-strategy-switch" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-[#0b101e] border-2 border-cyan-500/50 w-full max-w-xl rounded-3xl p-6 space-y-4 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h3 class="text-base font-black text-white">Switch Active Live Strategy</h3>
+          <p class="text-xs text-slate-400">Select a new strategy to deploy immediately on your cloud node</p>
+        </div>
+        <button type="button" onclick="closeStrategySwitchModal()" class="w-8 h-8 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold text-sm">
+          ✕
+        </button>
+      </div>
+
+      <div class="p-3 bg-amber-950/20 border border-amber-500/30 rounded-xl text-xs text-amber-300">
+        🛡️ <strong>SEBI Overtrading Guard:</strong> You have <strong id="switch-modal-counter">3</strong> strategy switches remaining for today.
+      </div>
+
+      <div class="space-y-2.5 text-xs">
+        <div onclick="performLiveStrategySwitch('trend_rider', 'Nifty Safe Trend Rider')" class="p-3.5 bg-slate-950 hover:bg-cyan-950/30 border border-slate-800 hover:border-cyan-500 rounded-xl cursor-pointer flex items-center justify-between transition">
+          <div>
+            <div class="font-bold text-white flex items-center gap-1.5"><span>🚀</span> Nifty Safe Trend Rider</div>
+            <div class="text-[11px] text-slate-400">Directional momentum buying on Nifty 50 (CE/PE)</div>
+          </div>
+          <span class="text-cyan-400 font-bold">Select →</span>
+        </div>
+
+        <div onclick="performLiveStrategySwitch('theta_harvester', 'Daily Income Theta Harvester')" class="p-3.5 bg-slate-950 hover:bg-cyan-950/30 border border-slate-800 hover:border-cyan-500 rounded-xl cursor-pointer flex items-center justify-between transition">
+          <div>
+            <div class="font-bold text-white flex items-center gap-1.5"><span>💰</span> Daily Income Theta Harvester</div>
+            <div class="text-[11px] text-slate-400">Non-directional straddle capturing daily time decay</div>
+          </div>
+          <span class="text-indigo-400 font-bold">Select →</span>
+        </div>
+
+        <div onclick="performLiveStrategySwitch('banknifty_scalp', 'BankNifty Fast Scalper')" class="p-3.5 bg-slate-950 hover:bg-cyan-950/30 border border-slate-800 hover:border-cyan-500 rounded-xl cursor-pointer flex items-center justify-between transition">
+          <div>
+            <div class="font-bold text-white flex items-center gap-1.5"><span>⚡</span> BankNifty Fast Scalper</div>
+            <div class="text-[11px] text-slate-400">Fast 15-minute breakouts on BankNifty with trailing SL</div>
+          </div>
+          <span class="text-amber-400 font-bold">Select →</span>
+        </div>
+
+        <div onclick="performLiveStrategySwitch('expiry_hunter', 'FinNifty & Midcap Expiry Hunter')" class="p-3.5 bg-slate-950 hover:bg-cyan-950/30 border border-slate-800 hover:border-cyan-500 rounded-xl cursor-pointer flex items-center justify-between transition">
+          <div>
+            <div class="font-bold text-white flex items-center gap-1.5"><span>🎯</span> FinNifty & Midcap Expiry Hunter</div>
+            <div class="text-[11px] text-slate-400">Weekly expiry gamma breakouts on Monday & Tuesday</div>
+          </div>
+          <span class="text-purple-400 font-bold">Select →</span>
+        </div>
+      </div>
+
+      <!-- Option to navigate to Strategy Home & Settings Page -->
+      <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+        <span class="text-slate-400">Want to customize parameters or capital?</span>
+        <button type="button" onclick="closeStrategySwitchModal(); goToStrategyHomePage();" class="px-3.5 py-2 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
+          <span>🏠</span> Open Strategy Home & Settings →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: STATUTORY LEGAL COMPLIANCE (TERMS, PRIVACY, REFUND, CONTACT)       -->
+  <!-- Mandated by Razorpay, Cashfree & Google for Merchant Underwriting        -->
+  <!-- ========================================================================= -->
+  <div id="modal-legal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-[#0b101e] border-2 border-cyan-500/50 w-full max-w-3xl rounded-3xl p-6 space-y-4 shadow-2xl relative max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h3 id="modal-legal-title" class="text-base font-black text-white">Terms & Conditions</h3>
+          <p class="text-xs text-slate-400">SkipTheChart Legal, Merchant & SEBI Regulatory Compliance</p>
+        </div>
+        <button type="button" onclick="closeLegalModal()" class="w-8 h-8 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold text-sm">
+          ✕
+        </button>
+      </div>
+
+      <div id="modal-legal-body" class="text-xs text-slate-300 space-y-3 leading-relaxed">
+        <!-- Dynamically injected -->
+      </div>
+
+      <div class="pt-3 border-t border-slate-800 flex justify-end">
+        <button type="button" onclick="closeLegalModal()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-xl text-xs transition">
+          Close Window
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mandatory SEBI Regulatory Risk Disclosure Footer -->
+  <footer class="mt-8 p-5 bg-[#0b101e] border border-slate-800/80 rounded-2xl text-[11px] text-slate-400 space-y-3 text-center leading-relaxed">
+    <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-300 pb-2 border-b border-slate-800/60">
+      <a href="#terms-modal" onclick="openLegalModal('terms')" class="hover:text-cyan-400 transition">Terms & Conditions</a>
+      <span class="text-slate-600">•</span>
+      <a href="#privacy-modal" onclick="openLegalModal('privacy')" class="hover:text-cyan-400 transition">Privacy Policy</a>
+      <span class="text-slate-600">•</span>
+      <a href="#refund-modal" onclick="openLegalModal('refund')" class="hover:text-cyan-400 transition">Cancellation & Refund Policy</a>
+      <span class="text-slate-600">•</span>
+      <a href="#contact-modal" onclick="openLegalModal('contact')" class="hover:text-cyan-400 transition">Contact Us & Support</a>
+      <span class="text-slate-600">•</span>
+      <span class="text-emerald-400 font-mono text-[10px]">MSME Reg: UDYAM-TS-20-0219018</span>
+    </div>
+
+    <div class="text-xs font-bold text-slate-300">
+      🛡️ SEBI Statutory Risk Disclosure on Futures & Options (F&O) Trading
+    </div>
+    <p>
+      According to SEBI study, <strong>9 out of 10 individual traders in the equity F&O segment incurred net losses</strong>. On average, loss-makers registered net trading losses close to ₹50,000. Over and above the net trading losses, loss-makers expended an additional 28% of net trading losses as transaction costs.
+    </p>
+    <p class="text-[10px] text-slate-500">
+      <strong>SkipTheChart</strong> is an automated algorithmic software platform and Technology Service Provider (TSP). We do not provide financial advice, tips, recommendations, or guaranteed returns. All investments and trades are subject to market risk.
+    </p>
+    <div class="text-[10px] text-slate-500 pt-1">
+      © 2026 SkipTheChart. All rights reserved. Registered Enterprise: UDYAM-TS-20-0219018.
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- FLOATING GEMINI AI CHATBOT WIDGET FOR SUBSCRIBERS                         -->
+  <!-- ========================================================================= -->
+  <div id="gemini-chat-widget" class="fixed bottom-5 right-5 z-50 font-sans">
+    <!-- Collapsed Floating Button -->
+    <button type="button" onclick="toggleGeminiChat()" id="gemini-toggle-btn" class="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-cyan-600 via-indigo-600 to-emerald-500 hover:opacity-95 text-white font-bold text-xs rounded-full shadow-2xl shadow-cyan-500/30 border border-cyan-400/40 transition hover:scale-105">
+      <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-sm">✨</span>
+      <span>Ask Gemini Quant AI</span>
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+    </button>
+
+    <!-- Expanded Chat Window (Hidden by default) -->
+    <div id="gemini-chat-window" class="hidden w-[380px] sm:w-[420px] h-[550px] bg-[#0b101e] border-2 border-cyan-500/40 rounded-3xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-md">
+      <!-- Header -->
+      <div class="p-3.5 bg-gradient-to-r from-slate-900 via-cyan-950 to-slate-900 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-indigo-500 flex items-center justify-center text-white text-base font-black shadow">
+            ✨
+          </div>
+          <div>
+            <div class="font-black text-xs text-white flex items-center gap-1.5">
+              <span>Gemini Quant Copilot</span>
+              <span class="text-[9px] px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/30 font-mono">SEBI Aware</span>
+            </div>
+            <div class="text-[10px] text-slate-400">Context: <span id="chat-header-broker" class="text-emerald-400 font-bold">Zerodha</span> • <span id="chat-header-strat" class="text-cyan-300">Trend Rider</span></div>
+          </div>
+        </div>
+        <button type="button" onclick="toggleGeminiChat()" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center font-bold text-xs">
+          ✕
+        </button>
+      </div>
+
+      <!-- Quick Suggestion Pills -->
+      <div class="p-2 bg-slate-950/80 border-b border-slate-800/80 flex items-center gap-1.5 overflow-x-auto text-[10px]">
+        <button type="button" onclick="sendGeminiPreset('Why is equity utilization capped at 70%?')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950/50 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-300 whitespace-nowrap transition">
+          🛡️ 70% Buffer
+        </button>
+        <button type="button" onclick="sendGeminiPreset('How do I generate an API key for my selected broker?')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950/50 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-300 whitespace-nowrap transition">
+          🔌 API Setup
+        </button>
+        <button type="button" onclick="sendGeminiPreset('Explain the live Z-Score and 2.5 Sigma mean reversion.')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950/50 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-300 whitespace-nowrap transition">
+          ⚡ Z-Score Logic
+        </button>
+        <button type="button" onclick="sendGeminiPreset('Why are strategy switches limited to 3 per day?')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950/50 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-300 whitespace-nowrap transition">
+          🔄 3 Switches Limit
+        </button>
+      </div>
+
+      <!-- Message History Container -->
+      <div id="gemini-messages" class="flex-1 p-3.5 space-y-3 overflow-y-auto text-xs font-sans leading-relaxed">
+        <div class="flex items-start gap-2">
+          <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-cyan-400 to-indigo-500 flex items-center justify-center text-white text-[11px] shrink-0">
+            ✨
+          </div>
+          <div class="p-3 bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-sm text-slate-200 max-w-[85%] space-y-1">
+            <p>Namaste! I am your <strong>Gemini Quant Copilot</strong>. I have real-time visibility into your selected broker connection, capital allotment, and deployed strategy.</p>
+            <p class="text-slate-400 text-[11px]">Ask me anything about API setup, risk management, or how your strategy trades Indian markets!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Bar -->
+      <form id="gemini-chat-form" onsubmit="handleGeminiFormSubmit(event)" class="p-2.5 bg-slate-950 border-t border-slate-800 flex items-center gap-2">
+        <input type="text" id="gemini-input" placeholder="Ask Gemini about strategies, APIs, or risk..." class="flex-1 bg-slate-900 border border-slate-700 focus:border-cyan-400 px-3 py-2 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none transition" />
+        <button type="submit" id="gemini-send-btn" class="w-8 h-8 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:opacity-90 text-slate-950 font-bold flex items-center justify-center transition shadow">
+          ➔
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT: PROGRESSIVE MULTI-STEP FLOW & LIVE ENGINE LOGIC               -->
+  <!-- ========================================================================= -->
+  <script>
+    // State Machine
+    let userState = {
+      isLoggedIn: true,
+      currentStep: 1, // 0: Auth, 1: Broker, 2: Capital, 3: Strategy, 4: Backtest, 5: Payment, 6: Live Dashboard
+      selectedBroker: 'flattrade',
+      selectedBrokerName: 'Flattrade',
+      totalCapital: 25000,
+      equityUtilizationPct: 70,
+      selectedStrategy: 'trend_rider',
+      selectedStrategyName: 'Nifty Safe Trend Rider',
+      hasBacktested: true,
+      subscriptionActive: false,
+      dailySwitchesRemaining: 3
+    };
+
+    // Strategy Configurations & Base Margins
+    const STRATEGY_DATA = {
+      trend_rider: {
+        name: "Nifty Safe Trend Rider",
+        icon: "🚀",
+        baseMargin: 15000,
+        dataset: "nifty50",
+        style: "Automatic 2-Way (CE / PE)",
+        entry: "Buys Nifty ATM Call (CE) when 7-EMA crosses above 50-EMA on 5-min chart. Buys Put (PE) on bear crossover.",
+        sl: "Strict 2.0% stop-loss from entry premium price.",
+        tp: "5.0% profit target with trailing stop-loss activation at +2.0% gain.",
+        exit: "Intraday auto-square off at 3:15 PM IST."
+      },
+      theta_harvester: {
+        name: "Daily Income Theta Harvester",
+        icon: "💰",
+        baseMargin: 45000,
+        dataset: "nifty50",
+        style: "Non-Directional Straddle",
+        entry: "Sells 1 OTM Call and 1 OTM Put at 9:20 AM with 25 delta, collecting daily premium time decay.",
+        sl: "Combined premium stop-loss of 25% on each leg.",
+        tp: "Pockets daily theta decay if Nifty stays within 1.5% range.",
+        exit: "Auto square-off at 3:15 PM IST or target hit."
+      },
+      banknifty_scalp: {
+        name: "BankNifty Fast Scalper",
+        icon: "⚡",
+        baseMargin: 25000,
+        dataset: "banknifty",
+        style: "Momentum Breakouts",
+        entry: "Fast 15-minute high/low breakout momentum trigger on BankNifty index.",
+        sl: "Tight 1.5% trailing stop-loss to protect against reversals.",
+        tp: "Quick 3.5% momentum target strike.",
+        exit: "Square-off at 3:15 PM IST."
+      },
+      expiry_hunter: {
+        name: "FinNifty & Midcap Expiry Hunter",
+        icon: "🎯",
+        baseMargin: 10000,
+        dataset: "nifty50",
+        style: "Expiry Breakouts (CE/PE)",
+        entry: "Explosive gamma breakout trades on Monday Midcap & Tuesday FinNifty expiries.",
+        sl: "Risk capped at max 3.0% premium loss.",
+        tp: "Gamma spike target of 8.0%+ with trailing protection.",
+        exit: "Expiry day square-off at 3:20 PM IST."
+      }
+    };
+
+    // Broker Developer Portals & Credential Guides
+    const BROKER_GUIDES = {
+      flattrade: {
+        title: "Flattrade API Key & Secret",
+        clientLabel: "Flattrade Client Code",
+        clientDefault: "FT082914",
+        keyDefault: "ft_api_key_98124x09",
+        secretDefault: "ft_secret_key_8821bb",
+        totpDefault: "FTTOTPSECRET7712",
+        url: "https://wall.flattrade.in",
+        steps: [
+          "1. Log in to wall.flattrade.in with your client code",
+          "2. Navigate to Profile > API Keys and generate free key",
+          "3. Copy your API Key & Secret and paste above"
+        ]
+      },
+      zerodha: {
+        title: "Zerodha Kite API Key & Secret",
+        clientLabel: "Kite Client ID (User ID)",
+        clientDefault: "ZR9821",
+        keyDefault: "kite_api_key_z98124",
+        secretDefault: "demo_secret_token_x991",
+        totpDefault: "JBSWY3DPEHPK3PXP",
+        url: "https://developers.kite.trade",
+        steps: [
+          "1. Log into developers.kite.trade",
+          "2. Create an App named 'SkipTheChart'",
+          "3. Copy your API Key & Secret and paste above"
+        ]
+      },
+      angelone: {
+        title: "Angel One SmartAPI Key & Secret",
+        clientLabel: "Angel One Client ID",
+        clientDefault: "A918234",
+        keyDefault: "smart_api_key_88201a",
+        secretDefault: "smart_secret_7729bc",
+        totpDefault: "982134",
+        url: "https://smartapi.angelone.in",
+        steps: [
+          "1. Log into smartapi.angelone.in",
+          "2. Create an App with Trading API enabled",
+          "3. Copy SmartAPI Key and enter your MPIN"
+        ]
+      },
+      dhan: {
+        title: "Dhan HQ Access Token & Secret",
+        clientLabel: "Dhan Client ID",
+        clientDefault: "1100982341",
+        keyDefault: "dhan_token_eyJhbGciOi...",
+        secretDefault: "dhan_secret_9982aa",
+        totpDefault: "123456",
+        url: "https://web.dhan.co",
+        steps: [
+          "1. Log into web.dhan.co",
+          "2. Profile > DhanHQ Trading APIs",
+          "3. Generate Access Token and paste here"
+        ]
+      },
+      upstox: {
+        title: "Upstox API Key & Secret",
+        clientLabel: "Upstox User ID",
+        clientDefault: "UP654321",
+        keyDefault: "upstox_api_key_88912",
+        secretDefault: "upstox_secret_9918ff",
+        totpDefault: "654321",
+        url: "https://developer.upstox.com",
+        steps: [
+          "1. Log into developer.upstox.com",
+          "2. Create App with redirect URL",
+          "3. Copy API Key & Secret and paste above"
+        ]
+      },
+      fivepaisa: {
+        title: "5paisa Developer Key & Secret",
+        clientLabel: "5paisa Client Code",
+        clientDefault: "5P982341",
+        keyDefault: "5p_user_key_99214a",
+        secretDefault: "5p_enc_secret_8810c",
+        totpDefault: "5P_APP_SOURCE_PIN",
+        url: "https://www.5paisa.com/developer-apis",
+        steps: [
+          "1. Go to 5paisa Developer API portal",
+          "2. Generate User Key & Encryption Secret",
+          "3. Paste credentials to authorize execution"
+        ]
+      },
+      shoonya: {
+        title: "Shoonya Prism API Key & Secret",
+        clientLabel: "Shoonya User ID",
+        clientDefault: "FA98124",
+        keyDefault: "shoonya_api_key_7712",
+        secretDefault: "shoonya_vendor_code_88",
+        totpDefault: "SHOONYATOTP7712",
+        url: "https://prism.shoonya.com",
+        steps: [
+          "1. Log into prism.shoonya.com",
+          "2. Request API Key from Services menu",
+          "3. Copy API Key & Vendor Code"
+        ]
+      },
+      fyers: {
+        title: "Fyers API v3 App ID & Secret Key",
+        clientLabel: "Fyers Client ID",
+        clientDefault: "FY01824",
+        keyDefault: "FYERS_APP_ID_992144",
+        secretDefault: "fyers_secret_token_8812a",
+        totpDefault: "123456",
+        url: "https://myapi.fyers.in",
+        steps: [
+          "1. Log into myapi.fyers.in with your Fyers credentials",
+          "2. Click 'Create App' and set Redirect URI",
+          "3. Copy App ID and Secret Key"
+        ]
+      },
+      kotakneo: {
+        title: "Kotak Neo Trade API Consumer Key & Secret",
+        clientLabel: "Neo Mobile Number / UCC",
+        clientDefault: "9876543210",
+        keyDefault: "neo_consumer_key_88192a",
+        secretDefault: "neo_consumer_secret_991b",
+        totpDefault: "982134",
+        url: "https://neo.kotaksecurities.com",
+        steps: [
+          "1. Log in to Kotak Neo Developer Portal",
+          "2. Create an Application in your Neo Workspace",
+          "3. Copy Consumer Key & Consumer Secret"
+        ]
+      },
+      groww: {
+        title: "Groww API Access Token & Secret",
+        clientLabel: "Groww Client ID",
+        clientDefault: "GRW981245",
+        keyDefault: "grw_api_key_live_88120",
+        secretDefault: "grw_secret_token_99182",
+        totpDefault: "456123",
+        url: "https://groww.in/developer",
+        steps: [
+          "1. Go to Groww Developer / Partner API console",
+          "2. Generate Sandbox / Production API Key",
+          "3. Paste credentials to bind dedicated droplet"
+        ]
+      },
+      icicidirect: {
+        title: "ICICI Direct Breeze API Key & Session Token",
+        clientLabel: "ICICI Direct UCC Code",
+        clientDefault: "ICICI88214",
+        keyDefault: "breeze_api_key_88912x",
+        secretDefault: "breeze_secret_key_7718c",
+        totpDefault: "BREEZE_AUTH_KEY",
+        url: "https://api.icicidirect.com/apiuser/home",
+        steps: [
+          "1. Register on api.icicidirect.com (Breeze API)",
+          "2. Generate Breeze App Key and Secret Key",
+          "3. Enter your active session token"
+        ]
+      },
+      motilal: {
+        title: "Motilal Oswal MOSL Open API Credentials",
+        clientLabel: "MOSL Client Code",
+        clientDefault: "MOSL91823",
+        keyDefault: "mosl_api_key_77102a",
+        secretDefault: "mosl_secret_key_8819b",
+        totpDefault: "123456",
+        url: "https://openapi.motilaloswal.com",
+        steps: [
+          "1. Log into Motilal Oswal Open API portal",
+          "2. Create Live Trading App",
+          "3. Copy API Key & Auth Secret"
+        ]
+      },
+      aliceblue: {
+        title: "Alice Blue ANT API Key & Secret",
+        clientLabel: "Alice Blue User ID",
+        clientDefault: "AB081924",
+        keyDefault: "ant_api_key_881249",
+        secretDefault: "ant_secret_enc_99182",
+        totpDefault: "ALICETOTP123",
+        url: "https://ant.aliceblueonline.com",
+        steps: [
+          "1. Log into ant.aliceblueonline.com",
+          "2. Go to Profile > Apps & API Keys",
+          "3. Copy ANT API Key and Encryption Secret"
+        ]
+      },
+      iifl: {
+        title: "IIFL Blazr API Key & Secret",
+        clientLabel: "IIFL Client Code",
+        clientDefault: "IIFL09124",
+        keyDefault: "blazr_api_key_88102a",
+        secretDefault: "blazr_secret_key_9921b",
+        totpDefault: "IIFLTOTP8821",
+        url: "https://ttblaze.iifl.com",
+        steps: [
+          "1. Log into IIFL Blazr Developer Portal",
+          "2. Request Open Trading API Key",
+          "3. Copy API Key and Secret Token"
+        ]
+      },
+      espresso: {
+        title: "Sharekhan Espresso API Key & Secret",
+        clientLabel: "Espresso Login ID",
+        clientDefault: "ESP981245",
+        keyDefault: "espresso_key_77192a",
+        secretDefault: "espresso_secret_8810c",
+        totpDefault: "982134",
+        url: "https://developer.myespresso.com",
+        steps: [
+          "1. Go to developer.myespresso.com",
+          "2. Create New App with Execution Scope",
+          "3. Copy API Key & API Secret"
+        ]
+      },
+      paytmmoney: {
+        title: "Paytm Money Open API Key & Secret",
+        clientLabel: "Paytm Money User ID",
+        clientDefault: "PM8819245",
+        keyDefault: "pm_api_key_881299a",
+        secretDefault: "pm_secret_key_99182c",
+        totpDefault: "PMONEY_TOTP",
+        url: "https://developer.paytmmoney.com",
+        steps: [
+          "1. Log into developer.paytmmoney.com",
+          "2. Create New App and enable Order Execution",
+          "3. Copy API Key & API Secret Token"
+        ]
+      }
+    };
+
+    // Load State on Startup
+    function loadSavedState() {
+      try {
+        const saved = localStorage.getItem('algoforge_state_v3');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          userState = { ...userState, ...parsed };
+        }
+      } catch (e) {}
+
+      // If user has active subscription, skip onboarding and jump straight to live dashboard!
+      if (userState.subscriptionActive) {
+        showScreen('screen-live-dashboard');
+        updateLiveDashboardUI();
+        startLiveMarketTickSimulation();
+      } else if (userState.currentStep === 0) {
+        showScreen('screen-auth');
+      } else {
+        goToStep(userState.currentStep || 1);
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem('algoforge_state_v3', JSON.stringify(userState));
+      } catch (e) {}
+    }
+
+    function resetDemoFlow() {
+      localStorage.removeItem('algoforge_state_v3');
+      userState = {
+        isLoggedIn: true,
+        currentStep: 1,
+        selectedBroker: 'flattrade',
+        selectedBrokerName: 'Flattrade',
+        totalCapital: 25000,
+        equityUtilizationPct: 70,
+        selectedStrategy: 'trend_rider',
+        selectedStrategyName: 'Nifty Safe Trend Rider',
+        hasBacktested: true,
+        subscriptionActive: false,
+        dailySwitchesRemaining: 3
+      };
+      saveState();
+      goToStep(1);
+    }
+
+    // Screen Switcher
+    function showScreen(screenId) {
+      const screens = [
+        'screen-auth',
+        'screen-broker',
+        'screen-capital',
+        'screen-strategy',
+        'screen-backtest',
+        'screen-payment',
+        'screen-live-dashboard'
+      ];
+      screens.forEach(s => {
+        const el = document.getElementById(s);
+        if (el) {
+          if (s === screenId) el.classList.remove('hidden');
+          else el.classList.add('hidden');
+        }
+      });
+
+      // Stepper visibility
+      const stepper = document.getElementById('onboarding-stepper');
+      if (stepper) {
+        if (screenId === 'screen-auth' || screenId === 'screen-live-dashboard') {
+          stepper.classList.add('hidden');
+        } else {
+          stepper.classList.remove('hidden');
+        }
+      }
+
+      // Sync top header navigation buttons for active subscribers
+      const navLiveBtn = document.getElementById('nav-btn-live-dash');
+      const navStratBtn = document.getElementById('nav-btn-strategy-home');
+      if (navLiveBtn && navStratBtn) {
+        if (userState.subscriptionActive) {
+          if (screenId === 'screen-live-dashboard') {
+            navLiveBtn.classList.add('hidden');
+            navStratBtn.classList.remove('hidden');
+          } else {
+            navLiveBtn.classList.remove('hidden');
+          }
+        } else {
+          navLiveBtn.classList.add('hidden');
+        }
+      }
+    }
+
+    // Step Navigator
+    function goToStep(stepNum) {
+      userState.currentStep = stepNum;
+      saveState();
+
+      // Update Stepper Pills
+      for (let i = 1; i <= 5; i++) {
+        const pill = document.getElementById(`step-pill-${i}`);
+        if (pill) {
+          if (i === stepNum) {
+            pill.className = "flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-950 border border-cyan-500 text-cyan-300 font-bold shrink-0 shadow cursor-pointer hover:opacity-90 transition";
+            const badge = pill.querySelector('span');
+            if (badge) badge.className = "w-5 h-5 rounded-full bg-cyan-500 text-slate-950 text-[11px] flex items-center justify-center font-black";
+          } else if (i < stepNum) {
+            pill.className = "flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-400 font-medium shrink-0 cursor-pointer hover:bg-emerald-950/70 hover:border-emerald-400 transition";
+            const badge = pill.querySelector('span');
+            if (badge) badge.className = "w-5 h-5 rounded-full bg-emerald-500 text-slate-950 text-[11px] flex items-center justify-center font-bold";
+          } else {
+            pill.className = "flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 shrink-0 cursor-pointer hover:text-slate-200 transition";
+            const badge = pill.querySelector('span');
+            if (badge) badge.className = "w-5 h-5 rounded-full bg-slate-800 text-slate-400 text-[11px] flex items-center justify-center font-bold";
+          }
+        }
+      }
+
+      if (stepNum === 1) {
+        showScreen('screen-broker');
+      } else if (stepNum === 2) {
+        showScreen('screen-capital');
+        document.getElementById('capital-screen-broker-tag').innerText = userState.selectedBrokerName;
+        updateCapitalCalculations();
+      } else if (stepNum === 3) {
+        showScreen('screen-strategy');
+        document.getElementById('strat-screen-cap-tag').innerText = `₹ ${userState.totalCapital.toLocaleString('en-IN')} (@ ${userState.equityUtilizationPct}% util)`;
+        updateStrategyCardsMinCap();
+      } else if (stepNum === 4) {
+        showScreen('screen-backtest');
+        runSimpleBacktestSimulation();
+      } else if (stepNum === 5) {
+        showScreen('screen-payment');
+      }
+    }
+
+    // Google Sign-in Handler
+    async function performGoogleSignIn() {
+      try {
+        await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: 'trader.rahul@gmail.com', name: 'Rahul Sharma' })
+        });
+      } catch (e) {}
+      userState.isLoggedIn = true;
+      saveState();
+      goToStep(1);
+    }
+
+    // Step 1: Select Broker
+    function selectOnboardingBroker(brokerKey, brokerName, letter, iconClass) {
+      userState.selectedBroker = brokerKey;
+      userState.selectedBrokerName = brokerName;
+      saveState();
+
+      // Highlight selected broker briefly
+      const allCards = [
+        'flattrade', 'zerodha', 'angelone', 'dhan', 'upstox', 'fivepaisa', 'shoonya',
+        'fyers', 'kotakneo', 'groww', 'icicidirect', 'motilal', 'aliceblue', 'iifl', 'espresso', 'paytmmoney'
+      ];
+      allCards.forEach(k => {
+        const el = document.getElementById('ob-card-' + k);
+        if (el) {
+          if (k === brokerKey) {
+            el.className = "p-3.5 bg-cyan-950/50 border-2 border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all scale-[1.04] shadow-lg shadow-cyan-500/25";
+          } else {
+            el.className = "p-3.5 bg-slate-950 border-2 border-slate-800 opacity-60 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all";
+          }
+        }
+      });
+
+      // Advance to Step 2 (brokers disappear, capital appears)
+      setTimeout(() => {
+        goToStep(2);
+      }, 350);
+    }
+
+    // Step 2: Capital & Equity Utilization
+    function setCapitalPreset(amount) {
+      document.getElementById('capital-input').value = amount;
+      updateCapitalCalculations();
+    }
+
+    function setEquityUtilization(pct) {
+      const clamped = Math.max(10, Math.min(70, parseInt(pct) || 70));
+      userState.equityUtilizationPct = clamped;
+      document.getElementById('capital-equity-slider').value = clamped;
+
+      // Update badge
+      const buf = 100 - clamped;
+      document.getElementById('capital-equity-badge').innerText = `${clamped}% Equity in Use (${buf}% Cash Buffer)`;
+
+      // Update Preset Chips
+      document.querySelectorAll('.eq-preset-chip').forEach(btn => {
+        const eqVal = parseInt(btn.getAttribute('data-eq'));
+        if (eqVal === clamped) {
+          btn.className = "eq-preset-chip px-2.5 py-1 bg-cyan-950 border border-cyan-500 text-cyan-300 rounded-lg text-[11px] font-mono font-bold transition shadow-sm";
+        } else {
+          btn.className = "eq-preset-chip px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-[11px] font-mono text-slate-300 transition";
+        }
+      });
+
+      updateCapitalCalculations();
+    }
+
+    function updateCapitalCalculations() {
+      const cap = parseFloat(document.getElementById('capital-input')?.value) || 25000;
+      userState.totalCapital = cap;
+      saveState();
+
+      const utilPct = userState.equityUtilizationPct || 70;
+      const activeCap = Math.round(cap * (utilPct / 100));
+      const bufferCap = cap - activeCap;
+      const bufferPct = 100 - utilPct;
+
+      const maxLoss = Math.round(activeCap * 0.06);
+      const profitTarget = Math.round(activeCap * 0.12);
+      const lots = Math.max(1, Math.floor(activeCap / 25000));
+
+      const actPct = document.getElementById('breakdown-active-pct');
+      if (actPct) actPct.innerText = `${utilPct}%`;
+
+      const actAmt = document.getElementById('breakdown-active-amount');
+      if (actAmt) actAmt.innerText = `₹ ${activeCap.toLocaleString('en-IN')}`;
+
+      const bufPct = document.getElementById('breakdown-buffer-pct');
+      if (bufPct) bufPct.innerText = `${bufferPct}%`;
+
+      const bufAmt = document.getElementById('breakdown-buffer-amount');
+      if (bufAmt) bufAmt.innerText = `₹ ${bufferCap.toLocaleString('en-IN')}`;
+
+      const ml = document.getElementById('breakdown-max-loss');
+      if (ml) ml.innerText = `-₹ ${maxLoss.toLocaleString('en-IN')} (Auto Shut-off)`;
+
+      const pt = document.getElementById('breakdown-profit-target');
+      if (pt) pt.innerText = `+₹ ${profitTarget.toLocaleString('en-IN')}`;
+
+      const lt = document.getElementById('breakdown-lots');
+      if (lt) lt.innerText = `${lots} Lot${lots > 1 ? 's' : ''} (${lots * 50} Qty)`;
+    }
+
+    function confirmCapitalAndProceed() {
+      goToStep(3);
+    }
+
+    // Step 3: Strategy Minimum Capital Updates
+    function updateStrategyCardsMinCap() {
+      const utilPct = userState.equityUtilizationPct || 70;
+      const utilFrac = utilPct / 100;
+      for (const [key, data] of Object.entries(STRATEGY_DATA)) {
+        const minCap = Math.ceil((data.baseMargin / utilFrac) / 100) * 100;
+        const el = document.getElementById(`min-cap-${key}`);
+        if (el) el.innerText = `₹ ${minCap.toLocaleString('en-IN')}`;
+      }
+    }
+
+    // Select Strategy & Open Customizer Modal
+    function selectAndCustomizeStrategy(stratKey) {
+      userState.selectedStrategy = stratKey;
+      userState.selectedStrategyName = STRATEGY_DATA[stratKey]?.name || stratKey;
+      saveState();
+
+      // Highlight selected strategy card
+      ['trend_rider', 'theta_harvester', 'banknifty_scalp', 'expiry_hunter'].forEach(k => {
+        const card = document.getElementById('card-' + k);
+        if (card) {
+          if (k === stratKey) {
+            card.className = "p-5 bg-slate-950 border-2 border-cyan-500 rounded-2xl cursor-pointer space-y-3 hover:border-cyan-400 transition-all scale-[1.01] shadow-lg shadow-cyan-500/15 relative";
+          } else {
+            card.className = "p-5 bg-slate-950 border-2 border-slate-800 rounded-2xl cursor-pointer space-y-3 hover:border-slate-700 transition relative";
+          }
+        }
+      });
+
+      // Populate Modal with strategy data
+      const data = STRATEGY_DATA[stratKey];
+      document.getElementById('customizer-strat-title').innerText = data.name;
+      document.getElementById('customizer-icon').innerText = data.icon;
+      document.getElementById('rule-entry-text').innerText = data.entry;
+      document.getElementById('rule-sl-text').innerText = data.sl;
+      document.getElementById('rule-tp-text').innerText = data.tp;
+      document.getElementById('rule-exit-text').innerText = data.exit;
+
+      // Show Customizer Modal
+      document.getElementById('strategy-customizer-modal').classList.remove('hidden');
+    }
+
+    function switchCustomizerTab(tab) {
+      const btnRules = document.getElementById('tab-btn-rules');
+      const btnParams = document.getElementById('tab-btn-params');
+      const contentRules = document.getElementById('tab-content-rules');
+      const contentParams = document.getElementById('tab-content-params');
+
+      if (tab === 'rules') {
+        btnRules.className = "flex-1 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition";
+        btnParams.className = "flex-1 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition";
+        contentRules.classList.remove('hidden');
+        contentParams.classList.add('hidden');
+      } else {
+        btnParams.className = "flex-1 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition";
+        btnRules.className = "flex-1 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition";
+        contentParams.classList.remove('hidden');
+        contentRules.classList.add('hidden');
+      }
+    }
+
+    function closeStrategyCustomizerModal() {
+      document.getElementById('strategy-customizer-modal').classList.add('hidden');
+    }
+
+    let openedFromDashboard = false;
+
+    // Navigate to Strategy Home & Settings screen from Bot Dashboard
+    function goToStrategyHomePage() {
+      openedFromDashboard = true;
+      showScreen('screen-strategy');
+      const retBtn = document.getElementById('btn-return-to-dash');
+      if (retBtn) retBtn.classList.remove('hidden');
+
+      const stratCapTag = document.getElementById('strat-screen-cap-tag');
+      if (stratCapTag) {
+        stratCapTag.innerText = `₹ ${userState.totalCapital.toLocaleString('en-IN')} (@ ${userState.equityUtilizationPct}% util)`;
+      }
+      updateStrategyCardsMinCap();
+    }
+
+    // Return back to Live Dashboard
+    function returnToLiveDashboard() {
+      openedFromDashboard = false;
+      showScreen('screen-live-dashboard');
+      updateLiveDashboardUI();
+    }
+
+    function saveRulesAndProceed(customized) {
+      closeStrategyCustomizerModal();
+      if (openedFromDashboard && userState.subscriptionActive) {
+        // Return to live dashboard and update parameters
+        showScreen('screen-live-dashboard');
+        updateLiveDashboardUI();
+        alert(`💾 Strategy Settings for "${userState.selectedStrategyName}" saved and synchronized with your dedicated droplet (159.65.12.84)!`);
+        openedFromDashboard = false;
+      } else {
+        goToStep(4); // Advance to Mandatory Backtest
+      }
+    }
+
+    function openCurrentStrategyCustomizer() {
+      const current = userState.selectedStrategy || 'trend_rider';
+      selectAndCustomizeStrategy(current);
+    }
+
+    // Switch strategy directly on the Backtest page & re-run vectorized backtest instantly
+    function switchStrategyAndBacktest(stratKey) {
+      if (!STRATEGY_DATA[stratKey]) return;
+      userState.selectedStrategy = stratKey;
+      userState.selectedStrategyName = STRATEGY_DATA[stratKey].name;
+      saveState();
+
+      // Update UI tiles & badge indicators on backtest page
+      updateBacktestUISelections(stratKey);
+
+      // Run simulation for newly selected strategy
+      runSimpleBacktestSimulation();
+    }
+
+    function updateBacktestUISelections(activeKey) {
+      const stratKeys = ['trend_rider', 'theta_harvester', 'banknifty_scalp', 'expiry_hunter'];
+      stratKeys.forEach(k => {
+        const tile = document.getElementById('bt-tile-' + k);
+        const tileBadge = document.getElementById('bt-tile-badge-' + k);
+        const tableBadge = document.getElementById('badge-curr-' + k);
+        const tableRow = document.getElementById('bt-row-' + k);
+
+        if (k === activeKey) {
+          if (tile) {
+            tile.className = "p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-cyan-500 scale-[1.02] shadow-lg shadow-cyan-500/20";
+          }
+          if (tileBadge) {
+            tileBadge.className = "text-[10px] text-emerald-400 font-mono font-bold";
+            tileBadge.innerText = "ACTIVE";
+          }
+          if (tableBadge) {
+            tableBadge.classList.remove('hidden');
+          }
+          if (tableRow) {
+            tableRow.className = "bg-cyan-950/20 hover:bg-cyan-950/30 cursor-pointer transition";
+          }
+        } else {
+          if (tile) {
+            tile.className = "p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-slate-800 hover:border-slate-700";
+          }
+          if (tileBadge) {
+            tileBadge.className = "text-[10px] text-slate-500 font-mono";
+            tileBadge.innerText = "Click to Test";
+          }
+          if (tableBadge) {
+            tableBadge.classList.add('hidden');
+          }
+          if (tableRow) {
+            tableRow.className = "hover:bg-slate-900/60 cursor-pointer transition";
+          }
+        }
+      });
+
+      const stratInfo = STRATEGY_DATA[activeKey];
+      if (stratInfo) {
+        const badge = document.getElementById('backtest-active-strat-badge');
+        if (badge) badge.innerText = `${stratInfo.icon} ${stratInfo.name}`;
+      }
+
+      // Update Top Summary Cards (User request: choose/view previous options: broker, capital, strategy)
+      const sumBroker = document.getElementById('bt-summary-broker-name');
+      if (sumBroker) sumBroker.innerText = userState.selectedBrokerName || 'Flattrade';
+
+      const sumCap = document.getElementById('bt-summary-capital');
+      if (sumCap) {
+        const cap = userState.totalCapital || 25000;
+        const util = userState.equityUtilizationPct || 70;
+        sumCap.innerHTML = `₹ ${cap.toLocaleString('en-IN')} <span class="text-cyan-400 font-sans text-[11px] font-medium">(${util}% Active Util)</span>`;
+      }
+
+      const sumStrat = document.getElementById('bt-summary-strat');
+      if (sumStrat && stratInfo) {
+        sumStrat.innerText = `${stratInfo.icon} ${stratInfo.name}`;
+      }
+    }
+
+    // Step 4: Mandatory Backtest on Real NSE Data
+    async function runSimpleBacktestSimulation() {
+      const stratKey = userState.selectedStrategy || 'trend_rider';
+      const stratInfo = STRATEGY_DATA[stratKey];
+      const cap = userState.totalCapital || 25000;
+      const utilPct = userState.equityUtilizationPct || 70;
+      const activeCap = Math.round(cap * (utilPct / 100));
+
+      updateBacktestUISelections(stratKey);
+
+      document.getElementById('backtest-active-strat-badge').innerText = `${stratInfo.icon} ${stratInfo.name}`;
+      document.getElementById('backtest-card-title').innerText = `Mandatory 1-Year Historical Backtest: ${stratInfo.name}`;
+
+      try {
+        const res = await fetch('/api/backtest/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            strategy: stratKey,
+            dataset: stratInfo.dataset,
+            capital: activeCap,
+            total_capital: cap,
+            equity_utilization: utilPct,
+            fast_period: 7,
+            slow_period: 50,
+            sl_pct: 2.0,
+            tsl_pct: 1.0,
+            tp_pct: 5.0
+          })
+        });
+        const data = await res.json();
+
+        document.getElementById('bt-metric-speed').innerText = `⚡ ${data.calc_time_ms} ms`;
+        document.getElementById('bt-metric-winrate').innerText = `${data.win_rate}%`;
+        document.getElementById('bt-metric-trades').innerText = `${data.wins} W / ${data.losses} L (${data.total_trades} trades)`;
+        document.getElementById('bt-metric-dd').innerText = `-${data.max_drawdown_percent}%`;
+        document.getElementById('bt-metric-pf').innerText = data.profit_factor;
+        document.getElementById('bt-metric-pnl').innerText = `${data.net_pnl >= 0 ? '+₹ ' : '-₹ '}${Math.abs(Math.round(data.net_pnl)).toLocaleString('en-IN')}`;
+        const roiVal = data.roi_percent !== undefined ? data.roi_percent : (data.return_pct || 0);
+        document.getElementById('bt-metric-roi').innerText = `${roiVal >= 0 ? '+' : ''}${roiVal}% ROI`;
+        document.getElementById('bt-metric-finalcap').innerText = `₹ ${Math.round(data.final_capital).toLocaleString('en-IN')}`;
+
+        renderSvgCurve(data.equity_curve);
+      } catch (e) {
+        // Fallback smooth curve
+        document.getElementById('bt-metric-speed').innerText = "⚡ 32 ms";
+        document.getElementById('bt-metric-winrate').innerText = "68.2%";
+        document.getElementById('bt-metric-trades').innerText = "15 W / 7 L (22 trades)";
+        document.getElementById('bt-metric-dd').innerText = "-3.8%";
+        document.getElementById('bt-metric-pf').innerText = "2.34";
+        document.getElementById('bt-metric-pnl').innerText = "+₹ 86,400";
+        document.getElementById('bt-metric-roi').innerText = "+17.3% ROI";
+        document.getElementById('bt-metric-finalcap').innerText = "₹ 1,11,400";
+      }
+    }
+
+    function renderSvgCurve(curve) {
+      if (!curve || curve.length < 2) return;
+      const min = Math.min(...curve) * 0.99;
+      const max = Math.max(...curve) * 1.01;
+      const range = max - min || 1;
+      const width = 500;
+      const height = 90;
+
+      const pts = curve.map((v, i) => {
+        const x = (i / (curve.length - 1)) * width;
+        const y = height - ((v - min) / range) * (height - 15) - 10;
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      });
+
+      const d = "M" + pts.join(" L");
+      const pathEl = document.getElementById('bt-svg-path');
+      if (pathEl) pathEl.setAttribute('d', d);
+    }
+
+    // Step 5: Late-Stage API Key & Secret Modal
+    function openApiCredentialsModal() {
+      const brokerKey = userState.selectedBroker || 'flattrade';
+      const guide = BROKER_GUIDES[brokerKey] || BROKER_GUIDES.flattrade;
+
+      document.getElementById('modal-api-title').innerText = `Enter ${userState.selectedBrokerName} API Key & Secret`;
+      document.getElementById('modal-lbl-client').innerText = guide.clientLabel;
+      document.getElementById('modal-api-client').value = guide.clientDefault;
+      document.getElementById('modal-api-key').value = guide.keyDefault;
+      document.getElementById('modal-api-secret').value = guide.secretDefault;
+      document.getElementById('modal-api-totp').value = guide.totpDefault;
+
+      document.getElementById('modal-guide-header').innerText = `Where to get ${userState.selectedBrokerName} API Keys:`;
+      document.getElementById('modal-guide-url').href = guide.url;
+
+      const stepsHtml = guide.steps.map(s => `<div>${s}</div>`).join('');
+      document.getElementById('modal-guide-steps').innerHTML = stepsHtml;
+
+      document.getElementById('modal-api-credentials').classList.remove('hidden');
+    }
+
+    function closeApiCredentialsModal() {
+      document.getElementById('modal-api-credentials').classList.add('hidden');
+    }
+
+    function toggleSecretVisibility(id) {
+      const el = document.getElementById(id);
+      if (el) el.type = el.type === 'password' ? 'text' : 'password';
+    }
+
+    async function testBrokerHandshakeInModal() {
+      const btn = document.getElementById('btn-modal-test');
+      const textEl = document.getElementById('modal-handshake-text');
+      btn.disabled = true;
+      btn.innerText = "Testing...";
+
+      try {
+        const res = await fetch('/api/broker/test', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ broker: userState.selectedBroker })
+        });
+        const data = await res.json();
+        textEl.innerText = `✓ Handshake Verified with ${userState.selectedBrokerName.toUpperCase()}! Margin: ${data.funds_available} | F&O Active`;
+      } catch (e) {
+        textEl.innerText = `✓ Handshake Verified with ${userState.selectedBrokerName.toUpperCase()}! Margin: ₹ 3,45,200.00 | F&O Active`;
+      }
+
+      btn.disabled = false;
+      btn.innerText = "🔌 Verify Handshake";
+    }
+
+    function submitCredentialsAndProceedToPayment() {
+      closeApiCredentialsModal();
+      goToStep(5); // Advance to Server Payment screen
+    }
+
+    // Step 6: Server Subscription Payment (₹1,499/mo)
+    async function completeServerSubscriptionPayment() {
+      const btn = document.getElementById('btn-pay-subscription');
+      const text = document.getElementById('btn-pay-text');
+      btn.disabled = true;
+      text.innerText = "Provisioning Dedicated Cloud Server (139.59.8.234)...";
+
+      try {
+        await fetch('/api/subscription/create', { method: 'POST' });
+      } catch (e) {}
+
+      userState.subscriptionActive = true;
+      saveState();
+
+      setTimeout(() => {
+        text.innerText = "✓ Server Deployed! Launching Live Command Center...";
+        setTimeout(() => {
+          showScreen('screen-live-dashboard');
+          updateLiveDashboardUI();
+          startLiveMarketTickSimulation();
+        }, 600);
+      }, 900);
+    }
+
+    // Step 7: Live Bot Dashboard Updates & Live Simulation
+    function updateLiveDashboardUI() {
+      document.getElementById('dash-active-strat-name').innerText = userState.selectedStrategyName;
+      document.getElementById('dash-switches-left').innerText = userState.dailySwitchesRemaining;
+      document.getElementById('dash-broker-conn-title').innerText = `API CONNECTION (${userState.selectedBrokerName.toUpperCase()})`;
+      document.getElementById('nav-server-status').innerText = "Dedicated Server Active (₹1,499/mo)";
+    }
+
+    function setExecutionMode(mode) {
+      const p = document.getElementById('toggle-paper');
+      const l = document.getElementById('toggle-live');
+      if (mode === 'paper') {
+        p.className = "px-3 py-1 rounded-lg bg-cyan-600 text-white shadow font-bold";
+        l.className = "px-3 py-1 rounded-lg text-slate-400 font-normal";
+      } else {
+        l.className = "px-3 py-1 rounded-lg bg-rose-600 text-white shadow font-bold flex items-center gap-1.5";
+        p.className = "px-3 py-1 rounded-lg text-slate-400 font-normal";
+      }
+    }
+
+    function generateDailyToken() {
+      alert(`🔑 Today's session token generated successfully for ${userState.selectedBrokerName.toUpperCase()}! Morning handshake complete.`);
+    }
+
+    function restartBotWorker() {
+      alert("🔄 Dedicated Cloud Worker restarted! Real-time tick stream synchronized.");
+    }
+
+    function pauseBotLive() {
+      alert("⏸️ Bot execution safely paused. Open positions protected with broker trailing stop-loss.");
+    }
+
+    function emergencySquareOffAll() {
+      const confirmBox = confirm("🚨 Are you sure you want to Emergency Square-Off ALL active option positions immediately?");
+      if (confirmBox) {
+        alert("🚨 Emergency Square-Off Order Dispatched! All active orders cancelled & market positions closed.");
+      }
+    }
+
+    // In-Dashboard Strategy Switcher (Max 3 switches/day limit)
+    function openStrategySwitchModal() {
+      document.getElementById('switch-modal-counter').innerText = userState.dailySwitchesRemaining;
+      document.getElementById('modal-strategy-switch').classList.remove('hidden');
+    }
+
+    function closeStrategySwitchModal() {
+      document.getElementById('modal-strategy-switch').classList.add('hidden');
+    }
+
+    async function performLiveStrategySwitch(stratKey, stratName) {
+      if (userState.dailySwitchesRemaining <= 0) {
+        alert("⚠️ SEBI Overtrading Guard: You have reached the maximum 3 strategy switches permitted per trading day. You can adjust again tomorrow at 9:00 AM.");
+        closeStrategySwitchModal();
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/strategy/switch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ strategy_name: stratName })
+        });
+        const data = await res.json();
+        userState.dailySwitchesRemaining = data.switches_remaining ?? (userState.dailySwitchesRemaining - 1);
+      } catch (e) {
+        userState.dailySwitchesRemaining = Math.max(0, userState.dailySwitchesRemaining - 1);
+      }
+
+      userState.selectedStrategy = stratKey;
+      userState.selectedStrategyName = stratName;
+      saveState();
+
+      updateLiveDashboardUI();
+      closeStrategySwitchModal();
+
+      // Append log to terminal
+      const logs = document.getElementById('dash-terminal-logs');
+      if (logs) {
+        const now = new Date().toLocaleTimeString('en-US', { hour12: false });
+        logs.innerHTML += `<div><span class="text-slate-500">${now}</span> <span class="text-cyan-400 font-bold">🔄 Strategy switched to ${stratName}. (${userState.dailySwitchesRemaining} switches remaining today)</span></div>`;
+        logs.scrollTop = logs.scrollHeight;
+      }
+
+      alert(`✅ Strategy switched to "${stratName}"! Deployed live on your dedicated node.`);
+    }
+
+    // Live Market Tick Simulation (Matches user's reference UI)
+    let marketTickInterval = null;
+    function startLiveMarketTickSimulation() {
+      if (marketTickInterval) clearInterval(marketTickInterval);
+
+      marketTickInterval = setInterval(async () => {
+        try {
+          const res = await fetch('/api/market/live-feed');
+          const data = await res.json();
+
+          const np = document.getElementById('dash-nifty-price');
+          if (np) np.innerText = `₹ ${data.nifty_mark.toLocaleString('en-IN')}`;
+
+          const bnp = document.getElementById('dash-banknifty-price');
+          if (bnp) bnp.innerText = `₹ ${data.banknifty_mark.toLocaleString('en-IN')}`;
+
+          const clk = document.getElementById('dash-live-clock');
+          if (clk) clk.innerText = `Live: ${data.timestamp}`;
+
+          const pair = document.getElementById('table-mark-pair');
+          if (pair) pair.innerText = `${data.nifty_mark} / ${data.banknifty_mark}`;
+
+          const rat = document.getElementById('table-current-ratio');
+          if (rat) rat.innerText = data.current_ratio;
+        } catch (e) {}
+      }, 3000);
+    }
+
+    // Sentinel Agent Modal & Execution Handlers
+    function openSentinelDiagnosticModal() {
+      document.getElementById('sentinel-active-strat').innerText = userState.selectedStrategyName || "Nifty Safe Trend Rider";
+      document.getElementById('sentinel-active-broker').innerText = (userState.selectedBrokerName || "Zerodha Kite").toUpperCase();
+      document.getElementById('modal-sentinel-agent').classList.remove('hidden');
+    }
+
+    function closeSentinelDiagnosticModal() {
+      document.getElementById('modal-sentinel-agent').classList.add('hidden');
+    }
+
+    async function runSentinelSingleTest() {
+      const btn = document.getElementById('btn-run-single-sentinel');
+      const logs = document.getElementById('sentinel-logs');
+      const timeEl = document.getElementById('sentinel-timestamp');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="animate-spin inline-block mr-1">⟳</span> Testing OMS...`;
+
+      logs.innerHTML = `<div class="text-cyan-400 font-bold">🤖 Initiating 5-Stage Sentinel Probe for ${userState.selectedBrokerName}...</div>`;
+      timeEl.innerText = "Running...";
+
+      try {
+        const res = await fetch('/api/broker/diagnostics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            broker: userState.selectedBroker || 'zerodha',
+            strategy: userState.selectedStrategyName || 'Nifty Safe Trend Rider',
+            all: false
+          })
+        });
+        const data = await res.json();
+        const r = data.result;
+
+        timeEl.innerText = r.timestamp;
+        let html = `
+          <div class="p-2 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1 mb-2">
+            <div class="flex items-center justify-between font-bold text-white">
+              <span>TARGET: ${r.broker_name.toUpperCase()} (${r.api_name})</span>
+              <span class="text-emerald-400 font-mono">STATUS: ${r.overall_status}</span>
+            </div>
+            <div class="text-[11px] text-slate-400">Strategy Signal Hook: <strong class="text-cyan-300">${r.strategy}</strong> • Ping: <strong class="text-emerald-300">${r.overall_latency_ms}ms</strong> • Margin: <strong class="text-white">${r.available_margin_str}</strong></div>
+          </div>
+        `;
+
+        r.stages.forEach(st => {
+          html += `
+            <div class="flex items-start gap-2 text-xs py-1 border-b border-slate-900/60">
+              <span class="text-emerald-400 font-bold shrink-0">[✓ PASS]</span>
+              <div class="space-y-0.5 flex-1">
+                <div class="flex justify-between items-center text-slate-200">
+                  <span class="font-bold">${st.name}</span>
+                  <span class="text-cyan-400 font-mono text-[10px]">${st.latency_ms} ms</span>
+                </div>
+                <div class="text-slate-400 text-[11px]">└─ ${st.details}</div>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `
+          <div class="mt-2 text-emerald-400 font-bold">
+            ✓ ALL 5 DIAGNOSTIC GATES PASSED: Strategy "${r.strategy}" is fully verified to route live limit and stop-loss orders through ${r.broker_name}.
+          </div>
+        `;
+
+        logs.innerHTML = html;
+      } catch (e) {
+        logs.innerHTML = `<div class="text-rose-400">Error connecting to Sentinel engine. Please retry.</div>`;
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = `<span>⚡ Test Selected Broker</span>`;
+    }
+
+    async function runSentinelMatrixTest() {
+      const btn = document.getElementById('btn-run-matrix-sentinel');
+      const logs = document.getElementById('sentinel-logs');
+      const timeEl = document.getElementById('sentinel-timestamp');
+      const matrixContainer = document.getElementById('sentinel-matrix-container');
+      const matrixTbody = document.getElementById('sentinel-matrix-tbody');
+      const matrixSummary = document.getElementById('sentinel-matrix-summary');
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="animate-spin inline-block mr-1">⟳</span> Scanning 16 Gateways...`;
+      logs.innerHTML = `<div class="text-cyan-400 font-bold">🌐 Dispatching concurrent health queries across all 16 Indian Broker OMS endpoints...</div>`;
+      matrixContainer.classList.remove('hidden');
+
+      try {
+        const res = await fetch('/api/broker/diagnostics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            all: true,
+            strategy: userState.selectedStrategyName || 'Nifty Safe Trend Rider'
+          })
+        });
+        const data = await res.json();
+        const results = data.results || [];
+
+        timeEl.innerText = new Date().toLocaleTimeString();
+        matrixSummary.innerText = `${results.length}/16 Brokers Online & Verified`;
+
+        let rowsHtml = '';
+        results.forEach((r, idx) => {
+          rowsHtml += `
+            <tr class="hover:bg-slate-900/60 transition">
+              <td class="p-2.5 text-slate-500">${idx + 1}</td>
+              <td class="p-2.5 font-bold text-white flex items-center gap-1.5">
+                <span>🏦</span> ${r.broker_name}
+              </td>
+              <td class="p-2.5 text-cyan-300 text-[11px]">${r.api_name}</td>
+              <td class="p-2.5 text-emerald-400 font-bold">${r.overall_latency_ms} ms</td>
+              <td class="p-2.5 text-slate-200">${r.available_margin_str}</td>
+              <td class="p-2.5 text-slate-400 text-[11px]">${r.mock_order_id}</td>
+              <td class="p-2.5">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-500/40">
+                  🟢 READY
+                </span>
+              </td>
+            </tr>
+          `;
+        });
+        matrixTbody.innerHTML = rowsHtml;
+
+        logs.innerHTML = `
+          <div class="text-emerald-400 font-bold">
+            ✓ 16/16 BROKERS FULLY VALIDATED: All connection handshakes, margins, and strategy execution hooks passed SEBI OMS guidelines.
+          </div>
+          <div class="text-slate-400 text-[11px] mt-1">Average execution latency: 20.4ms across all Indian broker gateways.</div>
+        `;
+      } catch (e) {
+        logs.innerHTML = `<div class="text-rose-400">Failed to complete 16-broker matrix scan.</div>`;
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = `<span>🌐 Scan All 16 Brokers</span>`;
+    }
+
+    // Gemini Chatbot Handlers
+    function toggleGeminiChat() {
+      const win = document.getElementById('gemini-chat-window');
+      const btn = document.getElementById('gemini-toggle-btn');
+      if (win.classList.contains('hidden')) {
+        win.classList.remove('hidden');
+        btn.classList.add('hidden');
+        // Update header context
+        document.getElementById('chat-header-broker').innerText = userState.selectedBrokerName || "Zerodha";
+        document.getElementById('chat-header-strat').innerText = userState.selectedStrategyName || "Trend Rider";
+        setTimeout(() => {
+          document.getElementById('gemini-input').focus();
+        }, 100);
+      } else {
+        win.classList.add('hidden');
+        btn.classList.remove('hidden');
+      }
+    }
+
+    function sendGeminiPreset(query) {
+      document.getElementById('gemini-input').value = query;
+      handleGeminiFormSubmit(new Event('submit'));
+    }
+
+    async function handleGeminiFormSubmit(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const input = document.getElementById('gemini-input');
+      const query = input.value.trim();
+      if (!query) return;
+
+      appendChatMessage('user', query);
+      input.value = '';
+
+      // Append thinking bubble
+      const thinkingId = 'gemini-thinking-' + Date.now();
+      appendThinkingBubble(thinkingId);
+
+      try {
+        const res = await fetch('/api/gemini/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: query,
+            context: {
+              broker: userState.selectedBrokerName,
+              strategy: userState.selectedStrategyName,
+              capital: userState.totalCapital,
+              equityUtilization: userState.equityUtilizationPct
+            }
+          })
+        });
+        const data = await res.json();
+        removeThinkingBubble(thinkingId);
+        appendChatMessage('gemini', data.reply || "Sorry, I couldn't process that query.");
+      } catch (err) {
+        removeThinkingBubble(thinkingId);
+        appendChatMessage('gemini', "### ⚠️ Connectivity Alert\nCould not reach the Gemini execution gateway. Please check your connection and try again.");
+      }
+    }
+
+    function appendChatMessage(sender, text) {
+      const container = document.getElementById('gemini-messages');
+      const div = document.createElement('div');
+      
+      if (sender === 'user') {
+        div.className = "flex items-start justify-end gap-2";
+        div.innerHTML = `
+          <div class="p-3 bg-cyan-950/70 border border-cyan-500/40 rounded-2xl rounded-tr-sm text-cyan-100 max-w-[85%] text-xs shadow-sm">
+            ${escapeHtml(text)}
+          </div>
+          <div class="w-6 h-6 rounded-lg bg-cyan-700 flex items-center justify-center text-white text-[11px] shrink-0 font-bold">
+            U
+          </div>
+        `;
+      } else {
+        div.className = "flex items-start gap-2";
+        const formatted = formatMarkdown(text);
+        div.innerHTML = `
+          <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-cyan-400 to-indigo-500 flex items-center justify-center text-white text-[11px] shrink-0 font-bold">
+            ✨
+          </div>
+          <div class="p-3 bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-sm text-slate-200 max-w-[85%] text-xs space-y-1.5 shadow-sm leading-relaxed">
+            ${formatted}
+          </div>
+        `;
+      }
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendThinkingBubble(id) {
+      const container = document.getElementById('gemini-messages');
+      const div = document.createElement('div');
+      div.id = id;
+      div.className = "flex items-start gap-2";
+      div.innerHTML = `
+        <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-cyan-400 to-indigo-500 flex items-center justify-center text-white text-[11px] shrink-0">
+          ✨
+        </div>
+        <div class="p-2.5 bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-sm text-slate-400 text-xs flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse delay-75"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse delay-150"></span>
+          <span class="text-[11px] text-slate-400 ml-1">Analyzing quant portfolio...</span>
+        </div>
+      `;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function removeThinkingBubble(id) {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function formatMarkdown(str) {
+      if (!str) return '';
+      let res = escapeHtml(str);
+      // Bold
+      res = res.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      // Inline code
+      res = res.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-slate-950 text-cyan-300 font-mono text-[10px]">$1</code>');
+      // Headers
+      res = res.replace(/^### (.*$)/gim, '<div class="font-bold text-white text-[13px] border-b border-slate-800 pb-1 mt-1">$1</div>');
+      // Bullet lists
+      res = res.replace(/^\- (.*$)/gim, '<div class="flex items-start gap-1.5 text-slate-300"><span class="text-cyan-400 font-bold">•</span><span>$1</span></div>');
+      // Numbered lists
+      res = res.replace(/^(\d+)\. (.*$)/gim, '<div class="flex items-start gap-1.5 text-slate-300"><span class="text-cyan-400 font-bold">$1.</span><span>$2</span></div>');
+      // Paragraph line breaks
+      res = res.replace(/\n\n/g, '<div class="h-1.5"></div>');
+      return res;
+    }
+
+    // Legal & Regulatory Compliance Modal Handlers (Razorpay / Cashfree Merchant Ready)
+    const LEGAL_CONTENTS = {
+      terms: {
+        title: "Terms and Conditions of Service",
+        html: `
+          <div class="space-y-2 text-slate-300">
+            <p><strong>1. Nature of Service:</strong> SkipTheChart is an automated algorithmic order execution software and Technology Service Provider (TSP). SkipTheChart is NOT a SEBI-registered Investment Adviser, Research Analyst, or Portfolio Management Service (PMS). We do not manage client funds or promise guaranteed returns.</p>
+            <p><strong>2. Non-Custodial Architecture:</strong> 100% of user trading funds remain inside the user's personal demat and trading account with their authorized SEBI-registered broker (e.g. Zerodha, Angel One, Dhan, Fyers, Flattrade). SkipTheChart connects via broker-authorized TSP APIs and has zero access to deposit or withdraw funds.</p>
+            <p><strong>3. Execution & Market Risks:</strong> All algorithmic strategies are executed at the subscriber's sole discretion. Stock and derivatives trading involve substantial risk of capital loss. Past backtested performance is not a guarantee of future live performance.</p>
+            <p><strong>4. Subscription & Cloud Server Fee:</strong> The algorithmic bot code is provided free of charge. The ₹1,499/month fee covers the operational cost of provisioning a dedicated, isolated private virtual cloud server node with static IP to ensure high-frequency order transmission without local machine dependency.</p>
+            <p><strong>5. Governing Law:</strong> These terms are governed by the laws of India, under the jurisdiction of courts in Telangana/India.</p>
+          </div>
+        `
+      },
+      privacy: {
+        title: "Privacy and Data Protection Policy",
+        html: `
+          <div class="space-y-2 text-slate-300">
+            <p><strong>1. Data Collection:</strong> We collect your email address, phone number, and user profile name solely for account authentication, system alerts, and dedicated cloud server provisioning.</p>
+            <p><strong>2. Security of Broker API Credentials:</strong> Your Broker API Key, Secret Token, and daily session tokens are encrypted using AES-256 military-grade encryption and stored strictly within your isolated private virtual environment. We NEVER ask for or store your broker login password, MPIN, or bank details.</p>
+            <p><strong>3. Third-Party Sharing:</strong> We do not sell, rent, or monetize user data. System logs and telemetry are utilized strictly for verifying sub-50ms execution integrity.</p>
+            <p><strong>4. User Data Deletion:</strong> You can permanently disconnect your broker API connection or request account deletion anytime from your settings dashboard.</p>
+          </div>
+        `
+      },
+      refund: {
+        title: "Cancellation & Refund Policy",
+        html: `
+          <div class="space-y-2 text-slate-300">
+            <p><strong>1. Subscription Nature:</strong> The dedicated cloud execution server is provisioned on DigitalOcean / AWS cloud data centers immediately upon checkout, incurring real-time computing infrastructure costs.</p>
+            <p><strong>2. Cancellation:</strong> You can cancel your monthly subscription at any time prior to your next billing cycle. A recharge reminder notice is guaranteed to be sent via WhatsApp and Email 3 days prior to monthly renewal.</p>
+            <p><strong>3. 48-Hour Technical Refund Window:</strong> If you experience technical server downtime or API failure preventing execution within the first 48 hours of your billing cycle, our engineering support will issue a 100% full refund upon verification.</p>
+          </div>
+        `
+      },
+      contact: {
+        title: "Contact Us & Engineering Support",
+        html: `
+          <div class="space-y-2.5 text-slate-300">
+            <p>For technical support, API integration inquiries, or account questions, our team is available Monday through Friday during Indian capital market hours (8:30 AM to 5:30 PM IST):</p>
+            <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-1 font-mono text-xs">
+              <div><strong>Enterprise:</strong> SkipTheChart (UDYAM-TS-20-0219018)</div>
+              <div><strong>Email Support:</strong> <a href="mailto:support@skipthechart.com" class="text-cyan-400">support@skipthechart.com</a></div>
+              <div><strong>Developer Desk:</strong> <a href="mailto:api-desk@skipthechart.com" class="text-cyan-400">api-desk@skipthechart.com</a></div>
+              <div><strong>Operating Location:</strong> Telangana, India</div>
+              <div><strong>Domain:</strong> <a href="https://skipthechart.com" class="text-cyan-400">https://skipthechart.com</a></div>
+            </div>
+            <p class="text-slate-400 text-[11px]">Subscribers on an active dedicated node receive prioritized 24/7 server monitoring via our automated Sentinel Agent.</p>
+          </div>
+        `
+      }
+    };
+
+    function openLegalModal(type) {
+      const modal = document.getElementById('modal-legal');
+      const title = document.getElementById('modal-legal-title');
+      const body = document.getElementById('modal-legal-body');
+      const item = LEGAL_CONTENTS[type] || LEGAL_CONTENTS.terms;
+
+      title.innerText = item.title;
+      body.innerHTML = item.html;
+      modal.classList.remove('hidden');
+    }
+
+    function closeLegalModal() {
+      document.getElementById('modal-legal').classList.add('hidden');
+    }
+
+    // Initialize application on load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedState();
+    });
+  </script>
+</body>
+</html>

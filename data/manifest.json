@@ -1,0 +1,18 @@
+{
+  "nifty50": {
+    "name": "NIFTY 50",
+    "total_candles": 246,
+    "start_date": "2025-10-03",
+    "end_date": "2026-10-01",
+    "latest_close": 22421.95,
+    "file": "/Users/uday/.gemini/antigravity/scratch/algoforge-studio/data/nifty50_1y.json"
+  },
+  "banknifty": {
+    "name": "BANK NIFTY",
+    "total_candles": 246,
+    "start_date": "2025-10-03",
+    "end_date": "2026-10-01",
+    "latest_close": 54450.75,
+    "file": "/Users/uday/.gemini/antigravity/scratch/algoforge-studio/data/banknifty_1y.json"
+  }
+}
