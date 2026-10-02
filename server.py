@@ -38,7 +38,7 @@ ACTIVE_SESSION = {
 USER_SUBSCRIPTION = {
     "is_active": True,
     "plan_name": "Dedicated Cloud Execution Server",
-    "fee_monthly": 1499,
+    "fee_monthly": 1599,
     "bot_fee": 0,
     "currency": "INR",
     "droplet_ip": ACTIVE_SESSION["assigned_droplet_ip"],
@@ -358,7 +358,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json_response(200, {
                 "success": True,
                 "plan": "Dedicated Cloud Execution Server",
-                "monthly_charge": 1499,
+                "monthly_charge": 1599,
                 "bot_charge": 0,
                 "expires_at_date": time.strftime("%b %d, %Y", time.localtime(USER_SUBSCRIPTION["expires_at"])),
                 "reminder_date": time.strftime("%b %d, %Y", time.localtime(USER_SUBSCRIPTION["reminder_at"])),
