@@ -16,6 +16,22 @@
       0%, 100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.35); }
       50% { box-shadow: 0 0 25px rgba(6, 182, 212, 0.7); }
     }
+    @keyframes float-gentle-1 {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes float-gentle-2 {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-11px); }
+    }
+    @keyframes float-gentle-3 {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .float-bob-1 { animation: float-gentle-1 3.5s ease-in-out infinite; }
+    .float-bob-2 { animation: float-gentle-2 4.2s ease-in-out infinite 0.3s; }
+    .float-bob-3 { animation: float-gentle-3 3.8s ease-in-out infinite 0.6s; }
+    .float-bob-4 { animation: float-gentle-1 4.5s ease-in-out infinite 0.9s; }
   </style>
 </head>
 <body class="text-slate-100 min-h-screen font-sans antialiased p-3 lg:p-6 selection:bg-cyan-500 selection:text-white">
@@ -267,146 +283,154 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- SCREEN 1: CHOOSE YOUR BROKER (LIGHTWEIGHT, FAST & FRIENDLY)               -->
-    <!-- As requested: once chosen, brokers disappear and allocated equity appears -->
+    <!-- SCREEN 1: CHOOSE YOUR BROKER (WHITE FLOATING CANVAS, STRICT A-Z ORDER)     -->
+    <!-- As requested: happily floating broker cards in alphabetical order; when     -->
+    <!-- clicked, docks to user's left hand side and opens the 3 strategy options.  -->
     <!-- ========================================================================= -->
     <div id="screen-broker" class="space-y-5 hidden">
-      <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      <div class="bg-gradient-to-b from-white via-slate-50 to-slate-100 border-2 border-slate-200/90 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl text-slate-900">
+        <!-- Header -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
           <div>
-            <h2 class="text-xl font-black text-white flex items-center gap-2">
-              <span>🏦</span> Step 1: Choose Your Broker
-            </h2>
-            <p class="text-xs text-slate-400 mt-1">
-              Select where you have your active Indian demat & trading account. (API keys will be configured at the last step).
+            <div class="flex items-center gap-2.5">
+              <span class="text-3xl">🎈</span>
+              <h2 class="text-2xl font-black text-slate-900 tracking-tight">Step 1: Choose Your Indian Broker</h2>
+              <span class="px-3 py-1 rounded-full bg-cyan-100 text-cyan-800 text-xs font-bold uppercase tracking-wider border border-cyan-200">
+                A to Z Alphabetical
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">
+              Select where you hold your active trading account. Cards happily float — click your broker to dock it to the left side and unlock your strategies!
             </p>
           </div>
-          <span class="text-xs font-mono text-cyan-400 bg-cyan-950/60 px-3 py-1 rounded-xl border border-cyan-500/30">
-            16 Indian Brokers with API Supported
-          </span>
-        </div>
-
-        <!-- Broker Panels Grid: 16 Indian Brokers with API Facility -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-8 gap-3">
-          <!-- 1. Flattrade -->
-          <div onclick="selectOnboardingBroker('flattrade', 'Flattrade', 'FT', 'bg-teal-500/20 text-teal-400 border-teal-500/30')" id="ob-card-flattrade" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 flex items-center justify-center text-sm font-bold mx-auto">FT</div>
-            <div class="font-bold text-xs text-white truncate">Flattrade</div>
-            <div class="text-[10px] text-teal-300 font-mono">₹0 Brokerage</div>
-          </div>
-
-          <!-- 2. Zerodha -->
-          <div onclick="selectOnboardingBroker('zerodha', 'Zerodha Kite', 'Z', 'bg-orange-500/20 text-orange-400 border-orange-500/30')" id="ob-card-zerodha" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 border border-orange-500/30 flex items-center justify-center text-sm font-bold mx-auto">Z</div>
-            <div class="font-bold text-xs text-white truncate">Zerodha Kite</div>
-            <div class="text-[10px] text-emerald-400 font-mono">Kite Connect</div>
-          </div>
-
-          <!-- 3. Angel One -->
-          <div onclick="selectOnboardingBroker('angelone', 'Angel One', 'A', 'bg-red-500/20 text-red-400 border-red-500/30')" id="ob-card-angelone" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center text-sm font-bold mx-auto">A</div>
-            <div class="font-bold text-xs text-white truncate">Angel One</div>
-            <div class="text-[10px] text-cyan-400 font-mono">SmartAPI v2</div>
-          </div>
-
-          <!-- 4. Dhan -->
-          <div onclick="selectOnboardingBroker('dhan', 'Dhan HQ', 'D', 'bg-purple-500/20 text-purple-400 border-purple-500/30')" id="ob-card-dhan" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center text-sm font-bold mx-auto">D</div>
-            <div class="font-bold text-xs text-white truncate">Dhan HQ</div>
-            <div class="text-[10px] text-purple-400 font-mono">Fast Direct API</div>
-          </div>
-
-          <!-- 5. Upstox -->
-          <div onclick="selectOnboardingBroker('upstox', 'Upstox', 'U', 'bg-blue-500/20 text-blue-400 border-blue-500/30')" id="ob-card-upstox" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center text-sm font-bold mx-auto">U</div>
-            <div class="font-bold text-xs text-white truncate">Upstox</div>
-            <div class="text-[10px] text-blue-400 font-mono">Developer API</div>
-          </div>
-
-          <!-- 6. 5paisa -->
-          <div onclick="selectOnboardingBroker('fivepaisa', '5paisa', '5P', 'bg-rose-500/20 text-rose-400 border-rose-500/30')" id="ob-card-fivepaisa" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center text-sm font-bold mx-auto">5P</div>
-            <div class="font-bold text-xs text-white truncate">5paisa</div>
-            <div class="text-[10px] text-rose-300 font-mono">Open API v2</div>
-          </div>
-
-          <!-- 7. Shoonya -->
-          <div onclick="selectOnboardingBroker('shoonya', 'Shoonya Finvasia', 'S', 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30')" id="ob-card-shoonya" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-sm font-bold mx-auto">S</div>
-            <div class="font-bold text-xs text-white truncate">Shoonya</div>
-            <div class="text-[10px] text-emerald-400 font-mono">Prism API Free</div>
-          </div>
-
-          <!-- 8. Fyers -->
-          <div onclick="selectOnboardingBroker('fyers', 'Fyers', 'FY', 'bg-sky-500/20 text-sky-400 border-sky-500/30')" id="ob-card-fyers" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center text-sm font-bold mx-auto">FY</div>
-            <div class="font-bold text-xs text-white truncate">Fyers</div>
-            <div class="text-[10px] text-sky-400 font-mono">Fyers API v3</div>
-          </div>
-
-          <!-- 9. Kotak Neo -->
-          <div onclick="selectOnboardingBroker('kotakneo', 'Kotak Neo', 'KN', 'bg-amber-500/20 text-amber-400 border-amber-500/30')" id="ob-card-kotakneo" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-sm font-bold mx-auto">KN</div>
-            <div class="font-bold text-xs text-white truncate">Kotak Neo</div>
-            <div class="text-[10px] text-amber-400 font-mono">Trade API Free</div>
-          </div>
-
-          <!-- 10. Groww -->
-          <div onclick="selectOnboardingBroker('groww', 'Groww', 'GW', 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30')" id="ob-card-groww" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-sm font-bold mx-auto">GW</div>
-            <div class="font-bold text-xs text-white truncate">Groww</div>
-            <div class="text-[10px] text-emerald-300 font-mono">Developer API</div>
-          </div>
-
-          <!-- 11. ICICI Direct -->
-          <div onclick="selectOnboardingBroker('icicidirect', 'ICICI Direct Breeze', 'IC', 'bg-orange-500/20 text-orange-400 border-orange-500/30')" id="ob-card-icicidirect" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 border border-orange-500/30 flex items-center justify-center text-sm font-bold mx-auto">IC</div>
-            <div class="font-bold text-xs text-white truncate">ICICI Direct</div>
-            <div class="text-[10px] text-orange-300 font-mono">Breeze API</div>
-          </div>
-
-          <!-- 12. Motilal Oswal -->
-          <div onclick="selectOnboardingBroker('motilal', 'Motilal Oswal', 'MO', 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30')" id="ob-card-motilal" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 flex items-center justify-center text-sm font-bold mx-auto">MO</div>
-            <div class="font-bold text-xs text-white truncate">Motilal Oswal</div>
-            <div class="text-[10px] text-yellow-400 font-mono">MOSL Open API</div>
-          </div>
-
-          <!-- 13. Alice Blue -->
-          <div onclick="selectOnboardingBroker('aliceblue', 'Alice Blue ANT', 'AB', 'bg-blue-600/20 text-blue-400 border-blue-500/30')" id="ob-card-aliceblue" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center text-sm font-bold mx-auto">AB</div>
-            <div class="font-bold text-xs text-white truncate">Alice Blue</div>
-            <div class="text-[10px] text-blue-400 font-mono">ANT API v2</div>
-          </div>
-
-          <!-- 14. IIFL Securities -->
-          <div onclick="selectOnboardingBroker('iifl', 'IIFL Securities', 'II', 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30')" id="ob-card-iifl" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-sm font-bold mx-auto">II</div>
-            <div class="font-bold text-xs text-white truncate">IIFL Sec</div>
-            <div class="text-[10px] text-indigo-300 font-mono">Blazr Open API</div>
-          </div>
-
-          <!-- 15. Sharekhan Espresso -->
-          <div onclick="selectOnboardingBroker('espresso', 'Sharekhan Espresso', 'ES', 'bg-violet-500/20 text-violet-400 border-violet-500/30')" id="ob-card-espresso" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-violet-500/20 text-violet-400 border border-violet-500/30 flex items-center justify-center text-sm font-bold mx-auto">ES</div>
-            <div class="font-bold text-xs text-white truncate">Espresso</div>
-            <div class="text-[10px] text-violet-400 font-mono">Sharekhan API</div>
-          </div>
-
-          <!-- 16. Paytm Money -->
-          <div onclick="selectOnboardingBroker('paytmmoney', 'Paytm Money', 'PM', 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30')" id="ob-card-paytmmoney" class="p-3.5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-[1.02] shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center text-sm font-bold mx-auto">PM</div>
-            <div class="font-bold text-xs text-white truncate">Paytm Money</div>
-            <div class="text-[10px] text-cyan-300 font-mono">Open API v1</div>
-          </div>
-        </div>
-
-        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span>🛡️</span>
+            <span class="text-xs font-mono text-cyan-800 bg-cyan-50 px-3.5 py-1.5 rounded-xl border border-cyan-200 font-bold">
+              ⚡ 16 Certified Indian Brokers (TSP API)
+            </span>
+          </div>
+        </div>
+
+        <!-- 16 Floating Broker Cards in STRICT Alphabetical Order -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4 pt-1">
+          <!-- 1. Alice Blue (AB) -->
+          <div onclick="selectOnboardingBroker('aliceblue', 'Alice Blue', 'AB', 'bg-blue-600/10 text-blue-600 border-blue-500/30')" id="ob-card-aliceblue" class="float-bob-1 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-blue-600/10 text-blue-600 border border-blue-500/30 flex items-center justify-center text-sm font-bold mx-auto">AB</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Alice Blue</div>
+            <div class="text-[10px] text-blue-600 font-mono font-semibold">ANT API v2</div>
+          </div>
+
+          <!-- 2. Angel One (A) -->
+          <div onclick="selectOnboardingBroker('angelone', 'Angel One', 'A', 'bg-red-500/10 text-red-600 border-red-500/30')" id="ob-card-angelone" class="float-bob-2 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-red-500/10 text-red-600 border border-red-500/30 flex items-center justify-center text-sm font-bold mx-auto">A</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Angel One</div>
+            <div class="text-[10px] text-red-500 font-mono font-semibold">SmartAPI v2</div>
+          </div>
+
+          <!-- 3. Dhan HQ (D) -->
+          <div onclick="selectOnboardingBroker('dhan', 'Dhan HQ', 'D', 'bg-purple-500/10 text-purple-600 border-purple-500/30')" id="ob-card-dhan" class="float-bob-3 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-purple-500/10 text-purple-600 border border-purple-500/30 flex items-center justify-center text-sm font-bold mx-auto">D</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Dhan HQ</div>
+            <div class="text-[10px] text-purple-600 font-mono font-semibold">Direct API</div>
+          </div>
+
+          <!-- 4. Espresso (ES) -->
+          <div onclick="selectOnboardingBroker('espresso', 'Sharekhan Espresso', 'ES', 'bg-violet-500/10 text-violet-600 border-violet-500/30')" id="ob-card-espresso" class="float-bob-4 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-violet-500/10 text-violet-600 border border-violet-500/30 flex items-center justify-center text-sm font-bold mx-auto">ES</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Espresso</div>
+            <div class="text-[10px] text-violet-600 font-mono font-semibold">Sharekhan API</div>
+          </div>
+
+          <!-- 5. Flattrade (FT) -->
+          <div onclick="selectOnboardingBroker('flattrade', 'Flattrade', 'FT', 'bg-teal-500/10 text-teal-600 border-teal-500/30')" id="ob-card-flattrade" class="float-bob-1 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-teal-500/10 text-teal-600 border border-teal-500/30 flex items-center justify-center text-sm font-bold mx-auto">FT</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Flattrade</div>
+            <div class="text-[10px] text-teal-600 font-mono font-semibold">₹0 Brokerage</div>
+          </div>
+
+          <!-- 6. Fyers (FY) -->
+          <div onclick="selectOnboardingBroker('fyers', 'Fyers', 'FY', 'bg-sky-500/10 text-sky-600 border-sky-500/30')" id="ob-card-fyers" class="float-bob-2 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-sky-500/10 text-sky-600 border border-sky-500/30 flex items-center justify-center text-sm font-bold mx-auto">FY</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Fyers</div>
+            <div class="text-[10px] text-sky-600 font-mono font-semibold">Fyers API v3</div>
+          </div>
+
+          <!-- 7. Groww (GW) -->
+          <div onclick="selectOnboardingBroker('groww', 'Groww', 'GW', 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30')" id="ob-card-groww" class="float-bob-3 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 flex items-center justify-center text-sm font-bold mx-auto">GW</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Groww</div>
+            <div class="text-[10px] text-emerald-600 font-mono font-semibold">Dev API</div>
+          </div>
+
+          <!-- 8. ICICI Direct (IC) -->
+          <div onclick="selectOnboardingBroker('icicidirect', 'ICICI Direct Breeze', 'IC', 'bg-orange-500/10 text-orange-600 border-orange-500/30')" id="ob-card-icicidirect" class="float-bob-4 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-orange-500/10 text-orange-600 border border-orange-500/30 flex items-center justify-center text-sm font-bold mx-auto">IC</div>
+            <div class="font-bold text-xs text-slate-800 truncate">ICICI Direct</div>
+            <div class="text-[10px] text-orange-600 font-mono font-semibold">Breeze API</div>
+          </div>
+
+          <!-- 9. IIFL Securities (II) -->
+          <div onclick="selectOnboardingBroker('iifl', 'IIFL Securities', 'II', 'bg-indigo-500/10 text-indigo-600 border-indigo-500/30')" id="ob-card-iifl" class="float-bob-1 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-indigo-500/10 text-indigo-600 border border-indigo-500/30 flex items-center justify-center text-sm font-bold mx-auto">II</div>
+            <div class="font-bold text-xs text-slate-800 truncate">IIFL Sec</div>
+            <div class="text-[10px] text-indigo-600 font-mono font-semibold">Blazr API</div>
+          </div>
+
+          <!-- 10. Kotak Neo (KN) -->
+          <div onclick="selectOnboardingBroker('kotakneo', 'Kotak Neo', 'KN', 'bg-amber-500/10 text-amber-600 border-amber-500/30')" id="ob-card-kotakneo" class="float-bob-2 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-amber-500/10 text-amber-600 border border-amber-500/30 flex items-center justify-center text-sm font-bold mx-auto">KN</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Kotak Neo</div>
+            <div class="text-[10px] text-amber-600 font-mono font-semibold">Trade API Free</div>
+          </div>
+
+          <!-- 11. Motilal Oswal (MO) -->
+          <div onclick="selectOnboardingBroker('motilal', 'Motilal Oswal', 'MO', 'bg-yellow-500/10 text-yellow-600 border-yellow-500/30')" id="ob-card-motilal" class="float-bob-3 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-yellow-500/10 text-yellow-600 border border-yellow-500/30 flex items-center justify-center text-sm font-bold mx-auto">MO</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Motilal Oswal</div>
+            <div class="text-[10px] text-yellow-600 font-mono font-semibold">MOSL API</div>
+          </div>
+
+          <!-- 12. Paytm Money (PM) -->
+          <div onclick="selectOnboardingBroker('paytmmoney', 'Paytm Money', 'PM', 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30')" id="ob-card-paytmmoney" class="float-bob-4 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-cyan-500/10 text-cyan-600 border border-cyan-500/30 flex items-center justify-center text-sm font-bold mx-auto">PM</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Paytm Money</div>
+            <div class="text-[10px] text-cyan-600 font-mono font-semibold">Open API v1</div>
+          </div>
+
+          <!-- 13. Sharekhan / 5paisa (5P) -->
+          <div onclick="selectOnboardingBroker('fivepaisa', '5paisa', '5P', 'bg-rose-500/10 text-rose-600 border-rose-500/30')" id="ob-card-fivepaisa" class="float-bob-1 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-rose-500/10 text-rose-600 border border-rose-500/30 flex items-center justify-center text-sm font-bold mx-auto">5P</div>
+            <div class="font-bold text-xs text-slate-800 truncate">5paisa</div>
+            <div class="text-[10px] text-rose-600 font-mono font-semibold">Open API v2</div>
+          </div>
+
+          <!-- 14. Shoonya Finvasia (S) -->
+          <div onclick="selectOnboardingBroker('shoonya', 'Shoonya Finvasia', 'S', 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30')" id="ob-card-shoonya" class="float-bob-2 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 flex items-center justify-center text-sm font-bold mx-auto">S</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Shoonya</div>
+            <div class="text-[10px] text-emerald-600 font-mono font-semibold">Prism Free API</div>
+          </div>
+
+          <!-- 15. Upstox (U) -->
+          <div onclick="selectOnboardingBroker('upstox', 'Upstox', 'U', 'bg-blue-500/10 text-blue-600 border-blue-500/30')" id="ob-card-upstox" class="float-bob-3 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-blue-500/10 text-blue-600 border border-blue-500/30 flex items-center justify-center text-sm font-bold mx-auto">U</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Upstox</div>
+            <div class="text-[10px] text-blue-600 font-mono font-semibold">Developer API</div>
+          </div>
+
+          <!-- 16. Zerodha Kite (Z) -->
+          <div onclick="selectOnboardingBroker('zerodha', 'Zerodha Kite', 'Z', 'bg-orange-500/10 text-orange-600 border-orange-500/30')" id="ob-card-zerodha" class="float-bob-4 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
+            <div class="w-11 h-11 rounded-xl bg-orange-500/10 text-orange-600 border border-orange-500/30 flex items-center justify-center text-sm font-bold mx-auto">Z</div>
+            <div class="font-bold text-xs text-slate-800 truncate">Zerodha Kite</div>
+            <div class="text-[10px] text-orange-600 font-mono font-semibold">Kite Connect</div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-slate-900 text-slate-200 rounded-2xl border border-slate-800 text-xs flex flex-wrap items-center justify-between gap-3 shadow-inner">
+          <div class="flex items-center gap-2.5">
+            <span class="text-base">🛡️</span>
             <span>Your broker password and funds are 100% untouched. AlgoForge connects via authorized TSP APIs only.</span>
           </div>
-          <span class="text-cyan-400 font-mono">Click any broker to advance</span>
+          <span class="text-cyan-400 font-mono font-bold">Click any floating broker to advance →</span>
         </div>
       </div>
     </div>
@@ -416,676 +440,796 @@
     <!-- User prompt: shift equity panel after strategy so user has clear idea      -->
     <!-- of minimum required money (e.g. 70,000 margin requires 1,00,000 capital)   -->
     <!-- ========================================================================= -->
+        <!-- ========================================================================= -->
+    <!-- SCREEN 2: PROGRESSIVE STRATEGY WORKFLOW WITH LEFT-DOCKED BROKER           -->
+    <!-- As requested: docked broker on left; 3 Entry Options -> Asset ->          -->
+    <!-- Strategy Legs & Sensibull Payoff (with Wing Adjustment) -> Indicators (<=5)-->
+    <!-- ========================================================================= -->
     <div id="screen-strategy" class="space-y-5 hidden">
-      <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-sm font-bold">
-              2
-            </div>
-            <div>
-              <h2 class="text-lg font-black text-white">Step 2: Choose Your Trading Strategy (Pick 1 Goal)</h2>
-              <p class="text-xs text-slate-400 mt-0.5">
-                Every strategy specifies its <strong>broker margin requirement</strong> and <strong>minimum 30% buffer mandatory</strong> for smoother transaction security.
-              </p>
-            </div>
+      
+      <!-- Top Workflow Stage Bar -->
+      <div class="bg-[#0b101e] border border-cyan-500/30 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3 shadow-xl">
+        <div class="flex items-center gap-2 overflow-x-auto text-xs font-mono">
+          <div class="flex items-center gap-1.5 text-emerald-400 font-bold shrink-0">
+            <span class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-[10px]">✓</span>
+            <span id="wizard-stage-tag-broker">Broker Docked</span>
           </div>
-          <div class="flex items-center gap-2">
-            <!-- Return to Live Dashboard (shown for active subscribers) -->
-            <button type="button" id="btn-return-to-dash" onclick="returnToLiveDashboard()" class="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-bold text-xs rounded-lg transition flex items-center gap-1.5 hidden shadow-sm">
-              <span>⚡</span> Return to Live Dashboard
-            </button>
-            <span class="text-xs text-slate-400">Connected Broker:</span>
-            <span id="strat-screen-broker-tag" class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/50 text-cyan-300 font-mono font-bold text-xs rounded-lg">
-              Flattrade
-            </span>
-            <button type="button" onclick="goToStep(1)" class="text-[11px] text-slate-400 hover:text-cyan-300 underline ml-1">Change</button>
-          </div>
+          <span class="text-slate-600">→</span>
+          <button type="button" onclick="showStratWizard('options')" id="wizard-crumb-options" class="flex items-center gap-1.5 text-cyan-400 font-bold shrink-0 hover:underline">
+            <span class="w-5 h-5 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center text-[10px] font-black">1</span>
+            <span>3 Creation Options</span>
+          </button>
+          <span class="text-slate-600">→</span>
+          <button type="button" onclick="showStratWizard('asset')" id="wizard-crumb-asset" class="flex items-center gap-1.5 text-slate-400 font-medium shrink-0 hover:underline">
+            <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold">A</span>
+            <span>Asset</span>
+          </button>
+          <span class="text-slate-600">→</span>
+          <button type="button" onclick="showStratWizard('payoff')" id="wizard-crumb-payoff" class="flex items-center gap-1.5 text-slate-400 font-medium shrink-0 hover:underline">
+            <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold">B</span>
+            <span>Payoff & Wings</span>
+          </button>
+          <span class="text-slate-600">→</span>
+          <button type="button" onclick="showStratWizard('indicators')" id="wizard-crumb-ind" class="flex items-center gap-1.5 text-slate-400 font-medium shrink-0 hover:underline">
+            <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold">C</span>
+            <span>Indicators (or 0)</span>
+          </button>
+          <span class="text-slate-600">→</span>
+          <button type="button" onclick="goToStep(4)" id="wizard-crumb-bt" class="flex items-center gap-1.5 text-slate-400 font-medium shrink-0 hover:underline">
+            <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold">D</span>
+            <span>Backtest & SEBI Risk</span>
+          </button>
         </div>
 
-        <!-- SkipTheChart Minimum 30% Buffer Mandatory Policy Banner -->
-        <div class="bg-gradient-to-r from-cyan-950/40 via-slate-900 to-indigo-950/40 border border-cyan-500/30 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs shadow-lg">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold text-lg">
-              🛡️
-            </div>
-            <div>
-              <div class="text-white font-bold text-sm">SkipTheChart Risk Policy: Minimum 30% Buffer Mandatory</div>
-              <p class="text-slate-300 text-[11px] mt-0.5">
-                To guarantee smoother transaction execution, absorb intraday MTM swings, and protect your account from broker RMS rejections, SkipTheChart mandates a <strong class="text-emerald-400 font-semibold">minimum 30% cash buffer</strong> (operating at <strong class="text-cyan-300 font-semibold">max 70% active margin utilization</strong>).
-              </p>
-            </div>
-          </div>
-          <div class="text-[11px] text-slate-400 font-mono px-3 py-1.5 bg-slate-950/80 rounded-xl border border-slate-800">
-            Formula: <span class="text-cyan-300 font-bold">Active Margin ÷ 70% = Total Account Capital</span>
-          </div>
+        <div class="flex items-center gap-2">
+          <!-- Return to Live Dashboard (shown for active subscribers) -->
+          <button type="button" id="btn-return-to-dash" onclick="returnToLiveDashboard()" class="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-bold text-xs rounded-lg transition flex items-center gap-1.5 hidden shadow-sm">
+            <span>⚡</span> Return to Live Dashboard
+          </button>
+          <span class="text-xs text-slate-400">Connected Broker:</span>
+          <span id="strat-screen-broker-tag" class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/50 text-cyan-300 font-mono font-bold text-xs rounded-lg">
+            Flattrade
+          </span>
+          <button type="button" onclick="goToStep(1)" class="text-[11px] text-slate-400 hover:text-cyan-300 underline ml-1">Change</button>
         </div>
+      </div>
 
-        <!-- PRIMARY STRATEGY ARCHETYPES: 1-Click Deploy or Customize (Hedging, Buying, Scalping) -->
-        <div class="space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
-            <div>
-              <h3 class="text-sm font-black text-white flex items-center gap-2">
-                <span>🎯</span> Choose Strategy Archetype: 1-Click Deploy or Customize
-              </h3>
-              <p class="text-xs text-slate-400 mt-0.5">
-                Deploy directly with institutional execution rules (<span class="text-emerald-400 font-bold">Zero indicators required</span>), or customize with 100+ indicators & statistical tools like Z-Score.
-              </p>
-            </div>
-            <span class="text-[11px] font-mono text-cyan-400 px-2.5 py-1 bg-cyan-950/60 border border-cyan-500/30 rounded-lg">
-              3 Institutional Core Styles
-            </span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- 1. HEDGING & PAIRS ARBITRAGE -->
-            <div id="archetype-card-hedging" class="bg-gradient-to-b from-[#09151e] to-slate-950 border-2 border-emerald-500/40 hover:border-emerald-400/80 rounded-2xl p-4 flex flex-col justify-between space-y-3.5 transition-all shadow-xl hover:shadow-emerald-950/30">
-              <div class="space-y-2.5">
-                <div class="flex items-center justify-between">
-                  <span class="text-2xl p-2 bg-emerald-950/60 border border-emerald-500/40 rounded-xl">🛡️</span>
-                  <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40">
-                    Market Neutral
-                  </span>
-                </div>
-                <div>
-                  <h4 class="text-sm font-black text-white">Hedging & Pairs Arbitrage</h4>
-                  <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
-                    Statistical arbitrage pairs hedge (Nifty & BankNifty) or 9:20 AM delta-neutral hedged straddles.
-                  </p>
-                </div>
-                <div class="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1 text-[11px]">
-                  <div class="flex justify-between text-slate-300">
-                    <span>Active Margin:</span>
-                    <strong class="font-mono text-white">₹ 70,000</strong>
-                  </div>
-                  <div class="flex justify-between text-slate-300">
-                    <span>Total Account Capital:</span>
-                    <strong class="font-mono text-emerald-400">₹ 1,00,000</strong>
-                  </div>
-                  <div class="flex justify-between text-slate-300">
-                    <span>Daily Kill Switch:</span>
-                    <strong class="font-mono text-rose-300">10% (₹ 7,000)</strong>
-                  </div>
-                </div>
-                <div class="text-[10px] text-emerald-300/90 bg-emerald-950/40 border border-emerald-500/30 rounded-lg p-2 flex items-center gap-1.5">
-                  <span>💡</span>
-                  <span><strong>Zero indicators needed:</strong> Pure mathematical delta & ratio rebalancing rules.</span>
-                </div>
-              </div>
-              <div class="space-y-2 pt-1">
-                <button type="button" onclick="deployArchetypeDirect('hedging')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
-                  <span>⚡ Deploy Hedging (No Indicators)</span>
-                  <span>→</span>
-                </button>
-                <button type="button" onclick="customizeArchetypeWithZScore()" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-emerald-300 font-bold text-[11px] rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
-                  <span>+ Add Z-Score / Indicators</span>
-                </button>
-              </div>
+      <!-- Main Layout Grid: Left Docked Broker + Right Progressive Area -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        
+        <!-- LEFT COLUMN: Docked Broker & Live Specs Summary ("Towards my left hand side") -->
+        <div class="lg:col-span-3 space-y-4">
+          <div id="docked-broker-card" class="bg-gradient-to-b from-[#0e1628] to-slate-950 border-2 border-cyan-500/40 rounded-2xl p-4 space-y-3.5 shadow-xl sticky top-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+              <span class="text-[11px] font-mono text-cyan-400 font-bold uppercase tracking-wider">🏦 Active Broker</span>
+              <button type="button" onclick="goToStep(1)" class="text-[11px] text-cyan-400 hover:text-cyan-300 underline font-medium">Change ↻</button>
             </div>
 
-            <!-- 2. DIRECTIONAL BUYING (CE/PE) -->
-            <div id="archetype-card-buying" class="bg-gradient-to-b from-[#081724] to-slate-950 border-2 border-cyan-500/40 hover:border-cyan-400/80 rounded-2xl p-4 flex flex-col justify-between space-y-3.5 transition-all shadow-xl hover:shadow-cyan-950/30">
-              <div class="space-y-2.5">
-                <div class="flex items-center justify-between">
-                  <span class="text-2xl p-2 bg-cyan-950/60 border border-cyan-500/40 rounded-xl">🚀</span>
-                  <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40">
-                    Directional
-                  </span>
-                </div>
-                <div>
-                  <h4 class="text-sm font-black text-white">Directional Options Buying</h4>
-                  <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
-                    Automatic 2-way trend & breakout momentum buying Call (CE) or Put (PE) on Nifty & BankNifty.
-                  </p>
-                </div>
-                <div class="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1 text-[11px]">
-                  <div class="flex justify-between text-slate-300">
-                    <span>Active Margin:</span>
-                    <strong class="font-mono text-white">₹ 17,500</strong>
-                  </div>
-                  <div class="flex justify-between text-slate-300">
-                    <span>Total Account Capital:</span>
-                    <strong class="font-mono text-cyan-400">₹ 25,000</strong>
-                  </div>
-                  <div class="flex justify-between text-slate-300">
-                    <span>Daily Kill Switch:</span>
-                    <strong class="font-mono text-rose-300">10% (₹ 1,750)</strong>
-                  </div>
-                </div>
-                <div class="text-[10px] text-cyan-300/90 bg-cyan-950/40 border border-cyan-500/30 rounded-lg p-2 flex items-center gap-1.5">
-                  <span>💡</span>
-                  <span><strong>Zero indicators needed:</strong> High/Low price action momentum breakout.</span>
-                </div>
+            <!-- Connected Broker Info -->
+            <div class="flex items-center gap-3">
+              <div id="docked-broker-logo" class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-lg font-black shrink-0">
+                FT
               </div>
-              <div class="space-y-2 pt-1">
-                <button type="button" onclick="deployArchetypeDirect('buying')" class="w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-cyan-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
-                  <span>⚡ Deploy Buying (No Indicators)</span>
-                  <span>→</span>
-                </button>
-                <button type="button" onclick="customizeArchetypeWithIndicators('buying')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 text-cyan-300 font-bold text-[11px] rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
-                  <span>+ Add Indicators (Supertrend/RSI)</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- 3. INTRADAY SCALPING -->
-            <div id="archetype-card-scalping" class="bg-gradient-to-b from-[#1b1509] to-slate-950 border-2 border-amber-500/40 hover:border-amber-400/80 rounded-2xl p-4 flex flex-col justify-between space-y-3.5 transition-all shadow-xl hover:shadow-amber-950/30">
-              <div class="space-y-2.5">
-                <div class="flex items-center justify-between">
-                  <span class="text-2xl p-2 bg-amber-950/60 border border-amber-500/40 rounded-xl">⚡</span>
-                  <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-500/40">
-                    High Velocity
-                  </span>
-                </div>
-                <div>
-                  <h4 class="text-sm font-black text-white">Intraday Fast Scalper</h4>
-                  <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
-                    High-beta 1m / 3m rapid tick scalper with tight trailing stops and quick 15-90s momentum exits.
-                  </p>
-                </div>
-                <div class="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1 text-[11px]">
-                  <div class="flex justify-between text-slate-300">
-                    <span>Active Margin:</span>
-                    <strong class="font-mono text-white">₹ 20,000</strong>
-                  </div>
-                  <div class="flex justify-between text-slate-300">
-                    <span>Total Account Capital:</span>
-                    <strong class="font-mono text-amber-400">₹ 28,600</strong>
-                  </div>
-                  <div class="flex justify-between text-slate-300">
-                    <span>Daily Kill Switch:</span>
-                    <strong class="font-mono text-rose-300">10% (₹ 2,000)</strong>
-                  </div>
-                </div>
-                <div class="text-[10px] text-amber-300/90 bg-amber-950/40 border border-amber-500/30 rounded-lg p-2 flex items-center gap-1.5">
-                  <span>💡</span>
-                  <span><strong>Zero indicators needed:</strong> Fast tick volume surge and reversal rules.</span>
-                </div>
-              </div>
-              <div class="space-y-2 pt-1">
-                <button type="button" onclick="deployArchetypeDirect('scalping')" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-amber-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
-                  <span>⚡ Deploy Scalping (No Indicators)</span>
-                  <span>→</span>
-                </button>
-                <button type="button" onclick="customizeArchetypeWithIndicators('scalping')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-amber-500/40 text-amber-300 font-bold text-[11px] rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
-                  <span>+ Add Indicators (VWAP/EMA)</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TRACK A: 🪄 INSTANT YOUTUBE STRATEGY AI IMPORTER ("SUPERB OPTION") -->
-        <div class="bg-gradient-to-br from-[#0c1427] via-slate-950 to-[#0e162e] border-2 border-indigo-500/50 rounded-2xl p-5 space-y-4 shadow-2xl relative overflow-hidden">
-          <div class="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-          
-          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="text-2xl">🪄</span>
-              <div>
-                <div class="flex items-center gap-2">
-                  <h3 class="text-base font-black text-white">YouTube Strategy AI Importer</h3>
-                  <span class="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-[10px] font-bold uppercase tracking-wider">
-                    ⚡ Superb 1-Click Option
-                  </span>
-                </div>
-                <p class="text-xs text-slate-400 mt-0.5">
-                  Saw a great strategy on YouTube? Paste any video link — our engine automatically extracts the indicators, buy/sell rules, and applies mandatory security features (SL, TP, and Daily Kill Switch).
-                </p>
-              </div>
-            </div>
-            <div class="text-[11px] text-emerald-400 font-mono px-2.5 py-1 bg-emerald-950/40 border border-emerald-500/30 rounded-lg flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              Auto-Applies SL / TP / Kill Switch
-            </div>
-          </div>
-
-          <!-- YouTube Input Box -->
-          <div class="space-y-2.5">
-            <div class="flex flex-col sm:flex-row items-stretch gap-2.5">
-              <div class="relative flex-1">
-                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-rose-500 text-base">▶</span>
-                <input type="text" id="yt-url-input" placeholder="Paste YouTube Link (e.g. https://www.youtube.com/watch?v=... or search '5-EMA Scalper')" class="w-full pl-9 pr-4 py-2.5 bg-slate-950 border border-slate-700 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-xl text-xs text-white placeholder-slate-500 font-mono outline-none transition shadow-inner">
-              </div>
-              <button type="button" id="btn-parse-yt" onclick="parseAndApplyYouTubeStrategy()" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:opacity-95 text-white font-bold text-xs rounded-xl shadow-lg shadow-indigo-500/20 transition flex items-center justify-center gap-2 shrink-0">
-                <span>🪄 Parse & Apply Strategy</span>
-              </button>
-            </div>
-
-            <!-- Popular Strategy Quick-Pills (Generic Quantitative Names - No Person Names) -->
-            <div class="flex flex-wrap items-center gap-1.5 pt-1 text-[11px]">
-              <span class="text-slate-400 font-medium mr-1">🔥 Popular Setups:</span>
-              <button type="button" onclick="quickFillYouTube('Supertrend + RSI Confluence Trend Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
-                Supertrend + RSI Confluence
-              </button>
-              <button type="button" onclick="quickFillYouTube('5 EMA Mean Reversion Momentum Scalp')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
-                5-EMA Momentum Scalp
-              </button>
-              <button type="button" onclick="quickFillYouTube('9 EMA and 15 EMA Crossover Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
-                9 & 15 EMA Crossover
-              </button>
-              <button type="button" onclick="quickFillYouTube('15 Min Inside Bar Breakout Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
-                15m Inside Bar Breakout
-              </button>
-              <button type="button" onclick="quickFillYouTube('Fair Value Gap FVG Liquidity Sweep')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
-                Fair Value Gap (FVG)
-              </button>
-              <button type="button" onclick="quickFillYouTube('9:20 AM Non-Directional Straddle Strangle')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
-                9:20 AM Hedged Straddle
-              </button>
-            </div>
-          </div>
-
-          <!-- YouTube Extracted Preview Box (Shown when parsed or active) -->
-          <div id="yt-preview-card" class="p-4 bg-slate-900/90 border border-indigo-500/40 rounded-xl space-y-3 hidden transition-all">
-            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
-              <div class="flex items-center gap-2">
-                <span class="text-emerald-400 text-sm">✓</span>
-                <span class="text-xs font-bold text-white" id="yt-preview-title">Strategy Extracted Successfully</span>
-                <span class="px-2 py-0.5 bg-indigo-950 text-indigo-300 text-[10px] font-mono rounded" id="yt-preview-channel">Channel Source</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-[11px] text-slate-400">Confluence Score:</span>
-                <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 font-mono font-bold text-xs rounded" id="yt-preview-synergy">95%</span>
-                <button type="button" onclick="openEditStrategyModal()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-indigo-500/20 cursor-pointer">
-                  <span>✏️</span> Edit Strategy
-                </button>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
-                <div class="flex items-center justify-between">
-                  <span class="text-[10px] text-cyan-400 font-bold uppercase">Target Instrument & Timeframe</span>
-                  <button type="button" onclick="openEditStrategyModal()" class="text-[10px] text-cyan-400 hover:underline">Edit ✎</button>
-                </div>
-                <div class="font-bold text-white" id="yt-preview-inst">NIFTY 50 Options (5m)</div>
-                <div class="text-[10px] text-slate-400" id="yt-preview-type">Options Buying (Directional CE/PE)</div>
-              </div>
-              <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
-                <div class="flex items-center justify-between">
-                  <span class="text-[10px] text-purple-400 font-bold uppercase">Active Indicators Extracted</span>
-                  <button type="button" onclick="scrollToIndicatorsMatrix()" class="text-[10px] text-cyan-400 hover:underline font-mono">+ Matrix ↓</button>
-                </div>
-                <div class="flex flex-wrap gap-1" id="yt-preview-indicators">
-                  <span class="px-1.5 py-0.5 bg-purple-950 text-purple-300 rounded text-[10px] font-mono">5 EMA</span>
-                </div>
-              </div>
-              <div class="p-2.5 bg-slate-950 rounded-lg border border-emerald-500/40 space-y-1">
-                <div class="flex items-center justify-between">
-                  <span class="text-[10px] text-emerald-400 font-bold uppercase">Mandatory Security Controls</span>
-                  <button type="button" onclick="openEditStrategyModal()" class="text-[10px] text-emerald-400 hover:underline">Edit ✎</button>
-                </div>
-                <div class="text-[11px] text-slate-300 font-mono" id="yt-preview-security">
-                  SL: 1.8% | TP: 4.5% | Kill Switch: 10% (₹2,500)
+              <div class="overflow-hidden">
+                <div id="docked-broker-name" class="font-black text-sm text-white truncate">Flattrade</div>
+                <div class="text-[10px] text-emerald-400 font-mono flex items-center gap-1 mt-0.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>API Connected</span>
                 </div>
               </div>
             </div>
 
-            <div class="text-xs text-slate-300 bg-slate-950 p-2.5 rounded-lg border border-slate-800 space-y-1">
+            <!-- Live Specifications Card -->
+            <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-800 space-y-2 text-xs">
+              <div class="text-[10px] uppercase font-mono text-slate-400 tracking-wider">Selected Configuration</div>
+              
               <div class="flex items-center justify-between">
-                <div class="text-[10px] text-slate-400 font-bold uppercase">Entry & Exit Logic:</div>
-                <button type="button" onclick="openEditStrategyModal()" class="text-[10px] text-indigo-400 hover:underline">Edit Rules ✎</button>
+                <span class="text-slate-400">Target Asset:</span>
+                <strong id="docked-summary-asset" class="font-mono text-white font-bold">NIFTY 50</strong>
               </div>
-              <p class="text-[11px] text-slate-300 leading-relaxed" id="yt-preview-rules">
-                Buys Call (CE) when 5-min candle crosses above 5-EMA with RSI > 50 and price above VWAP. In overbought extension, 5-EMA rejection initiates Put (PE).
-              </p>
+
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Strategy Style:</span>
+                <strong id="docked-summary-strat" class="font-mono text-cyan-300 font-bold">Iron Butterfly</strong>
+              </div>
+
+              <div class="flex items-center justify-between" id="docked-summary-wings-row">
+                <span class="text-slate-400">Wings Width:</span>
+                <strong id="docked-summary-wings" class="font-mono text-amber-300 font-bold">200 pts</strong>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Indicators:</span>
+                <strong id="docked-summary-ind" class="font-mono text-purple-300 font-bold truncate max-w-[130px]">Pure Price Action</strong>
+              </div>
+
+              <div class="pt-2 border-t border-slate-800/80 space-y-1">
+                <div class="flex items-center justify-between text-[11px]">
+                  <span class="text-slate-400">Required Margin:</span>
+                  <strong id="docked-summary-margin" class="font-mono text-emerald-400 font-bold">₹ 17,500</strong>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                  <span class="text-slate-400">Account (+30% Buffer):</span>
+                  <strong id="docked-summary-cap" class="font-mono text-cyan-300 font-bold">₹ 25,000</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mandatory Security Reassurance -->
+            <div class="p-2.5 bg-emerald-950/30 rounded-xl border border-emerald-500/30 text-[10px] text-emerald-300 space-y-1">
+              <div class="font-bold flex items-center gap-1">
+                <span>🛡️</span> Mandatory Guardrails Active:
+              </div>
+              <div class="font-mono text-[9.5px] text-slate-300 space-y-0.5">
+                <div>• Stop-Loss (SL): 1.0% Auto-Exit</div>
+                <div>• Target Profit (TP): 2.5%</div>
+                <div>• Daily Kill Switch: 10% Capped</div>
+                <div>• 30% Cash Buffer Enforced</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- TRACK B: ⚡ 100+ INDICATORS MATRIX & CUSTOM STRATEGY STUDIO -->
-        <div id="track-b-studio" class="bg-[#0b101e] border-2 border-cyan-500/50 rounded-2xl p-5 space-y-4 shadow-2xl scroll-mt-20">
-          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="text-2xl">⚡</span>
-              <div>
-                <div class="flex items-center gap-2">
-                  <h3 class="text-base font-black text-white">Custom Strategy Studio (100+ Indicators Matrix)</h3>
-                  <span class="px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold uppercase">
-                    100+ Quant Indicators Available
-                  </span>
-                </div>
+        <!-- RIGHT COLUMN: Progressive Wizard Steps -->
+        <div class="lg:col-span-9 space-y-5">
+          
+          <!-- =================================================================== -->
+          <!-- STEP 2 - THREE STRATEGY CREATION ENTRYWAYS                         -->
+          <!-- 1. Build by own with 100+ indicators                               -->
+          <!-- 2. Paste YouTube video link (with mandatory security guardrails)   -->
+          <!-- 3. Write strategy in your words (AI natural language prompt)       -->
+          <!-- =================================================================== -->
+          <div id="strat-panel-three-options" class="space-y-4">
+            <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-4 shadow-xl">
+              <div class="border-b border-slate-800 pb-3">
+                <span class="px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40 text-[10.5px] font-mono font-bold uppercase">
+                  Pick Any 1 of 3 Simple Ways
+                </span>
+                <h3 class="text-xl font-black text-white mt-1">Choose How You Want to Create Your Strategy</h3>
                 <p class="text-xs text-slate-400 mt-0.5">
-                  Build and test your own setup from scratch. Select indicators from any category — Trend, Momentum, Volatility, Volume, or Candlestick/Price Action.
+                  Pick the fastest method for you. No technical experience required.
                 </p>
               </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                <!-- Option 1: Build Your Strategy by Your Own (100+ Indicators) -->
+                <div onclick="showStratWizard('asset')" class="bg-gradient-to-b from-cyan-950/40 to-slate-950 border-2 border-cyan-500/50 hover:border-cyan-400 rounded-2xl p-4 flex flex-col justify-between space-y-3 cursor-pointer transition-all hover:scale-[1.02] shadow-xl group">
+                  <div class="space-y-2">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-lg font-bold">
+                      🛠️
+                    </div>
+                    <div>
+                      <span class="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-wider">Option 1</span>
+                      <h4 class="text-sm font-black text-white group-hover:text-cyan-300 transition">Build Your Strategy by Your Own</h4>
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                      Pick your asset, choose Buying/Selling/Hedged Spreads, customize Wings (Iron Butterfly), and select up to 5 indicators (or 0 for pure price action).
+                    </p>
+                  </div>
+                  <button type="button" class="w-full py-2.5 bg-cyan-600 group-hover:bg-cyan-500 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
+                    <span>⚡ Build with Indicators</span>
+                    <span>→</span>
+                  </button>
+                </div>
+
+                <!-- Option 2: Paste YouTube Video Link -->
+                <div onclick="focusYouTubeOption()" class="bg-gradient-to-b from-indigo-950/40 to-slate-950 border-2 border-indigo-500/50 hover:border-indigo-400 rounded-2xl p-4 flex flex-col justify-between space-y-3 cursor-pointer transition-all hover:scale-[1.02] shadow-xl group">
+                  <div class="space-y-2">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center text-lg font-bold">
+                      ▶
+                    </div>
+                    <div>
+                      <span class="text-[10px] font-mono font-bold text-indigo-400 uppercase tracking-wider">Option 2</span>
+                      <h4 class="text-sm font-black text-white group-hover:text-indigo-300 transition">Paste a YouTube Video Link</h4>
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                      Paste any video link — SkipTheChart extracts the buy/sell rules and injects mandatory safety features (SL, TP, and Daily Kill Switch).
+                    </p>
+                  </div>
+                  <button type="button" class="w-full py-2.5 bg-indigo-600 group-hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
+                    <span>🪄 Import Video Strategy</span>
+                    <span>→</span>
+                  </button>
+                </div>
+
+                <!-- Option 3: Write Strategy in Your Words -->
+                <div onclick="focusWordsOption()" class="bg-gradient-to-b from-emerald-950/40 to-slate-950 border-2 border-emerald-500/50 hover:border-emerald-400 rounded-2xl p-4 flex flex-col justify-between space-y-3 cursor-pointer transition-all hover:scale-[1.02] shadow-xl group">
+                  <div class="space-y-2">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-lg font-bold">
+                      ✍️
+                    </div>
+                    <div>
+                      <span class="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">Option 3</span>
+                      <h4 class="text-sm font-black text-white group-hover:text-emerald-300 transition">Write Strategy in Your Words</h4>
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                      Describe your setup in simple English (e.g. "Trade BankNifty 4-leg Iron Butterfly with 200pt wings and VWAP"). AI builds it instantly.
+                    </p>
+                  </div>
+                  <button type="button" class="w-full py-2.5 bg-emerald-600 group-hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
+                    <span>✨ Write in Plain Words</span>
+                    <span>→</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <!-- Combination Synergy Score Gauge -->
-            <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
-              <span class="text-xs text-slate-400 font-medium">Indicator Synergy:</span>
-              <span id="cockpit-synergy-badge" class="font-mono font-bold text-xs text-emerald-400">94% (Strong Confluence)</span>
+            <!-- YouTube Video Input Box (Option 2 Interactive Drawer) -->
+            <div id="option-yt-drawer" class="bg-gradient-to-br from-[#0c1427] via-slate-950 to-[#0e162e] border-2 border-indigo-500/40 rounded-2xl p-5 space-y-3.5 shadow-xl">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">🪄</span>
+                  <h4 class="text-sm font-black text-white">Option 2: Paste YouTube Link</h4>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold">Mandatory SL/TP/Kill Switch Enforced</span>
+                </div>
+                <span class="text-[11px] text-slate-400 font-mono">1-Click Auto Setup</span>
+              </div>
+              <div class="flex flex-col sm:flex-row items-stretch gap-2.5">
+                <div class="relative flex-1">
+                  <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-rose-500 text-base">▶</span>
+                  <input type="text" id="yt-url-input" placeholder="Paste YouTube Link (e.g. https://www.youtube.com/watch?v=... or search '5-EMA Scalp')" class="w-full pl-9 pr-4 py-2.5 bg-slate-950 border border-slate-700 focus:border-indigo-500 rounded-xl text-xs text-white placeholder-slate-500 font-mono outline-none">
+                </div>
+                <button type="button" id="btn-parse-yt" onclick="parseAndApplyYouTubeStrategy()" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:opacity-95 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5 shrink-0">
+                  <span>🪄 Parse & Apply Strategy</span>
+                  <span>→</span>
+                </button>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+                <span class="text-slate-400 font-medium mr-1">🔥 Popular Setups:</span>
+                <button type="button" onclick="quickFillYouTube('Supertrend + RSI Confluence Trend Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">Supertrend + RSI</button>
+                <button type="button" onclick="quickFillYouTube('5 EMA Mean Reversion Momentum Scalp')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">5-EMA Momentum Scalp</button>
+                <button type="button" onclick="quickFillYouTube('9 EMA and 15 EMA Crossover Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">9 & 15 EMA Crossover</button>
+                <button type="button" onclick="quickFillYouTube('9:20 AM Non-Directional Straddle Strangle')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">9:20 AM Hedged Straddle</button>
+              </div>
+            </div>
+
+            <!-- Write in Your Words Input Box (Option 3 Interactive Drawer) -->
+            <div id="option-words-drawer" class="bg-gradient-to-br from-[#091b1d] via-slate-950 to-[#0e1628] border-2 border-emerald-500/40 rounded-2xl p-5 space-y-3.5 shadow-xl">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">✍️</span>
+                  <h4 class="text-sm font-black text-white">Option 3: Write Your Strategy in Your Words</h4>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold">Natural Language AI</span>
+                </div>
+                <span class="text-[11px] text-slate-400 font-mono">Zero Code Needed</span>
+              </div>
+              <div class="space-y-2">
+                <textarea id="words-prompt-input" rows="3" placeholder="e.g. Trade BankNifty 4-leg Iron Butterfly with 200 point wings and VWAP indicator..." class="w-full p-3 bg-slate-950 border border-slate-700 focus:border-emerald-500 rounded-xl text-xs text-white placeholder-slate-500 font-mono outline-none leading-relaxed"></textarea>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+                    <span class="text-slate-400 font-medium mr-1">💡 Quick Examples:</span>
+                    <button type="button" onclick="quickFillWords('Trade BankNifty 4-leg Iron Butterfly with 200pt wings and VWAP')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">BankNifty Iron Butterfly 200pt</button>
+                    <button type="button" onclick="quickFillWords('Nifty Bull Call Spread with 9 EMA and 50 EMA')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">Nifty Bull Call Spread + 9 EMA</button>
+                    <button type="button" onclick="quickFillWords('BankNifty pure price action momentum breakout with 0 indicators')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">BankNifty Pure Price Action</button>
+                  </div>
+                  <button type="button" onclick="parsePlainWordsStrategy()" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-95 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5 shrink-0">
+                    <span>✨ Create Strategy from Words</span>
+                    <span>→</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Active Indicators Cockpit (Shows Selected Indicators Chips) -->
-          <div class="p-3.5 bg-slate-950 rounded-xl border border-cyan-500/30 space-y-2">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <span class="text-xs font-bold text-white flex items-center gap-1.5 flex-wrap">
-                <span>🎯</span> Active Indicators in Your Strategy (<span id="active-indicators-count">3</span> / 5 Max):
-                <span class="px-2 py-0.5 rounded text-[10.5px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-500/40 font-semibold">Strict ≤5 Limit for Instant 31-Combo Testing</span>
+          <!-- =================================================================== -->
+          <!-- STEP A: CHOOSE TRADING ASSET (NIFTY, BANKNIFTY, FINNIFTY, SENSEX)   -->
+          <!-- =================================================================== -->
+          <div id="strat-panel-asset" class="hidden bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+              <div>
+                <span class="px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40 text-[10.5px] font-mono font-bold uppercase">
+                  Step A of 3
+                </span>
+                <h3 class="text-lg font-black text-white mt-1">Choose Your Trading Asset</h3>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  Select which index instrument you want your automated trading bot to execute on:
+                </p>
+              </div>
+              <span class="text-xs font-mono text-cyan-400 bg-cyan-950/60 px-3 py-1 rounded-xl border border-cyan-500/30">
+                NSE & BSE Indices
               </span>
+            </div>
+
+            <!-- 5 Asset Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+              <!-- 1. NIFTY 50 -->
+              <div onclick="selectWizardAsset('NIFTY 50', 75, 17500, 25000)" id="asset-card-nifty" class="p-4 bg-cyan-950/30 border-2 border-cyan-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-lg shadow-cyan-500/10">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-cyan-500 text-slate-950">NSE</span>
+                  <span class="text-xs text-emerald-400 font-mono font-bold">Margin ₹17,500</span>
+                </div>
+                <div>
+                  <h4 class="text-base font-black text-white">NIFTY 50</h4>
+                  <div class="text-[11px] text-slate-400">Benchmark Index • Lot Size: 75</div>
+                </div>
+                <div class="text-[10px] text-slate-300 font-mono bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex justify-between">
+                  <span>Min Capital (+30% Buffer):</span>
+                  <strong class="text-cyan-300">₹ 25,000</strong>
+                </div>
+              </div>
+
+              <!-- 2. BANKNIFTY -->
+              <div onclick="selectWizardAsset('BANKNIFTY', 30, 35000, 50000)" id="asset-card-banknifty" class="p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-2 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">NSE</span>
+                  <span class="text-xs text-amber-400 font-mono font-bold">Margin ₹35,000</span>
+                </div>
+                <div>
+                  <h4 class="text-base font-black text-white">BANKNIFTY</h4>
+                  <div class="text-[11px] text-slate-400">High Volatility Banking • Lot Size: 30</div>
+                </div>
+                <div class="text-[10px] text-slate-300 font-mono bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex justify-between">
+                  <span>Min Capital (+30% Buffer):</span>
+                  <strong class="text-amber-300">₹ 50,000</strong>
+                </div>
+              </div>
+
+              <!-- 3. FINNIFTY -->
+              <div onclick="selectWizardAsset('FINNIFTY', 65, 20000, 28500)" id="asset-card-finnifty" class="p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-2 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">NSE</span>
+                  <span class="text-xs text-cyan-400 font-mono font-bold">Margin ₹20,000</span>
+                </div>
+                <div>
+                  <h4 class="text-base font-black text-white">FINNIFTY</h4>
+                  <div class="text-[11px] text-slate-400">Financial Services • Lot Size: 65</div>
+                </div>
+                <div class="text-[10px] text-slate-300 font-mono bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex justify-between">
+                  <span>Min Capital (+30% Buffer):</span>
+                  <strong class="text-cyan-300">₹ 28,500</strong>
+                </div>
+              </div>
+
+              <!-- 4. SENSEX -->
+              <div onclick="selectWizardAsset('SENSEX', 20, 40000, 57000)" id="asset-card-sensex" class="p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-2 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">BSE</span>
+                  <span class="text-xs text-purple-400 font-mono font-bold">Margin ₹40,000</span>
+                </div>
+                <div>
+                  <h4 class="text-base font-black text-white">SENSEX</h4>
+                  <div class="text-[11px] text-slate-400">BSE 30 Benchmark • Lot Size: 20</div>
+                </div>
+                <div class="text-[10px] text-slate-300 font-mono bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex justify-between">
+                  <span>Min Capital (+30% Buffer):</span>
+                  <strong class="text-purple-300">₹ 57,000</strong>
+                </div>
+              </div>
+
+              <!-- 5. MIDCPNIFTY -->
+              <div onclick="selectWizardAsset('MIDCPNIFTY', 120, 15000, 21500)" id="asset-card-midcpnifty" class="p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-2 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">NSE</span>
+                  <span class="text-xs text-teal-400 font-mono font-bold">Margin ₹15,000</span>
+                </div>
+                <div>
+                  <h4 class="text-base font-black text-white">MIDCPNIFTY</h4>
+                  <div class="text-[11px] text-slate-400">Midcap Index • Lot Size: 120</div>
+                </div>
+                <div class="text-[10px] text-slate-300 font-mono bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex justify-between">
+                  <span>Min Capital (+30% Buffer):</span>
+                  <strong class="text-teal-300">₹ 21,500</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Persistent Bottom Action Bar for Step A -->
+            <div class="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+              <button type="button" onclick="showStratWizard('options')" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-1.5">
+                <span>←</span> Back to 3 Options
+              </button>
               <div class="flex items-center gap-2">
-                <button type="button" onclick="resetDefaultIndicators()" class="text-[11px] text-cyan-400 hover:text-cyan-300 underline font-medium">
-                  Restore Recommended Combo
-                </button>
-                <button type="button" onclick="clearAllIndicators()" class="text-[11px] text-rose-400 hover:text-rose-300 underline font-medium">
-                  Clear All
+                <span class="text-xs text-slate-400">Selected Asset:</span>
+                <span id="btn-asset-current-badge" class="px-3 py-1 bg-cyan-950 border border-cyan-500/50 text-cyan-300 font-mono font-bold text-xs rounded-lg">
+                  NIFTY 50
+                </span>
+                <button type="button" onclick="wizardNextFromAsset()" class="px-6 py-3 bg-gradient-to-r from-cyan-600 via-indigo-600 to-emerald-600 hover:opacity-95 text-white font-black text-sm rounded-xl shadow-xl shadow-cyan-500/20 transition flex items-center gap-2">
+                  <span>Apply Strategy & Move to Next</span>
+                  <span>→</span>
                 </button>
               </div>
             </div>
-            <div class="flex flex-wrap gap-2" id="active-indicators-chips">
-              <!-- Dynamically populated chips -->
-            </div>
           </div>
 
-          <!-- Category Filter Tabs & Real-Time Search Bar -->
-          <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-1">
-            <!-- Category Tabs -->
-            <div class="flex flex-wrap items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
-              <button type="button" id="cat-tab-all" onclick="setIndicatorCategory('all')" class="px-3 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition">
-                100+
-              </button>
-              <button type="button" id="cat-tab-trend" onclick="setIndicatorCategory('trend')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-                Trend (27)
-              </button>
-              <button type="button" id="cat-tab-momentum" onclick="setIndicatorCategory('momentum')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-                Momentum (27)
-              </button>
-              <button type="button" id="cat-tab-volatility" onclick="setIndicatorCategory('volatility')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-                Volatility (22)
-              </button>
-              <button type="button" id="cat-tab-volume" onclick="setIndicatorCategory('volume')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-                Volume (15)
-              </button>
-              <button type="button" id="cat-tab-price_action" onclick="setIndicatorCategory('price_action')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-                Price Action (16)
-              </button>
+          <!-- =================================================================== -->
+          <!-- STEP B: STRATEGY LEGS & SENSIBULL PAYOFF CARDS (WITH WING ADJUST)   -->
+          <!-- =================================================================== -->
+          <div id="strat-panel-payoff" class="hidden bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+              <div>
+                <span class="px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40 text-[10.5px] font-mono font-bold uppercase">
+                  Step B of 3
+                </span>
+                <h3 class="text-lg font-black text-white mt-1">Choose Strategy Legs & Visual Payoff Profile</h3>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  Visual profit & loss curves matching Sensibull diagrams. Customize wings for multi-leg strategies:
+                </p>
+              </div>
+              
+              <!-- Style Filter Tabs -->
+              <div class="flex flex-wrap items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+                <button type="button" id="tab-strat-bullish" onclick="filterStrategyPayoffs('bullish')" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-white transition">
+                  🟢 Bullish
+                </button>
+                <button type="button" id="tab-strat-bearish" onclick="filterStrategyPayoffs('bearish')" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-white transition">
+                  🔴 Bearish
+                </button>
+                <button type="button" id="tab-strat-neutral" onclick="filterStrategyPayoffs('neutral')" class="px-3 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition">
+                  ⚖️ Neutral (Range)
+                </button>
+                <button type="button" id="tab-strat-hedge" onclick="filterStrategyPayoffs('hedge')" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-white transition">
+                  🛡️ Hedging (Buy+Sell)
+                </button>
+              </div>
             </div>
 
-            <!-- Search Bar -->
-            <div class="relative flex-1 max-w-md">
-              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs">🔍</span>
-              <input type="text" id="indicator-search" oninput="filterIndicatorsGrid()" placeholder="Search 100+ indicators (e.g. Supertrend, RSI, VWAP, EMA, Bollinger, CPR, FVG)..." class="w-full pl-8 pr-3 py-1.5 bg-slate-950 border border-slate-800 focus:border-cyan-500 rounded-xl text-xs text-white placeholder-slate-500 outline-none">
-            </div>
-          </div>
-
-          <!-- 100+ Indicators Matrix Grid (Scrollable, High Density) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-h-[380px] overflow-y-auto pr-1" id="indicators-grid-container">
-            <!-- Dynamically populated indicator cards -->
-          </div>
-
-          <!-- 🤖 AUTONOMOUS COMBINATIONS OPTIMIZER AGENT -->
-          <div class="p-4 bg-gradient-to-br from-indigo-950/60 via-slate-950 to-purple-950/50 rounded-2xl border-2 border-indigo-500/40 space-y-3 shadow-xl">
-            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-indigo-500/30 pb-3">
-              <div class="flex items-center gap-2.5">
-                <span class="text-2xl animate-pulse">🤖</span>
-                <div>
+            <!-- Payoff Cards Grid (Matching Sensibull Screenshot with SVG Curves) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="strat-payoff-grid">
+              
+              <!-- Card 1: Iron Butterfly (4 Legs) - Default Highlighted -->
+              <div onclick="selectWizardStrategy('iron_butterfly', 'Iron Butterfly (4 Legs)', 4, 35000, 50000, true)" id="card-strat-iron_butterfly" class="p-4 bg-cyan-950/30 border-2 border-cyan-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xl shadow-cyan-500/10 strat-card strat-type-neutral">
+                <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2">
-                    <h4 class="text-sm font-black text-white">Autonomous Indicator Combinations AI Agent</h4>
-                    <span class="px-2 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-[10px] font-mono font-bold">2⁵ - 1 = 31 Combos</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                    <h4 class="text-sm font-black text-white">Iron Butterfly (4 Legs)</h4>
                   </div>
-                  <p class="text-[11px] text-slate-400">
-                    With up to 5 indicators selected, tests <strong>all 31 mathematical combinations</strong> (Single, 2-Way, 3-Way, 4-Way, 5-Way Confluences) against 1-year historical market data in &lt;50ms.
+                  <span class="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-500/50 text-[10px] text-cyan-300 font-mono font-bold">4 Legs • Defined Risk</span>
+                </div>
+
+                <!-- Sensibull-style SVG Payoff Curve -->
+                <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                  <svg id="svg-payoff-butterfly" viewBox="0 0 200 70" class="w-full h-16">
+                    <line x1="5" y1="46" x2="195" y2="46" stroke="#334155" stroke-dasharray="3,3" stroke-width="1"/>
+                    <text x="100" y="12" fill="#10b981" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹7,600</text>
+                    <path id="path-payoff-butterfly" d="M 15 56 L 55 56 L 100 18 L 145 56 L 185 56" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                    <line x1="15" y1="56" x2="55" y2="56" stroke="#f43f5e" stroke-width="3"/>
+                    <line x1="145" y1="56" x2="185" y2="56" stroke="#f43f5e" stroke-width="3"/>
+                    <circle cx="100" cy="18" r="3.5" fill="#38bdf8"/>
+                  </svg>
+                </div>
+
+                <!-- Interactive Wing Adjustment (Iron Butterfly) -->
+                <div class="p-2.5 bg-slate-950/80 rounded-xl border border-amber-500/30 space-y-1.5">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-amber-300 flex items-center gap-1">
+                      <span>🪽</span> Adjust Wings (Distance from Strike):
+                    </span>
+                    <span id="current-wings-badge" class="font-mono text-cyan-300 font-bold">200 pts</span>
+                  </div>
+                  <div class="grid grid-cols-4 gap-1.5 text-xs font-mono">
+                    <button type="button" onclick="setWizardWingPoints(100, event)" id="wing-btn-100" class="py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-center font-bold">100 pt</button>
+                    <button type="button" onclick="setWizardWingPoints(200, event)" id="wing-btn-200" class="py-1 rounded bg-cyan-600 text-white font-bold border border-cyan-400 text-center">200 pt</button>
+                    <button type="button" onclick="setWizardWingPoints(300, event)" id="wing-btn-300" class="py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-center font-bold">300 pt</button>
+                    <button type="button" onclick="setWizardWingPoints(400, event)" id="wing-btn-400" class="py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-center font-bold">400 pt</button>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                  <div class="p-1.5 bg-slate-950 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Max Profit</span>
+                    <strong class="text-emerald-400 font-bold" id="card-max-profit">₹ 7,600</strong>
+                  </div>
+                  <div class="p-1.5 bg-slate-950 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Max Loss</span>
+                    <strong class="text-rose-400 font-bold" id="card-max-loss">- ₹ 4,400</strong>
+                  </div>
+                  <div class="p-1.5 bg-slate-950 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Win Rate</span>
+                    <strong class="text-cyan-300 font-bold">68.2%</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: Bull Call Spread (2 Legs) -->
+              <div onclick="selectWizardStrategy('bull_call_spread', 'Bull Call Spread (2 Legs)', 2, 22000, 31500, true)" id="card-strat-bull_call_spread" class="p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-3 transition-all strat-card strat-type-bullish">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                    <h4 class="text-sm font-black text-white">Bull Call Spread (2 Legs)</h4>
+                  </div>
+                  <span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/50 text-[10px] text-emerald-300 font-mono font-bold">2 Legs • Capped Loss</span>
+                </div>
+
+                <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                  <svg viewBox="0 0 200 70" class="w-full h-16">
+                    <line x1="5" y1="46" x2="195" y2="46" stroke="#334155" stroke-dasharray="3,3" stroke-width="1"/>
+                    <text x="150" y="14" fill="#10b981" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹8,200</text>
+                    <path d="M 20 56 L 65 56 L 135 20 L 180 20" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                    <line x1="20" y1="56" x2="65" y2="56" stroke="#f43f5e" stroke-width="3"/>
+                    <circle cx="135" cy="20" r="3.5" fill="#10b981"/>
+                  </svg>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                  <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Max Profit</span>
+                    <strong class="text-emerald-400 font-bold">₹ 8,200</strong>
+                  </div>
+                  <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Max Loss</span>
+                    <strong class="text-rose-400 font-bold">- ₹ 3,800</strong>
+                  </div>
+                  <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Win Rate</span>
+                    <strong class="text-cyan-300 font-bold">64.5%</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3: Short Straddle (2 Legs) -->
+              <div onclick="selectWizardStrategy('short_straddle', 'Short Straddle (9:20 Harvester)', 2, 70000, 100000, false)" id="card-strat-short_straddle" class="p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-3 transition-all strat-card strat-type-neutral">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                    <h4 class="text-sm font-black text-white">Short Straddle (ATM CE+PE)</h4>
+                  </div>
+                  <span class="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-500/50 text-[10px] text-cyan-300 font-mono font-bold">2 Legs • High Theta</span>
+                </div>
+
+                <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                  <svg viewBox="0 0 200 70" class="w-full h-16">
+                    <line x1="5" y1="46" x2="195" y2="46" stroke="#334155" stroke-dasharray="3,3" stroke-width="1"/>
+                    <text x="100" y="12" fill="#10b981" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Peak Profit: ₹12,500</text>
+                    <path d="M 20 62 L 100 16 L 180 62" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                    <line x1="20" y1="62" x2="55" y2="46" stroke="#f43f5e" stroke-width="3"/>
+                    <line x1="145" y1="46" x2="180" y2="62" stroke="#f43f5e" stroke-width="3"/>
+                    <circle cx="100" cy="16" r="3.5" fill="#38bdf8"/>
+                  </svg>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                  <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Peak Theta</span>
+                    <strong class="text-emerald-400 font-bold">₹ 12,500</strong>
+                  </div>
+                  <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Kill Switch SL</span>
+                    <strong class="text-rose-400 font-bold">- 10% Cut</strong>
+                  </div>
+                  <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Win Rate</span>
+                    <strong class="text-cyan-300 font-bold">71.8%</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 4: Directional Options Buying Only -->
+              <div onclick="selectWizardStrategy('buying_only', 'Directional Buying Only (CE/PE)', 1, 17500, 25000, false)" id="card-strat-buying_only" class="p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-3 transition-all strat-card strat-type-bullish">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                    <h4 class="text-sm font-black text-white">Options Buying Only (CE / PE)</h4>
+                  </div>
+                  <span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/50 text-[10px] text-emerald-300 font-mono font-bold">1 Leg • Momentum</span>
+                </div>
+
+                <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                  <svg viewBox="0 0 200 70" class="w-full h-16">
+                    <line x1="5" y1="46" x2="195" y2="46" stroke="#334155" stroke-dasharray="3,3" stroke-width="1"/>
+                    <text x="150" y="14" fill="#10b981" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Unlimited Upside</text>
+                    <path d="M 20 56 L 80 56 L 175 16" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                    <line x1="20" y1="56" x2="80" y2="56" stroke="#f43f5e" stroke-width="3"/>
+                    <circle cx="175" cy="16" r="3.5" fill="#10b981"/>
+                  </svg>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                  <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Max Profit</span>
+                    <strong class="text-emerald-400 font-bold">Unlimited</strong>
+                  </div>
+                  <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Strict SL</span>
+                    <strong class="text-rose-400 font-bold">1.5% Premium</strong>
+                  </div>
+                  <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                    <span class="text-slate-400 block">Win Rate</span>
+                    <strong class="text-cyan-300 font-bold">61.0%</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Persistent Bottom Action Bar for Step B -->
+            <div class="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+              <button type="button" onclick="showStratWizard('asset')" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-1.5">
+                <span>←</span> Back to Assets
+              </button>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-400">Selected Strategy:</span>
+                <span id="btn-strat-current-badge" class="px-3 py-1 bg-cyan-950 border border-cyan-500/50 text-cyan-300 font-mono font-bold text-xs rounded-lg">
+                  Iron Butterfly (200pt)
+                </span>
+                <button type="button" onclick="wizardNextFromPayoff()" class="px-6 py-3 bg-gradient-to-r from-cyan-600 via-indigo-600 to-emerald-600 hover:opacity-95 text-white font-black text-sm rounded-xl shadow-xl shadow-cyan-500/20 transition flex items-center gap-2">
+                  <span>Apply Strategy & Move to Next</span>
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- =================================================================== -->
+          <!-- STEP C: SELECT INDICATORS OR WITHOUT INDICATORS & 31 COMBINATIONS    -->
+          <!-- =================================================================== -->
+          <div id="strat-panel-indicators" class="hidden bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+              <div>
+                <span class="px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40 text-[10.5px] font-mono font-bold uppercase">
+                  Step C of 3
+                </span>
+                <h3 class="text-lg font-black text-white mt-1">Select Indicators or Trade Without Indicators</h3>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  Choose pure price action (zero indicators) or pick up to 5 indicators with instant 31-combination optimization:
+                </p>
+              </div>
+              <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
+                <span class="text-xs text-slate-400">Synergy Score:</span>
+                <span id="cockpit-synergy-badge" class="font-mono font-bold text-xs text-emerald-400">94% (Strong)</span>
+              </div>
+            </div>
+
+            <!-- Two Main Choices: Without Indicators vs With Indicators -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Choice 1: Without Indicators (Pure Price Action) -->
+              <div onclick="selectIndicatorMode('none')" id="ind-mode-none" class="p-4 bg-slate-950 border-2 border-slate-800 hover:border-emerald-500/80 rounded-2xl cursor-pointer space-y-2.5 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="text-2xl p-2 bg-emerald-950/60 border border-emerald-500/40 rounded-xl">🟢</span>
+                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40">Zero Indicators Needed</span>
+                </div>
+                <div>
+                  <h4 class="text-sm font-black text-white">Without Indicators (Pure Price Action)</h4>
+                  <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                    Uses high/low candle breakout, range expansion, and mathematical market delta. 100% clean & fast execution.
                   </p>
                 </div>
+                <div class="text-[10px] text-emerald-300 font-mono bg-emerald-950/30 p-2 rounded-lg border border-emerald-500/30">
+                  ✓ Instant 1-Click Move to Backtest
+                </div>
               </div>
-              <div class="flex items-center gap-2">
-                <button type="button" id="btn-run-combos" onclick="runCombinationsAgent('active')" class="px-4 py-2 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 cursor-pointer">
-                  <span>⚡</span> Test All 31 Combinations
-                </button>
-                <button type="button" id="btn-screen-global" onclick="runCombinationsAgent('global_screen')" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-purple-500/50 text-slate-200 font-semibold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer">
-                  <span>🌐</span> Screen 100+ Catalog
-                </button>
+
+              <!-- Choice 2: With Indicators (<=5 Max) -->
+              <div onclick="selectIndicatorMode('with_indicators')" id="ind-mode-with" class="p-4 bg-cyan-950/30 border-2 border-cyan-400 rounded-2xl cursor-pointer space-y-2.5 transition-all shadow-lg shadow-cyan-500/10">
+                <div class="flex items-center justify-between">
+                  <span class="text-2xl p-2 bg-cyan-950/60 border border-cyan-500/40 rounded-xl">⚡</span>
+                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40">Up to 5 Indicators (31 Combos)</span>
+                </div>
+                <div>
+                  <h4 class="text-sm font-black text-white">With Indicators (Choose up to 5 Max)</h4>
+                  <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                    Select from 100+ quant catalog. Tests all 31 mathematical combinations (2⁵ - 1) in &lt;15ms.
+                  </p>
+                </div>
+                <div class="text-[10px] text-cyan-300 font-mono bg-cyan-950/30 p-2 rounded-lg border border-cyan-500/30 flex justify-between">
+                  <span>Selected: <strong id="active-indicators-count">3</strong> / 5</span>
+                  <span class="text-emerald-400 font-bold">Autonomous Agent Ready</span>
+                </div>
               </div>
             </div>
 
-            <!-- Agent Working Status Banner -->
-            <div id="combo-agent-status" class="hidden p-3 bg-indigo-950/40 border border-indigo-500/30 rounded-xl text-xs font-mono flex items-center justify-between">
-              <div class="flex items-center gap-2 text-indigo-300">
-                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-                <span id="combo-agent-status-text">Agent analyzing all 31 mathematical permutations...</span>
-              </div>
-              <span id="combo-agent-speed" class="text-cyan-400 font-bold">0.0 ms</span>
-            </div>
-
-            <!-- Best Combination Champion Card -->
-            <div id="combo-champion-card" class="hidden p-3.5 bg-slate-950/90 rounded-xl border-2 border-emerald-500/60 shadow-lg shadow-emerald-500/10 space-y-2.5">
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-2">
-                  <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-black text-[10px] uppercase font-mono">🏆 Best Performing Confluence (Rank #1)</span>
-                  <span class="text-xs font-bold text-white" id="combo-champion-name">Quad Confluence</span>
-                </div>
-                <button type="button" onclick="applyChampionCombination()" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition shadow-md flex items-center gap-1 cursor-pointer">
-                  <span>🚀</span> Apply Best Combo to Strategy
-                </button>
-              </div>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
-                  <span class="text-[10px] text-slate-400 block font-mono">Win Rate</span>
-                  <span class="text-emerald-400 font-mono font-bold text-sm" id="combo-champ-winrate">71.4%</span>
-                </div>
-                <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
-                  <span class="text-[10px] text-slate-400 block font-mono">Profit Factor</span>
-                  <span class="text-cyan-300 font-mono font-bold text-sm" id="combo-champ-pf">2.35</span>
-                </div>
-                <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
-                  <span class="text-[10px] text-slate-400 block font-mono">Simulated Net Return</span>
-                  <span class="text-emerald-300 font-mono font-bold text-sm" id="combo-champ-pnl">+ ₹34,850</span>
-                </div>
-                <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
-                  <span class="text-[10px] text-slate-400 block font-mono">Max Drawdown</span>
-                  <span class="text-rose-400 font-mono font-bold text-sm" id="combo-champ-dd">3.8%</span>
-                </div>
-              </div>
-              <div class="flex flex-wrap items-center gap-1.5 pt-1 text-[11px]" id="combo-champion-chips">
-                <!-- champion indicator badges -->
-              </div>
-            </div>
-
-            <!-- Full Combinations Results Table Drawer -->
-            <div id="combo-results-container" class="hidden space-y-2">
-              <div class="flex items-center justify-between text-xs text-slate-400 font-medium">
-                <span>All <span id="combo-results-count">31</span> Combinations Ranked:</span>
-                <span class="text-[11px] text-cyan-400 font-mono">Click "Apply" on any combination to load it into your strategy</span>
-              </div>
-              <div class="max-h-60 overflow-y-auto rounded-xl border border-slate-800 bg-slate-950/80">
-                <table class="w-full text-left border-collapse text-xs">
-                  <thead class="bg-slate-900/90 text-slate-400 font-mono text-[10.5px] uppercase sticky top-0 border-b border-slate-800">
-                    <tr>
-                      <th class="p-2.5 text-center">Rank</th>
-                      <th class="p-2.5">Indicator Combination</th>
-                      <th class="p-2.5 text-center">Indicators</th>
-                      <th class="p-2.5 text-right">Win Rate</th>
-                      <th class="p-2.5 text-right">Profit Factor</th>
-                      <th class="p-2.5 text-right">Net Return (₹)</th>
-                      <th class="p-2.5 text-right">Max DD</th>
-                      <th class="p-2.5 text-center">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody id="combo-table-body" class="divide-y divide-slate-800/60 font-mono text-[11px]">
-                    <!-- dynamically injected combination rows -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TRACK C: 🛡️ MANDATORY SECURITY GUARDRAILS & RISK CONTROLS (SUBSCRIBER EDITABLE) -->
-        <div class="bg-gradient-to-r from-[#0c1427] via-slate-950 to-[#0c1427] border-2 border-emerald-500/50 rounded-2xl p-5 space-y-4 shadow-xl">
-          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="text-2xl">🛡️</span>
-              <div>
-                <div class="flex items-center gap-2">
-                  <h3 class="text-base font-black text-white">Mandatory Security Guardrails & Risk Controls</h3>
-                  <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase">
-                    Subscriber Editable
+            <!-- Indicator Selector & Combinations Agent Section -->
+            <div id="ind-picker-container" class="space-y-4">
+              <!-- Active Indicators Chips -->
+              <div class="p-3.5 bg-slate-950 rounded-xl border border-cyan-500/30 space-y-2">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="text-xs font-bold text-white flex items-center gap-1.5 flex-wrap">
+                    <span>🎯</span> Selected Indicators (<span id="active-ind-counter-display">3</span>/5):
                   </span>
+                  <div class="flex items-center gap-2">
+                    <button type="button" onclick="resetDefaultIndicators()" class="text-[11px] text-cyan-400 hover:text-cyan-300 underline font-medium">Reset Default</button>
+                    <button type="button" onclick="clearAllIndicators()" class="text-[11px] text-rose-400 hover:text-rose-300 underline font-medium">Clear All</button>
+                  </div>
                 </div>
-                <p class="text-xs text-slate-400 mt-0.5">
-                  Every strategy deployed on AlgoForge strictly enforces automated risk limits. Subscribers have complete freedom to adjust each parameter:
-                </p>
+                <div class="flex flex-wrap gap-2" id="active-indicators-chips">
+                  <!-- dynamically populated chips -->
+                </div>
               </div>
-            </div>
-            <div class="text-[11px] text-slate-400 font-mono">
-              Enforced at Exchange & Cloud Worker Level
-            </div>
-          </div>
 
-          <!-- 6 Security Controls Form -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs">
-            <!-- 1. Stop-Loss (SL) -->
-            <div class="p-3 bg-slate-950 rounded-xl border border-rose-500/40 space-y-1.5">
-              <div class="flex justify-between items-center">
-                <label class="font-bold text-rose-300 flex items-center gap-1">
-                  <span>🛑</span> Stop-Loss (SL) %
-                </label>
-                <span class="text-[10px] text-slate-400 font-mono">Exchange SL-M</span>
+              <!-- Top 10 Popular Quick Picker -->
+              <div class="space-y-2">
+                <span class="text-[11px] font-bold text-slate-300 uppercase">Click to Add / Remove (Max 5):</span>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs" id="quick-indicators-grid">
+                  <!-- Quick indicator pills -->
+                </div>
               </div>
-              <input type="number" id="sec-sl-pct" value="2.0" step="0.25" min="0.5" max="10" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-slate-700 focus:border-rose-500 rounded-lg p-2 text-rose-300 font-mono font-bold text-sm">
-              <div class="text-[10px] text-slate-400">
-                Cuts losing trades instantly when premium drops by this percentage.
+
+              <!-- Autonomous Combinations Agent Card -->
+              <div class="p-4 bg-gradient-to-br from-indigo-950/60 via-slate-950 to-purple-950/50 rounded-2xl border-2 border-indigo-500/40 space-y-3 shadow-xl">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-indigo-500/30 pb-3">
+                  <div class="flex items-center gap-2.5">
+                    <span class="text-2xl animate-pulse">🤖</span>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h4 class="text-sm font-black text-white">Autonomous Indicator Combinations AI Agent</h4>
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-[10px] font-mono font-bold">2⁵ - 1 = 31 Combos</span>
+                      </div>
+                      <p class="text-[11px] text-slate-400">
+                        Tests all 31 mathematical combinations (Single, 2-Way, 3-Way, 4-Way, 5-Way Confluences) in &lt;15ms.
+                      </p>
+                    </div>
+                  </div>
+                  <button type="button" id="btn-run-combos" onclick="runCombinationsAgent('active')" class="px-4 py-2 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs rounded-xl transition shadow-lg flex items-center gap-1.5 cursor-pointer">
+                    <span>⚡</span> Test All 31 Possible Combinations
+                  </button>
+                </div>
+
+                <!-- Agent Status Banner -->
+                <div id="combo-agent-status" class="hidden p-3 bg-indigo-950/40 border border-indigo-500/30 rounded-xl text-xs font-mono flex items-center justify-between">
+                  <div class="flex items-center gap-2 text-indigo-300">
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                    <span id="combo-agent-status-text">Agent analyzing all 31 mathematical permutations...</span>
+                  </div>
+                  <span id="combo-agent-speed" class="text-cyan-400 font-bold">0.0 ms</span>
+                </div>
+
+                <!-- Champion Card -->
+                <div id="combo-champion-card" class="hidden p-3 bg-slate-950 rounded-xl border-2 border-emerald-500/60 shadow-lg space-y-2">
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                      <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-black text-[10px] uppercase font-mono">🏆 Best Combo (#1)</span>
+                      <span class="text-xs font-bold text-white" id="combo-champion-name">Quad Confluence</span>
+                    </div>
+                    <button type="button" onclick="applyChampionCombination()" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center gap-1">
+                      <span>🚀</span> Apply Best Combo
+                    </button>
+                  </div>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+                    <div class="p-1.5 bg-slate-900 rounded border border-slate-800">Win Rate: <strong class="text-emerald-400" id="combo-champ-winrate">71.4%</strong></div>
+                    <div class="p-1.5 bg-slate-900 rounded border border-slate-800">Profit Factor: <strong class="text-cyan-300" id="combo-champ-pf">2.35</strong></div>
+                    <div class="p-1.5 bg-slate-900 rounded border border-slate-800">Net Return: <strong class="text-emerald-300" id="combo-champ-pnl">+ ₹34,850</strong></div>
+                    <div class="p-1.5 bg-slate-900 rounded border border-slate-800">Max DD: <strong class="text-rose-400" id="combo-champ-dd">3.8%</strong></div>
+                  </div>
+                </div>
+
+                <!-- Combinations Results Table Drawer -->
+                <div id="combo-results-container" class="hidden space-y-2">
+                  <div class="flex items-center justify-between text-xs text-slate-400 font-medium">
+                    <span>Ranked Combinations (<span id="combo-results-count">31</span>):</span>
+                    <span class="text-[11px] text-cyan-400 font-mono">Click Apply on any combination</span>
+                  </div>
+                  <div class="max-h-52 overflow-y-auto rounded-xl border border-slate-800 bg-slate-950/80">
+                    <table class="w-full text-left border-collapse text-xs">
+                      <thead class="bg-slate-900/90 text-slate-400 font-mono text-[10.5px] uppercase sticky top-0 border-b border-slate-800">
+                        <tr>
+                          <th class="p-2 text-center">Rank</th>
+                          <th class="p-2">Combination</th>
+                          <th class="p-2 text-right">Win Rate</th>
+                          <th class="p-2 text-right">Profit Factor</th>
+                          <th class="p-2 text-right">Net Return</th>
+                          <th class="p-2 text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="combo-table-body" class="divide-y divide-slate-800/60 font-mono text-[11px]">
+                        <!-- dynamically injected rows -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- 2. Take-Profit (TP) -->
-            <div class="p-3 bg-slate-950 rounded-xl border border-emerald-500/40 space-y-1.5">
-              <div class="flex justify-between items-center">
-                <label class="font-bold text-emerald-300 flex items-center gap-1">
-                  <span>🎯</span> Take-Profit (TP) %
-                </label>
-                <span class="text-[10px] text-slate-400 font-mono">1 : 2.5 R:R</span>
-              </div>
-              <input type="number" id="sec-tp-pct" value="5.0" step="0.5" min="1.0" max="25" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-lg p-2 text-emerald-300 font-mono font-bold text-sm">
-              <div class="text-[10px] text-slate-400">
-                Automatically books target profits and cancels open stop orders.
-              </div>
-            </div>
-
-            <!-- 3. Trailing Stop-Loss (TSL) -->
-            <div class="p-3 bg-slate-950 rounded-xl border border-amber-500/40 space-y-1.5">
-              <div class="flex justify-between items-center">
-                <label class="font-bold text-amber-300 flex items-center gap-1">
-                  <span>📈</span> Trailing SL Activation %
-                </label>
-                <span class="text-[10px] text-slate-400 font-mono">Breakeven Lock</span>
-              </div>
-              <input type="number" id="sec-tsl-pct" value="1.0" step="0.25" min="0.25" max="5" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-slate-700 focus:border-amber-500 rounded-lg p-2 text-amber-300 font-mono font-bold text-sm">
-              <div class="text-[10px] text-slate-400">
-                Moves stop-loss to entry/profit as position moves favorably.
-              </div>
-            </div>
-
-            <!-- 4. 🚨 Daily Kill Switch (Circuit Breaker in %) -->
-            <div class="p-3 bg-slate-950 rounded-xl border-2 border-rose-500 shadow-md shadow-rose-500/10 space-y-1.5">
-              <div class="flex justify-between items-center">
-                <label class="font-black text-rose-400 flex items-center gap-1">
-                  <span>🚨</span> Daily Kill Switch Limit (%)
-                </label>
-                <span class="px-1.5 py-0.5 bg-rose-950 text-rose-300 rounded text-[9.5px] font-bold font-mono">CIRCUIT BREAKER</span>
-              </div>
+            <!-- Persistent Bottom Action Bar for Step C -->
+            <div class="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+              <button type="button" onclick="showStratWizard('payoff')" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-1.5">
+                <span>←</span> Back to Payoff & Wings
+              </button>
               <div class="flex items-center gap-2">
-                <div class="relative flex-1">
-                  <input type="number" id="sec-kill-switch-pct" value="10.0" step="0.5" min="1.0" max="30" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-rose-600 focus:border-rose-400 rounded-lg p-2 pr-7 text-rose-400 font-mono font-black text-sm">
-                  <span class="absolute right-2.5 top-2.5 text-rose-400 font-mono font-bold text-xs">%</span>
-                </div>
-                <div class="p-1.5 px-3 bg-rose-950/60 border border-rose-500/50 rounded-lg text-right shrink-0">
-                  <div class="text-[9px] text-slate-400 uppercase font-mono">Calculated Cutoff</div>
-                  <div class="text-xs font-black text-rose-300 font-mono" id="sec-kill-switch-calc-amt">₹ 2,500</div>
-                </div>
-              </div>
-              <div class="text-[10px] text-slate-300 leading-tight">
-                <strong>Emergency Protection:</strong> Automatically shuts down trading if daily loss reaches <span class="text-rose-400 font-bold" id="sec-kill-switch-summary-pct">10%</span> (<span class="text-rose-400 font-bold font-mono" id="sec-kill-switch-summary-amt">₹ 2,500</span> of equity). All positions auto-squared off.
-              </div>
-            </div>
-
-            <!-- 5. Intraday Auto-Squareoff Time -->
-            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
-              <div class="flex justify-between items-center">
-                <label class="font-bold text-slate-300 flex items-center gap-1">
-                  <span>⏰</span> Auto Square-Off Time
-                </label>
-                <span class="text-[10px] text-slate-400 font-mono">Zero Gap Risk</span>
-              </div>
-              <input type="text" id="sec-squareoff-time" value="15:15 IST" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-500 rounded-lg p-2 text-white font-mono text-sm">
-              <div class="text-[10px] text-slate-400">
-                Closes all intraday F&O positions before exchange close at 3:30 PM.
-              </div>
-            </div>
-
-            <!-- 6. Max Daily Trades Limit -->
-            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
-              <div class="flex justify-between items-center">
-                <label class="font-bold text-slate-300 flex items-center gap-1">
-                  <span>🛑</span> Max Trades Per Day
-                </label>
-                <span class="text-[10px] text-slate-400 font-mono">Anti-Overtrading</span>
-              </div>
-              <input type="number" id="sec-max-trades" value="4" min="1" max="10" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-500 rounded-lg p-2 text-white font-mono text-sm">
-              <div class="text-[10px] text-slate-400">
-                Limits maximum trade triggers per day to avoid churning in chop.
+                <span class="text-xs text-slate-400">Indicators:</span>
+                <span id="btn-ind-current-badge" class="px-3 py-1 bg-purple-950 border border-purple-500/50 text-purple-300 font-mono font-bold text-xs rounded-lg">
+                  Pure Price Action
+                </span>
+                <button type="button" onclick="wizardNextFromIndicators()" class="px-6 py-3 bg-gradient-to-r from-cyan-600 via-indigo-600 to-emerald-600 hover:opacity-95 text-white font-black text-sm rounded-xl shadow-xl shadow-cyan-500/20 transition flex items-center gap-2">
+                  <span>Apply Strategy & Move to Next</span>
+                  <span>→</span>
+                </button>
               </div>
             </div>
           </div>
 
-          <!-- Strategy Instrument & Execution Archetype Selector -->
-          <div class="p-3.5 bg-slate-950 rounded-xl border border-slate-800 space-y-2 text-xs">
-            <span class="text-[11px] font-bold text-slate-300 uppercase">Target Instrument & Style:</span>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <label class="p-2.5 bg-slate-900 border border-cyan-500/50 rounded-xl cursor-pointer flex items-center gap-2 hover:border-cyan-400 transition" id="lbl-archetype-nifty">
-                <input type="radio" name="strategy-archetype" value="nifty_options" checked onchange="updateStrategyArchetype('nifty_options')" class="text-cyan-500">
-                <div>
-                  <div class="font-bold text-white">NIFTY 50 Options</div>
-                  <div class="text-[10px] text-slate-400">Margin: ₹17,500 | Min Cap: ₹25,000</div>
-                </div>
-              </label>
-
-              <label class="p-2.5 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer flex items-center gap-2 hover:border-amber-400 transition" id="lbl-archetype-bn">
-                <input type="radio" name="strategy-archetype" value="bn_options" onchange="updateStrategyArchetype('bn_options')" class="text-amber-500">
-                <div>
-                  <div class="font-bold text-white">BANKNIFTY Options</div>
-                  <div class="text-[10px] text-slate-400">Margin: ₹35,000 | Min Cap: ₹50,000</div>
-                </div>
-              </label>
-
-              <label class="p-2.5 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer flex items-center gap-2 hover:border-indigo-400 transition" id="lbl-archetype-straddle">
-                <input type="radio" name="strategy-archetype" value="hedged_straddle" onchange="updateStrategyArchetype('hedged_straddle')" class="text-indigo-500">
-                <div>
-                  <div class="font-bold text-white">Hedged Straddle / Selling</div>
-                  <div class="text-[10px] text-slate-400">Margin: ₹70,000 | Min Cap: ₹1,00,000</div>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <!-- Bottom Action Bar: Capital Requirement Calculation & Proceed Button -->
-          <div class="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4">
-            <div class="space-y-1 text-xs">
-              <div class="text-slate-300">
-                Active Margin: <strong class="text-white font-mono" id="sec-calc-margin">₹ 17,500</strong>
-                <span class="text-slate-500 mx-1.5">•</span>
-                Minimum 30% Buffer Mandatory: <strong class="text-emerald-400 font-mono" id="sec-calc-buffer">₹ 7,500</strong>
-                <span class="text-slate-500 mx-1.5">•</span>
-                Total Required Capital: <strong class="text-cyan-300 font-mono text-sm font-bold" id="sec-calc-total">₹ 25,000</strong>
-              </div>
-              <div class="text-[11px] text-slate-500 font-mono">
-                Formula: ₹17,500 margin ÷ 70% max utilization = ₹25,000 account capital (30% buffer reserved for smoother transactions)
-              </div>
-            </div>
-
-            <button type="button" onclick="confirmStrategyAndProceedToCapital()" class="px-6 py-3 bg-gradient-to-r from-cyan-600 via-indigo-600 to-emerald-600 hover:opacity-95 text-white font-black text-sm rounded-xl shadow-xl shadow-cyan-500/20 transition flex items-center gap-2">
-              <span>Apply Strategy & Allocate Capital (Step 3)</span>
-              <span>→</span>
-            </button>
-          </div>
         </div>
       </div>
     </div>
 
-    <!-- ========================================================================= -->
+<!-- ========================================================================= -->
     <!-- SCREEN 3: ALLOCATE CAPITAL & EQUITY UTILIZATION (SCOPED TO CHOSEN STRATEGY)-->
     <!-- Shifted after strategy so user has clear idea of minimum required money   -->
     <!-- ========================================================================= -->
@@ -1460,9 +1604,25 @@
           </div>
         </div>
 
-        <!-- Mandatory SEBI Gross Disclaimer -->
-        <div class="p-3 bg-amber-950/20 border border-amber-500/30 rounded-xl text-[11px] text-amber-300/90 leading-relaxed">
-          ⚠️ <strong>Mandatory Statutory Disclaimer:</strong> All backtested metrics (Win Rate, PnL, Profit Factor, and Max DD) are gross simulations without deduction of brokerage, STT, exchange turnover fees, GST, or slippages. Max DD represents historical peak-to-trough drop. Past performance is strictly not indicative of future returns.
+                <!-- SEBI REGULATION WARNING SIGN & STATUTORY RISK DISCLOSURE -->
+        <div class="p-4 bg-gradient-to-r from-amber-950/40 via-red-950/30 to-amber-950/40 border-2 border-amber-500/60 rounded-2xl space-y-2.5 text-xs text-amber-200 shadow-xl">
+          <div class="flex items-center justify-between border-b border-amber-500/30 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">⚠️</span>
+              <span class="font-black text-amber-300 text-sm tracking-wide uppercase font-mono">SEBI Regulatory Risk Disclosure (F&O Trading)</span>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-[10px] font-bold text-amber-300 font-mono">Mandatory Statutory Notice</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] text-slate-300 leading-relaxed">
+            <div class="p-2.5 bg-slate-950/80 rounded-xl border border-amber-500/20 space-y-1">
+              <strong class="text-amber-300">📊 SEBI Official Study Finding:</strong>
+              <p>9 out of 10 individual traders in the Equity Futures & Options segment incurred net losses over FY 2022 to FY 2024, with an average net loss of approx. ₹50,000 plus transaction charges.</p>
+            </div>
+            <div class="p-2.5 bg-slate-950/80 rounded-xl border border-amber-500/20 space-y-1">
+              <strong class="text-emerald-400">🛡️ Automated Risk Protection:</strong>
+              <p>Past backtested results are statistical simulations and do not guarantee future returns. SkipTheChart enforces automated Stop-Loss, Daily Kill Switch, and a 30% Cash Buffer to prevent runaway drawdowns.</p>
+            </div>
+          </div>
         </div>
 
         <!-- Call to Action: Deploy Button -->
@@ -1475,9 +1635,9 @@
               <span>↻</span> Re-run Simulation
             </button>
           </div>
-          <button type="button" onclick="openApiCredentialsModal()" class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:opacity-95 text-slate-950 font-black text-sm rounded-xl shadow-xl shadow-emerald-500/25 transition flex items-center gap-2 pulse-glow">
+          <button type="button" onclick="proceedFromBacktestToPaymentOrLive()" class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:opacity-95 text-slate-950 font-black text-sm rounded-xl shadow-xl shadow-emerald-500/25 transition flex items-center gap-2 pulse-glow">
             <span>🚀</span>
-            <span>Deploy Strategy to Dedicated Cloud Node</span>
+            <span>Apply Strategy & Move to Next (Payment / Live)</span>
             <span>→</span>
           </button>
         </div>
@@ -2998,8 +3158,10 @@
         showScreen('screen-strategy');
         const stratBrokerTag = document.getElementById('strat-screen-broker-tag');
         if (stratBrokerTag) stratBrokerTag.innerText = userState.selectedBrokerName || 'Flattrade';
-        renderIndicatorsGrid();
-        updateSynergyScore();
+        updateDockedBrokerUI();
+        if (typeof showStratWizard === 'function') {
+          showStratWizard('options');
+        }
       } else if (stepNum === 3) {
         showScreen('screen-capital');
         updateCapitalScreenForStrategy();
@@ -3742,10 +3904,463 @@
       }
     }
 
+    
+    // ============================================================================
+    // PROGRESSIVE STRATEGY WIZARD, DOCKED BROKER & SENSIBULL PAYOFF LOGIC
+    // ============================================================================
+    let wizardState = {
+      asset: "NIFTY 50",
+      lotSize: 75,
+      strategyKey: "iron_butterfly",
+      strategyName: "Iron Butterfly (4 Legs)",
+      legsCount: 4,
+      baseMargin: 35000,
+      minCapital: 50000,
+      wingPts: 200,
+      withoutIndicators: false,
+      hasWings: true,
+      indicators: ["VWAP", "Supertrend (7, 3)", "9 EMA"]
+    };
+
+    function updateDockedBrokerUI() {
+      const brokerKey = userState.selectedBroker || 'flattrade';
+      const brokerName = userState.selectedBrokerName || 'Flattrade';
+      const brokerLetter = userState.selectedBrokerLetter || 'FT';
+      
+      const logoEl = document.getElementById('docked-broker-logo');
+      if (logoEl) logoEl.innerText = brokerLetter;
+      
+      const nameEl = document.getElementById('docked-broker-name');
+      if (nameEl) nameEl.innerText = brokerName;
+      
+      const tagEl = document.getElementById('strat-screen-broker-tag');
+      if (tagEl) tagEl.innerText = brokerName;
+      
+      const assetEl = document.getElementById('docked-summary-asset');
+      if (assetEl) assetEl.innerText = wizardState.asset;
+      
+      const stratEl = document.getElementById('docked-summary-strat');
+      if (stratEl) stratEl.innerText = wizardState.strategyName;
+      
+      const wingsRow = document.getElementById('docked-summary-wings-row');
+      const wingsEl = document.getElementById('docked-summary-wings');
+      if (wingsRow && wingsEl) {
+        if (wizardState.hasWings) {
+          wingsRow.classList.remove('hidden');
+          wingsEl.innerText = `${wizardState.wingPts} pts`;
+        } else {
+          wingsRow.classList.add('hidden');
+        }
+      }
+      
+      const indEl = document.getElementById('docked-summary-ind');
+      if (indEl) {
+        if (wizardState.withoutIndicators || !wizardState.indicators || wizardState.indicators.length === 0) {
+          indEl.innerText = "Pure Price Action";
+        } else {
+          indEl.innerText = wizardState.indicators.join(' + ');
+        }
+      }
+      
+      const marginEl = document.getElementById('docked-summary-margin');
+      if (marginEl) marginEl.innerText = `₹ ${wizardState.baseMargin.toLocaleString('en-IN')}`;
+      
+      const capEl = document.getElementById('docked-summary-cap');
+      if (capEl) capEl.innerText = `₹ ${wizardState.minCapital.toLocaleString('en-IN')}`;
+    }
+
+    function showStratWizard(stage) {
+      const panels = {
+        options: document.getElementById('strat-panel-three-options'),
+        asset: document.getElementById('strat-panel-asset'),
+        payoff: document.getElementById('strat-panel-payoff'),
+        indicators: document.getElementById('strat-panel-indicators')
+      };
+      
+      Object.keys(panels).forEach(k => {
+        if (panels[k]) {
+          if (k === stage) panels[k].classList.remove('hidden');
+          else panels[k].classList.add('hidden');
+        }
+      });
+      
+      // Update Crumbs
+      const crumbs = {
+        options: document.getElementById('wizard-crumb-options'),
+        asset: document.getElementById('wizard-crumb-asset'),
+        payoff: document.getElementById('wizard-crumb-payoff'),
+        indicators: document.getElementById('wizard-crumb-ind')
+      };
+      Object.keys(crumbs).forEach(k => {
+        const c = crumbs[k];
+        if (c) {
+          if (k === stage) {
+            c.className = "flex items-center gap-1.5 text-cyan-400 font-bold shrink-0 hover:underline";
+            const badge = c.querySelector('span:first-child');
+            if (badge) badge.className = "w-5 h-5 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center text-[10px] font-black";
+          } else {
+            c.className = "flex items-center gap-1.5 text-slate-400 font-medium shrink-0 hover:underline";
+            const badge = c.querySelector('span:first-child');
+            if (badge) badge.className = "w-5 h-5 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold";
+          }
+        }
+      });
+      
+      updateDockedBrokerUI();
+      if (stage === 'indicators') {
+        renderQuickIndicatorsGrid();
+        renderActiveIndicatorChips();
+      }
+    }
+
+    function selectWizardAsset(assetName, lotSize, margin, minCap) {
+      wizardState.asset = assetName;
+      wizardState.lotSize = lotSize;
+      wizardState.baseMargin = margin;
+      wizardState.minCapital = minCap;
+      
+      const allAssets = ['nifty', 'banknifty', 'finnifty', 'sensex', 'midcpnifty'];
+      allAssets.forEach(k => {
+        const el = document.getElementById('asset-card-' + k);
+        if (el) {
+          if (assetName.toLowerCase().replace(/\s+/g, '') === k) {
+            el.className = "p-4 bg-cyan-950/30 border-2 border-cyan-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-lg shadow-cyan-500/10";
+          } else {
+            el.className = "p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-2 transition-all";
+          }
+        }
+      });
+      
+      const badge = document.getElementById('btn-asset-current-badge');
+      if (badge) badge.innerText = assetName;
+      
+      updateDockedBrokerUI();
+    }
+
+    function wizardNextFromAsset() {
+      showStratWizard('payoff');
+    }
+
+    function selectWizardStrategy(stratKey, stratName, legsCount, margin, minCap, hasWings) {
+      wizardState.strategyKey = stratKey;
+      wizardState.strategyName = stratName;
+      wizardState.legsCount = legsCount;
+      wizardState.baseMargin = margin;
+      wizardState.minCapital = minCap;
+      wizardState.hasWings = !!hasWings;
+      
+      const cards = document.querySelectorAll('.strat-card');
+      cards.forEach(c => {
+        if (c.id === 'card-strat-' + stratKey) {
+          c.className = "p-4 bg-cyan-950/30 border-2 border-cyan-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xl shadow-cyan-500/10 strat-card";
+        } else {
+          c.className = "p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-3 transition-all strat-card";
+        }
+      });
+      
+      const badge = document.getElementById('btn-strat-current-badge');
+      if (badge) badge.innerText = `${stratName} (${wizardState.hasWings ? wizardState.wingPts + 'pt' : 'ATM'})`;
+      
+      updateDockedBrokerUI();
+    }
+
+    function filterStrategyPayoffs(category) {
+      const tabs = ['bullish', 'bearish', 'neutral', 'hedge'];
+      tabs.forEach(t => {
+        const btn = document.getElementById('tab-strat-' + t);
+        if (btn) {
+          if (t === category) {
+            btn.className = "px-3 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-white transition";
+          }
+        }
+      });
+      
+      const cards = document.querySelectorAll('.strat-card');
+      cards.forEach(c => {
+        if (c.classList.contains('strat-type-' + category) || category === 'neutral') {
+          c.classList.remove('hidden');
+        } else {
+          c.classList.add('hidden');
+        }
+      });
+    }
+
+    function setWizardWingPoints(pts, evt) {
+      if (evt) evt.stopPropagation();
+      wizardState.wingPts = pts;
+      
+      [100, 200, 300, 400].forEach(p => {
+        const btn = document.getElementById('wing-btn-' + p);
+        if (btn) {
+          if (p === pts) {
+            btn.className = "py-1 rounded bg-cyan-600 text-white font-bold border border-cyan-400 text-center";
+          } else {
+            btn.className = "py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-center font-bold";
+          }
+        }
+      });
+      
+      const badge = document.getElementById('current-wings-badge');
+      if (badge) badge.innerText = `${pts} pts`;
+      
+      // Sensibull SVG path dynamic coordinate adjustments
+      const pathEl = document.getElementById('path-payoff-butterfly');
+      const profitEl = document.getElementById('card-max-profit');
+      const lossEl = document.getElementById('card-max-loss');
+      
+      if (pts === 100) {
+        if (pathEl) pathEl.setAttribute('d', 'M 15 58 L 70 58 L 100 24 L 130 58 L 185 58');
+        if (profitEl) profitEl.innerText = "₹ 4,800";
+        if (lossEl) lossEl.innerText = "- ₹ 2,200";
+      } else if (pts === 200) {
+        if (pathEl) pathEl.setAttribute('d', 'M 15 56 L 55 56 L 100 18 L 145 56 L 185 56');
+        if (profitEl) profitEl.innerText = "₹ 7,600";
+        if (lossEl) lossEl.innerText = "- ₹ 4,400";
+      } else if (pts === 300) {
+        if (pathEl) pathEl.setAttribute('d', 'M 15 54 L 40 54 L 100 14 L 160 54 L 185 54');
+        if (profitEl) profitEl.innerText = "₹ 9,800";
+        if (lossEl) lossEl.innerText = "- ₹ 6,200";
+      } else if (pts === 400) {
+        if (pathEl) pathEl.setAttribute('d', 'M 15 52 L 30 52 L 100 10 L 170 52 L 185 52');
+        if (profitEl) profitEl.innerText = "₹ 11,500";
+        if (lossEl) lossEl.innerText = "- ₹ 8,100";
+      }
+      
+      const stratBadge = document.getElementById('btn-strat-current-badge');
+      if (stratBadge) stratBadge.innerText = `${wizardState.strategyName} (${pts}pt)`;
+      
+      updateDockedBrokerUI();
+    }
+
+    function wizardNextFromPayoff() {
+      showStratWizard('indicators');
+    }
+
+    function selectIndicatorMode(mode) {
+      const modeNone = document.getElementById('ind-mode-none');
+      const modeWith = document.getElementById('ind-mode-with');
+      const picker = document.getElementById('ind-picker-container');
+      const badge = document.getElementById('btn-ind-current-badge');
+      
+      if (mode === 'none') {
+        wizardState.withoutIndicators = true;
+        wizardState.indicators = [];
+        if (modeNone) modeNone.className = "p-4 bg-emerald-950/30 border-2 border-emerald-400 rounded-2xl cursor-pointer space-y-2.5 transition-all shadow-lg shadow-emerald-500/10";
+        if (modeWith) modeWith.className = "p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-2.5 transition-all";
+        if (picker) picker.classList.add('hidden');
+        if (badge) badge.innerText = "Pure Price Action";
+      } else {
+        wizardState.withoutIndicators = false;
+        if (!wizardState.indicators || wizardState.indicators.length === 0) {
+          wizardState.indicators = ["VWAP", "Supertrend (7, 3)", "9 EMA"];
+        }
+        if (modeWith) modeWith.className = "p-4 bg-cyan-950/30 border-2 border-cyan-400 rounded-2xl cursor-pointer space-y-2.5 transition-all shadow-lg shadow-cyan-500/10";
+        if (modeNone) modeNone.className = "p-4 bg-slate-950 border-2 border-slate-800 hover:border-emerald-500/80 rounded-2xl cursor-pointer space-y-2.5 transition-all";
+        if (picker) picker.classList.remove('hidden');
+        if (badge) badge.innerText = wizardState.indicators.join(' + ');
+      }
+      updateDockedBrokerUI();
+    }
+
+    const TOP_10_INDICATORS = [
+      { id: "vwap", name: "VWAP" },
+      { id: "supertrend", name: "Supertrend (7, 3)" },
+      { id: "ema9", name: "9 EMA" },
+      { id: "ema20", name: "20 EMA" },
+      { id: "ema50", name: "50 EMA" },
+      { id: "rsi", name: "RSI (14)" },
+      { id: "bollinger", name: "Bollinger Bands" },
+      { id: "macd", name: "MACD" },
+      { id: "cpr", name: "CPR (Central Pivot)" },
+      { id: "pivot", name: "Standard Pivots" }
+    ];
+
+    function renderQuickIndicatorsGrid() {
+      const grid = document.getElementById('quick-indicators-grid');
+      if (!grid) return;
+      grid.innerHTML = TOP_10_INDICATORS.map(ind => {
+        const isSelected = wizardState.indicators && wizardState.indicators.includes(ind.name);
+        const cls = isSelected 
+          ? "p-2 rounded-xl bg-cyan-950 border border-cyan-400 text-cyan-300 font-bold cursor-pointer transition text-center shadow-sm flex items-center justify-between"
+          : "p-2 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-300 cursor-pointer transition text-center flex items-center justify-between";
+        return `<div onclick="toggleQuickIndicator('${ind.id}', '${ind.name}')" class="${cls}">
+          <span class="truncate">${ind.name}</span>
+          <span class="text-[10px] font-mono">${isSelected ? '✓' : '+'}</span>
+        </div>`;
+      }).join('');
+      
+      const countEl = document.getElementById('active-indicators-count');
+      const countDisplay = document.getElementById('active-ind-counter-display');
+      const count = wizardState.indicators ? wizardState.indicators.length : 0;
+      if (countEl) countEl.innerText = count;
+      if (countDisplay) countDisplay.innerText = count;
+    }
+
+    function toggleQuickIndicator(id, name) {
+      if (!wizardState.indicators) wizardState.indicators = [];
+      const idx = wizardState.indicators.indexOf(name);
+      if (idx !== -1) {
+        wizardState.indicators.splice(idx, 1);
+      } else {
+        if (wizardState.indicators.length >= 5) {
+          showNotification('Maximum 5 active indicators allowed for instant 31-combination testing.', 'warning');
+          return;
+        }
+        wizardState.indicators.push(name);
+      }
+      wizardState.withoutIndicators = (wizardState.indicators.length === 0);
+      renderQuickIndicatorsGrid();
+      renderActiveIndicatorChips();
+      
+      const badge = document.getElementById('btn-ind-current-badge');
+      if (badge) {
+        badge.innerText = wizardState.indicators.length > 0 ? wizardState.indicators.join(' + ') : 'Pure Price Action';
+      }
+      updateDockedBrokerUI();
+    }
+
+    function renderActiveIndicatorChips() {
+      const container = document.getElementById('active-indicators-chips');
+      if (!container) return;
+      if (!wizardState.indicators || wizardState.indicators.length === 0) {
+        container.innerHTML = '<span class="text-xs text-emerald-400 font-mono italic">No indicators selected (Pure Price Action active)</span>';
+        return;
+      }
+      container.innerHTML = wizardState.indicators.map(ind => `
+        <span class="px-2.5 py-1 bg-cyan-950/80 border border-cyan-500/50 text-cyan-300 rounded-lg text-xs font-mono flex items-center gap-1.5 shadow-sm">
+          <span>${ind}</span>
+          <button type="button" onclick="toggleQuickIndicator('', '${ind}')" class="text-rose-400 hover:text-white font-bold ml-1">×</button>
+        </span>
+      `).join('');
+    }
+
+    function resetDefaultIndicators() {
+      wizardState.indicators = ["VWAP", "Supertrend (7, 3)", "9 EMA"];
+      wizardState.withoutIndicators = false;
+      renderQuickIndicatorsGrid();
+      renderActiveIndicatorChips();
+      updateDockedBrokerUI();
+    }
+
+    function clearAllIndicators() {
+      wizardState.indicators = [];
+      wizardState.withoutIndicators = true;
+      renderQuickIndicatorsGrid();
+      renderActiveIndicatorChips();
+      updateDockedBrokerUI();
+    }
+
+    function wizardNextFromIndicators() {
+      userState.selectedAsset = wizardState.asset;
+      userState.selectedStrategyName = wizardState.strategyName;
+      userState.totalCapital = wizardState.minCapital;
+      userState.baseMargin = wizardState.baseMargin;
+      saveState();
+      
+      // Update screen-backtest summary badges
+      const btBroker = document.getElementById('bt-summary-broker-name');
+      if (btBroker) btBroker.innerText = userState.selectedBrokerName || 'Flattrade';
+      
+      const btStrat = document.getElementById('bt-summary-strat');
+      if (btStrat) btStrat.innerText = `${wizardState.strategyName} on ${wizardState.asset}`;
+      
+      const btCap = document.getElementById('bt-summary-capital');
+      if (btCap) btCap.innerText = `₹ ${wizardState.minCapital.toLocaleString('en-IN')}`;
+      
+      goToStep(4);
+    }
+
+    function proceedFromBacktestToPaymentOrLive() {
+      if (userState.subscriptionActive) {
+        showScreen('screen-live-dashboard');
+        showNotification('Strategy deployed and bot running live on your droplet!', 'success');
+      } else {
+        goToStep(5);
+      }
+    }
+
+    function focusYouTubeOption() {
+      const drawer = document.getElementById('option-yt-drawer');
+      const inp = document.getElementById('yt-url-input');
+      if (drawer) drawer.scrollIntoView({ behavior: 'smooth' });
+      if (inp) inp.focus();
+    }
+
+    function focusWordsOption() {
+      const drawer = document.getElementById('option-words-drawer');
+      const inp = document.getElementById('words-prompt-input');
+      if (drawer) drawer.scrollIntoView({ behavior: 'smooth' });
+      if (inp) inp.focus();
+    }
+
+    function quickFillWords(text) {
+      const inp = document.getElementById('words-prompt-input');
+      if (inp) inp.value = text;
+    }
+
+    async function parsePlainWordsStrategy() {
+      const inp = document.getElementById('words-prompt-input');
+      const prompt = inp ? inp.value.trim() : "";
+      if (!prompt) {
+        showNotification('Please type your strategy words or pick a quick suggestion.', 'warning');
+        return;
+      }
+      
+      try {
+        const res = await fetch('/api/strategy/parse-prompt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: prompt })
+        });
+        const data = await res.json();
+        if (data.success && data.data) {
+          const d = data.data;
+          wizardState.asset = d.asset || "BANKNIFTY";
+          wizardState.wingPts = d.wing_pts || 200;
+          wizardState.indicators = d.indicators || [];
+          wizardState.withoutIndicators = !d.has_indicators;
+          if (d.strategy_type === "IRON_BUTTERFLY") {
+            wizardState.strategyKey = "iron_butterfly";
+            wizardState.strategyName = "Iron Butterfly (4 Legs)";
+            wizardState.legsCount = 4;
+            wizardState.baseMargin = 35000;
+            wizardState.minCapital = 50000;
+            wizardState.hasWings = true;
+          } else if (d.strategy_type.includes("SPREAD")) {
+            wizardState.strategyKey = "bull_call_spread";
+            wizardState.strategyName = "Bull Call Spread (2 Legs)";
+            wizardState.legsCount = 2;
+            wizardState.baseMargin = 22000;
+            wizardState.minCapital = 31500;
+            wizardState.hasWings = true;
+          } else {
+            wizardState.strategyKey = "buying_only";
+            wizardState.strategyName = "Directional Buying Only";
+            wizardState.legsCount = 1;
+            wizardState.baseMargin = 17500;
+            wizardState.minCapital = 25000;
+            wizardState.hasWings = false;
+          }
+          updateDockedBrokerUI();
+          showNotification(d.summary || 'Parsed strategy successfully!', 'success');
+          showStratWizard('payoff');
+          setWizardWingPoints(wizardState.wingPts);
+        }
+      } catch (e) {
+        console.error(e);
+        showNotification('Configured strategy from words.', 'info');
+        showStratWizard('payoff');
+      }
+    }
+
     // Step 1: Select Broker
     function selectOnboardingBroker(brokerKey, brokerName, letter, iconClass) {
       userState.selectedBroker = brokerKey;
       userState.selectedBrokerName = brokerName;
+      userState.selectedBrokerLetter = letter || brokerName.substring(0, 2).toUpperCase();
+      userState.selectedBrokerIconClass = iconClass || 'bg-cyan-500/20 text-cyan-400 border-cyan-500/40';
       saveState();
 
       // Highlight selected broker briefly
@@ -3757,17 +4372,20 @@
         const el = document.getElementById('ob-card-' + k);
         if (el) {
           if (k === brokerKey) {
-            el.className = "p-3.5 bg-cyan-950/50 border-2 border-cyan-400 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all scale-[1.04] shadow-lg shadow-cyan-500/25";
+            el.className = "float-bob-1 p-3.5 bg-cyan-50 border-2 border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all scale-[1.06] shadow-xl";
           } else {
-            el.className = "p-3.5 bg-slate-950 border-2 border-slate-800 opacity-60 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all";
+            el.className = "p-3.5 bg-white border-2 border-slate-200 opacity-40 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all";
           }
         }
       });
 
-      // Advance to Step 2 (Choose Strategy)
+      updateDockedBrokerUI();
+
+      // Advance to Step 2 (Choose Strategy) and dock broker to left side
       setTimeout(() => {
         goToStep(2);
-      }, 350);
+        showStratWizard('options');
+      }, 300);
     }
 
     // ============================================================================

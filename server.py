@@ -1033,6 +1033,10 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         elif parsed.path == "/api/strategy/test-combinations":
             res = self.run_combinations_agent(payload)
             self.send_json_response(200, res)
+        elif parsed.path == "/api/strategy/parse-prompt":
+            prompt = payload.get("prompt", "")
+            res = self.parse_plain_english_strategy(prompt)
+            self.send_json_response(200, {"success": True, "data": res})
         elif parsed.path == "/api/session/switch-device":
             new_hwid = payload.get("hwid", "HWID-WIN11-884C")
             new_name = payload.get("device_name", "Rahul's Windows 11 Workstation")
@@ -1723,6 +1727,91 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "calc_time_ms": total_time_ms,
             "best_combination": best,
             "combinations": tested_combos
+        }
+
+    def parse_plain_english_strategy(self, prompt):
+        p = (prompt or "").lower()
+        # 1. Asset detection
+        asset = "NIFTY 50"
+        if "banknifty" in p or "bank nifty" in p:
+            asset = "BANKNIFTY"
+        elif "finnifty" in p or "fin nifty" in p:
+            asset = "FINNIFTY"
+        elif "sensex" in p:
+            asset = "SENSEX"
+        elif "midcpnifty" in p or "midcap" in p:
+            asset = "MIDCPNIFTY"
+        
+        # 2. Strategy Type / Payoff Archetype
+        strategy_type = "IRON_BUTTERFLY"
+        wing_pts = 200
+        if "iron butterfly" in p or "butterfly" in p:
+            strategy_type = "IRON_BUTTERFLY"
+        elif "straddle" in p:
+            strategy_type = "SHORT_STRADDLE"
+        elif "strangle" in p:
+            strategy_type = "SHORT_STRANGLE"
+        elif "call spread" in p or "bull call" in p:
+            strategy_type = "BULL_CALL_SPREAD"
+        elif "put spread" in p or "bear put" in p:
+            strategy_type = "BEAR_PUT_SPREAD"
+        elif "buy call" in p or "long call" in p:
+            strategy_type = "BUY_CALL"
+        elif "sell put" in p or "short put" in p:
+            strategy_type = "SELL_PUT"
+        elif "pair" in p or "hedge" in p:
+            strategy_type = "PAIRS_HEDGE"
+
+        # Wing width detection if butterfly / spread
+        for w in [100, 200, 300, 400]:
+            if f"{w}pt" in p or f"{w} pt" in p or f"{w} points" in p or f"{w}point" in p:
+                wing_pts = w
+                break
+
+        # 3. Indicator detection (capped at max 5)
+        indicators = []
+        indicator_catalogue = [
+            ("vwap", "VWAP"),
+            ("supertrend", "Supertrend (7, 3)"),
+            ("9 ema", "9 EMA"),
+            ("20 ema", "20 EMA"),
+            ("50 ema", "50 EMA"),
+            ("200 ema", "200 EMA"),
+            ("rsi", "RSI (14)"),
+            ("bollinger", "Bollinger Bands"),
+            ("macd", "MACD"),
+            ("atr", "ATR"),
+            ("stochastic", "Stochastic RSI"),
+            ("pivot", "Pivot Points"),
+            ("cpr", "CPR (Central Pivot Range)")
+        ]
+        for key, name in indicator_catalogue:
+            if key in p:
+                indicators.append(name)
+                if len(indicators) >= 5:
+                    break
+        
+        has_indicators = True
+        if "price action" in p or "no indicator" in p or "without indicator" in p or "0 indicator" in p or len(indicators) == 0:
+            if "price action" in p or "no indicator" in p or "without indicator" in p or "0 indicator" in p:
+                indicators = []
+                has_indicators = False
+            elif len(indicators) == 0:
+                has_indicators = False
+
+        return {
+            "asset": asset,
+            "strategy_type": strategy_type,
+            "wing_pts": wing_pts,
+            "indicators": indicators[:5],
+            "has_indicators": has_indicators,
+            "security_features": {
+                "max_drawdown_limit": "2.0%",
+                "kill_switch": True,
+                "stop_loss": "1.0%",
+                "target_profit": "2.5%"
+            },
+            "summary": f"Configured {strategy_type.replace('_', ' ')} on {asset} with {' + '.join(indicators) if indicators else 'Pure Price Action'} and automatic security guardrails."
         }
 
     def send_json_response(self, status_code, data):
