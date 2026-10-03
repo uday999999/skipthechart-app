@@ -23,10 +23,12 @@ An institutional-grade algorithmic trading strategy designer and cloud execution
    - Option-to-Option Spreads (PE Buy + PE Sell, CE Buy + CE Sell).
    - Auto-Margin sequencing (executes hedge leg first to reduce broker margin by ~70%).
    - Dynamic Futures Delta-Neutral rebalancing.
-4. **Interactive Broker Setup Wizard:**
-   - Live simulated handshakes for Zerodha Kite, Angel One SmartAPI, and Dhan/Upstox.
-5. **Anti-Piracy 1-System Session Enforcer:**
-   - Hardware ID (HWID) device tracking.
-   - Live kick-out simulation when logging in from a second PC.
-6. **Droplet Execution Runner Daemon:**
+4. **Interactive 18-Broker Gateway:**
+   - 18 SEBI-registered Indian brokers supported in strict alphabetical directory (Alice Blue, Angel One, Dhan HQ, Espresso, Flattrade, Fyers, Groww, HDFC Sky, ICICI Direct, IIFL Securities, Kotak Neo, Motilal Oswal, 5paisa, Paytm Money, SBI Securities, Shoonya Finvasia, Upstox, Zerodha Kite).
+   - Autonomous Sentinel Diagnostic Agent testing OMS handshakes, real-time margin queries, and dry-run execution with sub-25ms execution latency.
+5. **Bank-Grade Corporate White & Emerald Aesthetics:**
+   - Built with enterprise glassmorphism (`ms-glass-card`), high-clarity typography (`Plus Jakarta Sans`), and SEBI-compliant light theme palette.
+6. **Anti-Piracy 1-System Session Enforcer:**
+   - Hardware ID (HWID) device tracking and live kick-out simulation.
+7. **Droplet Execution Runner Daemon:**
    - Located at `runner/bot_runner.py`.

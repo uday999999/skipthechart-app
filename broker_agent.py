@@ -2,7 +2,7 @@
 """
 AlgoForge Sentinel Agent - Automated Broker Health & Strategy Execution Tester
 Tests broker connection integrity, margin query, market latency, order dry-run,
-and strategy signal dispatch across 16 Indian brokers with API facilities.
+and strategy signal dispatch across 18 Indian brokers with API facilities.
 """
 
 import sys
@@ -28,6 +28,8 @@ BROKER_PROFILES = {
     "iifl": {"name": "IIFL Securities", "api_name": "Blazr Open API", "segment": "NFO/NSE", "base_ping": 24},
     "espresso": {"name": "Sharekhan Espresso", "api_name": "Espresso API", "segment": "NFO/NSE", "base_ping": 27},
     "paytmmoney": {"name": "Paytm Money", "api_name": "Open API v1", "segment": "NFO/NSE", "base_ping": 22},
+    "hdfcsky": {"name": "HDFC Sky", "api_name": "Direct API", "segment": "NFO/NSE", "base_ping": 20},
+    "sbisecurities": {"name": "SBI Securities", "api_name": "Direct API", "segment": "NFO/NSE", "base_ping": 19},
 }
 
 class BrokerSentinelAgent:
@@ -135,7 +137,7 @@ class BrokerSentinelAgent:
 
     def print_matrix(self, results):
         print("\n" + "="*85)
-        print("🤖 ALGOFORGE SENTINEL AGENT: 16-BROKER CONNECTION & STRATEGY EXECUTION MATRIX")
+        print("🤖 ALGOFORGE SENTINEL AGENT: 18-BROKER CONNECTION & STRATEGY EXECUTION MATRIX")
         print("="*85)
         header = f"{'#':<3} {'Broker Name':<20} {'API Gateway':<22} {'Latency':<9} {'Margin':<14} {'Status':<12}"
         print(header)
@@ -150,7 +152,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="AlgoForge Sentinel Broker Diagnostic Agent")
     parser.add_argument("--broker", type=str, help="Specific broker key to test (e.g. zerodha, fyers, flattrade)")
     parser.add_argument("--strategy", type=str, default="Nifty Safe Trend Rider", help="Strategy to test dispatch for")
-    parser.add_argument("--all", action="store_true", help="Run diagnostic across all 16 supported brokers")
+    parser.add_argument("--all", action="store_true", help="Run diagnostic across all 18 supported brokers")
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
 
     args = parser.parse_args()
