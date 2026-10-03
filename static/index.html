@@ -3579,10 +3579,15 @@
       }
     }
 
+    function showNotification(msg, type = 'info') {
+      showToast(msg);
+    }
+
     function copyTotpSecret() {
-      if (currentTotpSecret) {
-        navigator.clipboard?.writeText(currentTotpSecret);
-        showNotification('Secret key copied! In Google Authenticator, tap + → Enter a setup key', 'success');
+      const secret = currentTotpSecret || document.getElementById('totp-secret-code')?.innerText?.trim();
+      if (secret) {
+        navigator.clipboard?.writeText(secret);
+        showToast('Secret key copied! In Google Authenticator, tap + → Enter a setup key');
       }
     }
 
@@ -3616,17 +3621,20 @@
         btn.innerHTML = `<span class="animate-spin text-sm">↻</span> <span>Verifying code...</span>`;
       }
 
+      const secretToVerify = currentTotpSecret || document.getElementById('totp-secret-code')?.innerText?.trim() || '';
+
       try {
         const res = await fetch('/api/auth/totp/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code: code, secret: currentTotpSecret })
+          body: JSON.stringify({ code: code, secret: secretToVerify })
         });
         const data = await res.json();
-        if (data.success) {
-          showNotification('✓ Google Authenticator 2FA activated successfully!', 'success');
+        if (data && data.success) {
           userState.totpEnabled = true;
+          userState.totpVerified = true;
           saveState();
+          showToast('✓ Google Authenticator 2FA activated successfully!');
           closeTotpModal(true);
         } else {
           if (errEl) {
@@ -3637,7 +3645,7 @@
       } catch (e) {
         console.error('TOTP error:', e);
         if (errEl) {
-          errEl.innerText = 'Verification error. Please check your connection and try again.';
+          errEl.innerText = 'Verification error: ' + (e.message || 'Please check your connection and try again.');
           errEl.classList.remove('hidden');
         }
       } finally {
