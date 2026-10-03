@@ -652,20 +652,23 @@
               </button>
             </div>
 
-            <!-- Popular Indian Strategy Quick-Pills -->
+            <!-- Popular Strategy Quick-Pills (Generic Quantitative Names - No Person Names) -->
             <div class="flex flex-wrap items-center gap-1.5 pt-1 text-[11px]">
               <span class="text-slate-400 font-medium mr-1">🔥 Popular Setups:</span>
-              <button type="button" onclick="quickFillYouTube('Pushkar Raj Thakur: Supertrend + RSI Confluence')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
-                Pushkar Raj Thakur (Supertrend + RSI)
+              <button type="button" onclick="quickFillYouTube('Supertrend + RSI Confluence Trend Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
+                Supertrend + RSI Confluence
               </button>
-              <button type="button" onclick="quickFillYouTube('Power of Stocks 5 EMA Scalper Subasish Pani')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
-                Power of Stocks (5-EMA Scalp)
+              <button type="button" onclick="quickFillYouTube('5 EMA Mean Reversion Momentum Scalp')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
+                5-EMA Momentum Scalp
+              </button>
+              <button type="button" onclick="quickFillYouTube('9 EMA and 15 EMA Crossover Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
+                9 & 15 EMA Crossover
               </button>
               <button type="button" onclick="quickFillYouTube('15 Min Inside Bar Breakout Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
                 15m Inside Bar Breakout
               </button>
-              <button type="button" onclick="quickFillYouTube('ICT Silver Bullet Fair Value Gap FVG')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
-                ICT Silver Bullet (FVG)
+              <button type="button" onclick="quickFillYouTube('Fair Value Gap FVG Liquidity Sweep')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
+                Fair Value Gap (FVG)
               </button>
               <button type="button" onclick="quickFillYouTube('9:20 AM Non-Directional Straddle Strangle')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
                 9:20 AM Hedged Straddle
@@ -684,33 +687,46 @@
               <div class="flex items-center gap-2">
                 <span class="text-[11px] text-slate-400">Confluence Score:</span>
                 <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 font-mono font-bold text-xs rounded" id="yt-preview-synergy">95%</span>
+                <button type="button" onclick="openEditStrategyModal()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-indigo-500/20 cursor-pointer">
+                  <span>✏️</span> Edit Strategy
+                </button>
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
               <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
-                <span class="text-[10px] text-cyan-400 font-bold uppercase">Target Instrument & Timeframe</span>
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] text-cyan-400 font-bold uppercase">Target Instrument & Timeframe</span>
+                  <button type="button" onclick="openEditStrategyModal()" class="text-[10px] text-cyan-400 hover:underline">Edit ✎</button>
+                </div>
                 <div class="font-bold text-white" id="yt-preview-inst">NIFTY 50 Options (5m)</div>
                 <div class="text-[10px] text-slate-400" id="yt-preview-type">Options Buying (Directional CE/PE)</div>
               </div>
               <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
-                <span class="text-[10px] text-purple-400 font-bold uppercase">Active Indicators Extracted</span>
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] text-purple-400 font-bold uppercase">Active Indicators Extracted</span>
+                  <button type="button" onclick="scrollToIndicatorsMatrix()" class="text-[10px] text-cyan-400 hover:underline font-mono">+ Matrix ↓</button>
+                </div>
                 <div class="flex flex-wrap gap-1" id="yt-preview-indicators">
                   <span class="px-1.5 py-0.5 bg-purple-950 text-purple-300 rounded text-[10px] font-mono">5 EMA</span>
-                  <span class="px-1.5 py-0.5 bg-purple-950 text-purple-300 rounded text-[10px] font-mono">RSI (14)</span>
-                  <span class="px-1.5 py-0.5 bg-purple-950 text-purple-300 rounded text-[10px] font-mono">VWAP</span>
                 </div>
               </div>
               <div class="p-2.5 bg-slate-950 rounded-lg border border-emerald-500/40 space-y-1">
-                <span class="text-[10px] text-emerald-400 font-bold uppercase">Mandatory Security Controls Applied</span>
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] text-emerald-400 font-bold uppercase">Mandatory Security Controls</span>
+                  <button type="button" onclick="openEditStrategyModal()" class="text-[10px] text-emerald-400 hover:underline">Edit ✎</button>
+                </div>
                 <div class="text-[11px] text-slate-300 font-mono" id="yt-preview-security">
-                  SL: 1.8% | TP: 4.5% | Kill Switch: ₹2,500
+                  SL: 1.8% | TP: 4.5% | Kill Switch: 10% (₹2,500)
                 </div>
               </div>
             </div>
 
             <div class="text-xs text-slate-300 bg-slate-950 p-2.5 rounded-lg border border-slate-800 space-y-1">
-              <div class="text-[10px] text-slate-400 font-bold uppercase">Entry & Exit Logic:</div>
+              <div class="flex items-center justify-between">
+                <div class="text-[10px] text-slate-400 font-bold uppercase">Entry & Exit Logic:</div>
+                <button type="button" onclick="openEditStrategyModal()" class="text-[10px] text-indigo-400 hover:underline">Edit Rules ✎</button>
+              </div>
               <p class="text-[11px] text-slate-300 leading-relaxed" id="yt-preview-rules">
                 Buys Call (CE) when 5-min candle crosses above 5-EMA with RSI > 50 and price above VWAP. In overbought extension, 5-EMA rejection initiates Put (PE).
               </p>
@@ -719,7 +735,7 @@
         </div>
 
         <!-- TRACK B: ⚡ 100+ INDICATORS MATRIX & CUSTOM STRATEGY STUDIO -->
-        <div class="bg-[#0b101e] border-2 border-cyan-500/50 rounded-2xl p-5 space-y-4 shadow-2xl">
+        <div id="track-b-studio" class="bg-[#0b101e] border-2 border-cyan-500/50 rounded-2xl p-5 space-y-4 shadow-2xl scroll-mt-20">
           <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
             <div class="flex items-center gap-2.5">
               <span class="text-2xl">⚡</span>
@@ -2238,6 +2254,106 @@
     </div>
   </div>
 
+  <!-- Modal: Edit YouTube / Custom Strategy -->
+  <div id="modal-edit-strategy" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-slate-900 border border-indigo-500/50 rounded-2xl w-full max-w-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">✏️</span>
+          <div>
+            <h3 class="text-base font-black text-white">Edit Strategy Configuration</h3>
+            <p class="text-xs text-slate-400">Fine-tune strategy parameters, execution rules, instrument targets, and risk controls.</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeEditStrategyModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center font-bold text-sm cursor-pointer">✕</button>
+      </div>
+
+      <div class="space-y-3.5 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Strategy Name / Title</label>
+          <input type="text" id="edit-strat-name" class="w-full bg-slate-950 border border-slate-700 focus:border-indigo-500 rounded-xl p-2.5 text-white font-medium text-xs">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-bold mb-1">Target Instrument</label>
+            <select id="edit-strat-inst" class="w-full bg-slate-950 border border-slate-700 focus:border-indigo-500 rounded-xl p-2.5 text-white text-xs">
+              <option value="NIFTY 50 Options (CE / PE)">NIFTY 50 Options (CE / PE)</option>
+              <option value="BANKNIFTY Options (CE / PE)">BANKNIFTY Options (CE / PE)</option>
+              <option value="NIFTY & BANKNIFTY Pairs Hedge">NIFTY & BANKNIFTY Pairs Hedge (Z-Score)</option>
+              <option value="9:20 AM Hedged Straddle / Strangle">9:20 AM Hedged Straddle / Strangle</option>
+              <option value="Equity Intraday Momentum">Equity Intraday Momentum</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 font-bold mb-1">Timeframe</label>
+            <select id="edit-strat-tf" class="w-full bg-slate-950 border border-slate-700 focus:border-indigo-500 rounded-xl p-2.5 text-white text-xs">
+              <option value="1m">1-Minute (Ultra-Fast Scalping)</option>
+              <option value="3m">3-Minute (Order Flow / MBP)</option>
+              <option value="5m" selected>5-Minute (Intraday Momentum)</option>
+              <option value="15m">15-Minute (Breakout / Swing)</option>
+              <option value="Daily Intraday">Daily Intraday (9:20 AM Setup)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Entry & Exit Rules</label>
+          <textarea id="edit-strat-rules" rows="3" class="w-full bg-slate-950 border border-slate-700 focus:border-indigo-500 rounded-xl p-2.5 text-slate-200 text-xs leading-relaxed"></textarea>
+        </div>
+
+        <!-- Security Guardrails inside editor -->
+        <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-2">
+          <div class="text-[11px] font-bold text-slate-300 flex items-center justify-between">
+            <span>🛡️ Risk Controls & Guardrails</span>
+            <span class="text-[10px] text-amber-400 font-mono">Enforced at Broker Level</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div>
+              <span class="text-[10px] text-rose-300 font-bold block mb-1">Stop Loss (SL %)</span>
+              <input type="number" id="edit-strat-sl" step="0.25" min="0.5" max="10" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-rose-300 font-mono text-xs font-bold">
+            </div>
+            <div>
+              <span class="text-[10px] text-emerald-300 font-bold block mb-1">Take Profit (TP %)</span>
+              <input type="number" id="edit-strat-tp" step="0.5" min="1.0" max="25" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-emerald-300 font-mono text-xs font-bold">
+            </div>
+            <div>
+              <span class="text-[10px] text-amber-300 font-bold block mb-1">Trailing SL %</span>
+              <input type="number" id="edit-strat-tsl" step="0.25" min="0.25" max="5" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-amber-300 font-mono text-xs font-bold">
+            </div>
+            <div>
+              <span class="text-[10px] text-rose-400 font-bold block mb-1">Daily Kill Switch %</span>
+              <input type="number" id="edit-strat-ks" step="1.0" min="1.0" max="20" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-rose-400 font-mono text-xs font-bold">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indicator Matrix Shortcut -->
+        <div class="p-3 bg-cyan-950/30 border border-cyan-500/30 rounded-xl flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="text-cyan-400">⚡</span>
+            <div>
+              <div class="text-xs font-bold text-white">Indicators Matrix (100+ Indicators)</div>
+              <div class="text-[10px] text-slate-400">Click below to toggle or swap any indicator (Supertrend, RSI, VWAP, EMA, etc.) in real time.</div>
+            </div>
+          </div>
+          <button type="button" onclick="closeEditStrategyModal(); scrollToIndicatorsMatrix()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs rounded-lg transition shrink-0 cursor-pointer">
+            Open Matrix ↓
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+        <button type="button" onclick="closeEditStrategyModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition cursor-pointer">
+          Cancel
+        </button>
+        <button type="button" onclick="saveEditedStrategy()" class="px-5 py-2 bg-gradient-to-r from-indigo-600 to-pink-600 hover:opacity-90 text-white rounded-xl text-xs font-bold transition shadow-lg shadow-indigo-500/20 cursor-pointer">
+          💾 Save Strategy Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Mandatory SEBI Regulatory Risk Disclosure Footer -->
   <footer class="mt-8 p-5 bg-[#0b101e] border border-slate-800/80 rounded-2xl text-[11px] text-slate-400 space-y-3 text-center leading-relaxed">
     <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-300 pb-2 border-b border-slate-800/60">
@@ -3173,6 +3289,145 @@
       }
     }
 
+    // Strategy Editor Modal Handlers
+    function openEditStrategyModal() {
+      const modal = document.getElementById('modal-edit-strategy');
+      if (!modal) return;
+
+      // Populate Name
+      const nameInput = document.getElementById('edit-strat-name');
+      if (nameInput) nameInput.value = customStrategyState.name || 'Custom Algorithmic Confluence Strategy';
+
+      // Populate Instrument
+      const instSelect = document.getElementById('edit-strat-inst');
+      if (instSelect) {
+        const curInst = (customStrategyState.instrument || '').toLowerCase();
+        if (curInst.includes('bank')) {
+          instSelect.value = 'BANKNIFTY Options (CE / PE)';
+        } else if (curInst.includes('hedge') || curInst.includes('pair') || curInst.includes('z-score')) {
+          instSelect.value = 'NIFTY & BANKNIFTY Pairs Hedge';
+        } else if (curInst.includes('straddle') || curInst.includes('strangle') || curInst.includes('9:20')) {
+          instSelect.value = '9:20 AM Hedged Straddle / Strangle';
+        } else if (curInst.includes('equity')) {
+          instSelect.value = 'Equity Intraday Momentum';
+        } else {
+          instSelect.value = 'NIFTY 50 Options (CE / PE)';
+        }
+      }
+
+      // Populate Timeframe
+      const tfSelect = document.getElementById('edit-strat-tf');
+      if (tfSelect) {
+        tfSelect.value = customStrategyState.timeframe || '5m';
+      }
+
+      // Populate Rules
+      const rulesInput = document.getElementById('edit-strat-rules');
+      if (rulesInput) {
+        rulesInput.value = customStrategyState.entryRule || document.getElementById('yt-preview-rules')?.innerText?.trim() || 'Direct momentum entry with confluence filters.';
+      }
+
+      // Populate Security
+      const slInput = document.getElementById('edit-strat-sl');
+      if (slInput) slInput.value = document.getElementById('sec-sl-pct')?.value || customStrategyState.security?.sl_pct || 1.8;
+
+      const tpInput = document.getElementById('edit-strat-tp');
+      if (tpInput) tpInput.value = document.getElementById('sec-tp-pct')?.value || customStrategyState.security?.tp_pct || 4.5;
+
+      const tslInput = document.getElementById('edit-strat-tsl');
+      if (tslInput) tslInput.value = document.getElementById('sec-tsl-pct')?.value || customStrategyState.security?.tsl_pct || 1.0;
+
+      const ksInput = document.getElementById('edit-strat-ks');
+      if (ksInput) ksInput.value = document.getElementById('sec-kill-switch-pct')?.value || customStrategyState.security?.kill_switch_pct || 10.0;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeEditStrategyModal() {
+      const modal = document.getElementById('modal-edit-strategy');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function saveEditedStrategy() {
+      const nameVal = document.getElementById('edit-strat-name')?.value?.trim() || customStrategyState.name;
+      const instVal = document.getElementById('edit-strat-inst')?.value || 'NIFTY 50 Options (CE / PE)';
+      const tfVal = document.getElementById('edit-strat-tf')?.value || '5m';
+      const rulesVal = document.getElementById('edit-strat-rules')?.value?.trim() || customStrategyState.entryRule;
+      const slVal = parseFloat(document.getElementById('edit-strat-sl')?.value) || 1.8;
+      const tpVal = parseFloat(document.getElementById('edit-strat-tp')?.value) || 4.5;
+      const tslVal = parseFloat(document.getElementById('edit-strat-tsl')?.value) || 1.0;
+      const ksVal = parseFloat(document.getElementById('edit-strat-ks')?.value) || 10.0;
+
+      // Update State
+      customStrategyState.name = nameVal;
+      customStrategyState.instrument = instVal;
+      customStrategyState.timeframe = tfVal;
+      customStrategyState.entryRule = rulesVal;
+
+      if (!customStrategyState.security) customStrategyState.security = {};
+      customStrategyState.security.sl_pct = slVal;
+      customStrategyState.security.tp_pct = tpVal;
+      customStrategyState.security.tsl_pct = tslVal;
+      customStrategyState.security.kill_switch_pct = ksVal;
+
+      // Synchronize form inputs in Track C
+      const sSl = document.getElementById('sec-sl-pct');
+      if (sSl) sSl.value = slVal;
+      const sTp = document.getElementById('sec-tp-pct');
+      if (sTp) sTp.value = tpVal;
+      const sTsl = document.getElementById('sec-tsl-pct');
+      if (sTsl) sTsl.value = tslVal;
+      const sKs = document.getElementById('sec-kill-switch-pct');
+      if (sKs) sKs.value = ksVal;
+
+      // Synchronize Preview Card
+      const pTitle = document.getElementById('yt-preview-title');
+      if (pTitle) pTitle.innerText = nameVal;
+      const pInst = document.getElementById('yt-preview-inst');
+      if (pInst) pInst.innerText = `${instVal} (${tfVal})`;
+      const pRules = document.getElementById('yt-preview-rules');
+      if (pRules) pRules.innerText = rulesVal;
+      const pSec = document.getElementById('yt-preview-security');
+      const ksAmount = Math.round(customStrategyState.minCapital * (ksVal / 100));
+      if (pSec) pSec.innerText = `SL: ${slVal}% | TP: ${tpVal}% | Kill Switch: ${ksVal}% (₹${ksAmount.toLocaleString('en-IN')})`;
+
+      // Recalculate margins and synergy
+      updateSecurityParams();
+      updateSynergyScore();
+
+      closeEditStrategyModal();
+      showToast("Strategy updated & configured successfully!");
+    }
+
+    function scrollToIndicatorsMatrix() {
+      const el = document.getElementById('track-b-studio');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const chips = document.getElementById('active-indicators-chips');
+        if (chips) {
+          chips.classList.add('ring-2', 'ring-cyan-400', 'p-1', 'rounded-xl');
+          setTimeout(() => {
+            chips.classList.remove('ring-2', 'ring-cyan-400', 'p-1', 'rounded-xl');
+          }, 2000);
+        }
+      }
+    }
+
+    function showToast(msg) {
+      let toast = document.getElementById('global-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'global-toast';
+        toast.className = 'fixed bottom-6 right-6 z-50 px-4 py-3 bg-emerald-950 border border-emerald-500/80 text-emerald-200 text-xs font-mono font-bold rounded-xl shadow-2xl transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2 pointer-events-none';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = `<span class="text-emerald-400">✓</span> <span>${msg}</span>`;
+      toast.classList.remove('translate-y-10', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-10', 'opacity-0');
+      }, 3500);
+    }
+
     // Top Header Auth Button Handler (Sign In / Sign Out)
     function handleAuthButtonClick() {
       if (userState.isLoggedIn) {
@@ -3737,6 +3992,9 @@
         customStrategyState.url = url;
         customStrategyState.dataset = data.dataset || "nifty50";
         customStrategyState.indicators = Array.isArray(data.indicators) ? data.indicators : [];
+        customStrategyState.entryRule = data.entry_rule || "";
+        customStrategyState.timeframe = data.timeframe || "5m";
+        customStrategyState.instrument = data.instrument || "NIFTY 50 Options (CE / PE)";
         if (data.security) {
           customStrategyState.security = { ...customStrategyState.security, ...data.security };
           const slInput = document.getElementById('sec-sl-pct');

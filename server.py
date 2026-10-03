@@ -382,8 +382,8 @@ def parse_youtube_strategy(url: str, description: str = "") -> dict:
         return {
             "success": True,
             "strategy_id": "yt_ema_crossover_strategy",
-            "name": title_name[:65],
-            "channel": channel_name,
+            "name": "9 & 15 EMA Trend Crossover Strategy",
+            "channel": "Quantitative Trend Desk",
             "url": url,
             "instrument": inst,
             "dataset": ds,
@@ -409,13 +409,13 @@ def parse_youtube_strategy(url: str, description: str = "") -> dict:
             "summary": "High-accuracy single indicator momentum strategy using 9 & 15 Exponential Moving Averages (EMA) as demonstrated in the video."
         }
 
-    # 1. Subasish Pani / Power of Stocks 5-EMA Setup
+    # 1. 5-EMA Intraday Momentum Setup (No personal names)
     if any(k in text for k in ["5 ema", "5ema", "power of stocks", "subasish", "subashish"]):
         return {
             "success": True,
-            "strategy_id": "yt_power_of_stocks_5ema",
-            "name": "Power of Stocks 5-EMA Intraday Momentum Setup",
-            "channel": "Subasish Pani (Power of Stocks)",
+            "strategy_id": "yt_5ema_momentum_setup",
+            "name": "5-EMA Intraday Momentum Setup",
+            "channel": "High-Velocity Momentum Desk",
             "url": url,
             "instrument": "NIFTY 50 Options (CE / PE)",
             "dataset": "nifty50",
@@ -440,13 +440,13 @@ def parse_youtube_strategy(url: str, description: str = "") -> dict:
             "summary": "Proven high-velocity scalping strategy that exploits mean-reversion pullbacks to the 5-EMA on 5-minute charts."
         }
 
-    # 2. Pushkar Raj Thakur / Trade with Trend Supertrend + RSI
+    # 2. Triple Confirmation Supertrend + RSI (No personal names)
     if any(k in text for k in ["supertrend", "pushkar", "trade with trend"]):
         return {
             "success": True,
             "strategy_id": "yt_supertrend_rsi_confluence",
             "name": "Triple Confirmation Supertrend (10,3) + RSI + VWAP",
-            "channel": "Pushkar Raj Thakur / Trade With Trend",
+            "channel": "Trend Following Quant Desk",
             "url": url,
             "instrument": "NIFTY 50 Options (CE / PE)",
             "dataset": "nifty50",
@@ -508,7 +508,7 @@ def parse_youtube_strategy(url: str, description: str = "") -> dict:
             "success": True,
             "strategy_id": "yt_cpr_camarilla_breakout",
             "name": "Virgin CPR + Camarilla Breakout Engine",
-            "channel": "Booming Bulls Academy",
+            "channel": "Floor Trader Pivot Desk",
             "url": url,
             "instrument": "NIFTY 50 Options",
             "dataset": "nifty50",
@@ -533,13 +533,13 @@ def parse_youtube_strategy(url: str, description: str = "") -> dict:
             "summary": "Precision floor trader pivot framework targeting institutional support/resistance breakouts."
         }
 
-    # 5. ICT Fair Value Gap (FVG) / Smart Money Concept
+    # 5. Fair Value Gap (FVG) / Smart Money Concept (No personal names)
     if any(k in text for k in ["ict", "fvg", "fair value gap", "silver bullet", "order block", "smc"]):
         return {
             "success": True,
-            "strategy_id": "yt_ict_silver_bullet_fvg",
-            "name": "ICT Silver Bullet Fair Value Gap (FVG) + Liquidity Sweep",
-            "channel": "Inner Circle Trader / SMC Quant",
+            "strategy_id": "yt_silver_bullet_fvg",
+            "name": "Silver Bullet Fair Value Gap (FVG) + Liquidity Sweep",
+            "channel": "Institutional Smart Money Desk",
             "url": url,
             "instrument": "BANKNIFTY Options",
             "dataset": "banknifty",
