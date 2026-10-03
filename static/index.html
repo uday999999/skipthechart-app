@@ -8,11 +8,11 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    body { background-color: #F4F9F6; }
+    body { background-color: #D4EFE0; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #F4F9F6; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    ::-webkit-scrollbar-track { background: #D4EFE0; }
+    ::-webkit-scrollbar-thumb { background: #a7f3d0; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #6ee7b7; }
     .pulse-glow { animation: pulseGlow 2s infinite; }
     @keyframes pulseGlow {
       0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.35); }
@@ -87,12 +87,12 @@
     }
   </style>
 </head>
-<body class="text-slate-800 bg-[#F4F9F6] min-h-screen font-sans antialiased p-3 lg:p-6 selection:bg-emerald-500 selection:text-white">
+<body class="text-slate-800 bg-[#D4EFE0] min-h-screen font-sans antialiased p-3 lg:p-6 selection:bg-emerald-500 selection:text-white">
 
   <div class="max-w-[1550px] mx-auto space-y-5">
 
     <!-- Top Branding & Status Header (White & Emerald Green Theme) -->
-    <header class="bg-white/85 border border-slate-200/90 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm backdrop-blur-md text-slate-900">
+    <header class="bg-white/95 border border-emerald-200/90 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm backdrop-blur-md text-slate-900">
       <div class="flex items-center gap-3.5">
         <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-600 to-emerald-400 flex items-center justify-center font-black text-white text-xl shadow-md shadow-emerald-500/20">
           ⚡
@@ -145,7 +145,7 @@
     </header>
 
     <!-- Progressive Onboarding Stepper Header (White & Emerald Green Theme) -->
-    <div id="onboarding-stepper" class="bg-white/85 border border-slate-200/90 rounded-2xl p-3.5 hidden shadow-sm backdrop-blur-md">
+    <div id="onboarding-stepper" class="bg-white/95 border border-emerald-200/90 rounded-2xl p-3.5 hidden shadow-sm backdrop-blur-md">
       <div class="flex items-center justify-between gap-2 overflow-x-auto text-xs font-medium">
         <button type="button" onclick="goToStep(1)" id="step-pill-1" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 border-2 border-emerald-500 text-emerald-900 font-bold shrink-0 cursor-pointer shadow-sm">
           <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[11px] flex items-center justify-center font-black">1</span>
@@ -341,11 +341,11 @@
     <!-- Right: 17 Floating 3D Fluent Glass Cards with Instant Search               -->
     <!-- ========================================================================= -->
     <div id="screen-broker" class="space-y-5 hidden">
-      <div class="relative overflow-hidden rounded-3xl bg-white/80 border border-slate-200/90 shadow-sm p-6 sm:p-8 lg:p-10 text-slate-900 transition-all backdrop-blur-sm">
+      <div class="relative overflow-hidden rounded-3xl bg-[#DDF2E6]/90 border border-emerald-300/80 shadow-sm p-6 sm:p-8 lg:p-10 text-slate-900 transition-all backdrop-blur-sm">
         
-        <!-- Subtle ambient backdrop light (Emerald & Warm Slate) -->
-        <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-100/25 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-24 left-1/4 w-96 h-96 bg-slate-100/50 rounded-full blur-3xl pointer-events-none"></div>
+        <!-- Subtle ambient backdrop light (Emerald) -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-200/25 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 left-1/4 w-96 h-96 bg-emerald-100/40 rounded-full blur-3xl pointer-events-none"></div>
 
         <!-- 2-Column Split Layout -->
         <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
@@ -354,21 +354,21 @@
           <div class="lg:col-span-4 xl:col-span-3 space-y-6">
             
             <div class="space-y-3">
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold tracking-wider text-emerald-800 uppercase">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-emerald-300 text-[11px] font-bold tracking-wider text-emerald-800 uppercase shadow-2xs">
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                 Step 01 / 05 &bull; Broker Gateway
               </div>
               <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
                 Connect Your Trading Broker
               </h1>
-              <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                 Direct API integration with SEBI-registered brokers. Execute automated multi-leg options, equities, and scalping strategies with zero manual chart-staring.
               </p>
             </div>
 
             <!-- Corporate Bank-Grade Trust Badges (White & Emerald Theme) -->
             <div class="space-y-2.5 pt-1">
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-emerald-200 shadow-xs transition">
+              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-emerald-200/90 hover:border-emerald-400 shadow-xs transition">
                 <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-700 flex items-center justify-center shrink-0">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
@@ -378,7 +378,7 @@
                 </div>
               </div>
 
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-emerald-200 shadow-xs transition">
+              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-emerald-200/90 hover:border-emerald-400 shadow-xs transition">
                 <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-700 flex items-center justify-center shrink-0">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 </div>
@@ -388,7 +388,7 @@
                 </div>
               </div>
 
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-emerald-200 shadow-xs transition">
+              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-emerald-200/90 hover:border-emerald-400 shadow-xs transition">
                 <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-700 flex items-center justify-center shrink-0">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                 </div>
@@ -398,7 +398,7 @@
                 </div>
               </div>
 
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-emerald-200 shadow-xs transition">
+              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-emerald-200/90 hover:border-emerald-400 shadow-xs transition">
                 <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-700 flex items-center justify-center shrink-0">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
                 </div>
@@ -412,13 +412,13 @@
 
           <!-- RIGHT SIDE: Uniform Corporate Broker Cards Grid (18 Verified Brokers) -->
           <div class="lg:col-span-8 xl:col-span-9">
-            <div class="p-3.5 sm:p-5 rounded-3xl bg-emerald-50/50 border border-emerald-200/80 shadow-xs">
+            <div class="p-3.5 sm:p-5 rounded-3xl bg-[#C8E8D5]/70 border border-emerald-300/90 shadow-xs">
               
               <!-- Quick search bar (Corporate Header) -->
               <div class="flex flex-wrap items-center justify-between gap-3 mb-4 px-1">
                 <div class="text-xs font-bold text-emerald-950 uppercase tracking-wider">Alphabetical Directory</div>
                 <div class="relative w-full sm:w-72">
-                  <input type="text" id="broker-search-input" oninput="filterBrokerCards(this.value)" placeholder="Search broker (A to Z)..." class="w-full text-xs font-semibold px-4 py-2 pl-9 rounded-xl bg-white border-2 border-emerald-200 hover:border-emerald-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/15 text-slate-900 placeholder-slate-400 shadow-xs transition-all outline-none">
+                  <input type="text" id="broker-search-input" oninput="filterBrokerCards(this.value)" placeholder="Search broker (A to Z)..." class="w-full text-xs font-semibold px-4 py-2 pl-9 rounded-xl bg-white border-2 border-emerald-300 hover:border-emerald-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/15 text-slate-900 placeholder-slate-400 shadow-xs transition-all outline-none">
                   <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
                 </div>
               </div>
