@@ -5,10 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SkipTheChart.com - 1-Click Algorithmic Trading for Indian Markets</title>
   <meta name="color-scheme" content="light">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    body { background-color: #F8FAFC; }
+    * {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    }
+    body {
+      background-color: #F8FAFC;
+      background-image: radial-gradient(rgba(148, 163, 184, 0.22) 1px, transparent 1px);
+      background-size: 24px 24px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      letter-spacing: -0.012em;
+    }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #F8FAFC; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -38,30 +55,32 @@
     
     .ms-glass-card {
       background: #ffffff;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      border-radius: 1.125rem;
+      box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03), 0 1px 2px -1px rgba(15, 23, 42, 0.03), inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .ms-glass-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px -4px rgba(15, 23, 42, 0.07), 0 4px 8px -2px rgba(16, 185, 129, 0.08), inset 0 1px 0 0 #ffffff;
       border-color: #a7f3d0;
       background: #ffffff;
     }
     .ms-glass-card:hover .ms-3d-icon {
-      transform: translateY(-1px) scale(1.04);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.16), inset 0 1px 1.5px rgba(255, 255, 255, 0.7);
     }
     .ms-glass-card.selected {
       border: 2px solid #059669 !important;
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.22), 0 8px 16px -2px rgba(16, 185, 129, 0.15) !important;
-      background: #ecfdf5 !important;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18), 0 12px 24px -4px rgba(5, 150, 105, 0.14), inset 0 1px 0 0 rgba(255, 255, 255, 0.8) !important;
+      background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%) !important;
       transform: translateY(-2px);
     }
     .ms-3d-icon {
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 8px -1px rgba(0, 0, 0, 0.12), 0 2px 4px -2px rgba(0, 0, 0, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.5);
-      transition: transform 0.2s ease;
+      box-shadow: 0 5px 12px -2px rgba(0, 0, 0, 0.12), 0 2px 4px -2px rgba(0, 0, 0, 0.06), inset 0 1px 1.5px rgba(255, 255, 255, 0.6);
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
     }
     .ms-3d-icon::before {
       content: '';
@@ -69,8 +88,8 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 48%;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.08) 70%, transparent 100%);
+      height: 50%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.08) 75%, transparent 100%);
       border-radius: inherit;
       pointer-events: none;
     }
@@ -341,14 +360,14 @@
     <!-- Right: 17 Floating 3D Fluent Glass Cards with Instant Search               -->
     <!-- ========================================================================= -->
     <div id="screen-broker" class="space-y-5 hidden">
-      <div class="relative overflow-hidden rounded-3xl bg-white border border-slate-200/90 shadow-[0_4px_25px_-5px_rgba(15,23,42,0.05),0_1px_3px_0_rgba(15,23,42,0.03)] p-6 sm:p-8 lg:p-10 text-slate-900 transition-all">
+      <div class="relative overflow-hidden rounded-3xl bg-white border border-slate-200/90 shadow-[0_20px_50px_-15px_rgba(15,23,42,0.06),0_1px_3px_0_rgba(15,23,42,0.03)] p-6 sm:p-8 lg:p-10 text-slate-900 transition-all">
         
         <!-- Corporate Top Accent Bar (SEBI Emerald Accent) -->
         <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-400"></div>
 
         <!-- Subtle ambient backdrop light (clean & airy) -->
-        <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-50/50 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-24 left-1/4 w-96 h-96 bg-slate-50/80 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -top-32 -right-32 w-[30rem] h-[30rem] bg-emerald-50/60 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 left-1/4 w-[30rem] h-[30rem] bg-slate-100/70 rounded-full blur-3xl pointer-events-none"></div>
 
         <!-- 2-Column Split Layout -->
         <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
@@ -357,12 +376,15 @@
           <div class="lg:col-span-4 xl:col-span-3 space-y-6">
             
             <div class="space-y-3">
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold tracking-wider text-emerald-800 uppercase shadow-2xs">
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                Step 01 / 05 &bull; Broker Gateway
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50/90 border border-emerald-200/80 text-[10.5px] font-bold tracking-wider text-emerald-800 uppercase shadow-2xs">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+                </span>
+                <span>Step 01 / 05 &bull; Broker Gateway</span>
               </div>
-              <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                Connect Your Trading Broker
+              <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-[1.18]">
+                Connect Your <span class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-700 bg-clip-text text-transparent">Trading Broker</span>
               </h1>
               <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
                 Direct API integration with SEBI-registered brokers. Execute automated multi-leg options, equities, and scalping strategies with zero manual chart-staring.
@@ -371,43 +393,55 @@
 
             <!-- Corporate Bank-Grade Trust Badges (White & Emerald Theme) -->
             <div class="space-y-2.5 pt-1">
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-xs transition">
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <div class="group flex items-center gap-3.5 p-3 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-xs transition-all">
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
+                  <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                 </div>
-                <div>
-                  <div class="text-xs font-bold text-slate-900">Official SEBI Broker TSP</div>
-                  <div class="text-[11px] text-slate-500">Certified protocol integrations</div>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-xs transition">
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                </div>
-                <div>
-                  <div class="text-xs font-bold text-slate-900">Zero-Knowledge Security</div>
-                  <div class="text-[11px] text-slate-500">Credentials stay with your broker</div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
+                    <span>Official SEBI Broker TSP</span>
+                    <span class="px-1.5 py-0.2 rounded bg-emerald-100/80 text-emerald-800 text-[9px] font-mono font-bold">VERIFIED</span>
+                  </div>
+                  <div class="text-[11px] text-slate-500 truncate">Certified direct protocol integrations</div>
                 </div>
               </div>
 
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-xs transition">
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <div class="group flex items-center gap-3.5 p-3 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-xs transition-all">
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
+                  <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 </div>
-                <div>
-                  <div class="text-xs font-bold text-slate-900">100% Capital Isolation</div>
-                  <div class="text-[11px] text-slate-500">Funds remain safely in your demat</div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
+                    <span>Zero-Knowledge Security</span>
+                    <span class="px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 text-[9px] font-mono font-bold">AES-256</span>
+                  </div>
+                  <div class="text-[11px] text-slate-500 truncate">Credentials remain encrypted with your broker</div>
                 </div>
               </div>
 
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-xs transition">
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+              <div class="group flex items-center gap-3.5 p-3 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-xs transition-all">
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
+                  <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
-                <div>
-                  <div class="text-xs font-bold text-slate-900">1-Click Instant Dock</div>
-                  <div class="text-[11px] text-slate-500">Click any broker below to connect</div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
+                    <span>100% Capital Isolation</span>
+                    <span class="px-1.5 py-0.2 rounded bg-emerald-100/80 text-emerald-800 text-[9px] font-mono font-bold">&lt;5ms</span>
+                  </div>
+                  <div class="text-[11px] text-slate-500 truncate">Funds remain strictly in your broker demat</div>
+                </div>
+              </div>
+
+              <div class="group flex items-center gap-3.5 p-3 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-xs transition-all">
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
+                  <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
+                    <span>1-Click Instant Dock</span>
+                    <span class="px-1.5 py-0.2 rounded bg-emerald-100/80 text-emerald-800 text-[9px] font-mono font-bold">READY</span>
+                  </div>
+                  <div class="text-[11px] text-slate-500 truncate">Click any verified broker below to connect</div>
                 </div>
               </div>
             </div>
@@ -419,10 +453,15 @@
               
               <!-- Quick search bar (Corporate Header) -->
               <div class="flex flex-wrap items-center justify-between gap-3 mb-4 px-1">
-                <div class="text-xs font-bold text-slate-700 uppercase tracking-wider">Alphabetical Directory (18 Brokers)</div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span class="text-xs font-bold text-slate-800 uppercase tracking-wider">Alphabetical Directory</span>
+                  <span class="px-2 py-0.5 rounded-full bg-white border border-slate-200/90 text-slate-600 text-[10px] font-mono font-bold shadow-2xs">18 Brokers</span>
+                </div>
                 <div class="relative w-full sm:w-72">
-                  <input type="text" id="broker-search-input" oninput="filterBrokerCards(this.value)" placeholder="Search broker (A to Z)..." class="w-full text-xs font-semibold px-4 py-2 pl-9 rounded-xl bg-white border border-slate-200 hover:border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 text-slate-900 placeholder-slate-400 shadow-2xs transition-all outline-none">
+                  <input type="text" id="broker-search-input" oninput="filterBrokerCards(this.value)" placeholder="Search broker (A to Z)..." class="w-full text-xs font-medium px-4 py-2 pl-9 pr-12 rounded-xl bg-white border border-slate-200 hover:border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 text-slate-900 placeholder-slate-400 shadow-2xs transition-all outline-none">
                   <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+                  <span class="absolute right-2.5 top-2 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-500 text-[9px] font-mono font-bold uppercase pointer-events-none">⌘K</span>
                 </div>
               </div>
 
@@ -578,12 +617,15 @@
               <!-- Safety Reassurance Bar (Corporate Clean Style - White & Emerald) -->
               <div class="mt-4 px-4 py-3 bg-white rounded-xl border border-slate-200/90 shadow-2xs flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
                 <div class="flex items-center gap-2.5 font-medium text-slate-700">
-                  <span class="w-6 h-6 rounded-lg bg-emerald-50 border border-emerald-200/60 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">🛡️</span>
+                  <span class="w-6 h-6 rounded-lg bg-emerald-50 border border-emerald-200/70 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 shadow-2xs">🛡️</span>
                   <span>Official SEBI Broker TSP integration. Capital and securities remain strictly in your demat.</span>
                 </div>
-                <div class="flex items-center gap-1.5 text-emerald-700 font-semibold text-[11px]">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  <span>Direct Gateway Ready</span>
+                <div class="flex items-center gap-2 text-emerald-700 font-semibold text-[11px] font-mono">
+                  <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <span>Direct Gateway Live &bull; 0ms Relay</span>
                 </div>
               </div>
 
