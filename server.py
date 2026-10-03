@@ -517,6 +517,12 @@ HISTORICAL_DATASETS = load_historical_datasets()
 HISTORICAL_NIFTY = HISTORICAL_DATASETS["nifty50"]["candles"]
 
 class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
+
     def do_GET(self):
         parsed = urlparse(self.path)
         if parsed.path == "/api/session/status":
