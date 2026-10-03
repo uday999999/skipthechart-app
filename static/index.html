@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SkipTheChart.com - 1-Click Algorithmic Trading for Indian Markets</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     body { background-color: #060913; }
     ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -225,8 +226,10 @@
           <div class="flex-grow border-t border-slate-800"></div>
         </div>
 
-        <!-- 1-Click Google Sign-in Button -->
-        <button type="button" onclick="performGoogleSignIn()" class="w-full py-2.5 px-4 bg-white hover:bg-slate-100 text-slate-900 rounded-xl font-bold text-xs shadow-md transition flex items-center justify-center gap-2.5">
+        <!-- Google Sign-In Container & Button -->
+        <div id="google-gsi-btn-container" class="w-full flex justify-center empty:hidden"></div>
+
+        <button type="button" onclick="openGoogleSignInModal()" id="btn-google-signin" class="w-full py-2.5 px-4 bg-white hover:bg-slate-100 text-slate-900 rounded-xl font-bold text-xs shadow-md transition flex items-center justify-center gap-2.5">
           <svg class="w-4 h-4" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -234,6 +237,11 @@
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
           </svg>
           <span>Continue with Google (Gmail)</span>
+        </button>
+
+        <!-- Quick 1-Click Demo Bypass -->
+        <button type="button" onclick="performGoogleSignIn('trader.rahul@gmail.com', 'Rahul Sharma')" class="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5">
+          <span>⚡ Instant 1-Click Demo Enter (Skip Sign-In)</span>
         </button>
 
         <!-- Compliance & Security Trust Badges -->
@@ -1919,6 +1927,60 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- MODAL: GOOGLE SIGN-IN SELECTOR & GMAIL ENTRY                               -->
+  <!-- ========================================================================= -->
+  <div id="modal-google-auth" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-[#0b101e] border-2 border-cyan-500/50 w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <h3 class="text-sm font-black text-white">Google Account Sign-In</h3>
+        </div>
+        <button type="button" onclick="closeGoogleSignInModal()" class="w-8 h-8 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold text-sm">
+          ✕
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <p class="text-slate-300">Choose how you want to sign in with Google:</p>
+
+        <!-- Option 1: 1-Click Demo Profile -->
+        <button type="button" onclick="performGoogleSignIn('trader.rahul@gmail.com', 'Rahul Sharma')" class="w-full p-3 bg-slate-950 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500 rounded-2xl flex items-center gap-3 text-left transition group">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white font-black text-sm shrink-0">
+            R
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-white text-xs group-hover:text-cyan-300 transition">Rahul Sharma (Demo Trader)</div>
+            <div class="text-[11px] text-slate-400 font-mono truncate">trader.rahul@gmail.com</div>
+          </div>
+          <span class="text-cyan-400 text-xs font-bold shrink-0">Select →</span>
+        </button>
+
+        <!-- Option 2: Enter Custom Gmail -->
+        <div class="p-3 bg-slate-950 border border-slate-800 rounded-2xl space-y-2">
+          <label class="block text-[11px] font-bold text-slate-300">Or Enter Your Own Gmail:</label>
+          <div class="flex gap-2">
+            <input type="email" id="custom-google-email" placeholder="your.name@gmail.com" class="flex-1 bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-white outline-none font-mono">
+            <button type="button" onclick="submitCustomGoogleEmail()" class="px-3.5 py-2 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold rounded-xl text-xs shrink-0 transition">
+              Sign In
+            </button>
+          </div>
+        </div>
+
+        <div class="p-2.5 bg-slate-950 border border-slate-800/80 rounded-xl text-[10.5px] text-slate-400 flex items-start gap-2">
+          <span class="text-cyan-400">💡</span>
+          <span><strong>One-Tap Google SDK Ready:</strong> Once Google Cloud Client ID is added to your server environment, the native Google authentication prompt appears automatically.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Mandatory SEBI Regulatory Risk Disclosure Footer -->
   <footer class="mt-8 p-5 bg-[#0b101e] border border-slate-800/80 rounded-2xl text-[11px] text-slate-400 space-y-3 text-center leading-relaxed">
     <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-300 pb-2 border-b border-slate-800/60">
@@ -2641,26 +2703,149 @@
       }
     }
 
-    // 1-Click Google Sign-In Handler
-    async function performGoogleSignIn() {
+    // Google Sign-In & Modal Handlers
+    function openGoogleSignInModal() {
+      // If native Google Identity Services is available and configured, trigger prompt
+      if (window.google && window.google.accounts && window.GOOGLE_CLIENT_ID_CONFIGURED) {
+        window.google.accounts.id.prompt();
+        return;
+      }
+      const modal = document.getElementById('modal-google-auth');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeGoogleSignInModal() {
+      const modal = document.getElementById('modal-google-auth');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function submitCustomGoogleEmail() {
+      const input = document.getElementById('custom-google-email');
+      const email = (input?.value || '').trim();
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid Gmail address.');
+        return;
+      }
+      const name = email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      closeGoogleSignInModal();
+      performGoogleSignIn(email, name);
+    }
+
+    // Google JWT Token Decoder (Client-side RFC 7519 compliant)
+    function decodeJwtResponse(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // Native Google Identity Services Callback
+    async function handleGoogleCredentialResponse(response) {
+      if (!response || !response.credential) return;
+      const claims = decodeJwtResponse(response.credential) || {};
+      const email = claims.email || 'trader.rahul@gmail.com';
+      const name = claims.name || claims.given_name || 'Google User';
+
       try {
         const res = await fetch('/api/auth/google', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: 'trader.rahul@gmail.com', name: 'Rahul Sharma' })
+          body: JSON.stringify({
+            credential: response.credential,
+            email: email,
+            name: name,
+            picture: claims.picture || ''
+          })
         });
         const data = await res.json();
-        if (data.email) userState.userEmail = data.email;
-        if (data.name) userState.userName = data.name;
+        userState.userEmail = data.email || email;
+        userState.userName = data.name || name;
       } catch (e) {
-        userState.userEmail = 'trader.rahul@gmail.com';
-        userState.userName = 'Rahul Sharma';
+        userState.userEmail = email;
+        userState.userName = name;
       }
 
       userState.isLoggedIn = true;
       saveState();
       updateHeaderUserInfo();
       goToStep(1);
+    }
+
+    // Unified Google Sign-In Execution
+    async function performGoogleSignIn(customEmail, customName) {
+      closeGoogleSignInModal();
+      const email = customEmail || 'trader.rahul@gmail.com';
+      const name = customName || 'Rahul Sharma';
+
+      const btn = document.getElementById('btn-google-signin');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="animate-spin text-sm">↻</span> <span>Signing in with Google...</span>`;
+      }
+
+      try {
+        const res = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, name: name })
+        });
+        const data = await res.json();
+        if (data.email) userState.userEmail = data.email;
+        if (data.name) userState.userName = data.name;
+      } catch (e) {
+        userState.userEmail = email;
+        userState.userName = name;
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `
+            <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Continue with Google (Gmail)</span>
+          `;
+        }
+      }
+
+      userState.isLoggedIn = true;
+      saveState();
+      updateHeaderUserInfo();
+      goToStep(1);
+    }
+
+    // Initialize Google Identity SDK on Startup
+    async function initGoogleAuth() {
+      try {
+        const res = await fetch('/api/auth/config');
+        const config = await res.json();
+        if (config.google_client_id && window.google && window.google.accounts) {
+          window.GOOGLE_CLIENT_ID_CONFIGURED = true;
+          window.google.accounts.id.initialize({
+            client_id: config.google_client_id,
+            callback: handleGoogleCredentialResponse,
+            auto_select: false,
+            cancel_on_tap_outside: true
+          });
+          const container = document.getElementById('google-gsi-btn-container');
+          if (container) {
+            window.google.accounts.id.renderButton(container, {
+              theme: 'outline',
+              size: 'large',
+              width: 320,
+              text: 'continue_with'
+            });
+          }
+        }
+      } catch (e) {}
     }
 
     // Top Header Auth Button Handler (Sign In / Sign Out)
@@ -3538,43 +3723,6 @@
     }
 
     function updateBacktestUISelections(activeKey) {
-      const stratKeys = ['trend_rider', 'theta_harvester', 'banknifty_scalp', 'expiry_hunter'];
-      stratKeys.forEach(k => {
-        const tile = document.getElementById('bt-tile-' + k);
-        const tileBadge = document.getElementById('bt-tile-badge-' + k);
-        const tableBadge = document.getElementById('badge-curr-' + k);
-        const tableRow = document.getElementById('bt-row-' + k);
-
-        if (k === activeKey) {
-          if (tile) {
-            tile.className = "p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-cyan-500 scale-[1.02] shadow-lg shadow-cyan-500/20";
-          }
-          if (tileBadge) {
-            tileBadge.className = "text-[10px] text-emerald-400 font-mono font-bold";
-            tileBadge.innerText = "ACTIVE";
-          }
-          if (tableBadge) {
-            tableBadge.classList.remove('hidden');
-          }
-          if (tableRow) {
-            tableRow.className = "bg-cyan-950/20 hover:bg-cyan-950/30 cursor-pointer transition";
-          }
-        } else {
-          if (tile) {
-            tile.className = "p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-slate-800 hover:border-slate-700";
-          }
-          if (tileBadge) {
-            tileBadge.className = "text-[10px] text-slate-500 font-mono";
-            tileBadge.innerText = "Click to Test";
-          }
-          if (tableBadge) {
-            tableBadge.classList.add('hidden');
-          }
-          if (tableRow) {
-            tableRow.className = "hover:bg-slate-900/60 cursor-pointer transition";
-          }
-        }
-    function updateBacktestUISelections(activeKey) {
       const stratName = customStrategyState.name || "Custom Quantitative Setup";
       const sec = customStrategyState.security;
 
@@ -4261,6 +4409,9 @@
     // Initialize application on load
     window.addEventListener('DOMContentLoaded', () => {
       loadSavedState();
+      if (typeof initGoogleAuth === 'function') {
+        initGoogleAuth();
+      }
       if (typeof renderIndicatorsGrid === 'function') {
         renderIndicatorsGrid();
         updateSynergyScore();

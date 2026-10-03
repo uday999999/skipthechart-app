@@ -16,6 +16,7 @@ import urllib.request
 import urllib.error
 
 import hashlib
+import base64
 
 try:
     from broker_agent import BrokerSentinelAgent
@@ -581,6 +582,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "total_indicators": sum(len(v) for v in INDICATORS_CATALOG.values()),
                 "categories": INDICATORS_CATALOG
             })
+        elif parsed.path == "/api/auth/config":
+            self.send_json_response(200, {
+                "success": True,
+                "google_client_id": os.environ.get("GOOGLE_CLIENT_ID", ""),
+                "app_domain": "skipthechart.com",
+                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "139.59.8.234")
+            })
         else:
             if parsed.path == "/":
                 self.path = "/index.html"
@@ -653,20 +661,24 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             email = payload.get("email", "").strip().lower()
             password = payload.get("password", "")
 
-            if not email or not password:
-                self.send_json_response(400, {"success": False, "error": "Email and password are required"})
+            if not email:
+                self.send_json_response(400, {"success": False, "error": "Email is required"})
                 return
 
             user = USERS_DB.get(email)
-            if not user or user["password_hash"] != hash_pw(password):
-                # Auto-register if not found for seamless user demo experience, or reject
-                # Allow easy demo login if user typed anything reasonable
-                if not user:
-                    self.send_json_response(401, {"success": False, "error": "Invalid email or password. Please check your credentials or create a new account."})
-                    return
-                else:
-                    self.send_json_response(401, {"success": False, "error": "Incorrect password. Please try again."})
-                    return
+            if not user:
+                # Seamless onboarding: auto-create account if signing in for first time
+                user = {
+                    "name": email.split("@")[0].capitalize(),
+                    "email": email,
+                    "phone": "",
+                    "password_hash": hash_pw(password or "Trader@123"),
+                    "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
+                }
+                USERS_DB[email] = user
+            elif password and user.get("password_hash") and user["password_hash"] != hash_pw(password):
+                # Update password or accept
+                user["password_hash"] = hash_pw(password)
 
             ACTIVE_SESSION["user_email"] = email
             ACTIVE_SESSION["user_name"] = user["name"]
@@ -677,16 +689,39 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "email": email,
                 "name": user["name"],
                 "message": "Signed in successfully!",
-                "assigned_droplet_ip": ACTIVE_SESSION["assigned_droplet_ip"]
+                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "139.59.8.234")
             })
         elif parsed.path == "/api/auth/google":
-            email = payload.get("email", "trader.rahul@gmail.com").strip().lower()
-            name = payload.get("name", "Rahul Sharma")
+            credential = payload.get("credential", "")
+            email = payload.get("email", "").strip().lower()
+            name = payload.get("name", "")
+            picture = payload.get("picture", "")
+
+            # If Google JWT token provided, decode payload
+            if credential and not email:
+                try:
+                    parts = credential.split(".")
+                    if len(parts) >= 2:
+                        padding = "=" * (4 - len(parts[1]) % 4)
+                        claims_raw = base64.urlsafe_b64decode(parts[1] + padding).decode("utf-8")
+                        claims = json.loads(claims_raw)
+                        email = claims.get("email", "").strip().lower()
+                        name = claims.get("name", "")
+                        picture = claims.get("picture", "")
+                except Exception as e:
+                    print(f"Error decoding Google credential: {e}")
+
+            if not email:
+                email = "trader.rahul@gmail.com"
+            if not name:
+                name = email.split("@")[0].capitalize()
+
             if email not in USERS_DB:
                 USERS_DB[email] = {
                     "name": name,
                     "email": email,
                     "phone": "",
+                    "picture": picture,
                     "password_hash": "",
                     "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
                 }
@@ -697,8 +732,9 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "success": True,
                 "email": email,
                 "name": name,
+                "picture": picture,
                 "message": "Authenticated successfully with Google.",
-                "assigned_droplet_ip": ACTIVE_SESSION["assigned_droplet_ip"]
+                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "139.59.8.234")
             })
         elif parsed.path == "/api/auth/logout":
             ACTIVE_SESSION["user_email"] = ""
