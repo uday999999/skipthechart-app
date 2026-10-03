@@ -148,7 +148,9 @@ INDICATORS_CATALOG = {
         {"id": "linreg_slope", "name": "Linear Regression Trendline Slope", "periods": "25", "desc": "Mathematical slope angle of best-fit price trajectory."},
         {"id": "schaff", "name": "Schaff Trend Cycle (STC)", "periods": "10, 23, 50", "desc": "Combines MACD and Stochastics for early trend cycles."},
         {"id": "dema", "name": "DEMA (Double Exponential MA)", "periods": "21", "desc": "Reduces lag compared to standard exponential moving averages."},
-        {"id": "tema", "name": "TEMA (Triple Exponential MA)", "periods": "21", "desc": "Zero-lag triple exponential smoothing for fast scalping."}
+        {"id": "tema", "name": "TEMA (Triple Exponential MA)", "periods": "21", "desc": "Zero-lag triple exponential smoothing for fast scalping."},
+        {"id": "kama", "name": "Kaufman Adaptive Moving Average (KAMA)", "periods": "10, 2, 30", "desc": "Dynamically adjusts speed based on market noise and trend efficiency."},
+        {"id": "mcginley_dyn", "name": "McGinley Dynamic Indicator", "periods": "14", "desc": "Self-adjusting moving average designed to minimize whipsaws in choppy markets."}
     ],
     "momentum": [
         {"id": "rsi", "name": "RSI (Relative Strength Index)", "periods": "14", "desc": "Overbought/Oversold momentum oscillator with 50-midline confirmation."},
@@ -175,7 +177,9 @@ INDICATORS_CATALOG = {
         {"id": "divergence", "name": "RSI / MACD Divergence Detector", "periods": "Dynamic", "desc": "Scans for Higher Highs in price with Lower Highs in oscillator."},
         {"id": "kdj", "name": "KDJ Indicator", "periods": "9, 3, 3", "desc": "Extended stochastic with J-line indicating extreme inflection points."},
         {"id": "kst", "name": "Know Sure Thing (KST)", "periods": "10, 15, 20, 30", "desc": "Martin Pring multi-timeframe smoothed rate of change."},
-        {"id": "mass_index", "name": "Mass Index Reversal", "periods": "25, 9", "desc": "Examines high-low range expansion to predict imminent trend reversal."}
+        {"id": "mass_index", "name": "Mass Index Reversal", "periods": "25, 9", "desc": "Examines high-low range expansion to predict imminent trend reversal."},
+        {"id": "connors_rsi", "name": "Connors RSI (CRSI)", "periods": "3, 2, 100", "desc": "Quant composite momentum indicator combining RSI, streak length, and percent rank."},
+        {"id": "fisher_transform", "name": "Ehlers Fisher Transform", "periods": "10", "desc": "Converts prices to a Gaussian normal distribution to pinpoint extreme turning points."}
     ],
     "volatility": [
         {"id": "bollinger", "name": "Bollinger Bands (2 Sigma)", "periods": "20, 2.0", "desc": "20-period moving average with upper and lower 2-standard deviation bands."},
@@ -197,7 +201,8 @@ INDICATORS_CATALOG = {
         {"id": "super_bollinger", "name": "Super Bollinger (Multi-Sigma)", "periods": "20 (1.5 & 2.5σ)", "desc": "Two-tier volatility envelope for mean reversion scalping."},
         {"id": "vol_smile", "name": "Implied Volatility Smile Reversion", "periods": "Intraday F&O", "desc": "Detects abnormal skew expansion between OTM Calls and Puts."},
         {"id": "ivp", "name": "IVP (Implied Volatility Percentile)", "periods": "252 Days", "desc": "Percentage of days in past year where IV was lower than current IV."},
-        {"id": "ivr", "name": "IVR (Implied Volatility Rank)", "periods": "52-Week", "desc": "Current IV relative to 52-week high and low IV range."}
+        {"id": "ivr", "name": "IVR (Implied Volatility Rank)", "periods": "52-Week", "desc": "Current IV relative to 52-week high and low IV range."},
+        {"id": "donchian_squeeze", "name": "Donchian Bandwidth Squeeze", "periods": "20", "desc": "Measures width of 20-period price extremes to detect volatility contraction."}
     ],
     "volume": [
         {"id": "vwap", "name": "VWAP (Volume Weighted Average Price)", "periods": "Intraday Benchmark", "desc": "Institutional price weighted by true traded volume from 9:15 AM."},
@@ -231,7 +236,8 @@ INDICATORS_CATALOG = {
         {"id": "double_top", "name": "Double Top & Double Bottom", "periods": "Structural Pattern", "desc": "Classic structural 'M' or 'W' pattern rejecting swing extreme twice."},
         {"id": "head_shoulders", "name": "Head & Shoulders Reversal", "periods": "Structural Pattern", "desc": "Left shoulder, higher head, right shoulder neckline breakdown pattern."},
         {"id": "gap_fade", "name": "Morning Gap Up / Gap Down Fade", "periods": "9:15 - 10:00 AM", "desc": "Fades opening gap back toward previous day close / VWAP equilibrium."},
-        {"id": "mtf_high_low", "name": "Multi-Timeframe High/Low Breakout", "periods": "Hourly + Daily", "desc": "Synchronous breakout of both hourly and daily swing highs for runners."}
+        {"id": "mtf_high_low", "name": "Multi-Timeframe High/Low Breakout", "periods": "Hourly + Daily", "desc": "Synchronous breakout of both hourly and daily swing highs for runners."},
+        {"id": "liquidity_sweep", "name": "ICT Liquidity Pool Sweep (Buy/Sell Stops)", "periods": "Swing High/Low", "desc": "Detects false breakout spikes triggering retail stop-loss clusters before reversing."}
     ]
 }
 
@@ -815,7 +821,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         f"You help Indian retail traders succeed with automated algorithmic trading. "
                         f"User Profile: Active Broker: {broker}, Deployed Strategy: {strat}, "
                         f"Total Account Capital: ₹{capital:,}, Equity Utilization: {equity_util}% "
-                        f"(maintaining a {100-equity_util}% SEBI cash buffer). "
+                        f"(maintaining a {100-equity_util}% SkipTheChart mandatory transaction & RMS buffer). "
                         f"Keep answers concise, direct, professional, friendly, and formatted in clean markdown. "
                         f"Remind traders about discipline, risk management, and Indian market hours (9:15 AM to 3:30 PM IST)."
                     )
@@ -850,8 +856,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     reply = (
                         f"### 🛡️ Why 70% Equity Utilization Protects Your Capital\n\n"
                         f"At **{equity_util}% equity utilization** with **₹{capital:,} capital**, your active trading margin is **₹{int(capital * equity_util / 100):,}**, "
-                        f"leaving an untouchable **₹{int(capital * (100 - equity_util) / 100):,} (30% Cash Buffer)**.\n\n"
-                        f"1. **SEBI Peak Margin Shield**: Intraday span + exposure margin spikes won't trigger penalty squares.\n"
+                        f"leaving an untouchable **₹{int(capital * (100 - equity_util) / 100):,} (30% Mandatory Buffer)**.\n\n"
+                        f"1. **SkipTheChart RMS Shield**: Intraday span + exposure margin spikes won't trigger broker penalty squares.\n"
                         f"2. **Drawdown Protection**: Consecutive losing trades cannot deplete your core principal.\n"
                         f"3. **Zero Margin Call Risk**: You have ample room to absorb overnight gap movements if applicable."
                     )
@@ -995,7 +1001,10 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         sl_pct = float(payload.get("sl_pct", 2.0)) / 100.0
         tp_pct = float(payload.get("tp_pct", 5.0)) / 100.0
         tsl_pct = float(payload.get("tsl_pct", 1.0)) / 100.0
-        kill_switch_amt = float(payload.get("kill_switch_amount", 2500.0))
+        ks_pct = float(payload.get("kill_switch_pct", 10.0))
+        kill_switch_amt = float(payload.get("kill_switch_amount", 0.0))
+        if kill_switch_amt <= 0:
+            kill_switch_amt = capital * (ks_pct / 100.0)
         theta_range_limit = float(payload.get("theta_range_limit", 1.25))
         atr_multiplier = float(payload.get("atr_multiplier", 0.75))
         gamma_threshold = float(payload.get("gamma_threshold", 0.50))
@@ -1154,7 +1163,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                             daily_loss += abs(pnl)
                             if daily_loss >= kill_switch_amt:
                                 kill_switch_active_date = c_date
-                                reason = f"🚨 Daily Kill Switch Triggered (Max ₹{kill_switch_amt:,.0f} Loss Cutoff)"
+                                reason = f"🚨 Daily Kill Switch Triggered ({ks_pct:.1f}% / ₹{kill_switch_amt:,.0f} Cutoff)"
 
                         in_pos = None
                         capital += pnl

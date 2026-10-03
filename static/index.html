@@ -419,7 +419,7 @@
             <div>
               <h2 class="text-lg font-black text-white">Step 2: Choose Your Trading Strategy (Pick 1 Goal)</h2>
               <p class="text-xs text-slate-400 mt-0.5">
-                Every strategy specifies its <strong>broker margin requirement</strong> and mandatory <strong>30% cash buffer</strong> for SEBI peak margin rules.
+                Every strategy specifies its <strong>broker margin requirement</strong> and <strong>minimum 30% buffer mandatory</strong> for smoother transaction security.
               </p>
             </div>
           </div>
@@ -436,16 +436,16 @@
           </div>
         </div>
 
-        <!-- SEBI 30% Buffer Policy Banner -->
+        <!-- SkipTheChart Minimum 30% Buffer Mandatory Policy Banner -->
         <div class="bg-gradient-to-r from-cyan-950/40 via-slate-900 to-indigo-950/40 border border-cyan-500/30 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs shadow-lg">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold text-lg">
               🛡️
             </div>
             <div>
-              <div class="text-white font-bold text-sm">SEBI Peak Margin & Liquid Buffer Requirement:</div>
+              <div class="text-white font-bold text-sm">SkipTheChart Risk Policy: Minimum 30% Buffer Mandatory</div>
               <p class="text-slate-300 text-[11px] mt-0.5">
-                To prevent margin penalty rejections and absorb daily MTM drawdowns, the bot operates at a <strong class="text-cyan-300 font-semibold">max 70% active margin utilization</strong> and retains a <strong class="text-emerald-400 font-semibold">mandatory 30% cash buffer</strong> in your trading account.
+                To guarantee smoother transaction execution, absorb intraday MTM swings, and protect your account from broker RMS rejections, SkipTheChart mandates a <strong class="text-emerald-400 font-semibold">minimum 30% cash buffer</strong> (operating at <strong class="text-cyan-300 font-semibold">max 70% active margin utilization</strong>).
               </p>
             </div>
           </div>
@@ -566,7 +566,7 @@
                 <div class="flex items-center gap-2">
                   <h3 class="text-base font-black text-white">Custom Strategy Studio (100+ Indicators Matrix)</h3>
                   <span class="px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold uppercase">
-                    100+ Real Indicators Available
+                    106 Quant Indicators Available (100+)
                   </span>
                 </div>
                 <p class="text-xs text-slate-400 mt-0.5">
@@ -607,22 +607,22 @@
             <!-- Category Tabs -->
             <div class="flex flex-wrap items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
               <button type="button" id="cat-tab-all" onclick="setIndicatorCategory('all')" class="px-3 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition">
-                All (100+)
+                All (106 Indicators)
               </button>
               <button type="button" id="cat-tab-trend" onclick="setIndicatorCategory('trend')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-                Trend (25)
+                Trend (27)
               </button>
               <button type="button" id="cat-tab-momentum" onclick="setIndicatorCategory('momentum')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-                Momentum (25)
+                Momentum (27)
               </button>
               <button type="button" id="cat-tab-volatility" onclick="setIndicatorCategory('volatility')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-                Volatility (20)
+                Volatility (21)
               </button>
               <button type="button" id="cat-tab-volume" onclick="setIndicatorCategory('volume')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
                 Volume (15)
               </button>
               <button type="button" id="cat-tab-price_action" onclick="setIndicatorCategory('price_action')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-                Price Action (15)
+                Price Action (16)
               </button>
             </div>
 
@@ -705,17 +705,26 @@
               </div>
             </div>
 
-            <!-- 4. 🚨 Daily Kill Switch (Circuit Breaker) -->
+            <!-- 4. 🚨 Daily Kill Switch (Circuit Breaker in %) -->
             <div class="p-3 bg-slate-950 rounded-xl border-2 border-rose-500 shadow-md shadow-rose-500/10 space-y-1.5">
               <div class="flex justify-between items-center">
                 <label class="font-black text-rose-400 flex items-center gap-1">
-                  <span>🚨</span> Daily Kill Switch Limit (₹)
+                  <span>🚨</span> Daily Kill Switch Limit (%)
                 </label>
                 <span class="px-1.5 py-0.5 bg-rose-950 text-rose-300 rounded text-[9.5px] font-bold font-mono">CIRCUIT BREAKER</span>
               </div>
-              <input type="number" id="sec-kill-switch-amt" value="2500" step="250" min="500" max="25000" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-rose-600 focus:border-rose-400 rounded-lg p-2 text-rose-400 font-mono font-black text-sm">
+              <div class="flex items-center gap-2">
+                <div class="relative flex-1">
+                  <input type="number" id="sec-kill-switch-pct" value="10.0" step="0.5" min="1.0" max="30" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-rose-600 focus:border-rose-400 rounded-lg p-2 pr-7 text-rose-400 font-mono font-black text-sm">
+                  <span class="absolute right-2.5 top-2.5 text-rose-400 font-mono font-bold text-xs">%</span>
+                </div>
+                <div class="p-1.5 px-3 bg-rose-950/60 border border-rose-500/50 rounded-lg text-right shrink-0">
+                  <div class="text-[9px] text-slate-400 uppercase font-mono">Calculated Cutoff</div>
+                  <div class="text-xs font-black text-rose-300 font-mono" id="sec-kill-switch-calc-amt">₹ 2,500</div>
+                </div>
+              </div>
               <div class="text-[10px] text-slate-300 leading-tight">
-                <strong>Emergency Protection:</strong> If cumulative daily losses hit this limit, the bot immediately squares off all open positions, cancels pending orders, and halts trading until next day.
+                <strong>Emergency Protection:</strong> Automatically shuts down trading if daily loss reaches <span class="text-rose-400 font-bold" id="sec-kill-switch-summary-pct">10%</span> (<span class="text-rose-400 font-bold font-mono" id="sec-kill-switch-summary-amt">₹ 2,500</span> of equity). All positions auto-squared off.
               </div>
             </div>
 
@@ -784,12 +793,12 @@
               <div class="text-slate-300">
                 Active Margin: <strong class="text-white font-mono" id="sec-calc-margin">₹ 17,500</strong>
                 <span class="text-slate-500 mx-1.5">•</span>
-                30% SEBI Cash Buffer: <strong class="text-emerald-400 font-mono" id="sec-calc-buffer">₹ 7,500</strong>
+                Minimum 30% Buffer Mandatory: <strong class="text-emerald-400 font-mono" id="sec-calc-buffer">₹ 7,500</strong>
                 <span class="text-slate-500 mx-1.5">•</span>
                 Total Required Capital: <strong class="text-cyan-300 font-mono text-sm font-bold" id="sec-calc-total">₹ 25,000</strong>
               </div>
               <div class="text-[11px] text-slate-500 font-mono">
-                Formula: ₹17,500 margin ÷ 70% max utilization = ₹25,000 account capital
+                Formula: ₹17,500 margin ÷ 70% max utilization = ₹25,000 account capital (30% buffer reserved for smoother transactions)
               </div>
             </div>
 
@@ -836,7 +845,7 @@
             <div>
               <div class="text-white font-bold" id="req-box-title">Daily Income Theta Harvester Requirement</div>
               <div class="text-slate-300 text-[11px]" id="req-box-desc">
-                Requires <strong class="text-white font-mono">₹ 70,000</strong> active margin (1 lot). With mandatory 30% cash buffer, minimum required capital is <strong class="text-cyan-300 font-mono">₹ 1,00,000</strong>.
+                Requires <strong class="text-white font-mono">₹ 70,000</strong> active margin (1 lot). With minimum 30% buffer mandatory, minimum required capital is <strong class="text-cyan-300 font-mono">₹ 1,00,000</strong>.
               </div>
             </div>
           </div>
@@ -868,7 +877,7 @@
                   <div class="text-xs font-bold text-white flex items-center gap-1.5">
                     <span>⚖️</span> % of Equity to Utilize (10% to 70%)
                   </div>
-                  <div class="text-[11px] text-slate-400">Guarantees a safe liquid cash buffer against SEBI peak margin shortfalls</div>
+                  <div class="text-[11px] text-slate-400">Minimum 30% buffer mandatory for smoother transaction security & RMS protection</div>
                 </div>
                 <span class="px-2.5 py-1 bg-cyan-950 border border-cyan-500 text-cyan-300 font-mono font-bold text-xs rounded-lg" id="capital-equity-badge">
                   70% Equity in Use (30% Cash Buffer)
@@ -905,7 +914,7 @@
           <div class="lg:col-span-5 flex flex-col justify-between space-y-4 bg-slate-950 p-5 rounded-2xl border border-slate-800">
             <div class="space-y-3">
               <h3 class="text-xs font-bold text-white flex items-center gap-1.5 border-b border-slate-800 pb-2">
-                <span>🛡️</span> SEBI Risk Allocation Breakdown
+                <span>🛡️</span> SkipTheChart Mandatory Risk Allocation Breakdown
               </h3>
               
               <div class="grid grid-cols-2 gap-3 text-xs">
@@ -2950,7 +2959,9 @@
         { id: "linreg_slope", name: "Linear Regression Slope", periods: "25", icon: "📐", desc: "Mathematical slope angle of best-fit price trajectory." },
         { id: "schaff", name: "Schaff Trend Cycle (STC)", periods: "10, 23, 50", icon: "🌀", desc: "Combines MACD and Stochastics for early trend cycles." },
         { id: "dema", name: "DEMA (Double Exp MA)", periods: "21", icon: "⏩", desc: "Reduces lag compared to standard exponential moving averages." },
-        { id: "tema", name: "TEMA (Triple Exp MA)", periods: "21", icon: "⏭️", desc: "Zero-lag triple exponential smoothing for fast scalping." }
+        { id: "tema", name: "TEMA (Triple Exp MA)", periods: "21", icon: "⏭️", desc: "Zero-lag triple exponential smoothing for fast scalping." },
+        { id: "kama", name: "Kaufman Adaptive MA (KAMA)", periods: "10, 2, 30", icon: "🧠", desc: "Dynamically adjusts speed based on market noise and trend efficiency." },
+        { id: "mcginley_dyn", name: "McGinley Dynamic Indicator", periods: "14", icon: "🧭", desc: "Self-adjusting moving average designed to minimize whipsaws in choppy markets." }
       ],
       momentum: [
         { id: "rsi", name: "RSI (Relative Strength)", periods: "14", icon: "⚡", desc: "Overbought/Oversold oscillator with 50-midline confirmation." },
@@ -2977,7 +2988,9 @@
         { id: "divergence", name: "RSI/MACD Divergences", periods: "Auto-Scan", icon: "🔀", desc: "Scans for Higher Highs in price with Lower Highs in oscillator." },
         { id: "kdj", name: "KDJ Extreme Inflection", periods: "9, 3, 3", icon: "🎯", desc: "Extended stochastic with J-line indicating extreme turning points." },
         { id: "kst", name: "Know Sure Thing (KST)", periods: "10, 15, 20, 30", icon: "🔮", desc: "Martin Pring multi-timeframe smoothed rate of change." },
-        { id: "mass_index", name: "Mass Index Reversal", periods: "25, 9", icon: "🌋", desc: "Examines high-low range expansion to predict imminent reversal." }
+        { id: "mass_index", name: "Mass Index Reversal", periods: "25, 9", icon: "🌋", desc: "Examines high-low range expansion to predict imminent reversal." },
+        { id: "connors_rsi", name: "Connors RSI (CRSI)", periods: "3, 2, 100", icon: "🎯", desc: "Quant composite momentum indicator combining RSI, streak length, and percent rank." },
+        { id: "fisher_transform", name: "Ehlers Fisher Transform", periods: "10", icon: "🧬", desc: "Converts prices to a Gaussian normal distribution to pinpoint extreme turning points." }
       ],
       volatility: [
         { id: "bollinger", name: "Bollinger Bands (2σ)", periods: "20, 2.0", icon: "🎯", desc: "20-period moving average with upper and lower 2-standard deviation bands." },
@@ -2999,7 +3012,8 @@
         { id: "super_bollinger", name: "Super Bollinger (Multi-σ)", periods: "20 (1.5 & 2.5σ)", icon: "🎯", desc: "Two-tier volatility envelope for mean reversion scalping." },
         { id: "vol_smile", name: "IV Smile Reversion", periods: "Intraday F&O", icon: "😄", desc: "Detects abnormal skew expansion between OTM Calls and Puts." },
         { id: "ivp", name: "IV Percentile (IVP)", periods: "252 Days", icon: "📊", desc: "Percentage of days in past year where IV was lower than current IV." },
-        { id: "ivr", name: "IV Rank (IVR)", periods: "52-Week", icon: "🏆", desc: "Current IV relative to 52-week high and low IV range." }
+        { id: "ivr", name: "IV Rank (IVR)", periods: "52-Week", icon: "🏆", desc: "Current IV relative to 52-week high and low IV range." },
+        { id: "donchian_squeeze", name: "Donchian Bandwidth Squeeze", periods: "20", icon: "🗜️", desc: "Measures width of 20-period price extremes to detect volatility contraction." }
       ],
       volume: [
         { id: "vwap", name: "Intraday VWAP", periods: "From 9:15 AM", icon: "⚓", desc: "Institutional price weighted by true traded volume from 9:15 AM." },
@@ -3033,7 +3047,8 @@
         { id: "double_top", name: "Double Top & Double Bottom", periods: "M / W Pattern", icon: "👑", desc: "Classic structural 'M' or 'W' pattern rejecting swing extreme twice." },
         { id: "head_shoulders", name: "Head & Shoulders Reversal", periods: "Structural Pattern", icon: "👤", desc: "Left shoulder, higher head, right shoulder neckline breakdown pattern." },
         { id: "gap_fade", name: "Morning Gap Fade Setup", periods: "9:15 - 10:00 AM", icon: "🌅", desc: "Fades opening gap back toward previous day close / VWAP equilibrium." },
-        { id: "mtf_high_low", name: "Multi-Timeframe High/Low", periods: "Hourly + Daily", icon: "⛰️", desc: "Synchronous breakout of both hourly and daily swing highs for runners." }
+        { id: "mtf_high_low", name: "Multi-Timeframe High/Low", periods: "Hourly + Daily", icon: "⛰️", desc: "Synchronous breakout of both hourly and daily swing highs for runners." },
+        { id: "liquidity_sweep", name: "ICT Liquidity Pool Sweep", periods: "Swing High/Low", icon: "🧲", desc: "Detects false breakout spikes triggering retail stop clusters before reversing." }
       ]
     };
 
@@ -3053,6 +3068,7 @@
         sl_pct: 2.0,
         tp_pct: 5.0,
         tsl_pct: 1.0,
+        kill_switch_pct: 10.0,
         kill_switch_amount: 2500,
         square_off_time: "15:15 IST",
         max_daily_trades: 4
@@ -3260,8 +3276,8 @@
           if (tpInput) tpInput.value = data.security.tp_pct;
           const tslInput = document.getElementById('sec-tsl-pct');
           if (tslInput) tslInput.value = data.security.tsl_pct;
-          const ksInput = document.getElementById('sec-kill-switch-amt');
-          if (ksInput) ksInput.value = data.security.kill_switch_amount;
+          const ksInput = document.getElementById('sec-kill-switch-pct');
+          if (ksInput) ksInput.value = data.security.kill_switch_pct || 10.0;
           const sqInput = document.getElementById('sec-squareoff-time');
           if (sqInput) sqInput.value = data.security.square_off_time;
           const mtInput = document.getElementById('sec-max-trades');
@@ -3280,7 +3296,8 @@
           document.getElementById('yt-preview-indicators').innerHTML = (data.indicator_names || data.indicators).map(n => `
             <span class="px-1.5 py-0.5 bg-purple-950 border border-purple-500/40 text-purple-300 rounded text-[10px] font-mono">${n}</span>
           `).join('');
-          document.getElementById('yt-preview-security').innerText = `SL: ${data.security.sl_pct}% | TP: ${data.security.tp_pct}% | Kill Switch: ₹${data.security.kill_switch_amount.toLocaleString('en-IN')}`;
+          const ksPctVal = data.security.kill_switch_pct || 10.0;
+          document.getElementById('yt-preview-security').innerText = `SL: ${data.security.sl_pct}% | TP: ${data.security.tp_pct}% | Kill Switch: ${ksPctVal}% (₹${(data.security.kill_switch_amount || 2500).toLocaleString('en-IN')})`;
           document.getElementById('yt-preview-rules').innerText = data.entry_rule;
         }
 
@@ -3293,6 +3310,7 @@
           updateStrategyArchetype('nifty_options');
         }
 
+        updateSecurityParams();
         renderIndicatorsGrid();
         updateSynergyScore();
 
@@ -3312,15 +3330,34 @@
       const sl = parseFloat(document.getElementById('sec-sl-pct')?.value) || 2.0;
       const tp = parseFloat(document.getElementById('sec-tp-pct')?.value) || 5.0;
       const tsl = parseFloat(document.getElementById('sec-tsl-pct')?.value) || 1.0;
-      const ks = parseFloat(document.getElementById('sec-kill-switch-amt')?.value) || 2500;
+      const ksPct = parseFloat(document.getElementById('sec-kill-switch-pct')?.value) || 10.0;
       const sq = document.getElementById('sec-squareoff-time')?.value || "15:15 IST";
       const mt = parseInt(document.getElementById('sec-max-trades')?.value) || 4;
+
+      // Determine active equity:
+      // If user has capital set in Step 3, compute from active equity; otherwise base margin or min capital
+      // E.g. If set to 10% and equity is ₹70,000, displays as ₹7,000!
+      const activeEquity = (userState.totalCapital && userState.equityUtilizationPct)
+        ? Math.round(userState.totalCapital * (userState.equityUtilizationPct / 100))
+        : (customStrategyState.baseMargin || 17500);
+
+      const ksAmt = Math.round(activeEquity * (ksPct / 100));
+
+      const calcEl = document.getElementById('sec-kill-switch-calc-amt');
+      if (calcEl) calcEl.innerText = `₹ ${ksAmt.toLocaleString('en-IN')}`;
+
+      const sumPctEl = document.getElementById('sec-kill-switch-summary-pct');
+      if (sumPctEl) sumPctEl.innerText = `${ksPct}%`;
+
+      const sumAmtEl = document.getElementById('sec-kill-switch-summary-amt');
+      if (sumAmtEl) sumAmtEl.innerText = `₹ ${ksAmt.toLocaleString('en-IN')}`;
 
       customStrategyState.security = {
         sl_pct: sl,
         tp_pct: tp,
         tsl_pct: tsl,
-        kill_switch_amount: ks,
+        kill_switch_pct: ksPct,
+        kill_switch_amount: ksAmt,
         square_off_time: sq,
         max_daily_trades: mt
       };
@@ -3363,6 +3400,8 @@
 
       const tEl = document.getElementById('sec-calc-total');
       if (tEl) tEl.innerText = `₹ ${minCap.toLocaleString('en-IN')}`;
+
+      updateSecurityParams();
     }
 
     // Step 2 Action: Apply Custom / YouTube Strategy and Proceed to Step 3 (Capital)
@@ -3564,6 +3603,10 @@
           }
         }
       }
+
+      if (typeof updateSecurityParams === 'function') {
+        updateSecurityParams();
+      }
     }
 
     // Step 3 Confirmation: Advance to Step 4 (Mandatory Backtest)
@@ -3746,7 +3789,14 @@
       if (tpEl) tpEl.innerText = `${sec.tp_pct}% Target (${sec.tsl_pct}% TSL)`;
 
       const ksEl = document.getElementById('bt-panel-killswitch');
-      if (ksEl) ksEl.innerText = `₹ ${sec.kill_switch_amount.toLocaleString('en-IN')} Max Loss Cutoff`;
+      if (ksEl) {
+        const cap = userState.totalCapital || 25000;
+        const util = userState.equityUtilizationPct || 70;
+        const activeCap = Math.round(cap * (util / 100));
+        const ksPct = sec.kill_switch_pct || 10.0;
+        const ksAmt = sec.kill_switch_amount || Math.round(activeCap * (ksPct / 100));
+        ksEl.innerText = `${ksPct}% Max Loss Cutoff (₹ ${ksAmt.toLocaleString('en-IN')})`;
+      }
 
       // Update Top Summary Cards (User request: choose/view previous options: broker, capital, strategy)
       const sumBroker = document.getElementById('bt-summary-broker-name');
@@ -3792,6 +3842,7 @@
             sl_pct: customStrategyState.security.sl_pct,
             tp_pct: customStrategyState.security.tp_pct,
             tsl_pct: customStrategyState.security.tsl_pct,
+            kill_switch_pct: customStrategyState.security.kill_switch_pct || 10.0,
             kill_switch_amount: customStrategyState.security.kill_switch_amount
           })
         });
