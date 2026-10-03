@@ -2417,7 +2417,7 @@
         <div class="space-y-1.5">
           <label class="block text-xs font-bold text-white text-center">Step 2: Enter the 6-Digit Code from Authenticator:</label>
           <div class="flex justify-center">
-            <input type="text" id="totp-input-code" maxlength="6" inputmode="numeric" pattern="[0-9]*" placeholder="••••••" class="w-48 text-center text-2xl font-mono font-black tracking-[0.3em] bg-slate-950 border-2 border-emerald-500/60 focus:border-emerald-400 text-white rounded-xl py-2 outline-none shadow-inner" autofocus autocomplete="one-time-code">
+            <input type="text" id="totp-input-code" maxlength="6" inputmode="numeric" pattern="[0-9]*" oninput="onTotpInput(this)" placeholder="••••••" class="w-48 text-center text-2xl font-mono font-black tracking-[0.3em] bg-slate-950 border-2 border-emerald-500/60 focus:border-emerald-400 text-white rounded-xl py-2 outline-none shadow-inner" autofocus autocomplete="one-time-code">
           </div>
           <p id="totp-error-msg" class="text-[11px] text-red-400 text-center font-medium hidden"></p>
         </div>
@@ -3586,9 +3586,20 @@
       }
     }
 
+    function onTotpInput(input) {
+      if (!input) return;
+      const clean = (input.value || '').replace(/[\s-]/g, '').trim();
+      input.value = clean;
+      const errEl = document.getElementById('totp-error-msg');
+      if (errEl) errEl.classList.add('hidden');
+      if (clean.length === 6) {
+        verifyTotpCode();
+      }
+    }
+
     async function verifyTotpCode() {
       const codeInput = document.getElementById('totp-input-code');
-      const code = (codeInput?.value || '').trim();
+      const code = (codeInput?.value || '').replace(/[\s-]/g, '').trim();
       const errEl = document.getElementById('totp-error-msg');
       const btn = document.getElementById('btn-verify-totp');
 
@@ -3619,13 +3630,14 @@
           closeTotpModal(true);
         } else {
           if (errEl) {
-            errEl.innerText = data.error || 'Invalid code. Please check your authenticator app and try again.';
+            errEl.innerText = data.error || 'Code expired or incorrect. Please try again.';
             errEl.classList.remove('hidden');
           }
         }
       } catch (e) {
+        console.error('TOTP error:', e);
         if (errEl) {
-          errEl.innerText = 'Verification error. Please try again.';
+          errEl.innerText = 'Verification error. Please check your connection and try again.';
           errEl.classList.remove('hidden');
         }
       } finally {

@@ -55,10 +55,10 @@ def generate_totp_secret():
     raw = os.urandom(20)
     return base64.b32encode(raw).decode("utf-8").replace("=", "")
 
-def verify_totp_code(secret, user_code, window=1):
+def verify_totp_code(secret, user_code, window=4):
     if not secret or not user_code:
         return False
-    user_code = str(user_code).strip()
+    user_code = str(user_code).replace(" ", "").replace("-", "").strip()
     if user_code == "999999":  # Emergency / Demo testing override
         return True
     try:
@@ -1097,12 +1097,12 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
                 }
                 USERS_DB[email] = user
-            code = str(payload.get("code", "")).strip()
+            code = str(payload.get("code", "")).replace(" ", "").replace("-", "").strip()
             secret = payload.get("secret", "").strip() or user.get("totp_temp_secret") or user.get("totp_secret")
             if not code or len(code) != 6:
-                self.send_json_response(400, {"success": False, "error": "Please enter a valid 6-digit code."})
+                self.send_json_response(200, {"success": False, "error": "Please enter a valid 6-digit code."})
                 return
-            if verify_totp_code(secret, code):
+            if verify_totp_code(secret, code, window=4):
                 user["totp_secret"] = secret
                 user["totp_enabled"] = True
                 user["totp_temp_secret"] = None
@@ -1113,9 +1113,9 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     "totp_enabled": True
                 })
             else:
-                self.send_json_response(400, {
+                self.send_json_response(200, {
                     "success": False,
-                    "error": "Invalid 6-digit code. Please verify the code displayed in your Google Authenticator app and try again."
+                    "error": "Code expired or incorrect. Please enter the latest 6-digit code from Google Authenticator."
                 })
         elif parsed.path == "/api/backtest/run":
             res = self.run_vectorized_backtest(payload)
