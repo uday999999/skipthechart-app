@@ -32,6 +32,44 @@
     .float-bob-2 { animation: float-gentle-2 4.2s ease-in-out infinite 0.3s; }
     .float-bob-3 { animation: float-gentle-3 3.8s ease-in-out infinite 0.6s; }
     .float-bob-4 { animation: float-gentle-1 4.5s ease-in-out infinite 0.9s; }
+    
+    /* Microsoft 365 Theme Lite Floating Cards & 3D Emblems */
+    .ms-glass-card {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 4px 8px -2px rgba(0, 0, 0, 0.02);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ms-glass-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.09), 0 8px 16px -4px rgba(0, 0, 0, 0.03);
+      border-color: rgba(6, 182, 212, 0.6);
+      background: rgba(255, 255, 255, 0.95);
+    }
+    .ms-glass-card.selected {
+      border: 2px solid #06b6d4 !important;
+      box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.25), 0 20px 35px -5px rgba(6, 182, 212, 0.15) !important;
+      background: #ffffff !important;
+      transform: translateY(-4px) scale(1.03);
+    }
+    .ms-3d-icon {
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.16), inset 0 1px 1px rgba(255, 255, 255, 0.45);
+    }
+    .ms-3d-icon::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 48%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 100%);
+      border-radius: inherit;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body class="text-slate-100 min-h-screen font-sans antialiased p-3 lg:p-6 selection:bg-cyan-500 selection:text-white">
@@ -283,154 +321,243 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- SCREEN 1: CHOOSE YOUR BROKER (WHITE FLOATING CANVAS, STRICT A-Z ORDER)     -->
-    <!-- As requested: happily floating broker cards in alphabetical order; when     -->
-    <!-- clicked, docks to user's left hand side and opens the 3 strategy options.  -->
+    <!-- SCREEN 1: CHOOSE YOUR BROKER (MICROSOFT 365 THEME, STRICT A-Z ALPHABETICAL)-->
+    <!-- Left: Step 1 Copy, A-Z Tag, Headline, Trust Checkmarks                     -->
+    <!-- Right: 17 Floating 3D Fluent Glass Cards with Instant Search               -->
     <!-- ========================================================================= -->
     <div id="screen-broker" class="space-y-5 hidden">
-      <div class="bg-gradient-to-b from-white via-slate-50 to-slate-100 border-2 border-slate-200/90 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl text-slate-900">
-        <!-- Header -->
-        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
-          <div>
-            <div class="flex items-center gap-2.5">
-              <span class="text-3xl">🎈</span>
-              <h2 class="text-2xl font-black text-slate-900 tracking-tight">Step 1: Choose Your Indian Broker</h2>
-              <span class="px-3 py-1 rounded-full bg-cyan-100 text-cyan-800 text-xs font-bold uppercase tracking-wider border border-cyan-200">
-                A to Z Alphabetical
-              </span>
+      <div class="relative overflow-hidden rounded-3xl bg-[#FAF9F5] border border-slate-200/90 shadow-2xl p-6 sm:p-10 lg:p-12 text-slate-900 transition-all">
+        
+        <!-- Soft Pastel Glow Blurs (Microsoft 365 Ambient Background) -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-200/40 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/3 -right-12 w-80 h-80 bg-purple-200/35 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 right-1/4 w-96 h-96 bg-amber-200/35 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-12 left-1/3 w-64 h-64 bg-rose-100/35 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- 2-Column Split Layout -->
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          
+          <!-- LEFT SIDE: Text Area in Microsoft 365 Style -->
+          <div class="lg:col-span-5 space-y-6">
+            <!-- Step & Alphabetical Tag -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/5 border border-slate-300/80 text-slate-800 text-xs font-bold uppercase tracking-wider">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Step 1: Choose Your Broker</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-cyan-700 font-extrabold">A TO Z ALPHABETICAL</span>
             </div>
-            <p class="text-xs sm:text-sm text-slate-500 mt-1">
-              Select where you hold your active trading account. Cards happily float — click your broker to dock it to the left side and unlock your strategies!
+
+            <!-- Big Bold Headline -->
+            <h1 class="text-3xl sm:text-4xl xl:text-5xl font-extrabold text-[#111827] tracking-tight leading-[1.12]">
+              Zerodha, Angel One, Groww, and 17 Indian Brokers, all in one terminal
+            </h1>
+
+            <!-- Explanatory Subtitle -->
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+              Connect your existing Indian demat and trading account in 1-click via official SEBI-registered broker APIs. Deploy automated multi-leg options, swing equities, and scalping systems with zero manual chart-staring.
             </p>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-mono text-cyan-800 bg-cyan-50 px-3.5 py-1.5 rounded-xl border border-cyan-200 font-bold">
-              ⚡ 16 Certified Indian Brokers (TSP API)
-            </span>
-          </div>
-        </div>
 
-        <!-- 16 Floating Broker Cards in STRICT Alphabetical Order -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4 pt-1">
-          <!-- 1. Alice Blue (AB) -->
-          <div onclick="selectOnboardingBroker('aliceblue', 'Alice Blue', 'AB', 'bg-blue-600/10 text-blue-600 border-blue-500/30')" id="ob-card-aliceblue" class="float-bob-1 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-blue-600/10 text-blue-600 border border-blue-500/30 flex items-center justify-center text-sm font-bold mx-auto">AB</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Alice Blue</div>
-            <div class="text-[10px] text-blue-600 font-mono font-semibold">ANT API v2</div>
-          </div>
+            <!-- Buttons -->
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <button type="button" onclick="focusBrokerSelection()" class="px-6 py-3 rounded-lg bg-[#0f172a] text-white hover:bg-black font-semibold text-sm shadow-md transition-all flex items-center gap-2 group">
+                <span>Select Your Broker</span>
+                <span class="group-hover:translate-x-1 transition-transform">→</span>
+              </button>
+              <button type="button" onclick="showToast('AlgoForge operates strictly through certified broker TSP APIs. Your funds, demat holdings, and master passwords never leave your broker.', 'info')" class="px-5 py-3 rounded-lg border border-slate-300 bg-white/70 hover:bg-white text-slate-800 font-semibold text-sm shadow-sm transition-all">
+                API Security & Compliance
+              </button>
+            </div>
 
-          <!-- 2. Angel One (A) -->
-          <div onclick="selectOnboardingBroker('angelone', 'Angel One', 'A', 'bg-red-500/10 text-red-600 border-red-500/30')" id="ob-card-angelone" class="float-bob-2 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-red-500/10 text-red-600 border border-red-500/30 flex items-center justify-center text-sm font-bold mx-auto">A</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Angel One</div>
-            <div class="text-[10px] text-red-500 font-mono font-semibold">SmartAPI v2</div>
-          </div>
-
-          <!-- 3. Dhan HQ (D) -->
-          <div onclick="selectOnboardingBroker('dhan', 'Dhan HQ', 'D', 'bg-purple-500/10 text-purple-600 border-purple-500/30')" id="ob-card-dhan" class="float-bob-3 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-purple-500/10 text-purple-600 border border-purple-500/30 flex items-center justify-center text-sm font-bold mx-auto">D</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Dhan HQ</div>
-            <div class="text-[10px] text-purple-600 font-mono font-semibold">Direct API</div>
-          </div>
-
-          <!-- 4. Espresso (ES) -->
-          <div onclick="selectOnboardingBroker('espresso', 'Sharekhan Espresso', 'ES', 'bg-violet-500/10 text-violet-600 border-violet-500/30')" id="ob-card-espresso" class="float-bob-4 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-violet-500/10 text-violet-600 border border-violet-500/30 flex items-center justify-center text-sm font-bold mx-auto">ES</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Espresso</div>
-            <div class="text-[10px] text-violet-600 font-mono font-semibold">Sharekhan API</div>
+            <!-- Trust Highlights (Microsoft Style) -->
+            <div class="pt-6 border-t border-slate-200/90 grid grid-cols-2 gap-3.5 text-xs text-slate-700 font-medium">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px]">✓</span>
+                <span>100% Direct Broker TSP</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px]">✓</span>
+                <span>Zero Password Storage</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px]">✓</span>
+                <span>Sub-ms Webhook Trading</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px]">✓</span>
+                <span>17 Brokers from A to Z</span>
+              </div>
+            </div>
           </div>
 
-          <!-- 5. Flattrade (FT) -->
-          <div onclick="selectOnboardingBroker('flattrade', 'Flattrade', 'FT', 'bg-teal-500/10 text-teal-600 border-teal-500/30')" id="ob-card-flattrade" class="float-bob-1 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-teal-500/10 text-teal-600 border border-teal-500/30 flex items-center justify-center text-sm font-bold mx-auto">FT</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Flattrade</div>
-            <div class="text-[10px] text-teal-600 font-mono font-semibold">₹0 Brokerage</div>
+          <!-- RIGHT SIDE: Translucent Floating 3D Broker Cards (Microsoft 365 Theme) -->
+          <div class="lg:col-span-7">
+            <div class="p-3 sm:p-5 rounded-3xl bg-white/40 border border-white/60 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+              
+              <!-- Quick search bar -->
+              <div class="flex flex-wrap items-center justify-between gap-3 mb-4 px-1">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Alphabetical Directory</span>
+                  <span class="px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-800 text-[10px] font-bold">17 Verified</span>
+                </div>
+                <div class="relative w-full sm:w-56">
+                  <input type="text" id="broker-search-input" oninput="filterBrokerCards(this.value)" placeholder="Search broker (A-Z)..." class="w-full text-xs px-3 py-1.5 pl-8 rounded-xl bg-white/90 border border-slate-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 shadow-inner">
+                  <span class="absolute left-2.5 top-2 text-slate-400 text-xs">🔍</span>
+                </div>
+              </div>
+
+              <!-- Floating Cards Grid: 17 Brokers in STRICT Alphabetical Order -->
+              <div id="broker-cards-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 sm:gap-3 max-h-[540px] overflow-y-auto p-1 custom-scroll">
+                
+                <!-- 1. Alice Blue (AB) -->
+                <div onclick="selectOnboardingBroker('aliceblue', 'Alice Blue', 'AB', 'bg-blue-600/10 text-blue-600 border-blue-500/30')" id="ob-card-aliceblue" class="ms-glass-card float-bob-1 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700">AB</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Alice Blue</div>
+                  <div class="text-[10px] text-blue-600 font-mono font-semibold">ANT API v2</div>
+                </div>
+
+                <!-- 2. Angel One (A) -->
+                <div onclick="selectOnboardingBroker('angelone', 'Angel One', 'A', 'bg-red-500/10 text-red-600 border-red-500/30')" id="ob-card-angelone" class="ms-glass-card float-bob-2 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-rose-500 via-red-600 to-orange-600">A</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Angel One</div>
+                  <div class="text-[10px] text-red-600 font-mono font-semibold">SmartAPI v2</div>
+                </div>
+
+                <!-- 3. Dhan HQ (D) -->
+                <div onclick="selectOnboardingBroker('dhan', 'Dhan HQ', 'D', 'bg-purple-500/10 text-purple-600 border-purple-500/30')" id="ob-card-dhan" class="ms-glass-card float-bob-3 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-purple-500 via-violet-600 to-indigo-700">D</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Dhan HQ</div>
+                  <div class="text-[10px] text-purple-600 font-mono font-semibold">Direct API</div>
+                </div>
+
+                <!-- 4. Espresso (ES) -->
+                <div onclick="selectOnboardingBroker('espresso', 'Sharekhan Espresso', 'ES', 'bg-violet-500/10 text-violet-600 border-violet-500/30')" id="ob-card-espresso" class="ms-glass-card float-bob-4 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-violet-500 via-purple-600 to-fuchsia-700">ES</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Espresso</div>
+                  <div class="text-[10px] text-violet-600 font-mono font-semibold">Sharekhan API</div>
+                </div>
+
+                <!-- 5. 5paisa (5P) -->
+                <div onclick="selectOnboardingBroker('fivepaisa', '5paisa', '5P', 'bg-rose-500/10 text-rose-600 border-rose-500/30')" id="ob-card-fivepaisa" class="ms-glass-card float-bob-1 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-rose-500 via-pink-600 to-red-600">5P</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">5paisa</div>
+                  <div class="text-[10px] text-rose-600 font-mono font-semibold">Open API v2</div>
+                </div>
+
+                <!-- 6. Flattrade (FT) -->
+                <div onclick="selectOnboardingBroker('flattrade', 'Flattrade', 'FT', 'bg-teal-500/10 text-teal-600 border-teal-500/30')" id="ob-card-flattrade" class="ms-glass-card float-bob-2 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-teal-400 via-teal-600 to-emerald-700">FT</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Flattrade</div>
+                  <div class="text-[10px] text-teal-600 font-mono font-semibold">₹0 Brokerage</div>
+                </div>
+
+                <!-- 7. Fyers (FY) -->
+                <div onclick="selectOnboardingBroker('fyers', 'Fyers', 'FY', 'bg-sky-500/10 text-sky-600 border-sky-500/30')" id="ob-card-fyers" class="ms-glass-card float-bob-3 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-sky-400 via-blue-500 to-cyan-600">FY</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Fyers</div>
+                  <div class="text-[10px] text-sky-600 font-mono font-semibold">Fyers API v3</div>
+                </div>
+
+                <!-- 8. Groww (GW) -->
+                <div onclick="selectOnboardingBroker('groww', 'Groww', 'GW', 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30')" id="ob-card-groww" class="ms-glass-card float-bob-4 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600">GW</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Groww</div>
+                  <div class="text-[10px] text-emerald-600 font-mono font-semibold">Dev API</div>
+                </div>
+
+                <!-- 9. ICICI Direct (IC) -->
+                <div onclick="selectOnboardingBroker('icicidirect', 'ICICI Direct Breeze', 'IC', 'bg-orange-500/10 text-orange-600 border-orange-500/30')" id="ob-card-icicidirect" class="ms-glass-card float-bob-1 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-orange-400 via-amber-500 to-orange-600">IC</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">ICICI Direct</div>
+                  <div class="text-[10px] text-orange-600 font-mono font-semibold">Breeze API</div>
+                </div>
+
+                <!-- 10. IIFL Securities (II) -->
+                <div onclick="selectOnboardingBroker('iifl', 'IIFL Securities', 'II', 'bg-indigo-500/10 text-indigo-600 border-indigo-500/30')" id="ob-card-iifl" class="ms-glass-card float-bob-2 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-700">II</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">IIFL Sec</div>
+                  <div class="text-[10px] text-indigo-600 font-mono font-semibold">Blazr API</div>
+                </div>
+
+                <!-- 11. Kotak Neo (KN) -->
+                <div onclick="selectOnboardingBroker('kotakneo', 'Kotak Neo', 'KN', 'bg-amber-500/10 text-amber-600 border-amber-500/30')" id="ob-card-kotakneo" class="ms-glass-card float-bob-3 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-amber-400 via-amber-500 to-red-500">KN</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Kotak Neo</div>
+                  <div class="text-[10px] text-amber-600 font-mono font-semibold">Trade Free API</div>
+                </div>
+
+                <!-- 12. Motilal Oswal (MO) -->
+                <div onclick="selectOnboardingBroker('motilal', 'Motilal Oswal', 'MO', 'bg-yellow-500/10 text-yellow-600 border-yellow-500/30')" id="ob-card-motilal" class="ms-glass-card float-bob-4 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-amber-400 via-yellow-500 to-orange-500">MO</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Motilal Oswal</div>
+                  <div class="text-[10px] text-yellow-600 font-mono font-semibold">MOSL API</div>
+                </div>
+
+                <!-- 13. Paytm Money (PM) -->
+                <div onclick="selectOnboardingBroker('paytmmoney', 'Paytm Money', 'PM', 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30')" id="ob-card-paytmmoney" class="ms-glass-card float-bob-1 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-cyan-400 via-sky-500 to-blue-600">PM</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Paytm Money</div>
+                  <div class="text-[10px] text-cyan-600 font-mono font-semibold">Open API v1</div>
+                </div>
+
+                <!-- 14. SBI Securities (SBI) -->
+                <div onclick="selectOnboardingBroker('sbisecurities', 'SBI Securities', 'SBI', 'bg-blue-800/10 text-blue-800 border-blue-700/30')" id="ob-card-sbisecurities" class="ms-glass-card float-bob-2 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-blue-700 via-blue-800 to-slate-900">SBI</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">SBI Securities</div>
+                  <div class="text-[10px] text-blue-700 font-mono font-semibold">SBI Direct API</div>
+                </div>
+
+                <!-- 15. Shoonya Finvasia (S) -->
+                <div onclick="selectOnboardingBroker('shoonya', 'Shoonya Finvasia', 'S', 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30')" id="ob-card-shoonya" class="ms-glass-card float-bob-3 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700">S</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Shoonya</div>
+                  <div class="text-[10px] text-emerald-600 font-mono font-semibold">Prism Free API</div>
+                </div>
+
+                <!-- 16. Upstox (U) -->
+                <div onclick="selectOnboardingBroker('upstox', 'Upstox', 'U', 'bg-blue-500/10 text-blue-600 border-blue-500/30')" id="ob-card-upstox" class="ms-glass-card float-bob-4 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700">U</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Upstox</div>
+                  <div class="text-[10px] text-blue-600 font-mono font-semibold">Developer API</div>
+                </div>
+
+                <!-- 17. Zerodha Kite (Z) -->
+                <div onclick="selectOnboardingBroker('zerodha', 'Zerodha Kite', 'Z', 'bg-orange-500/10 text-orange-600 border-orange-500/30')" id="ob-card-zerodha" class="ms-glass-card float-bob-1 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
+                  <span class="selected-check hidden absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold shadow">✓</span>
+                  <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-md bg-gradient-to-br from-orange-500 via-orange-600 to-red-600">Z</div>
+                  <div class="mt-2 font-bold text-xs text-slate-800 truncate w-full">Zerodha Kite</div>
+                  <div class="text-[10px] text-orange-600 font-mono font-semibold">Kite Connect</div>
+                </div>
+
+              </div>
+
+              <!-- Safety Reassurance Bar -->
+              <div class="mt-4 p-3 bg-white/70 border border-slate-200/90 rounded-2xl flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm">🛡️</span>
+                  <span class="font-medium">Direct SEBI Broker TSP integration. Your capital remains safely in your demat.</span>
+                </div>
+                <span class="text-cyan-700 font-bold text-[11px] shrink-0 font-mono">1-Click Instant Connect</span>
+              </div>
+
+            </div>
           </div>
 
-          <!-- 6. Fyers (FY) -->
-          <div onclick="selectOnboardingBroker('fyers', 'Fyers', 'FY', 'bg-sky-500/10 text-sky-600 border-sky-500/30')" id="ob-card-fyers" class="float-bob-2 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-sky-500/10 text-sky-600 border border-sky-500/30 flex items-center justify-center text-sm font-bold mx-auto">FY</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Fyers</div>
-            <div class="text-[10px] text-sky-600 font-mono font-semibold">Fyers API v3</div>
-          </div>
-
-          <!-- 7. Groww (GW) -->
-          <div onclick="selectOnboardingBroker('groww', 'Groww', 'GW', 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30')" id="ob-card-groww" class="float-bob-3 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 flex items-center justify-center text-sm font-bold mx-auto">GW</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Groww</div>
-            <div class="text-[10px] text-emerald-600 font-mono font-semibold">Dev API</div>
-          </div>
-
-          <!-- 8. ICICI Direct (IC) -->
-          <div onclick="selectOnboardingBroker('icicidirect', 'ICICI Direct Breeze', 'IC', 'bg-orange-500/10 text-orange-600 border-orange-500/30')" id="ob-card-icicidirect" class="float-bob-4 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-orange-500/10 text-orange-600 border border-orange-500/30 flex items-center justify-center text-sm font-bold mx-auto">IC</div>
-            <div class="font-bold text-xs text-slate-800 truncate">ICICI Direct</div>
-            <div class="text-[10px] text-orange-600 font-mono font-semibold">Breeze API</div>
-          </div>
-
-          <!-- 9. IIFL Securities (II) -->
-          <div onclick="selectOnboardingBroker('iifl', 'IIFL Securities', 'II', 'bg-indigo-500/10 text-indigo-600 border-indigo-500/30')" id="ob-card-iifl" class="float-bob-1 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-indigo-500/10 text-indigo-600 border border-indigo-500/30 flex items-center justify-center text-sm font-bold mx-auto">II</div>
-            <div class="font-bold text-xs text-slate-800 truncate">IIFL Sec</div>
-            <div class="text-[10px] text-indigo-600 font-mono font-semibold">Blazr API</div>
-          </div>
-
-          <!-- 10. Kotak Neo (KN) -->
-          <div onclick="selectOnboardingBroker('kotakneo', 'Kotak Neo', 'KN', 'bg-amber-500/10 text-amber-600 border-amber-500/30')" id="ob-card-kotakneo" class="float-bob-2 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-amber-500/10 text-amber-600 border border-amber-500/30 flex items-center justify-center text-sm font-bold mx-auto">KN</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Kotak Neo</div>
-            <div class="text-[10px] text-amber-600 font-mono font-semibold">Trade API Free</div>
-          </div>
-
-          <!-- 11. Motilal Oswal (MO) -->
-          <div onclick="selectOnboardingBroker('motilal', 'Motilal Oswal', 'MO', 'bg-yellow-500/10 text-yellow-600 border-yellow-500/30')" id="ob-card-motilal" class="float-bob-3 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-yellow-500/10 text-yellow-600 border border-yellow-500/30 flex items-center justify-center text-sm font-bold mx-auto">MO</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Motilal Oswal</div>
-            <div class="text-[10px] text-yellow-600 font-mono font-semibold">MOSL API</div>
-          </div>
-
-          <!-- 12. Paytm Money (PM) -->
-          <div onclick="selectOnboardingBroker('paytmmoney', 'Paytm Money', 'PM', 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30')" id="ob-card-paytmmoney" class="float-bob-4 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-cyan-500/10 text-cyan-600 border border-cyan-500/30 flex items-center justify-center text-sm font-bold mx-auto">PM</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Paytm Money</div>
-            <div class="text-[10px] text-cyan-600 font-mono font-semibold">Open API v1</div>
-          </div>
-
-          <!-- 13. Sharekhan / 5paisa (5P) -->
-          <div onclick="selectOnboardingBroker('fivepaisa', '5paisa', '5P', 'bg-rose-500/10 text-rose-600 border-rose-500/30')" id="ob-card-fivepaisa" class="float-bob-1 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-rose-500/10 text-rose-600 border border-rose-500/30 flex items-center justify-center text-sm font-bold mx-auto">5P</div>
-            <div class="font-bold text-xs text-slate-800 truncate">5paisa</div>
-            <div class="text-[10px] text-rose-600 font-mono font-semibold">Open API v2</div>
-          </div>
-
-          <!-- 14. Shoonya Finvasia (S) -->
-          <div onclick="selectOnboardingBroker('shoonya', 'Shoonya Finvasia', 'S', 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30')" id="ob-card-shoonya" class="float-bob-2 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 flex items-center justify-center text-sm font-bold mx-auto">S</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Shoonya</div>
-            <div class="text-[10px] text-emerald-600 font-mono font-semibold">Prism Free API</div>
-          </div>
-
-          <!-- 15. Upstox (U) -->
-          <div onclick="selectOnboardingBroker('upstox', 'Upstox', 'U', 'bg-blue-500/10 text-blue-600 border-blue-500/30')" id="ob-card-upstox" class="float-bob-3 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-blue-500/10 text-blue-600 border border-blue-500/30 flex items-center justify-center text-sm font-bold mx-auto">U</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Upstox</div>
-            <div class="text-[10px] text-blue-600 font-mono font-semibold">Developer API</div>
-          </div>
-
-          <!-- 16. Zerodha Kite (Z) -->
-          <div onclick="selectOnboardingBroker('zerodha', 'Zerodha Kite', 'Z', 'bg-orange-500/10 text-orange-600 border-orange-500/30')" id="ob-card-zerodha" class="float-bob-4 p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl">
-            <div class="w-11 h-11 rounded-xl bg-orange-500/10 text-orange-600 border border-orange-500/30 flex items-center justify-center text-sm font-bold mx-auto">Z</div>
-            <div class="font-bold text-xs text-slate-800 truncate">Zerodha Kite</div>
-            <div class="text-[10px] text-orange-600 font-mono font-semibold">Kite Connect</div>
-          </div>
-        </div>
-
-        <div class="p-4 bg-slate-900 text-slate-200 rounded-2xl border border-slate-800 text-xs flex flex-wrap items-center justify-between gap-3 shadow-inner">
-          <div class="flex items-center gap-2.5">
-            <span class="text-base">🛡️</span>
-            <span>Your broker password and funds are 100% untouched. AlgoForge connects via authorized TSP APIs only.</span>
-          </div>
-          <span class="text-cyan-400 font-mono font-bold">Click any floating broker to advance →</span>
         </div>
       </div>
     </div>
@@ -4544,24 +4671,25 @@
       }
     }
 
-    // Step 1: Select Broker
+    // Step 1: Select Broker (17 Verified Indian Brokers in STRICT A-to-Z Alphabetical Order)
     const ONBOARDING_BROKERS = [
-      { key: 'aliceblue', bob: 'float-bob-1' },
-      { key: 'angelone', bob: 'float-bob-2' },
-      { key: 'dhan', bob: 'float-bob-3' },
-      { key: 'espresso', bob: 'float-bob-4' },
-      { key: 'flattrade', bob: 'float-bob-1' },
-      { key: 'fyers', bob: 'float-bob-2' },
-      { key: 'groww', bob: 'float-bob-3' },
-      { key: 'icicidirect', bob: 'float-bob-4' },
-      { key: 'iifl', bob: 'float-bob-1' },
-      { key: 'kotakneo', bob: 'float-bob-2' },
-      { key: 'motilal', bob: 'float-bob-3' },
-      { key: 'paytmmoney', bob: 'float-bob-4' },
-      { key: 'fivepaisa', bob: 'float-bob-1' },
-      { key: 'shoonya', bob: 'float-bob-2' },
-      { key: 'upstox', bob: 'float-bob-3' },
-      { key: 'zerodha', bob: 'float-bob-4' }
+      { key: 'aliceblue', bob: 'float-bob-1', name: 'Alice Blue', letter: 'AB' },
+      { key: 'angelone', bob: 'float-bob-2', name: 'Angel One', letter: 'A' },
+      { key: 'dhan', bob: 'float-bob-3', name: 'Dhan HQ', letter: 'D' },
+      { key: 'espresso', bob: 'float-bob-4', name: 'Espresso', letter: 'ES' },
+      { key: 'fivepaisa', bob: 'float-bob-1', name: '5paisa', letter: '5P' },
+      { key: 'flattrade', bob: 'float-bob-2', name: 'Flattrade', letter: 'FT' },
+      { key: 'fyers', bob: 'float-bob-3', name: 'Fyers', letter: 'FY' },
+      { key: 'groww', bob: 'float-bob-4', name: 'Groww', letter: 'GW' },
+      { key: 'icicidirect', bob: 'float-bob-1', name: 'ICICI Direct', letter: 'IC' },
+      { key: 'iifl', bob: 'float-bob-2', name: 'IIFL Sec', letter: 'II' },
+      { key: 'kotakneo', bob: 'float-bob-3', name: 'Kotak Neo', letter: 'KN' },
+      { key: 'motilal', bob: 'float-bob-4', name: 'Motilal Oswal', letter: 'MO' },
+      { key: 'paytmmoney', bob: 'float-bob-1', name: 'Paytm Money', letter: 'PM' },
+      { key: 'sbisecurities', bob: 'float-bob-2', name: 'SBI Securities', letter: 'SBI' },
+      { key: 'shoonya', bob: 'float-bob-3', name: 'Shoonya', letter: 'S' },
+      { key: 'upstox', bob: 'float-bob-4', name: 'Upstox', letter: 'U' },
+      { key: 'zerodha', bob: 'float-bob-1', name: 'Zerodha Kite', letter: 'Z' }
     ];
 
     function updateBrokerCardsHighlight() {
@@ -4569,15 +4697,38 @@
       ONBOARDING_BROKERS.forEach(b => {
         const el = document.getElementById('ob-card-' + b.key);
         if (el) {
+          const checkEl = el.querySelector('.selected-check');
           if (b.key === selected) {
-            // Selected broker card: bright cyan border, subtle ring glow, elevated shadow, full opacity
-            el.className = `${b.bob} p-3.5 bg-cyan-50 border-2 border-cyan-500 ring-4 ring-cyan-400/40 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all scale-[1.05] shadow-xl relative z-10 opacity-100`;
+            el.classList.add('selected');
+            if (checkEl) checkEl.classList.remove('hidden');
           } else {
-            // Unselected broker cards: crystal-clear full opacity, crisp dark text, responsive hover effects
-            el.className = `${b.bob} p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl opacity-100`;
+            el.classList.remove('selected');
+            if (checkEl) checkEl.classList.add('hidden');
           }
         }
       });
+    }
+
+    function filterBrokerCards(query) {
+      const q = (query || '').toLowerCase().trim();
+      ONBOARDING_BROKERS.forEach(b => {
+        const el = document.getElementById('ob-card-' + b.key);
+        if (el) {
+          const match = !q || b.name.toLowerCase().includes(q) || b.letter.toLowerCase().includes(q) || b.key.toLowerCase().includes(q);
+          el.style.display = match ? '' : 'none';
+        }
+      });
+    }
+
+    function focusBrokerSelection() {
+      const container = document.getElementById('broker-cards-container');
+      const search = document.getElementById('broker-search-input');
+      if (search) {
+        search.focus();
+      }
+      if (container) {
+        container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
 
     function selectOnboardingBroker(brokerKey, brokerName, letter, iconClass) {
