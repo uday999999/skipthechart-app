@@ -3156,6 +3156,9 @@
 
       if (stepNum === 1) {
         showScreen('screen-broker');
+        if (typeof updateBrokerCardsHighlight === 'function') {
+          updateBrokerCardsHighlight();
+        }
       } else if (stepNum === 2) {
         showScreen('screen-strategy');
         const stratBrokerTag = document.getElementById('strat-screen-broker-tag');
@@ -4358,6 +4361,41 @@
     }
 
     // Step 1: Select Broker
+    const ONBOARDING_BROKERS = [
+      { key: 'aliceblue', bob: 'float-bob-1' },
+      { key: 'angelone', bob: 'float-bob-2' },
+      { key: 'dhan', bob: 'float-bob-3' },
+      { key: 'espresso', bob: 'float-bob-4' },
+      { key: 'flattrade', bob: 'float-bob-1' },
+      { key: 'fyers', bob: 'float-bob-2' },
+      { key: 'groww', bob: 'float-bob-3' },
+      { key: 'icicidirect', bob: 'float-bob-4' },
+      { key: 'iifl', bob: 'float-bob-1' },
+      { key: 'kotakneo', bob: 'float-bob-2' },
+      { key: 'motilal', bob: 'float-bob-3' },
+      { key: 'paytmmoney', bob: 'float-bob-4' },
+      { key: 'fivepaisa', bob: 'float-bob-1' },
+      { key: 'shoonya', bob: 'float-bob-2' },
+      { key: 'upstox', bob: 'float-bob-3' },
+      { key: 'zerodha', bob: 'float-bob-4' }
+    ];
+
+    function updateBrokerCardsHighlight() {
+      const selected = userState.selectedBroker;
+      ONBOARDING_BROKERS.forEach(b => {
+        const el = document.getElementById('ob-card-' + b.key);
+        if (el) {
+          if (b.key === selected) {
+            // Selected broker card: bright cyan border, subtle ring glow, elevated shadow, full opacity
+            el.className = `${b.bob} p-3.5 bg-cyan-50 border-2 border-cyan-500 ring-4 ring-cyan-400/40 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all scale-[1.05] shadow-xl relative z-10 opacity-100`;
+          } else {
+            // Unselected broker cards: crystal-clear full opacity, crisp dark text, responsive hover effects
+            el.className = `${b.bob} p-3.5 bg-white border-2 border-slate-200 hover:border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all hover:scale-105 shadow-md hover:shadow-xl opacity-100`;
+          }
+        }
+      });
+    }
+
     function selectOnboardingBroker(brokerKey, brokerName, letter, iconClass) {
       userState.selectedBroker = brokerKey;
       userState.selectedBrokerName = brokerName;
@@ -4365,22 +4403,8 @@
       userState.selectedBrokerIconClass = iconClass || 'bg-cyan-500/20 text-cyan-400 border-cyan-500/40';
       saveState();
 
-      // Highlight selected broker briefly
-      const allCards = [
-        'flattrade', 'zerodha', 'angelone', 'dhan', 'upstox', 'fivepaisa', 'shoonya',
-        'fyers', 'kotakneo', 'groww', 'icicidirect', 'motilal', 'aliceblue', 'iifl', 'espresso', 'paytmmoney'
-      ];
-      allCards.forEach(k => {
-        const el = document.getElementById('ob-card-' + k);
-        if (el) {
-          if (k === brokerKey) {
-            el.className = "float-bob-1 p-3.5 bg-cyan-50 border-2 border-cyan-500 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all scale-[1.06] shadow-xl";
-          } else {
-            el.className = "p-3.5 bg-white border-2 border-slate-200 opacity-40 rounded-2xl cursor-pointer text-center space-y-1.5 transition-all";
-          }
-        }
-      });
-
+      // Highlight selected broker without reducing opacity on any cards
+      updateBrokerCardsHighlight();
       updateDockedBrokerUI();
 
       // Advance to Step 2 (Choose Strategy) and dock broker to left side
@@ -6089,6 +6113,9 @@
     // Initialize application on load
     window.addEventListener('DOMContentLoaded', () => {
       loadSavedState();
+      if (typeof updateBrokerCardsHighlight === 'function') {
+        updateBrokerCardsHighlight();
+      }
       if (typeof initGoogleAuth === 'function') {
         initGoogleAuth();
       }
