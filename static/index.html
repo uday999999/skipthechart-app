@@ -4,14 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SkipTheChart.com - 1-Click Algorithmic Trading for Indian Markets</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <meta name="color-scheme" content="light">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    body { background-color: #FAF9F5; }
+    body { background-color: #F4F9F6; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #FAF9F5; }
+    ::-webkit-scrollbar-track { background: #F4F9F6; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     .pulse-glow { animation: pulseGlow 2s infinite; }
@@ -88,7 +87,7 @@
     }
   </style>
 </head>
-<body class="text-slate-800 bg-[#FAF9F5] min-h-screen font-sans antialiased p-3 lg:p-6 selection:bg-emerald-500 selection:text-white">
+<body class="text-slate-800 bg-[#F4F9F6] min-h-screen font-sans antialiased p-3 lg:p-6 selection:bg-emerald-500 selection:text-white">
 
   <div class="max-w-[1550px] mx-auto space-y-5">
 
@@ -413,13 +412,13 @@
 
           <!-- RIGHT SIDE: Uniform Corporate Broker Cards Grid (18 Verified Brokers) -->
           <div class="lg:col-span-8 xl:col-span-9">
-            <div class="p-3.5 sm:p-5 rounded-3xl bg-slate-50/70 border border-slate-200/80 shadow-xs">
+            <div class="p-3.5 sm:p-5 rounded-3xl bg-emerald-50/50 border border-emerald-200/80 shadow-xs">
               
               <!-- Quick search bar (Corporate Header) -->
               <div class="flex flex-wrap items-center justify-between gap-3 mb-4 px-1">
-                <div class="text-xs font-bold text-slate-900 uppercase tracking-wider">Alphabetical Directory</div>
+                <div class="text-xs font-bold text-emerald-950 uppercase tracking-wider">Alphabetical Directory</div>
                 <div class="relative w-full sm:w-72">
-                  <input type="text" id="broker-search-input" oninput="filterBrokerCards(this.value)" placeholder="Search broker (A to Z)..." class="w-full text-xs font-medium px-4 py-2 pl-9 rounded-xl bg-white border border-slate-300 hover:border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 text-slate-900 placeholder-slate-400 shadow-xs transition-all outline-none">
+                  <input type="text" id="broker-search-input" oninput="filterBrokerCards(this.value)" placeholder="Search broker (A to Z)..." class="w-full text-xs font-semibold px-4 py-2 pl-9 rounded-xl bg-white border-2 border-emerald-200 hover:border-emerald-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/15 text-slate-900 placeholder-slate-400 shadow-xs transition-all outline-none">
                   <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
                 </div>
               </div>
@@ -432,7 +431,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#0078d4] via-[#106ebe] to-[#004578]">AB</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Alice Blue</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">ANT API v2</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">ANT API v2</span></div>
                 </div>
 
                 <!-- 2. Angel One (A) -->
@@ -440,7 +439,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#ff5530] via-[#ea3829] to-[#c91804]">A</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Angel One</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">SmartAPI v2</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">SmartAPI v2</span></div>
                 </div>
 
                 <!-- 3. Dhan HQ (D) -->
@@ -448,7 +447,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#7b83eb] via-[#5059c9] to-[#3b44ac]">D</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Dhan HQ</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Direct API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Direct API</span></div>
                 </div>
 
                 <!-- 4. Espresso (ES) -->
@@ -456,7 +455,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#b73ea4] via-[#80397b] to-[#5c2d58]">ES</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Espresso</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Sharekhan API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Sharekhan API</span></div>
                 </div>
 
                 <!-- 5. 5paisa (5P) -->
@@ -464,7 +463,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#e03e3e] via-[#c41a1a] to-[#8a0909]">5P</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">5paisa</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Open API v2</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Open API v2</span></div>
                 </div>
 
                 <!-- 6. Flattrade (FT) -->
@@ -472,7 +471,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#00b294] via-[#008272] to-[#004e40]">FT</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Flattrade</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Zero Brokerage</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Zero Brokerage</span></div>
                 </div>
 
                 <!-- 7. Fyers (FY) -->
@@ -480,7 +479,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#29b6f6] via-[#0288d1] to-[#01579b]">FY</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Fyers</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Fyers API v3</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Fyers API v3</span></div>
                 </div>
 
                 <!-- 8. Groww (GW) -->
@@ -488,7 +487,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#23a859] via-[#107c41] to-[#094b26]">GW</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Groww</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Groww API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Groww API</span></div>
                 </div>
 
                 <!-- 9. HDFC Sky (HS) -->
@@ -496,7 +495,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#2b579a] via-[#1b3a6b] to-[#0f2142]">HS</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">HDFC Sky</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Direct API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Direct API</span></div>
                 </div>
 
                 <!-- 10. ICICI Direct (IC) -->
@@ -504,7 +503,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#ff7043] via-[#f4511e] to-[#bf360c]">IC</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">ICICI Direct</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Breeze API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Breeze API</span></div>
                 </div>
 
                 <!-- 11. IIFL Securities (II) -->
@@ -512,7 +511,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#4185f2] via-[#2460d4] to-[#123e9c]">II</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">IIFL Sec</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Blaze API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Blaze API</span></div>
                 </div>
 
                 <!-- 12. Kotak Neo (KN) -->
@@ -520,7 +519,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#ffb300] via-[#fb8c00] to-[#e65100]">KN</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Kotak Neo</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Trade Free API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Trade Free API</span></div>
                 </div>
 
                 <!-- 13. Motilal Oswal (MO) -->
@@ -528,7 +527,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#ffd54f] via-[#ffb300] to-[#f57f17]">MO</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Motilal Oswal</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">MOSL API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">MOSL API</span></div>
                 </div>
 
                 <!-- 14. Paytm Money (PM) -->
@@ -536,7 +535,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#00c8e0] via-[#0091b8] to-[#005f7d]">PM</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Paytm Money</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Open API v1</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Open API v1</span></div>
                 </div>
 
                 <!-- 15. SBI Securities (SBI) -->
@@ -544,7 +543,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#1e5eb5] via-[#10418c] to-[#062459]">SBI</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">SBI Securities</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Direct API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Direct API</span></div>
                 </div>
 
                 <!-- 16. Shoonya Finvasia (S) -->
@@ -552,7 +551,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#14b8a6] via-[#0d9488] to-[#04655c]">S</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Shoonya</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Prism Free API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Prism Free API</span></div>
                 </div>
 
                 <!-- 17. Upstox (U) -->
@@ -560,7 +559,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#6366f1] via-[#4f46e5] to-[#3730a3]">U</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Upstox</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Developer API</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Developer API</span></div>
                 </div>
 
                 <!-- 18. Zerodha Kite (Z) -->
@@ -568,7 +567,7 @@
                   <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#ff6d00] via-[#f4511e] to-[#dd2c00]">Z</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Zerodha Kite</div>
-                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Kite Connect</span></div>
+                  <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-emerald-50/80 border border-emerald-200/50 text-emerald-800 text-[10px] font-semibold">Kite Connect</span></div>
                 </div>
 
               </div>
