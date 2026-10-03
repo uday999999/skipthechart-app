@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SkipTheChart.com - 1-Click Algorithmic Trading for Indian Markets</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="color-scheme" content="light">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     body { background-color: #FAF9F5; }
@@ -14,8 +16,8 @@
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     .pulse-glow { animation: pulseGlow 2s infinite; }
     @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.35); }
-      50% { box-shadow: 0 0 25px rgba(6, 182, 212, 0.7); }
+      0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.35); }
+      50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.7); }
     }
     @keyframes float-gentle-1 {
       0%, 100% { transform: translateY(0px); }
@@ -44,16 +46,16 @@
     .ms-glass-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 20px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
-      border-color: #cbd5e1;
+      border-color: #a7f3d0;
       background: #ffffff;
     }
     .ms-glass-card:hover .ms-3d-icon {
       transform: translateY(-1px) scale(1.04);
     }
     .ms-glass-card.selected {
-      border: 2px solid #0891b2 !important;
-      box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.18), 0 8px 16px -2px rgba(8, 145, 178, 0.12) !important;
-      background: #f0fdfa !important;
+      border: 2px solid #059669 !important;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.22), 0 8px 16px -2px rgba(16, 185, 129, 0.15) !important;
+      background: #ecfdf5 !important;
       transform: translateY(-2px);
     }
     .ms-3d-icon {
@@ -86,21 +88,21 @@
     }
   </style>
 </head>
-<body class="text-slate-800 bg-[#FAF9F5] min-h-screen font-sans antialiased p-3 lg:p-6 selection:bg-cyan-500 selection:text-white">
+<body class="text-slate-800 bg-[#FAF9F5] min-h-screen font-sans antialiased p-3 lg:p-6 selection:bg-emerald-500 selection:text-white">
 
   <div class="max-w-[1550px] mx-auto space-y-5">
 
-    <!-- Top Branding & Status Header (Microsoft 365 Clean Light Theme) -->
+    <!-- Top Branding & Status Header (White & Emerald Green Theme) -->
     <header class="bg-white/85 border border-slate-200/90 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm backdrop-blur-md text-slate-900">
       <div class="flex items-center gap-3.5">
-        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-emerald-400 flex items-center justify-center font-black text-white text-xl shadow-md shadow-cyan-500/20">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-600 to-emerald-400 flex items-center justify-center font-black text-white text-xl shadow-md shadow-emerald-500/20">
           ⚡
         </div>
         <div>
           <div class="flex items-center gap-2.5 flex-wrap">
-            <h1 class="text-lg font-black tracking-wider text-slate-900">SKIPTHECHART<span class="text-cyan-600 font-mono text-base font-bold">.COM</span></h1>
-            <span class="px-2.5 py-0.5 bg-cyan-50 border border-cyan-200 text-cyan-800 text-[10px] font-mono font-bold rounded-md flex items-center gap-1 shadow-sm">
-              <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-ping"></span>
+            <h1 class="text-lg font-black tracking-wider text-slate-900">SKIPTHECHART<span class="text-emerald-600 font-mono text-base font-bold">.COM</span></h1>
+            <span class="px-2.5 py-0.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono font-bold rounded-md flex items-center gap-1 shadow-sm">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
               🚀 PRIVATE BETA v3.2
             </span>
             <span class="px-2.5 py-0.5 bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-mono font-semibold rounded-md">
@@ -121,7 +123,7 @@
           <div class="font-semibold text-slate-800" id="nav-user-email">trader.rahul@gmail.com</div>
           <div class="text-[10px] text-emerald-600 font-mono font-semibold" id="nav-server-status">Server Active (₹1,599/mo)</div>
         </div>
-        <div class="w-9 h-9 rounded-full bg-cyan-100 border border-cyan-300 text-cyan-800 flex items-center justify-center text-xs font-bold" id="nav-user-avatar">
+        <div class="w-9 h-9 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 flex items-center justify-center text-xs font-bold" id="nav-user-avatar">
           R
         </div>
         <button type="button" onclick="openSentinelDiagnosticModal()" id="nav-btn-sentinel" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300/80 text-emerald-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Run Sentinel Diagnostic Agent across 16 Indian brokers & deployed strategy">
@@ -130,7 +132,7 @@
         <button type="button" onclick="goToStrategyHomePage()" id="nav-btn-strategy-home" class="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm" title="View & customize all 4 pre-built strategies">
           <span>🎯</span> Strategy Home
         </button>
-        <button type="button" onclick="returnToLiveDashboard()" id="nav-btn-live-dash" class="px-3 py-1.5 bg-cyan-50 border border-cyan-400 text-cyan-800 font-bold rounded-xl text-xs transition flex items-center gap-1.5 hidden shadow-sm" title="Return to Live Bot Command Center">
+        <button type="button" onclick="returnToLiveDashboard()" id="nav-btn-live-dash" class="px-3 py-1.5 bg-emerald-50 border border-emerald-400 text-emerald-800 font-bold rounded-xl text-xs transition flex items-center gap-1.5 hidden shadow-sm" title="Return to Live Bot Command Center">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>Live Bot Dashboard</span>
         </button>
@@ -143,11 +145,11 @@
       </div>
     </header>
 
-    <!-- Progressive Onboarding Stepper Header (Microsoft 365 Clean Light Theme) -->
+    <!-- Progressive Onboarding Stepper Header (White & Emerald Green Theme) -->
     <div id="onboarding-stepper" class="bg-white/85 border border-slate-200/90 rounded-2xl p-3.5 hidden shadow-sm backdrop-blur-md">
       <div class="flex items-center justify-between gap-2 overflow-x-auto text-xs font-medium">
-        <button type="button" onclick="goToStep(1)" id="step-pill-1" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-50 border border-cyan-500 text-cyan-800 font-bold shrink-0 cursor-pointer shadow-sm">
-          <span class="w-5 h-5 rounded-full bg-cyan-600 text-white text-[11px] flex items-center justify-center font-black">1</span>
+        <button type="button" onclick="goToStep(1)" id="step-pill-1" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 border-2 border-emerald-500 text-emerald-900 font-bold shrink-0 cursor-pointer shadow-sm">
+          <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[11px] flex items-center justify-center font-black">1</span>
           <span>1. Select Broker</span>
         </button>
         <span class="text-slate-300">→</span>
@@ -342,8 +344,8 @@
     <div id="screen-broker" class="space-y-5 hidden">
       <div class="relative overflow-hidden rounded-3xl bg-white/80 border border-slate-200/90 shadow-sm p-6 sm:p-8 lg:p-10 text-slate-900 transition-all backdrop-blur-sm">
         
-        <!-- Subtle ambient backdrop light -->
-        <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-100/30 rounded-full blur-3xl pointer-events-none"></div>
+        <!-- Subtle ambient backdrop light (Emerald & Warm Slate) -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-100/25 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-24 left-1/4 w-96 h-96 bg-slate-100/50 rounded-full blur-3xl pointer-events-none"></div>
 
         <!-- 2-Column Split Layout -->
@@ -353,7 +355,7 @@
           <div class="lg:col-span-4 xl:col-span-3 space-y-6">
             
             <div class="space-y-3">
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-bold tracking-wider text-slate-700 uppercase">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold tracking-wider text-emerald-800 uppercase">
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                 Step 01 / 05 &bull; Broker Gateway
               </div>
@@ -365,10 +367,10 @@
               </p>
             </div>
 
-            <!-- Corporate Bank-Grade Trust Badges -->
+            <!-- Corporate Bank-Grade Trust Badges (White & Emerald Theme) -->
             <div class="space-y-2.5 pt-1">
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
-                <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-emerald-200 shadow-xs transition">
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-700 flex items-center justify-center shrink-0">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <div>
@@ -377,8 +379,8 @@
                 </div>
               </div>
 
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-emerald-200 shadow-xs transition">
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-700 flex items-center justify-center shrink-0">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 </div>
                 <div>
@@ -387,8 +389,8 @@
                 </div>
               </div>
 
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
-                <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-emerald-200 shadow-xs transition">
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-700 flex items-center justify-center shrink-0">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                 </div>
                 <div>
@@ -397,8 +399,8 @@
                 </div>
               </div>
 
-              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
-                <div class="w-8 h-8 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center shrink-0">
+              <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-emerald-200 shadow-xs transition">
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-700 flex items-center justify-center shrink-0">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
                 </div>
                 <div>
@@ -417,7 +419,7 @@
               <div class="flex flex-wrap items-center justify-between gap-3 mb-4 px-1">
                 <div class="text-xs font-bold text-slate-900 uppercase tracking-wider">Alphabetical Directory</div>
                 <div class="relative w-full sm:w-72">
-                  <input type="text" id="broker-search-input" oninput="filterBrokerCards(this.value)" placeholder="Search broker (A to Z)..." class="w-full text-xs font-medium px-4 py-2 pl-9 rounded-xl bg-white border border-slate-300 hover:border-slate-400 focus:border-cyan-600 focus:ring-4 focus:ring-cyan-500/10 text-slate-900 placeholder-slate-400 shadow-xs transition-all outline-none">
+                  <input type="text" id="broker-search-input" oninput="filterBrokerCards(this.value)" placeholder="Search broker (A to Z)..." class="w-full text-xs font-medium px-4 py-2 pl-9 rounded-xl bg-white border border-slate-300 hover:border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 text-slate-900 placeholder-slate-400 shadow-xs transition-all outline-none">
                   <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
                 </div>
               </div>
@@ -427,7 +429,7 @@
                 
                 <!-- 1. Alice Blue (AB) -->
                 <div onclick="selectOnboardingBroker('aliceblue', 'Alice Blue', 'AB', 'bg-blue-600/10 text-blue-600 border-blue-500/30')" id="ob-card-aliceblue" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#0078d4] via-[#106ebe] to-[#004578]">AB</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Alice Blue</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">ANT API v2</span></div>
@@ -435,7 +437,7 @@
 
                 <!-- 2. Angel One (A) -->
                 <div onclick="selectOnboardingBroker('angelone', 'Angel One', 'A', 'bg-red-500/10 text-red-600 border-red-500/30')" id="ob-card-angelone" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#ff5530] via-[#ea3829] to-[#c91804]">A</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Angel One</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">SmartAPI v2</span></div>
@@ -443,7 +445,7 @@
 
                 <!-- 3. Dhan HQ (D) -->
                 <div onclick="selectOnboardingBroker('dhan', 'Dhan HQ', 'D', 'bg-purple-500/10 text-purple-600 border-purple-500/30')" id="ob-card-dhan" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#7b83eb] via-[#5059c9] to-[#3b44ac]">D</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Dhan HQ</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Direct API</span></div>
@@ -451,7 +453,7 @@
 
                 <!-- 4. Espresso (ES) -->
                 <div onclick="selectOnboardingBroker('espresso', 'Sharekhan Espresso', 'ES', 'bg-violet-500/10 text-violet-600 border-violet-500/30')" id="ob-card-espresso" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#b73ea4] via-[#80397b] to-[#5c2d58]">ES</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Espresso</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Sharekhan API</span></div>
@@ -459,7 +461,7 @@
 
                 <!-- 5. 5paisa (5P) -->
                 <div onclick="selectOnboardingBroker('fivepaisa', '5paisa', '5P', 'bg-rose-500/10 text-rose-600 border-rose-500/30')" id="ob-card-fivepaisa" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#e03e3e] via-[#c41a1a] to-[#8a0909]">5P</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">5paisa</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Open API v2</span></div>
@@ -467,7 +469,7 @@
 
                 <!-- 6. Flattrade (FT) -->
                 <div onclick="selectOnboardingBroker('flattrade', 'Flattrade', 'FT', 'bg-teal-500/10 text-teal-600 border-teal-500/30')" id="ob-card-flattrade" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#00b294] via-[#008272] to-[#004e40]">FT</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Flattrade</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Zero Brokerage</span></div>
@@ -475,7 +477,7 @@
 
                 <!-- 7. Fyers (FY) -->
                 <div onclick="selectOnboardingBroker('fyers', 'Fyers', 'FY', 'bg-sky-500/10 text-sky-600 border-sky-500/30')" id="ob-card-fyers" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#29b6f6] via-[#0288d1] to-[#01579b]">FY</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Fyers</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Fyers API v3</span></div>
@@ -483,7 +485,7 @@
 
                 <!-- 8. Groww (GW) -->
                 <div onclick="selectOnboardingBroker('groww', 'Groww', 'GW', 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30')" id="ob-card-groww" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#23a859] via-[#107c41] to-[#094b26]">GW</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Groww</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Groww API</span></div>
@@ -491,7 +493,7 @@
 
                 <!-- 9. HDFC Sky (HS) -->
                 <div onclick="selectOnboardingBroker('hdfcsky', 'HDFC Sky', 'HS', 'bg-blue-900/10 text-blue-900 border-blue-900/30')" id="ob-card-hdfcsky" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#2b579a] via-[#1b3a6b] to-[#0f2142]">HS</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">HDFC Sky</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Direct API</span></div>
@@ -499,7 +501,7 @@
 
                 <!-- 10. ICICI Direct (IC) -->
                 <div onclick="selectOnboardingBroker('icicidirect', 'ICICI Direct Breeze', 'IC', 'bg-orange-500/10 text-orange-600 border-orange-500/30')" id="ob-card-icicidirect" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#ff7043] via-[#f4511e] to-[#bf360c]">IC</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">ICICI Direct</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Breeze API</span></div>
@@ -507,7 +509,7 @@
 
                 <!-- 11. IIFL Securities (II) -->
                 <div onclick="selectOnboardingBroker('iifl', 'IIFL Securities', 'II', 'bg-indigo-500/10 text-indigo-600 border-indigo-500/30')" id="ob-card-iifl" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#4185f2] via-[#2460d4] to-[#123e9c]">II</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">IIFL Sec</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Blaze API</span></div>
@@ -515,7 +517,7 @@
 
                 <!-- 12. Kotak Neo (KN) -->
                 <div onclick="selectOnboardingBroker('kotakneo', 'Kotak Neo', 'KN', 'bg-amber-500/10 text-amber-600 border-amber-500/30')" id="ob-card-kotakneo" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#ffb300] via-[#fb8c00] to-[#e65100]">KN</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Kotak Neo</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Trade Free API</span></div>
@@ -523,7 +525,7 @@
 
                 <!-- 13. Motilal Oswal (MO) -->
                 <div onclick="selectOnboardingBroker('motilal', 'Motilal Oswal', 'MO', 'bg-yellow-500/10 text-yellow-600 border-yellow-500/30')" id="ob-card-motilal" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#ffd54f] via-[#ffb300] to-[#f57f17]">MO</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Motilal Oswal</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">MOSL API</span></div>
@@ -531,7 +533,7 @@
 
                 <!-- 14. Paytm Money (PM) -->
                 <div onclick="selectOnboardingBroker('paytmmoney', 'Paytm Money', 'PM', 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30')" id="ob-card-paytmmoney" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#00c8e0] via-[#0091b8] to-[#005f7d]">PM</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Paytm Money</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Open API v1</span></div>
@@ -539,7 +541,7 @@
 
                 <!-- 15. SBI Securities (SBI) -->
                 <div onclick="selectOnboardingBroker('sbisecurities', 'SBI Securities', 'SBI', 'bg-blue-800/10 text-blue-800 border-blue-700/30')" id="ob-card-sbisecurities" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#1e5eb5] via-[#10418c] to-[#062459]">SBI</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">SBI Securities</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Direct API</span></div>
@@ -547,7 +549,7 @@
 
                 <!-- 16. Shoonya Finvasia (S) -->
                 <div onclick="selectOnboardingBroker('shoonya', 'Shoonya Finvasia', 'S', 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30')" id="ob-card-shoonya" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#14b8a6] via-[#0d9488] to-[#04655c]">S</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Shoonya</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Prism Free API</span></div>
@@ -555,7 +557,7 @@
 
                 <!-- 17. Upstox (U) -->
                 <div onclick="selectOnboardingBroker('upstox', 'Upstox', 'U', 'bg-blue-500/10 text-blue-600 border-blue-500/30')" id="ob-card-upstox" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#6366f1] via-[#4f46e5] to-[#3730a3]">U</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Upstox</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Developer API</span></div>
@@ -563,7 +565,7 @@
 
                 <!-- 18. Zerodha Kite (Z) -->
                 <div onclick="selectOnboardingBroker('zerodha', 'Zerodha Kite', 'Z', 'bg-orange-500/10 text-orange-600 border-orange-500/30')" id="ob-card-zerodha" class="ms-glass-card rounded-2xl p-3.5 cursor-pointer text-center relative flex flex-col items-center justify-between">
-                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
+                  <span class="selected-check hidden absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">✓</span>
                   <div class="w-12 h-12 rounded-2xl ms-3d-icon flex items-center justify-center font-black text-white text-base shadow-sm ring-1 ring-inset ring-white/20 bg-gradient-to-br from-[#ff6d00] via-[#f4511e] to-[#dd2c00]">Z</div>
                   <div class="mt-2.5 font-bold text-xs text-slate-900 tracking-tight truncate w-full">Zerodha Kite</div>
                   <div class="mt-1"><span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">Kite Connect</span></div>
@@ -571,13 +573,13 @@
 
               </div>
 
-              <!-- Safety Reassurance Bar (Corporate Clean Style) -->
-              <div class="mt-4 px-4 py-3 bg-white rounded-2xl border border-slate-200/90 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
+              <!-- Safety Reassurance Bar (Corporate Clean Style - White & Emerald) -->
+              <div class="mt-4 px-4 py-3 bg-white rounded-2xl border border-emerald-200/90 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
                 <div class="flex items-center gap-2.5 font-medium text-slate-700">
-                  <span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs font-bold shrink-0">🛡️</span>
+                  <span class="w-6 h-6 rounded-lg bg-emerald-50 border border-emerald-200/60 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">🛡️</span>
                   <span>Official SEBI Broker TSP integration. Capital and securities remain strictly in your demat.</span>
                 </div>
-                <div class="flex items-center gap-1.5 text-slate-500 font-semibold text-[11px]">
+                <div class="flex items-center gap-1.5 text-emerald-700 font-semibold text-[11px]">
                   <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                   <span>Direct Gateway Ready</span>
                 </div>
@@ -3372,9 +3374,9 @@
         const pill = document.getElementById(`step-pill-${i}`);
         if (pill) {
           if (i === stepNum) {
-            pill.className = "flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-50 border border-cyan-500 text-cyan-800 font-bold shrink-0 shadow-sm cursor-pointer transition";
+            pill.className = "flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 border-2 border-emerald-500 text-emerald-900 font-bold shrink-0 shadow-sm cursor-pointer transition";
             const badge = pill.querySelector('span');
-            if (badge) badge.className = "w-5 h-5 rounded-full bg-cyan-600 text-white text-[11px] flex items-center justify-center font-black";
+            if (badge) badge.className = "w-5 h-5 rounded-full bg-emerald-600 text-white text-[11px] flex items-center justify-center font-black";
           } else if (i < stepNum) {
             pill.className = "flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 font-semibold shrink-0 cursor-pointer hover:bg-emerald-100 transition";
             const badge = pill.querySelector('span');
