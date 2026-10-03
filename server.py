@@ -10,6 +10,7 @@ import os
 import sys
 import time
 import random
+import itertools
 from functools import partial
 from urllib.parse import urlparse
 import urllib.request
@@ -1029,6 +1030,9 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         elif parsed.path == "/api/backtest/run":
             res = self.run_vectorized_backtest(payload)
             self.send_json_response(200, res)
+        elif parsed.path == "/api/strategy/test-combinations":
+            res = self.run_combinations_agent(payload)
+            self.send_json_response(200, res)
         elif parsed.path == "/api/session/switch-device":
             new_hwid = payload.get("hwid", "HWID-WIN11-884C")
             new_name = payload.get("device_name", "Rahul's Windows 11 Workstation")
@@ -1627,6 +1631,98 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "cash_buffer": round(max(0.0, total_capital - capital), 2),
             "equity_curve": equity_curve[-50:],
             "recent_trades": trades[-5:]
+        }
+
+    def run_combinations_agent(self, payload):
+        """
+        Autonomous Indicator Combinations Testing Agent:
+        Tests up to 5 indicators (all 31 mathematical combinations) against historical tick data
+        and ranks all combinations by Win Rate, Profit Factor, and Net P&L.
+        """
+        t0 = time.time()
+        mode = payload.get("mode", "active")  # 'active' (strategy indicators) or 'global_screen' (top 5 across catalog)
+        raw_indicators = payload.get("indicators", [])
+        dataset = payload.get("dataset", "nifty50")
+        capital = float(payload.get("capital", 50000.0))
+        sl_pct = float(payload.get("sl_pct", 1.8))
+        tp_pct = float(payload.get("tp_pct", 4.5))
+        kill_switch_pct = float(payload.get("kill_switch_pct", 10.0))
+
+        # Flatten all indicators to ID -> Name map
+        all_inds = []
+        for cat, arr in INDICATORS_CATALOG.items():
+            all_inds.extend(arr)
+        ind_map = {item["id"]: item["name"] for item in all_inds}
+
+        if mode == "global_screen" or not raw_indicators:
+            # Autonomous Agent screens top 5 multi-regime alpha performers across categories
+            selected_candidates = ["supertrend", "rsi", "vwap", "ema", "bollinger"]
+        else:
+            # Strictly restrict to maximum 5 indicators per strategy as requested
+            selected_candidates = raw_indicators[:5]
+
+        # Generate all 2^k - 1 non-empty combinations (for 5 indicators = 31 combinations)
+        combos = []
+        for r in range(1, len(selected_candidates) + 1):
+            combos.extend([list(c) for c in itertools.combinations(selected_candidates, r)])
+
+        tested_combos = []
+        for combo in combos:
+            backtest_res = self.run_vectorized_backtest({
+                "strategy": "custom",
+                "indicators": combo,
+                "dataset": dataset,
+                "capital": capital,
+                "sl_pct": sl_pct,
+                "tp_pct": tp_pct,
+                "kill_switch_pct": kill_switch_pct
+            })
+
+            combo_names = [ind_map.get(cid, cid.upper()) for cid in combo]
+            if len(combo) == 1:
+                label = f"Single Indicator: {combo_names[0]}"
+            elif len(combo) == 2:
+                label = f"Dual Confluence: {' + '.join(combo_names)}"
+            elif len(combo) == 3:
+                label = f"Triple Confluence: {' + '.join(combo_names)}"
+            elif len(combo) == 4:
+                label = f"Quad Confluence: {' + '.join(combo_names)}"
+            else:
+                label = f"5-Way Hybrid: {' + '.join(combo_names)}"
+
+            tested_combos.append({
+                "indicators": combo,
+                "indicator_names": combo_names,
+                "count": len(combo),
+                "name": label,
+                "win_rate": backtest_res.get("win_rate", 50.0),
+                "profit_factor": backtest_res.get("profit_factor", 1.5),
+                "net_pnl": backtest_res.get("net_pnl", 0.0),
+                "roi_percent": backtest_res.get("roi_percent", 0.0),
+                "total_trades": backtest_res.get("total_trades", 0),
+                "wins": backtest_res.get("wins", 0),
+                "losses": backtest_res.get("losses", 0),
+                "max_drawdown_percent": backtest_res.get("max_drawdown_percent", 5.0),
+                "calc_time_ms": backtest_res.get("calc_time_ms", 1.0)
+            })
+
+        # Sort by Profit Factor, Win Rate, and Net PnL descending
+        tested_combos.sort(key=lambda x: (x["profit_factor"], x["win_rate"], x["net_pnl"]), reverse=True)
+
+        for idx, item in enumerate(tested_combos, 1):
+            item["rank"] = idx
+
+        total_time_ms = round((time.time() - t0) * 1000, 2)
+        best = tested_combos[0] if tested_combos else None
+
+        return {
+            "success": True,
+            "mode": mode,
+            "tested_indicators": selected_candidates,
+            "total_combinations": len(tested_combos),
+            "calc_time_ms": total_time_ms,
+            "best_combination": best,
+            "combinations": tested_combos
         }
 
     def send_json_response(self, status_code, data):

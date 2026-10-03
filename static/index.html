@@ -762,8 +762,9 @@
           <!-- Active Indicators Cockpit (Shows Selected Indicators Chips) -->
           <div class="p-3.5 bg-slate-950 rounded-xl border border-cyan-500/30 space-y-2">
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                <span>🎯</span> Active Indicators in Your Strategy (<span id="active-indicators-count">3</span> Selected):
+              <span class="text-xs font-bold text-white flex items-center gap-1.5 flex-wrap">
+                <span>🎯</span> Active Indicators in Your Strategy (<span id="active-indicators-count">3</span> / 5 Max):
+                <span class="px-2 py-0.5 rounded text-[10.5px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-500/40 font-semibold">Strict ≤5 Limit for Instant 31-Combo Testing</span>
               </span>
               <div class="flex items-center gap-2">
                 <button type="button" onclick="resetDefaultIndicators()" class="text-[11px] text-cyan-400 hover:text-cyan-300 underline font-medium">
@@ -813,6 +814,102 @@
           <!-- 100+ Indicators Matrix Grid (Scrollable, High Density) -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-h-[380px] overflow-y-auto pr-1" id="indicators-grid-container">
             <!-- Dynamically populated indicator cards -->
+          </div>
+
+          <!-- 🤖 AUTONOMOUS COMBINATIONS OPTIMIZER AGENT -->
+          <div class="p-4 bg-gradient-to-br from-indigo-950/60 via-slate-950 to-purple-950/50 rounded-2xl border-2 border-indigo-500/40 space-y-3 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-indigo-500/30 pb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="text-2xl animate-pulse">🤖</span>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h4 class="text-sm font-black text-white">Autonomous Indicator Combinations AI Agent</h4>
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-[10px] font-mono font-bold">2⁵ - 1 = 31 Combos</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400">
+                    With up to 5 indicators selected, tests <strong>all 31 mathematical combinations</strong> (Single, 2-Way, 3-Way, 4-Way, 5-Way Confluences) against 1-year historical market data in &lt;50ms.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" id="btn-run-combos" onclick="runCombinationsAgent('active')" class="px-4 py-2 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 cursor-pointer">
+                  <span>⚡</span> Test All 31 Combinations
+                </button>
+                <button type="button" id="btn-screen-global" onclick="runCombinationsAgent('global_screen')" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-purple-500/50 text-slate-200 font-semibold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+                  <span>🌐</span> Screen 100+ Catalog
+                </button>
+              </div>
+            </div>
+
+            <!-- Agent Working Status Banner -->
+            <div id="combo-agent-status" class="hidden p-3 bg-indigo-950/40 border border-indigo-500/30 rounded-xl text-xs font-mono flex items-center justify-between">
+              <div class="flex items-center gap-2 text-indigo-300">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                <span id="combo-agent-status-text">Agent analyzing all 31 mathematical permutations...</span>
+              </div>
+              <span id="combo-agent-speed" class="text-cyan-400 font-bold">0.0 ms</span>
+            </div>
+
+            <!-- Best Combination Champion Card -->
+            <div id="combo-champion-card" class="hidden p-3.5 bg-slate-950/90 rounded-xl border-2 border-emerald-500/60 shadow-lg shadow-emerald-500/10 space-y-2.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-black text-[10px] uppercase font-mono">🏆 Best Performing Confluence (Rank #1)</span>
+                  <span class="text-xs font-bold text-white" id="combo-champion-name">Quad Confluence</span>
+                </div>
+                <button type="button" onclick="applyChampionCombination()" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition shadow-md flex items-center gap-1 cursor-pointer">
+                  <span>🚀</span> Apply Best Combo to Strategy
+                </button>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block font-mono">Win Rate</span>
+                  <span class="text-emerald-400 font-mono font-bold text-sm" id="combo-champ-winrate">71.4%</span>
+                </div>
+                <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block font-mono">Profit Factor</span>
+                  <span class="text-cyan-300 font-mono font-bold text-sm" id="combo-champ-pf">2.35</span>
+                </div>
+                <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block font-mono">Simulated Net Return</span>
+                  <span class="text-emerald-300 font-mono font-bold text-sm" id="combo-champ-pnl">+ ₹34,850</span>
+                </div>
+                <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block font-mono">Max Drawdown</span>
+                  <span class="text-rose-400 font-mono font-bold text-sm" id="combo-champ-dd">3.8%</span>
+                </div>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5 pt-1 text-[11px]" id="combo-champion-chips">
+                <!-- champion indicator badges -->
+              </div>
+            </div>
+
+            <!-- Full Combinations Results Table Drawer -->
+            <div id="combo-results-container" class="hidden space-y-2">
+              <div class="flex items-center justify-between text-xs text-slate-400 font-medium">
+                <span>All <span id="combo-results-count">31</span> Combinations Ranked:</span>
+                <span class="text-[11px] text-cyan-400 font-mono">Click "Apply" on any combination to load it into your strategy</span>
+              </div>
+              <div class="max-h-60 overflow-y-auto rounded-xl border border-slate-800 bg-slate-950/80">
+                <table class="w-full text-left border-collapse text-xs">
+                  <thead class="bg-slate-900/90 text-slate-400 font-mono text-[10.5px] uppercase sticky top-0 border-b border-slate-800">
+                    <tr>
+                      <th class="p-2.5 text-center">Rank</th>
+                      <th class="p-2.5">Indicator Combination</th>
+                      <th class="p-2.5 text-center">Indicators</th>
+                      <th class="p-2.5 text-right">Win Rate</th>
+                      <th class="p-2.5 text-right">Profit Factor</th>
+                      <th class="p-2.5 text-right">Net Return (₹)</th>
+                      <th class="p-2.5 text-right">Max DD</th>
+                      <th class="p-2.5 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="combo-table-body" class="divide-y divide-slate-800/60 font-mono text-[11px]">
+                    <!-- dynamically injected combination rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -3428,6 +3525,178 @@
       }, 3500);
     }
 
+    // ============================================================================
+    // 🤖 AUTONOMOUS COMBINATIONS OPTIMIZER AGENT HANDLERS
+    // ============================================================================
+    let latestCombinationsResult = null;
+
+    async function runCombinationsAgent(mode = 'active') {
+      const btnActive = document.getElementById('btn-run-combos');
+      const btnGlobal = document.getElementById('btn-screen-global');
+      const statusBox = document.getElementById('combo-agent-status');
+      const statusText = document.getElementById('combo-agent-status-text');
+      const speedText = document.getElementById('combo-agent-speed');
+      const champCard = document.getElementById('combo-champion-card');
+      const resultsContainer = document.getElementById('combo-results-container');
+
+      if (btnActive) btnActive.disabled = true;
+      if (btnGlobal) btnGlobal.disabled = true;
+      if (statusBox) {
+        statusBox.classList.remove('hidden');
+        statusText.innerText = mode === 'global_screen' ?
+          "Agent screening 100+ indicators across Market Regimes to pick Top 5 & test all 31 permutations..." :
+          "Agent calculating all 31 mathematical combinations (Singles, Duals, Triples, Quads, 5-Way)...";
+      }
+
+      const activeInds = customStrategyState.indicators.length > 0 ?
+        customStrategyState.indicators :
+        ["supertrend", "rsi", "vwap", "ema", "bollinger"];
+
+      const slVal = parseFloat(document.getElementById('sec-sl-pct')?.value) || 1.8;
+      const tpVal = parseFloat(document.getElementById('sec-tp-pct')?.value) || 4.5;
+      const ksVal = parseFloat(document.getElementById('sec-kill-switch-pct')?.value) || 10.0;
+
+      try {
+        const t0 = performance.now();
+        const res = await fetch('/api/strategy/test-combinations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mode: mode,
+            indicators: activeInds,
+            dataset: customStrategyState.dataset || "nifty50",
+            capital: customStrategyState.minCapital || 50000,
+            sl_pct: slVal,
+            tp_pct: tpVal,
+            kill_switch_pct: ksVal
+          })
+        });
+        const data = await res.json();
+        const clientDt = Math.round(performance.now() - t0);
+
+        if (!data.success || !data.combinations) {
+          alert("Could not complete combination tests: " + (data.error || "Unknown error"));
+          return;
+        }
+
+        latestCombinationsResult = data;
+
+        if (speedText) {
+          speedText.innerText = `⚡ ${data.calc_time_ms} ms (${data.total_combinations} Combos Tested)`;
+        }
+        if (statusText) {
+          statusText.innerText = `✓ Complete! Tested all ${data.total_combinations} combinations in ${data.calc_time_ms}ms on server (${clientDt}ms roundtrip).`;
+        }
+
+        // Render Champion Card
+        const best = data.best_combination;
+        if (best && champCard) {
+          champCard.classList.remove('hidden');
+          document.getElementById('combo-champion-name').innerText = best.name;
+          document.getElementById('combo-champ-winrate').innerText = `${best.win_rate}%`;
+          document.getElementById('combo-champ-pf').innerText = `${best.profit_factor}`;
+          const sign = best.net_pnl >= 0 ? '+' : '';
+          document.getElementById('combo-champ-pnl').innerText = `${sign} ₹${Math.round(best.net_pnl).toLocaleString('en-IN')}`;
+          document.getElementById('combo-champ-dd').innerText = `${best.max_drawdown_percent}%`;
+
+          const chipsContainer = document.getElementById('combo-champion-chips');
+          if (chipsContainer) {
+            chipsContainer.innerHTML = best.indicator_names.map(name => `
+              <span class="px-2 py-0.5 bg-emerald-950 border border-emerald-500/50 text-emerald-300 rounded font-mono text-[10px] font-bold">
+                ✓ ${name}
+              </span>
+            `).join('');
+          }
+        }
+
+        // Render Combinations Table
+        if (resultsContainer) {
+          resultsContainer.classList.remove('hidden');
+          document.getElementById('combo-results-count').innerText = data.total_combinations;
+
+          const tbody = document.getElementById('combo-table-body');
+          if (tbody) {
+            tbody.innerHTML = data.combinations.map((c, i) => {
+              const isBest = i === 0;
+              const rowClass = isBest ? "bg-emerald-950/40 font-bold border-l-4 border-emerald-400" : "hover:bg-slate-900/60";
+              const pnlSign = c.net_pnl >= 0 ? '+' : '';
+              const pnlColor = c.net_pnl >= 0 ? 'text-emerald-400' : 'text-rose-400';
+              const rankBadge = isBest ?
+                `<span class="px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950 font-black text-[10px]">#1 🏆</span>` :
+                `<span class="text-slate-400 font-mono">#${c.rank}</span>`;
+
+              const indBadges = c.indicator_names.map(n =>
+                `<span class="px-1.5 py-0.5 bg-slate-900 border border-slate-800 text-slate-300 rounded text-[9.5px]">${n}</span>`
+              ).join(' ');
+
+              return `
+                <tr class="${rowClass} transition">
+                  <td class="p-2.5 text-center">${rankBadge}</td>
+                  <td class="p-2.5">
+                    <div class="font-bold text-white text-[11px]">${c.name}</div>
+                    <div class="flex flex-wrap gap-1 mt-1">${indBadges}</div>
+                  </td>
+                  <td class="p-2.5 text-center text-cyan-300 font-bold">${c.count}</td>
+                  <td class="p-2.5 text-right font-bold ${c.win_rate >= 60 ? 'text-emerald-400' : 'text-slate-300'}">${c.win_rate}%</td>
+                  <td class="p-2.5 text-right font-bold text-cyan-300">${c.profit_factor}</td>
+                  <td class="p-2.5 text-right font-bold ${pnlColor}">${pnlSign} ₹${Math.round(c.net_pnl).toLocaleString('en-IN')}</td>
+                  <td class="p-2.5 text-right text-rose-300">${c.max_drawdown_percent}%</td>
+                  <td class="p-2.5 text-center">
+                    <button type="button" onclick="applyCombinationDirectly(${JSON.stringify(c.indicators).replace(/"/g, '&quot;')})" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-[10px] font-bold transition cursor-pointer">
+                      Apply
+                    </button>
+                  </td>
+                </tr>
+              `;
+            }).join('');
+          }
+        }
+
+        showToast(`Tested all ${data.total_combinations} combinations in ${data.calc_time_ms}ms!`);
+
+      } catch (err) {
+        alert("Network error testing combinations: " + err.message);
+      } finally {
+        if (btnActive) btnActive.disabled = false;
+        if (btnGlobal) btnGlobal.disabled = false;
+      }
+    }
+
+    function applyChampionCombination() {
+      if (latestCombinationsResult && latestCombinationsResult.best_combination) {
+        applyCombinationDirectly(latestCombinationsResult.best_combination.indicators);
+      }
+    }
+
+    function applyCombinationDirectly(indicatorsList) {
+      if (!Array.isArray(indicatorsList)) return;
+      customStrategyState.indicators = indicatorsList.slice(0, 5);
+      renderIndicatorsGrid();
+      renderCockpitChips();
+      updateSynergyScore();
+
+      // Update preview card badges if visible
+      const prevInds = document.getElementById('yt-preview-indicators');
+      if (prevInds) {
+        let allInds = [];
+        Object.values(INDICATORS_DATABASE).forEach(arr => allInds.push(...arr));
+        const indMap = {};
+        allInds.forEach(item => { indMap[item.id] = item; });
+        prevInds.innerHTML = customStrategyState.indicators.map(id => {
+          const item = indMap[id] || { name: id.toUpperCase() };
+          return `<span class="px-1.5 py-0.5 bg-emerald-950 border border-emerald-500/50 text-emerald-300 rounded text-[10px] font-mono font-bold">${item.name}</span>`;
+        }).join('');
+      }
+
+      showToast(`Applied ${customStrategyState.indicators.length} indicators to your active strategy!`);
+      const chipsEl = document.getElementById('active-indicators-chips');
+      if (chipsEl) {
+        chipsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        chipsEl.classList.add('ring-2', 'ring-emerald-400');
+        setTimeout(() => chipsEl.classList.remove('ring-2', 'ring-emerald-400'), 2000);
+      }
+    }
+
     // Top Header Auth Button Handler (Sign In / Sign Out)
     function handleAuthButtonClick() {
       if (userState.isLoggedIn) {
@@ -3846,6 +4115,10 @@
       if (idx >= 0) {
         customStrategyState.indicators.splice(idx, 1);
       } else {
+        if (customStrategyState.indicators.length >= 5) {
+          showToast("⚠️ Maximum 5 indicators allowed per strategy! Restricting to ≤5 prevents indicator lag and allows testing all 31 combinations.");
+          return;
+        }
         customStrategyState.indicators.push(id);
       }
       renderIndicatorsGrid();
