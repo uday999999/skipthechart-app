@@ -335,62 +335,60 @@
         <div class="absolute top-12 left-1/3 w-64 h-64 bg-rose-100/35 rounded-full blur-3xl pointer-events-none"></div>
 
         <!-- 2-Column Split Layout -->
-        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
           
           <!-- LEFT SIDE: Text Area in Microsoft 365 Style -->
-          <div class="lg:col-span-5 space-y-6">
+          <div class="lg:col-span-4 xl:col-span-3 space-y-4">
             <!-- Step & Alphabetical Tag -->
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/5 border border-slate-300/80 text-slate-800 text-xs font-bold uppercase tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/5 border border-slate-300/80 text-slate-800 text-xs font-bold uppercase tracking-wider">
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Step 1: Choose Your Broker</span>
-              <span class="text-slate-400">•</span>
               <span class="text-cyan-700 font-extrabold">A TO Z ALPHABETICAL</span>
             </div>
 
             <!-- Big Bold Headline -->
-            <h1 class="text-3xl sm:text-4xl xl:text-5xl font-extrabold text-[#111827] tracking-tight leading-[1.12]">
-              Zerodha, Angel One, Groww, and 17 Indian Brokers, all in one terminal
+            <h1 class="text-3xl sm:text-4xl xl:text-5xl font-black text-[#111827] tracking-tight leading-[1.08] uppercase">
+              STEP 1: CHOOSE YOUR BROKER
             </h1>
 
             <!-- Explanatory Subtitle -->
-            <p class="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
               Connect your existing Indian demat and trading account in 1-click via official SEBI-registered broker APIs. Deploy automated multi-leg options, swing equities, and scalping systems with zero manual chart-staring.
             </p>
 
             <!-- Buttons -->
-            <div class="flex flex-wrap items-center gap-3 pt-2">
-              <button type="button" onclick="focusBrokerSelection()" class="px-6 py-3 rounded-lg bg-[#0f172a] text-white hover:bg-black font-semibold text-sm shadow-md transition-all flex items-center gap-2 group">
+            <div class="flex flex-wrap items-center gap-2.5 pt-1">
+              <button type="button" onclick="focusBrokerSelection()" class="px-5 py-2.5 rounded-lg bg-[#0f172a] text-white hover:bg-black font-semibold text-xs shadow-md transition-all flex items-center gap-2 group">
                 <span>Select Your Broker</span>
                 <span class="group-hover:translate-x-1 transition-transform">→</span>
               </button>
-              <button type="button" onclick="showToast('AlgoForge operates strictly through certified broker TSP APIs. Your funds, demat holdings, and master passwords never leave your broker.', 'info')" class="px-5 py-3 rounded-lg border border-slate-300 bg-white/70 hover:bg-white text-slate-800 font-semibold text-sm shadow-sm transition-all">
-                API Security & Compliance
+              <button type="button" onclick="showToast('AlgoForge operates strictly through certified broker TSP APIs. Your funds, demat holdings, and master passwords never leave your broker.', 'info')" class="px-4 py-2.5 rounded-lg border border-slate-300 bg-white/70 hover:bg-white text-slate-800 font-medium text-xs shadow-sm transition-all">
+                Security & TSP
               </button>
             </div>
 
             <!-- Trust Highlights (Microsoft Style) -->
-            <div class="pt-6 border-t border-slate-200/90 grid grid-cols-2 gap-3.5 text-xs text-slate-700 font-medium">
-              <div class="flex items-center gap-2">
-                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px]">✓</span>
-                <span>100% Direct Broker TSP</span>
+            <div class="pt-4 border-t border-slate-200/90 grid grid-cols-2 gap-2.5 text-[11px] text-slate-700 font-medium">
+              <div class="flex items-center gap-1.5">
+                <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px]">✓</span>
+                <span>Direct Broker TSP</span>
               </div>
-              <div class="flex items-center gap-2">
-                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px]">✓</span>
+              <div class="flex items-center gap-1.5">
+                <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px]">✓</span>
                 <span>Zero Password Storage</span>
               </div>
-              <div class="flex items-center gap-2">
-                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px]">✓</span>
-                <span>Sub-ms Webhook Trading</span>
+              <div class="flex items-center gap-1.5">
+                <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px]">✓</span>
+                <span>Sub-ms Webhooks</span>
               </div>
-              <div class="flex items-center gap-2">
-                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px]">✓</span>
-                <span>17 Brokers from A to Z</span>
+              <div class="flex items-center gap-1.5">
+                <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px]">✓</span>
+                <span>17 Brokers A-Z</span>
               </div>
             </div>
           </div>
 
           <!-- RIGHT SIDE: Translucent Floating 3D Broker Cards (Microsoft 365 Theme) -->
-          <div class="lg:col-span-7">
+          <div class="lg:col-span-8 xl:col-span-9">
             <div class="p-3 sm:p-5 rounded-3xl bg-white/40 border border-white/60 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
               
               <!-- Quick search bar -->
@@ -399,14 +397,14 @@
                   <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Alphabetical Directory</span>
                   <span class="px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-800 text-[10px] font-bold">17 Verified</span>
                 </div>
-                <div class="relative w-full sm:w-56">
+                <div class="relative w-full sm:w-64">
                   <input type="text" id="broker-search-input" oninput="filterBrokerCards(this.value)" placeholder="Search broker (A-Z)..." class="w-full text-xs px-3 py-1.5 pl-8 rounded-xl bg-white/90 border border-slate-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 shadow-inner">
                   <span class="absolute left-2.5 top-2 text-slate-400 text-xs">🔍</span>
                 </div>
               </div>
 
               <!-- Floating Cards Grid: 17 Brokers in STRICT Alphabetical Order -->
-              <div id="broker-cards-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 sm:gap-3 max-h-[540px] overflow-y-auto p-1 custom-scroll">
+              <div id="broker-cards-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 sm:gap-3 p-1">
                 
                 <!-- 1. Alice Blue (AB) -->
                 <div onclick="selectOnboardingBroker('aliceblue', 'Alice Blue', 'AB', 'bg-blue-600/10 text-blue-600 border-blue-500/30')" id="ob-card-aliceblue" class="ms-glass-card float-bob-1 rounded-2xl p-3 cursor-pointer text-center relative flex flex-col items-center justify-between">
