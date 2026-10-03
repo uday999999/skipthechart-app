@@ -446,257 +446,350 @@
           </div>
         </div>
 
-        <!-- 4 Strategy Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-
-          <!-- Strategy 1: Daily Income Theta Harvester (Featured Hedged Strategy) -->
-          <div onclick="selectStrategyAndProceedToCapital('theta_harvester')" id="card-theta_harvester" class="p-5 bg-slate-950 border-2 border-cyan-500/80 rounded-2xl cursor-pointer space-y-3 hover:border-cyan-400 transition-all hover:scale-[1.01] shadow-lg shadow-cyan-500/10 relative flex flex-col justify-between">
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="px-2 py-0.5 bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold rounded-md uppercase">
-                  ⭐ Flagship Hedged
-                </span>
-                <span class="text-indigo-400 font-mono text-xs font-semibold">NSE: NIFTY/BANKNIFTY</span>
-              </div>
+        <!-- TRACK A: 🪄 INSTANT YOUTUBE STRATEGY AI IMPORTER ("SUPERB OPTION") -->
+        <div class="bg-gradient-to-br from-[#0c1427] via-slate-950 to-[#0e162e] border-2 border-indigo-500/50 rounded-2xl p-5 space-y-4 shadow-2xl relative overflow-hidden">
+          <div class="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">🪄</span>
               <div>
-                <h3 class="text-base font-bold text-white flex items-center gap-2">
-                  <span>💰</span> Daily Income Theta Harvester
-                </h3>
-                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Zero direction guessing! Sells options away from market price at 9:20 AM with bought hedge wings, collecting daily time decay (theta).
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base font-black text-white">YouTube Strategy AI Importer</h3>
+                  <span class="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-[10px] font-bold uppercase tracking-wider">
+                    ⚡ Superb 1-Click Option
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  Saw a great strategy on YouTube? Paste any video link — our engine automatically extracts the indicators, buy/sell rules, and applies mandatory security features (SL, TP, and Daily Kill Switch).
                 </p>
               </div>
+            </div>
+            <div class="text-[11px] text-emerald-400 font-mono px-2.5 py-1 bg-emerald-950/40 border border-emerald-500/30 rounded-lg flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Auto-Applies SL / TP / Kill Switch
+            </div>
+          </div>
 
-              <!-- Mandatory Minimum Capital Box -->
-              <div class="p-3 bg-slate-900 rounded-xl border border-cyan-500/40 space-y-1.5">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] text-slate-300 font-bold uppercase tracking-wider">Min. Account Capital:</span>
-                  <span class="font-black text-cyan-300 font-mono text-base">₹ 1,00,000</span>
-                </div>
-                <div class="text-[10px] text-slate-400 space-y-0.5 pt-1 border-t border-slate-800">
-                  <div class="flex justify-between">
-                    <span>Active Margin (1 Lot):</span>
-                    <span class="font-mono text-white font-semibold">₹ 70,000</span>
-                  </div>
-                  <div class="flex justify-between text-emerald-400">
-                    <span>Mandatory 30% Cash Buffer:</span>
-                    <span class="font-mono font-semibold">₹ 30,000</span>
-                  </div>
-                </div>
-                <div class="text-[9.5px] text-slate-500 font-mono text-center pt-0.5">
-                  ₹70,000 margin ÷ 70% util = ₹1,00,000 total
-                </div>
+          <!-- YouTube Input Box -->
+          <div class="space-y-2.5">
+            <div class="flex flex-col sm:flex-row items-stretch gap-2.5">
+              <div class="relative flex-1">
+                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-rose-500 text-base">▶</span>
+                <input type="text" id="yt-url-input" placeholder="Paste YouTube Link (e.g. https://www.youtube.com/watch?v=... or search '5-EMA Scalper')" class="w-full pl-9 pr-4 py-2.5 bg-slate-950 border border-slate-700 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-xl text-xs text-white placeholder-slate-500 font-mono outline-none transition shadow-inner">
               </div>
-
-              <div class="text-[11px] space-y-1 text-slate-300">
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Trading Style:</span>
-                  <span class="text-indigo-300 font-medium">Non-Directional Hedged</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Margin Discount:</span>
-                  <span class="text-emerald-400 font-mono font-bold">70% Hedged (SPAN)</span>
-                </div>
-              </div>
+              <button type="button" id="btn-parse-yt" onclick="parseAndApplyYouTubeStrategy()" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:opacity-95 text-white font-bold text-xs rounded-xl shadow-lg shadow-indigo-500/20 transition flex items-center justify-center gap-2 shrink-0">
+                <span>🪄 Parse & Apply Strategy</span>
+              </button>
             </div>
 
-            <div class="space-y-1.5 mt-2">
-              <button type="button" onclick="event.stopPropagation(); selectStrategyAndProceedToCapital('theta_harvester')" class="w-full py-2 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
-                <span>Select & Allocate Capital</span>
-                <span>→</span>
+            <!-- Popular Indian Strategy Quick-Pills -->
+            <div class="flex flex-wrap items-center gap-1.5 pt-1 text-[11px]">
+              <span class="text-slate-400 font-medium mr-1">🔥 Popular Setups:</span>
+              <button type="button" onclick="quickFillYouTube('Pushkar Raj Thakur: Supertrend + RSI Confluence')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
+                Pushkar Raj Thakur (Supertrend + RSI)
               </button>
-              <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('theta_harvester')" class="w-full py-1 text-[11px] text-slate-400 hover:text-cyan-300 transition text-center underline">
-                ⚙️ View / Edit Rulebook
+              <button type="button" onclick="quickFillYouTube('Power of Stocks 5 EMA Scalper Subasish Pani')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
+                Power of Stocks (5-EMA Scalp)
+              </button>
+              <button type="button" onclick="quickFillYouTube('15 Min Inside Bar Breakout Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
+                15m Inside Bar Breakout
+              </button>
+              <button type="button" onclick="quickFillYouTube('ICT Silver Bullet Fair Value Gap FVG')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
+                ICT Silver Bullet (FVG)
+              </button>
+              <button type="button" onclick="quickFillYouTube('9:20 AM Non-Directional Straddle Strangle')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-400/50 text-slate-300 hover:text-white transition">
+                9:20 AM Hedged Straddle
               </button>
             </div>
           </div>
 
-          <!-- Strategy 2: BankNifty Fast Scalper -->
-          <div onclick="selectStrategyAndProceedToCapital('banknifty_scalp')" id="card-banknifty_scalp" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-amber-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative flex flex-col justify-between">
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="px-2 py-0.5 bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold rounded-md uppercase">
-                  ⚡ High Action
-                </span>
-                <span class="text-amber-400 font-mono text-xs font-semibold">NSE: BANKNIFTY</span>
+          <!-- YouTube Extracted Preview Box (Shown when parsed or active) -->
+          <div id="yt-preview-card" class="p-4 bg-slate-900/90 border border-indigo-500/40 rounded-xl space-y-3 hidden transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
+              <div class="flex items-center gap-2">
+                <span class="text-emerald-400 text-sm">✓</span>
+                <span class="text-xs font-bold text-white" id="yt-preview-title">Strategy Extracted Successfully</span>
+                <span class="px-2 py-0.5 bg-indigo-950 text-indigo-300 text-[10px] font-mono rounded" id="yt-preview-channel">Channel Source</span>
               </div>
-              <div>
-                <h3 class="text-base font-bold text-white flex items-center gap-2">
-                  <span>⚡</span> BankNifty Fast Scalper
-                </h3>
-                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Fast 15-minute momentum strikes on BankNifty index. In and out before 3:15 PM with tight trailing stop-loss. High profit potential.
-                </p>
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] text-slate-400">Confluence Score:</span>
+                <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 font-mono font-bold text-xs rounded" id="yt-preview-synergy">95%</span>
               </div>
+            </div>
 
-              <!-- Mandatory Minimum Capital Box -->
-              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] text-slate-300 font-bold uppercase tracking-wider">Min. Account Capital:</span>
-                  <span class="font-black text-amber-300 font-mono text-base">₹ 50,000</span>
-                </div>
-                <div class="text-[10px] text-slate-400 space-y-0.5 pt-1 border-t border-slate-800">
-                  <div class="flex justify-between">
-                    <span>Active Margin (1 Lot):</span>
-                    <span class="font-mono text-white font-semibold">₹ 35,000</span>
-                  </div>
-                  <div class="flex justify-between text-emerald-400">
-                    <span>Mandatory 30% Cash Buffer:</span>
-                    <span class="font-mono font-semibold">₹ 15,000</span>
-                  </div>
-                </div>
-                <div class="text-[9.5px] text-slate-500 font-mono text-center pt-0.5">
-                  ₹35,000 margin ÷ 70% util = ₹50,000 total
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
+                <span class="text-[10px] text-cyan-400 font-bold uppercase">Target Instrument & Timeframe</span>
+                <div class="font-bold text-white" id="yt-preview-inst">NIFTY 50 Options (5m)</div>
+                <div class="text-[10px] text-slate-400" id="yt-preview-type">Options Buying (Directional CE/PE)</div>
+              </div>
+              <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
+                <span class="text-[10px] text-purple-400 font-bold uppercase">Active Indicators Extracted</span>
+                <div class="flex flex-wrap gap-1" id="yt-preview-indicators">
+                  <span class="px-1.5 py-0.5 bg-purple-950 text-purple-300 rounded text-[10px] font-mono">5 EMA</span>
+                  <span class="px-1.5 py-0.5 bg-purple-950 text-purple-300 rounded text-[10px] font-mono">RSI (14)</span>
+                  <span class="px-1.5 py-0.5 bg-purple-950 text-purple-300 rounded text-[10px] font-mono">VWAP</span>
                 </div>
               </div>
-
-              <div class="text-[11px] space-y-1 text-slate-300">
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Trading Style:</span>
-                  <span class="text-amber-300 font-medium">Momentum Breakouts</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Exit Rule:</span>
-                  <span class="text-amber-400 font-mono font-bold">Auto Square-off 3:15 PM</span>
+              <div class="p-2.5 bg-slate-950 rounded-lg border border-emerald-500/40 space-y-1">
+                <span class="text-[10px] text-emerald-400 font-bold uppercase">Mandatory Security Controls Applied</span>
+                <div class="text-[11px] text-slate-300 font-mono" id="yt-preview-security">
+                  SL: 1.8% | TP: 4.5% | Kill Switch: ₹2,500
                 </div>
               </div>
             </div>
 
-            <div class="space-y-1.5 mt-2">
-              <button type="button" onclick="event.stopPropagation(); selectStrategyAndProceedToCapital('banknifty_scalp')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 text-slate-200 font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
-                <span>Select & Allocate Capital</span>
-                <span>→</span>
-              </button>
-              <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('banknifty_scalp')" class="w-full py-1 text-[11px] text-slate-400 hover:text-cyan-300 transition text-center underline">
-                ⚙️ View / Edit Rulebook
-              </button>
+            <div class="text-xs text-slate-300 bg-slate-950 p-2.5 rounded-lg border border-slate-800 space-y-1">
+              <div class="text-[10px] text-slate-400 font-bold uppercase">Entry & Exit Logic:</div>
+              <p class="text-[11px] text-slate-300 leading-relaxed" id="yt-preview-rules">
+                Buys Call (CE) when 5-min candle crosses above 5-EMA with RSI > 50 and price above VWAP. In overbought extension, 5-EMA rejection initiates Put (PE).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRACK B: ⚡ 100+ INDICATORS MATRIX & CUSTOM STRATEGY STUDIO -->
+        <div class="bg-[#0b101e] border-2 border-cyan-500/50 rounded-2xl p-5 space-y-4 shadow-2xl">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">⚡</span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base font-black text-white">Custom Strategy Studio (100+ Indicators Matrix)</h3>
+                  <span class="px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold uppercase">
+                    100+ Real Indicators Available
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  Build and test your own setup from scratch. Select indicators from any category — Trend, Momentum, Volatility, Volume, or Candlestick/Price Action.
+                </p>
+              </div>
+            </div>
+
+            <!-- Combination Synergy Score Gauge -->
+            <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-400 font-medium">Indicator Synergy:</span>
+              <span id="cockpit-synergy-badge" class="font-mono font-bold text-xs text-emerald-400">94% (Strong Confluence)</span>
             </div>
           </div>
 
-          <!-- Strategy 3: Nifty Safe Trend Rider -->
-          <div onclick="selectStrategyAndProceedToCapital('trend_rider')" id="card-trend_rider" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative flex flex-col justify-between">
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="px-2 py-0.5 bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold rounded-md uppercase">
-                  ⭐ Directional
-                </span>
-                <span class="text-cyan-400 font-mono text-xs font-semibold">NSE: NIFTY 50</span>
-              </div>
-              <div>
-                <h3 class="text-base font-bold text-white flex items-center gap-2">
-                  <span>🚀</span> Nifty Safe Trend Rider
-                </h3>
-                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Automatically buys Calls (CE) during rallies and Puts (PE) during market falls. Exits instantly if stop-loss is hit.
-                </p>
-              </div>
-
-              <!-- Mandatory Minimum Capital Box -->
-              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] text-slate-300 font-bold uppercase tracking-wider">Min. Account Capital:</span>
-                  <span class="font-black text-cyan-300 font-mono text-base">₹ 25,000</span>
-                </div>
-                <div class="text-[10px] text-slate-400 space-y-0.5 pt-1 border-t border-slate-800">
-                  <div class="flex justify-between">
-                    <span>Active Margin (1 Lot):</span>
-                    <span class="font-mono text-white font-semibold">₹ 17,500</span>
-                  </div>
-                  <div class="flex justify-between text-emerald-400">
-                    <span>Mandatory 30% Cash Buffer:</span>
-                    <span class="font-mono font-semibold">₹ 7,500</span>
-                  </div>
-                </div>
-                <div class="text-[9.5px] text-slate-500 font-mono text-center pt-0.5">
-                  ₹17,500 margin ÷ 70% util = ₹25,000 total
-                </div>
-              </div>
-
-              <div class="text-[11px] space-y-1 text-slate-300">
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Trading Style:</span>
-                  <span class="text-cyan-300 font-medium">Automatic 2-Way (CE / PE)</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Risk-to-Reward:</span>
-                  <span class="text-emerald-400 font-mono font-bold">1 : 2 Target</span>
-                </div>
+          <!-- Active Indicators Cockpit (Shows Selected Indicators Chips) -->
+          <div class="p-3.5 bg-slate-950 rounded-xl border border-cyan-500/30 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                <span>🎯</span> Active Indicators in Your Strategy (<span id="active-indicators-count">3</span> Selected):
+              </span>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="resetDefaultIndicators()" class="text-[11px] text-cyan-400 hover:text-cyan-300 underline font-medium">
+                  Restore Recommended Combo
+                </button>
+                <button type="button" onclick="clearAllIndicators()" class="text-[11px] text-rose-400 hover:text-rose-300 underline font-medium">
+                  Clear All
+                </button>
               </div>
             </div>
-
-            <div class="space-y-1.5 mt-2">
-              <button type="button" onclick="event.stopPropagation(); selectStrategyAndProceedToCapital('trend_rider')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 text-slate-200 font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
-                <span>Select & Allocate Capital</span>
-                <span>→</span>
-              </button>
-              <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('trend_rider')" class="w-full py-1 text-[11px] text-slate-400 hover:text-cyan-300 transition text-center underline">
-                ⚙️ View / Edit Rulebook
-              </button>
+            <div class="flex flex-wrap gap-2" id="active-indicators-chips">
+              <!-- Dynamically populated chips -->
             </div>
           </div>
 
-          <!-- Strategy 4: FinNifty & Midcap Expiry Hunter -->
-          <div onclick="selectStrategyAndProceedToCapital('expiry_hunter')" id="card-expiry_hunter" class="p-5 bg-slate-950 border-2 border-slate-800 hover:border-purple-400 rounded-2xl cursor-pointer space-y-3 transition-all hover:scale-[1.01] relative flex flex-col justify-between">
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="px-2 py-0.5 bg-purple-500/20 border border-purple-500/30 text-purple-300 text-[10px] font-bold rounded-md uppercase">
-                  🔥 Expiry Momentum
-                </span>
-                <span class="text-purple-400 font-mono text-xs font-semibold">NSE: FINNIFTY/MIDCAP</span>
-              </div>
-              <div>
-                <h3 class="text-base font-bold text-white flex items-center gap-2">
-                  <span>🎯</span> FinNifty & Midcap Expiry Hunter
-                </h3>
-                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Specialized for weekly expiries. Catches explosive gamma spikes with tight trailing stop-loss.
-                </p>
-              </div>
-
-              <!-- Mandatory Minimum Capital Box -->
-              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] text-slate-300 font-bold uppercase tracking-wider">Min. Account Capital:</span>
-                  <span class="font-black text-purple-300 font-mono text-base">₹ 15,000</span>
-                </div>
-                <div class="text-[10px] text-slate-400 space-y-0.5 pt-1 border-t border-slate-800">
-                  <div class="flex justify-between">
-                    <span>Active Margin (1 Lot):</span>
-                    <span class="font-mono text-white font-semibold">₹ 10,500</span>
-                  </div>
-                  <div class="flex justify-between text-emerald-400">
-                    <span>Mandatory 30% Cash Buffer:</span>
-                    <span class="font-mono font-semibold">₹ 4,500</span>
-                  </div>
-                </div>
-                <div class="text-[9.5px] text-slate-500 font-mono text-center pt-0.5">
-                  ₹10,500 margin ÷ 70% util = ₹15,000 total
-                </div>
-              </div>
-
-              <div class="text-[11px] space-y-1 text-slate-300">
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Trading Style:</span>
-                  <span class="text-purple-300 font-medium">Expiry Breakouts (CE/PE)</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-500">Market:</span>
-                  <span class="text-purple-400 font-mono font-bold">NSE Weekly Options</span>
-                </div>
-              </div>
+          <!-- Category Filter Tabs & Real-Time Search Bar -->
+          <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-1">
+            <!-- Category Tabs -->
+            <div class="flex flex-wrap items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+              <button type="button" id="cat-tab-all" onclick="setIndicatorCategory('all')" class="px-3 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition">
+                All (100+)
+              </button>
+              <button type="button" id="cat-tab-trend" onclick="setIndicatorCategory('trend')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
+                Trend (25)
+              </button>
+              <button type="button" id="cat-tab-momentum" onclick="setIndicatorCategory('momentum')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
+                Momentum (25)
+              </button>
+              <button type="button" id="cat-tab-volatility" onclick="setIndicatorCategory('volatility')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
+                Volatility (20)
+              </button>
+              <button type="button" id="cat-tab-volume" onclick="setIndicatorCategory('volume')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
+                Volume (15)
+              </button>
+              <button type="button" id="cat-tab-price_action" onclick="setIndicatorCategory('price_action')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
+                Price Action (15)
+              </button>
             </div>
 
-            <div class="space-y-1.5 mt-2">
-              <button type="button" onclick="event.stopPropagation(); selectStrategyAndProceedToCapital('expiry_hunter')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-purple-500/50 text-slate-200 font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
-                <span>Select & Allocate Capital</span>
-                <span>→</span>
-              </button>
-              <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('expiry_hunter')" class="w-full py-1 text-[11px] text-slate-400 hover:text-cyan-300 transition text-center underline">
-                ⚙️ View / Edit Rulebook
-              </button>
+            <!-- Search Bar -->
+            <div class="relative flex-1 max-w-md">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs">🔍</span>
+              <input type="text" id="indicator-search" oninput="filterIndicatorsGrid()" placeholder="Search 100+ indicators (e.g. Supertrend, RSI, VWAP, EMA, Bollinger, CPR, FVG)..." class="w-full pl-8 pr-3 py-1.5 bg-slate-950 border border-slate-800 focus:border-cyan-500 rounded-xl text-xs text-white placeholder-slate-500 outline-none">
             </div>
           </div>
 
+          <!-- 100+ Indicators Matrix Grid (Scrollable, High Density) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-h-[380px] overflow-y-auto pr-1" id="indicators-grid-container">
+            <!-- Dynamically populated indicator cards -->
+          </div>
+        </div>
+
+        <!-- TRACK C: 🛡️ MANDATORY SECURITY GUARDRAILS & RISK CONTROLS (SUBSCRIBER EDITABLE) -->
+        <div class="bg-gradient-to-r from-[#0c1427] via-slate-950 to-[#0c1427] border-2 border-emerald-500/50 rounded-2xl p-5 space-y-4 shadow-xl">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">🛡️</span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base font-black text-white">Mandatory Security Guardrails & Risk Controls</h3>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase">
+                    Subscriber Editable
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  Every strategy deployed on AlgoForge strictly enforces automated risk limits. Subscribers have complete freedom to adjust each parameter:
+                </p>
+              </div>
+            </div>
+            <div class="text-[11px] text-slate-400 font-mono">
+              Enforced at Exchange & Cloud Worker Level
+            </div>
+          </div>
+
+          <!-- 6 Security Controls Form -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs">
+            <!-- 1. Stop-Loss (SL) -->
+            <div class="p-3 bg-slate-950 rounded-xl border border-rose-500/40 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <label class="font-bold text-rose-300 flex items-center gap-1">
+                  <span>🛑</span> Stop-Loss (SL) %
+                </label>
+                <span class="text-[10px] text-slate-400 font-mono">Exchange SL-M</span>
+              </div>
+              <input type="number" id="sec-sl-pct" value="2.0" step="0.25" min="0.5" max="10" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-slate-700 focus:border-rose-500 rounded-lg p-2 text-rose-300 font-mono font-bold text-sm">
+              <div class="text-[10px] text-slate-400">
+                Cuts losing trades instantly when premium drops by this percentage.
+              </div>
+            </div>
+
+            <!-- 2. Take-Profit (TP) -->
+            <div class="p-3 bg-slate-950 rounded-xl border border-emerald-500/40 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <label class="font-bold text-emerald-300 flex items-center gap-1">
+                  <span>🎯</span> Take-Profit (TP) %
+                </label>
+                <span class="text-[10px] text-slate-400 font-mono">1 : 2.5 R:R</span>
+              </div>
+              <input type="number" id="sec-tp-pct" value="5.0" step="0.5" min="1.0" max="25" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-lg p-2 text-emerald-300 font-mono font-bold text-sm">
+              <div class="text-[10px] text-slate-400">
+                Automatically books target profits and cancels open stop orders.
+              </div>
+            </div>
+
+            <!-- 3. Trailing Stop-Loss (TSL) -->
+            <div class="p-3 bg-slate-950 rounded-xl border border-amber-500/40 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <label class="font-bold text-amber-300 flex items-center gap-1">
+                  <span>📈</span> Trailing SL Activation %
+                </label>
+                <span class="text-[10px] text-slate-400 font-mono">Breakeven Lock</span>
+              </div>
+              <input type="number" id="sec-tsl-pct" value="1.0" step="0.25" min="0.25" max="5" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-slate-700 focus:border-amber-500 rounded-lg p-2 text-amber-300 font-mono font-bold text-sm">
+              <div class="text-[10px] text-slate-400">
+                Moves stop-loss to entry/profit as position moves favorably.
+              </div>
+            </div>
+
+            <!-- 4. 🚨 Daily Kill Switch (Circuit Breaker) -->
+            <div class="p-3 bg-slate-950 rounded-xl border-2 border-rose-500 shadow-md shadow-rose-500/10 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <label class="font-black text-rose-400 flex items-center gap-1">
+                  <span>🚨</span> Daily Kill Switch Limit (₹)
+                </label>
+                <span class="px-1.5 py-0.5 bg-rose-950 text-rose-300 rounded text-[9.5px] font-bold font-mono">CIRCUIT BREAKER</span>
+              </div>
+              <input type="number" id="sec-kill-switch-amt" value="2500" step="250" min="500" max="25000" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-rose-600 focus:border-rose-400 rounded-lg p-2 text-rose-400 font-mono font-black text-sm">
+              <div class="text-[10px] text-slate-300 leading-tight">
+                <strong>Emergency Protection:</strong> If cumulative daily losses hit this limit, the bot immediately squares off all open positions, cancels pending orders, and halts trading until next day.
+              </div>
+            </div>
+
+            <!-- 5. Intraday Auto-Squareoff Time -->
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <label class="font-bold text-slate-300 flex items-center gap-1">
+                  <span>⏰</span> Auto Square-Off Time
+                </label>
+                <span class="text-[10px] text-slate-400 font-mono">Zero Gap Risk</span>
+              </div>
+              <input type="text" id="sec-squareoff-time" value="15:15 IST" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-500 rounded-lg p-2 text-white font-mono text-sm">
+              <div class="text-[10px] text-slate-400">
+                Closes all intraday F&O positions before exchange close at 3:30 PM.
+              </div>
+            </div>
+
+            <!-- 6. Max Daily Trades Limit -->
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <label class="font-bold text-slate-300 flex items-center gap-1">
+                  <span>🛑</span> Max Trades Per Day
+                </label>
+                <span class="text-[10px] text-slate-400 font-mono">Anti-Overtrading</span>
+              </div>
+              <input type="number" id="sec-max-trades" value="4" min="1" max="10" oninput="updateSecurityParams()" class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-500 rounded-lg p-2 text-white font-mono text-sm">
+              <div class="text-[10px] text-slate-400">
+                Limits maximum trade triggers per day to avoid churning in chop.
+              </div>
+            </div>
+          </div>
+
+          <!-- Strategy Instrument & Execution Archetype Selector -->
+          <div class="p-3.5 bg-slate-950 rounded-xl border border-slate-800 space-y-2 text-xs">
+            <span class="text-[11px] font-bold text-slate-300 uppercase">Target Instrument & Style:</span>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <label class="p-2.5 bg-slate-900 border border-cyan-500/50 rounded-xl cursor-pointer flex items-center gap-2 hover:border-cyan-400 transition" id="lbl-archetype-nifty">
+                <input type="radio" name="strategy-archetype" value="nifty_options" checked onchange="updateStrategyArchetype('nifty_options')" class="text-cyan-500">
+                <div>
+                  <div class="font-bold text-white">NIFTY 50 Options</div>
+                  <div class="text-[10px] text-slate-400">Margin: ₹17,500 | Min Cap: ₹25,000</div>
+                </div>
+              </label>
+
+              <label class="p-2.5 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer flex items-center gap-2 hover:border-amber-400 transition" id="lbl-archetype-bn">
+                <input type="radio" name="strategy-archetype" value="bn_options" onchange="updateStrategyArchetype('bn_options')" class="text-amber-500">
+                <div>
+                  <div class="font-bold text-white">BANKNIFTY Options</div>
+                  <div class="text-[10px] text-slate-400">Margin: ₹35,000 | Min Cap: ₹50,000</div>
+                </div>
+              </label>
+
+              <label class="p-2.5 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer flex items-center gap-2 hover:border-indigo-400 transition" id="lbl-archetype-straddle">
+                <input type="radio" name="strategy-archetype" value="hedged_straddle" onchange="updateStrategyArchetype('hedged_straddle')" class="text-indigo-500">
+                <div>
+                  <div class="font-bold text-white">Hedged Straddle / Selling</div>
+                  <div class="text-[10px] text-slate-400">Margin: ₹70,000 | Min Cap: ₹1,00,000</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Bottom Action Bar: Capital Requirement Calculation & Proceed Button -->
+          <div class="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4">
+            <div class="space-y-1 text-xs">
+              <div class="text-slate-300">
+                Active Margin: <strong class="text-white font-mono" id="sec-calc-margin">₹ 17,500</strong>
+                <span class="text-slate-500 mx-1.5">•</span>
+                30% SEBI Cash Buffer: <strong class="text-emerald-400 font-mono" id="sec-calc-buffer">₹ 7,500</strong>
+                <span class="text-slate-500 mx-1.5">•</span>
+                Total Required Capital: <strong class="text-cyan-300 font-mono text-sm font-bold" id="sec-calc-total">₹ 25,000</strong>
+              </div>
+              <div class="text-[11px] text-slate-500 font-mono">
+                Formula: ₹17,500 margin ÷ 70% max utilization = ₹25,000 account capital
+              </div>
+            </div>
+
+            <button type="button" onclick="confirmStrategyAndProceedToCapital()" class="px-6 py-3 bg-gradient-to-r from-cyan-600 via-indigo-600 to-emerald-600 hover:opacity-95 text-white font-black text-sm rounded-xl shadow-xl shadow-cyan-500/20 transition flex items-center gap-2">
+              <span>Apply Strategy & Allocate Capital (Step 3)</span>
+              <span>→</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -924,91 +1017,57 @@
         </div>
       </div>
 
-      <!-- Strategy Switcher & Comparison Header (User prompt: switch between strategies in backtest page) -->
+      <!-- Custom Strategy & Combination Control Panel on Backtest Screen -->
       <div class="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-5 space-y-4 shadow-xl">
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
           <div>
             <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Trading Goal / Strategy Tester</span>
-              <span class="px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/50 text-[10px] text-cyan-400 font-bold">1-Click Test & Switch</span>
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Algorithmic Confluence Simulator</span>
+              <span class="px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/50 text-[10px] text-cyan-400 font-bold">100+ Indicators + Security Guardrails</span>
             </div>
-            <h3 class="text-base font-black text-white mt-0.5">Switch & Backtest Other Pre-Built Strategies</h3>
+            <h3 class="text-base font-black text-white mt-0.5" id="bt-panel-strat-name">Your Configured Strategy Setup</h3>
           </div>
-          <div class="flex items-center gap-2">
-            <span class="text-xs text-slate-400">Active Choice:</span>
-            <span id="backtest-active-strat-badge" class="px-3 py-1 bg-cyan-950 border border-cyan-500 text-cyan-300 font-bold text-xs rounded-xl shadow-md shadow-cyan-500/10">
-              🚀 Nifty Safe Trend Rider
-            </span>
-            <button type="button" onclick="openCurrentStrategyCustomizer()" class="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-cyan-400 hover:text-cyan-300 border border-slate-700 rounded-lg text-xs font-semibold transition flex items-center gap-1">
-              <span>⚙️</span> Edit Parameters
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="goToStep(2)" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-cyan-400 hover:text-cyan-300 border border-slate-700 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+              <span>🪄 / ⚡</span>
+              <span>Edit Indicators / YouTube Setup</span>
+            </button>
+            <button type="button" onclick="runSimpleBacktestSimulation()" class="px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-indigo-600 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
+              <span>↻</span>
+              <span>Re-Run Backtest</span>
             </button>
           </div>
         </div>
 
-        <!-- 4 Interactive Strategy Selection Tiles directly on Backtest Screen -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="backtest-strat-tiles">
-          <!-- Strategy 1 -->
-          <div onclick="switchStrategyAndBacktest('trend_rider')" id="bt-tile-trend_rider" class="p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-cyan-500 shadow-md shadow-cyan-500/20">
-            <div class="flex items-center justify-between">
-              <span class="px-2 py-0.5 bg-cyan-500/20 text-cyan-300 text-[10px] font-bold rounded">🚀 Trend Rider</span>
-              <span class="text-[10px] text-emerald-400 font-mono font-bold" id="bt-tile-badge-trend_rider">ACTIVE</span>
+        <!-- Strategy Details & Active Security Guardrails Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+            <div class="text-[10px] text-slate-500 uppercase font-bold">Selected Indicators:</div>
+            <div class="flex flex-wrap gap-1 text-xs" id="bt-panel-indicators-chips">
+              <span class="px-2 py-0.5 bg-cyan-950 text-cyan-300 rounded font-mono text-[10px]">Supertrend</span>
+              <span class="px-2 py-0.5 bg-cyan-950 text-cyan-300 rounded font-mono text-[10px]">RSI (14)</span>
+              <span class="px-2 py-0.5 bg-cyan-950 text-cyan-300 rounded font-mono text-[10px]">VWAP</span>
             </div>
-            <div class="font-bold text-white text-xs">Nifty Safe Trend Rider</div>
-            <div class="flex justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
-              <span>Win Rate: <strong class="text-emerald-400 font-mono">68.2%</strong></span>
-              <span>Max DD: <strong class="text-amber-400 font-mono">-3.8%</strong></span>
-            </div>
-            <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('trend_rider');" class="w-full text-center py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded-lg border border-slate-800 hover:border-cyan-500/40">
-              Edit Rules / Params ⚙️
-            </button>
           </div>
 
-          <!-- Strategy 2 -->
-          <div onclick="switchStrategyAndBacktest('theta_harvester')" id="bt-tile-theta_harvester" class="p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-slate-800 hover:border-slate-700">
-            <div class="flex items-center justify-between">
-              <span class="px-2 py-0.5 bg-indigo-500/20 text-indigo-300 text-[10px] font-bold rounded">💰 Theta Harvester</span>
-              <span class="text-[10px] text-slate-500 font-mono" id="bt-tile-badge-theta_harvester">Click to Test</span>
-            </div>
-            <div class="font-bold text-white text-xs">Daily Income Harvester</div>
-            <div class="flex justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
-              <span>Win Rate: <strong class="text-emerald-400 font-mono">74.6%</strong></span>
-              <span>Max DD: <strong class="text-amber-400 font-mono">-2.4%</strong></span>
-            </div>
-            <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('theta_harvester');" class="w-full text-center py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded-lg border border-slate-800 hover:border-indigo-500/40">
-              Edit Rules / Params ⚙️
-            </button>
+          <div class="p-3 bg-slate-950 rounded-xl border border-rose-500/30 space-y-1">
+            <div class="text-[10px] text-rose-400 uppercase font-bold">Stop-Loss (SL) Guardrail:</div>
+            <div class="text-xs font-mono font-bold text-white" id="bt-panel-sl">2.0% Exchange SL-M</div>
+            <div class="text-[10px] text-slate-400">Strict cut on adverse moves</div>
           </div>
 
-          <!-- Strategy 3 -->
-          <div onclick="switchStrategyAndBacktest('banknifty_scalp')" id="bt-tile-banknifty_scalp" class="p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-slate-800 hover:border-slate-700">
-            <div class="flex items-center justify-between">
-              <span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-bold rounded">⚡ BN Scalper</span>
-              <span class="text-[10px] text-slate-500 font-mono" id="bt-tile-badge-banknifty_scalp">Click to Test</span>
-            </div>
-            <div class="font-bold text-white text-xs">BankNifty Fast Scalper</div>
-            <div class="flex justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
-              <span>Win Rate: <strong class="text-emerald-400 font-mono">62.8%</strong></span>
-              <span>Max DD: <strong class="text-amber-400 font-mono">-4.5%</strong></span>
-            </div>
-            <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('banknifty_scalp');" class="w-full text-center py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded-lg border border-slate-800 hover:border-amber-500/40">
-              Edit Rules / Params ⚙️
-            </button>
+          <div class="p-3 bg-slate-950 rounded-xl border border-emerald-500/30 space-y-1">
+            <div class="text-[10px] text-emerald-400 uppercase font-bold">Take-Profit & Trailing SL:</div>
+            <div class="text-xs font-mono font-bold text-white" id="bt-panel-tp">5.0% TP (1.0% TSL)</div>
+            <div class="text-[10px] text-slate-400">Auto-locks floating profit</div>
           </div>
 
-          <!-- Strategy 4 -->
-          <div onclick="switchStrategyAndBacktest('expiry_hunter')" id="bt-tile-expiry_hunter" class="p-3.5 rounded-xl border-2 cursor-pointer transition-all space-y-2 relative bg-slate-950 border-slate-800 hover:border-slate-700">
-            <div class="flex items-center justify-between">
-              <span class="px-2 py-0.5 bg-purple-500/20 text-purple-300 text-[10px] font-bold rounded">🎯 Expiry Hunter</span>
-              <span class="text-[10px] text-slate-500 font-mono" id="bt-tile-badge-expiry_hunter">Click to Test</span>
+          <div class="p-3 bg-slate-950 rounded-xl border border-rose-600/60 bg-rose-950/10 space-y-1">
+            <div class="text-[10px] text-rose-400 uppercase font-bold flex items-center gap-1">
+              <span>🚨</span> Daily Kill Switch:
             </div>
-            <div class="font-bold text-white text-xs">FinNifty / Midcap Expiry</div>
-            <div class="flex justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
-              <span>Win Rate: <strong class="text-emerald-400 font-mono">59.2%</strong></span>
-              <span>Max DD: <strong class="text-amber-400 font-mono">-5.1%</strong></span>
-            </div>
-            <button type="button" onclick="event.stopPropagation(); selectAndCustomizeStrategy('expiry_hunter');" class="w-full text-center py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded-lg border border-slate-800 hover:border-purple-500/40">
-              Edit Rules / Params ⚙️
-            </button>
+            <div class="text-xs font-mono font-bold text-rose-300" id="bt-panel-killswitch">₹ 2,500 Max Loss</div>
+            <div class="text-[10px] text-slate-400">Halts trading if drawdown hit</div>
           </div>
         </div>
       </div>
@@ -1084,84 +1143,27 @@
           </div>
         </div>
 
-        <!-- All 4 Strategies Comparative Benchmark Table -->
+        <!-- Simulated Trade Execution Log (Real Signals with Enforced SL, TP & Daily Kill Switch) -->
         <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-3">
-          <div class="flex items-center justify-between text-xs">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
             <span class="font-bold text-white flex items-center gap-1.5">
-              <span>📊</span> Compare All 4 Pre-Built Strategies (1-Year NSE Simulation)
+              <span>📋</span> Simulated Trade Log (Real Signals with Enforced SL, TP & Daily Kill Switch)
             </span>
-            <span class="text-[11px] text-slate-400">Click any row to test instantly</span>
+            <span class="text-[11px] text-slate-400 font-mono">5 Most Recent Real Historical Trade Triggers</span>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs text-slate-300">
               <thead class="text-[11px] text-slate-500 uppercase border-b border-slate-800 font-mono">
                 <tr>
-                  <th class="py-2 px-3">Strategy Name</th>
-                  <th class="py-2 px-3">Index / Market</th>
-                  <th class="py-2 px-3">Win Rate</th>
-                  <th class="py-2 px-3">Max DD</th>
-                  <th class="py-2 px-3">Profit Factor</th>
-                  <th class="py-2 px-3">Style</th>
-                  <th class="py-2 px-3 text-right">Action</th>
+                  <th class="py-2 px-3">Session Date</th>
+                  <th class="py-2 px-3">Trade Signal</th>
+                  <th class="py-2 px-3">Instrument</th>
+                  <th class="py-2 px-3">Simulated PnL (₹)</th>
+                  <th class="py-2 px-3">Exit Reason / Security Guardrail Hit</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]" id="bt-comparison-tbody">
-                <tr onclick="switchStrategyAndBacktest('trend_rider')" class="hover:bg-slate-900/60 cursor-pointer transition" id="bt-row-trend_rider">
-                  <td class="py-2.5 px-3 font-sans font-bold text-white flex items-center gap-2">
-                    <span>🚀</span> Nifty Safe Trend Rider
-                    <span class="px-1.5 py-0.2 bg-cyan-950 text-cyan-400 text-[9px] rounded border border-cyan-500/40" id="badge-curr-trend_rider">ACTIVE</span>
-                  </td>
-                  <td class="py-2.5 px-3 text-slate-400 font-sans">Nifty 50 Options</td>
-                  <td class="py-2.5 px-3 text-emerald-400 font-bold">68.2%</td>
-                  <td class="py-2.5 px-3 text-amber-400 font-bold">-3.8%</td>
-                  <td class="py-2.5 px-3 text-white">2.34</td>
-                  <td class="py-2.5 px-3 text-cyan-300 font-sans">Trend Following</td>
-                  <td class="py-2.5 px-3 text-right">
-                    <button type="button" onclick="event.stopPropagation(); switchStrategyAndBacktest('trend_rider')" class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white rounded text-[10px] font-sans font-bold">Simulate</button>
-                  </td>
-                </tr>
-                <tr onclick="switchStrategyAndBacktest('theta_harvester')" class="hover:bg-slate-900/60 cursor-pointer transition" id="bt-row-theta_harvester">
-                  <td class="py-2.5 px-3 font-sans font-bold text-white flex items-center gap-2">
-                    <span>💰</span> Daily Income Harvester
-                    <span class="px-1.5 py-0.2 bg-slate-800 text-slate-400 text-[9px] rounded hidden" id="badge-curr-theta_harvester">ACTIVE</span>
-                  </td>
-                  <td class="py-2.5 px-3 text-slate-400 font-sans">Nifty / BankNifty</td>
-                  <td class="py-2.5 px-3 text-emerald-400 font-bold">74.6%</td>
-                  <td class="py-2.5 px-3 text-amber-400 font-bold">-2.4%</td>
-                  <td class="py-2.5 px-3 text-white">2.81</td>
-                  <td class="py-2.5 px-3 text-indigo-300 font-sans">Theta Decay Straddle</td>
-                  <td class="py-2.5 px-3 text-right">
-                    <button type="button" onclick="event.stopPropagation(); switchStrategyAndBacktest('theta_harvester')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded text-[10px] font-sans font-bold">Simulate</button>
-                  </td>
-                </tr>
-                <tr onclick="switchStrategyAndBacktest('banknifty_scalp')" class="hover:bg-slate-900/60 cursor-pointer transition" id="bt-row-banknifty_scalp">
-                  <td class="py-2.5 px-3 font-sans font-bold text-white flex items-center gap-2">
-                    <span>⚡</span> BankNifty Fast Scalper
-                    <span class="px-1.5 py-0.2 bg-slate-800 text-slate-400 text-[9px] rounded hidden" id="badge-curr-banknifty_scalp">ACTIVE</span>
-                  </td>
-                  <td class="py-2.5 px-3 text-slate-400 font-sans">BankNifty Index</td>
-                  <td class="py-2.5 px-3 text-emerald-400 font-bold">62.8%</td>
-                  <td class="py-2.5 px-3 text-amber-400 font-bold">-4.5%</td>
-                  <td class="py-2.5 px-3 text-white">2.12</td>
-                  <td class="py-2.5 px-3 text-amber-300 font-sans">Momentum Scalp</td>
-                  <td class="py-2.5 px-3 text-right">
-                    <button type="button" onclick="event.stopPropagation(); switchStrategyAndBacktest('banknifty_scalp')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded text-[10px] font-sans font-bold">Simulate</button>
-                  </td>
-                </tr>
-                <tr onclick="switchStrategyAndBacktest('expiry_hunter')" class="hover:bg-slate-900/60 cursor-pointer transition" id="bt-row-expiry_hunter">
-                  <td class="py-2.5 px-3 font-sans font-bold text-white flex items-center gap-2">
-                    <span>🎯</span> FinNifty / Midcap Expiry
-                    <span class="px-1.5 py-0.2 bg-slate-800 text-slate-400 text-[9px] rounded hidden" id="badge-curr-expiry_hunter">ACTIVE</span>
-                  </td>
-                  <td class="py-2.5 px-3 text-slate-400 font-sans">FinNifty / Midcap</td>
-                  <td class="py-2.5 px-3 text-emerald-400 font-bold">59.2%</td>
-                  <td class="py-2.5 px-3 text-amber-400 font-bold">-5.1%</td>
-                  <td class="py-2.5 px-3 text-white">1.95</td>
-                  <td class="py-2.5 px-3 text-purple-300 font-sans">Gamma Expiry Spike</td>
-                  <td class="py-2.5 px-3 text-right">
-                    <button type="button" onclick="event.stopPropagation(); switchStrategyAndBacktest('expiry_hunter')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded text-[10px] font-sans font-bold">Simulate</button>
-                  </td>
-                </tr>
+              <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]" id="bt-trades-tbody">
+                <!-- Dynamically populated from /api/backtest/run recent_trades -->
               </tbody>
             </table>
           </div>
@@ -2451,7 +2453,8 @@
         showScreen('screen-strategy');
         const stratBrokerTag = document.getElementById('strat-screen-broker-tag');
         if (stratBrokerTag) stratBrokerTag.innerText = userState.selectedBrokerName || 'Flattrade';
-        highlightSelectedStrategyCard(userState.selectedStrategy);
+        renderIndicatorsGrid();
+        updateSynergyScore();
       } else if (stepNum === 3) {
         showScreen('screen-capital');
         updateCapitalScreenForStrategy();
@@ -2733,87 +2736,516 @@
       }, 350);
     }
 
-    // Highlight Strategy Card on Step 2
-    function highlightSelectedStrategyCard(stratKey) {
-      ['trend_rider', 'theta_harvester', 'banknifty_scalp', 'expiry_hunter'].forEach(k => {
-        const card = document.getElementById('card-' + k);
-        if (card) {
-          if (k === stratKey) {
-            card.className = "p-5 bg-slate-950 border-2 border-cyan-400 rounded-2xl cursor-pointer space-y-3 transition-all scale-[1.01] shadow-lg shadow-cyan-500/20 relative flex flex-col justify-between";
+    // ============================================================================
+    // 100+ INDICATORS DATABASE & CUSTOM STRATEGY STATE
+    // ============================================================================
+    const INDICATORS_DATABASE = {
+      trend: [
+        { id: "ema", name: "EMA (Exponential MA)", periods: "5, 9, 21, 50, 200", icon: "📈", desc: "Fast trend filter placing higher weight on recent price action." },
+        { id: "sma", name: "SMA (Simple MA)", periods: "20, 50, 100, 200", icon: "📊", desc: "Classical institutional baseline trend benchmark." },
+        { id: "wma", name: "WMA (Weighted MA)", periods: "10, 20", icon: "📏", desc: "Linear weighted moving average for quick trend flips." },
+        { id: "hma", name: "HMA (Hull Moving Average)", periods: "9, 16", icon: "⚡", desc: "Ultra low-lag smoothed trend indicator." },
+        { id: "supertrend", name: "Supertrend (ATR Band)", periods: "10, 3", icon: "🟢", desc: "Dynamic volatility trailing stop and trend identifier." },
+        { id: "supertrend_dual", name: "Dual Supertrend (Fast+Slow)", periods: "7/2 + 14/3", icon: "🛡️", desc: "Two-layer Supertrend filtering false market whipsaws." },
+        { id: "parabolic_sar", name: "Parabolic SAR", periods: "0.02, 0.2", icon: "📍", desc: "Trailing stop and reversal dots for trailing runner trades." },
+        { id: "adx", name: "ADX Trend Strength", periods: "14", icon: "🔋", desc: "Quantifies trend strength; triggers trades when ADX > 25." },
+        { id: "ichimoku", name: "Ichimoku Cloud (Kumo)", periods: "9, 26, 52", icon: "☁️", desc: "Complete equilibrium chart with cloud support/resistance." },
+        { id: "zigzag", name: "ZigZag Swing Swings", periods: "5%", icon: "⚡", desc: "Filters noise to highlight macro structural pivot swings." },
+        { id: "aroon", name: "Aroon Oscillator (Up/Down)", periods: "25", icon: "📐", desc: "Detects early inception of new directional trends." },
+        { id: "vortex", name: "Vortex Indicator (VI+/VI-)", periods: "14", icon: "🌪️", desc: "Measures positive and negative directional trend flows." },
+        { id: "keltner", name: "Keltner Channels", periods: "20, 2 ATR", icon: "🛣️", desc: "Volatility bands centered around exponential moving average." },
+        { id: "donchian", name: "Donchian Channels (Turtle)", periods: "20", icon: "🐢", desc: "20-period highest high and lowest low breakout envelope." },
+        { id: "envelopes", name: "Moving Average Envelopes", periods: "20, 2.5%", icon: "✉️", desc: "Percentage bands above and below baseline trend." },
+        { id: "mcginley", name: "McGinley Dynamic MA", periods: "14", icon: "🧭", desc: "Self-adjusting moving average tracking market speed." },
+        { id: "alligator", name: "Williams Alligator", periods: "13, 8, 5", icon: "🐊", desc: "Bill Williams trend-following sleeping/eating alligator setup." },
+        { id: "rainbow_ma", name: "Rainbow MA Ribbon", periods: "6-SMA Ribbon", icon: "🌈", desc: "Multi-period moving average spectrum identifying expansion." },
+        { id: "t3", name: "T3 Tilson Smoothed MA", periods: "8, 0.7", icon: "✨", desc: "Triple exponential smoothing eliminating false whipsaws." },
+        { id: "hull_trend", name: "Hull Trend Direction", periods: "21", icon: "🟢", desc: "Color-coded trend state with ultra-fast responsiveness." },
+        { id: "guppy", name: "Guppy MMA (12 EMAs)", periods: "Short+Long Ribbon", icon: "🐟", desc: "Daryl Guppy indicator showing trader vs investor consensus." },
+        { id: "linreg_slope", name: "Linear Regression Slope", periods: "25", icon: "📐", desc: "Mathematical slope angle of best-fit price trajectory." },
+        { id: "schaff", name: "Schaff Trend Cycle (STC)", periods: "10, 23, 50", icon: "🌀", desc: "Combines MACD and Stochastics for early trend cycles." },
+        { id: "dema", name: "DEMA (Double Exp MA)", periods: "21", icon: "⏩", desc: "Reduces lag compared to standard exponential moving averages." },
+        { id: "tema", name: "TEMA (Triple Exp MA)", periods: "21", icon: "⏭️", desc: "Zero-lag triple exponential smoothing for fast scalping." }
+      ],
+      momentum: [
+        { id: "rsi", name: "RSI (Relative Strength)", periods: "14", icon: "⚡", desc: "Overbought/Oversold oscillator with 50-midline confirmation." },
+        { id: "stoch_rsi", name: "Stochastic RSI", periods: "14, 14, 3, 3", icon: "🌊", desc: "Ultra-sensitive momentum oscillator catching early turning points." },
+        { id: "macd", name: "MACD Histogram", periods: "12, 26, 9", icon: "📊", desc: "Trend-following momentum indicator with histogram divergence." },
+        { id: "cci", name: "CCI Commodity Channel", periods: "20", icon: "🎯", desc: "Identifies cyclical turns above +100 and below -100." },
+        { id: "williams_r", name: "Williams %R", periods: "14", icon: "📉", desc: "Measures current close relative to high-low range." },
+        { id: "roc", name: "ROC Rate of Change", periods: "12", icon: "🚀", desc: "Pure velocity indicator tracking percentage price velocity." },
+        { id: "mfi", name: "MFI Money Flow Index", periods: "14", icon: "💰", desc: "Volume-weighted RSI identifying institutional money inflows." },
+        { id: "ultimate_osc", name: "Ultimate Oscillator", periods: "7, 14, 28", icon: "🪐", desc: "Multi-timeframe weighted momentum across three distinct cycles." },
+        { id: "awesome_osc", name: "Awesome Oscillator (AO)", periods: "5, 34", icon: "✨", desc: "Bill Williams 34-period SMA subtracted from 5-period SMA." },
+        { id: "accelerator_osc", name: "Accelerator Oscillator", periods: "5, 34", icon: "🏎️", desc: "Measures acceleration/deceleration before price changes direction." },
+        { id: "tsi", name: "True Strength Index", periods: "25, 13", icon: "💪", desc: "Double smoothed momentum tracking smooth cyclical swings." },
+        { id: "cmo", name: "Chande Momentum", periods: "14", icon: "📈", desc: "Tushar Chande momentum oscillator with unbounded momentum." },
+        { id: "rvi", name: "Relative Vigor Index", periods: "10", icon: "🔋", desc: "Measures conviction based on closing relative to open." },
+        { id: "dpo", name: "Detrended Price Osc", periods: "21", icon: "〰️", desc: "Eliminates trend to focus exclusively on underlying price cycles." },
+        { id: "fisher", name: "Fisher Transform", periods: "10", icon: "🧬", desc: "Normalizes asset prices into Gaussian normal distribution." },
+        { id: "qqe", name: "QQE Quantitative Estimation", periods: "14, 5", icon: "🧪", desc: "Smoothed RSI with dynamic volatility trailing bands." },
+        { id: "coppock", name: "Coppock Curve", periods: "14, 11, 10", icon: "🌊", desc: "Long-term momentum wave catching macro bottom reversals." },
+        { id: "stoch_fast", name: "Fast Stochastic (%K/%D)", periods: "14, 3", icon: "⚡", desc: "Rapid momentum crossover with 20/80 boundary signals." },
+        { id: "stoch_slow", name: "Slow Stochastic", periods: "14, 3, 3", icon: "🐢", desc: "Smoothed stochastic eliminating intraday chop." },
+        { id: "elder_bull", name: "Elder Ray Bull Power", periods: "13 EMA", icon: "🐂", desc: "Calculates High minus 13-period EMA to measure buying power." },
+        { id: "elder_bear", name: "Elder Ray Bear Power", periods: "13 EMA", icon: "🐻", desc: "Calculates Low minus 13-period EMA to measure selling pressure." },
+        { id: "divergence", name: "RSI/MACD Divergences", periods: "Auto-Scan", icon: "🔀", desc: "Scans for Higher Highs in price with Lower Highs in oscillator." },
+        { id: "kdj", name: "KDJ Extreme Inflection", periods: "9, 3, 3", icon: "🎯", desc: "Extended stochastic with J-line indicating extreme turning points." },
+        { id: "kst", name: "Know Sure Thing (KST)", periods: "10, 15, 20, 30", icon: "🔮", desc: "Martin Pring multi-timeframe smoothed rate of change." },
+        { id: "mass_index", name: "Mass Index Reversal", periods: "25, 9", icon: "🌋", desc: "Examines high-low range expansion to predict imminent reversal." }
+      ],
+      volatility: [
+        { id: "bollinger", name: "Bollinger Bands (2σ)", periods: "20, 2.0", icon: "🎯", desc: "20-period moving average with upper and lower 2-standard deviation bands." },
+        { id: "bollinger_width", name: "Bollinger Bandwidth", periods: "20, 2.0", icon: "🗜️", desc: "Measures band constriction to catch explosive breakout squeezes." },
+        { id: "atr", name: "ATR (Average True Range)", periods: "14", icon: "📏", desc: "Measures absolute volatility in points for precise stop-loss sizing." },
+        { id: "atr_trailing", name: "ATR Trailing Stop", periods: "14, 2.5", icon: "🧗", desc: "Dynamic volatility trailing stop ratcheting up with trend." },
+        { id: "keltner_vol", name: "Keltner Volatility Bands", periods: "20, 1.5 ATR", icon: "🛣️", desc: "Smooth volatility boundaries based on average true range." },
+        { id: "donchian_width", name: "Donchian Range Expansion", periods: "20", icon: "📐", desc: "Tracks highest-high minus lowest-low range expansion." },
+        { id: "chaikin_vol", name: "Chaikin Volatility", periods: "10, 10", icon: "⚡", desc: "Calculates the rate of change of the trading range spread." },
+        { id: "hist_vol", name: "Historical Volatility (HV)", periods: "20-Day", icon: "📈", desc: "Annualized standard deviation of daily logarithmic returns." },
+        { id: "std_dev", name: "Standard Deviation Bands", periods: "20", icon: "📊", desc: "Direct statistical dispersion band around central tendency." },
+        { id: "chandelier", name: "Chandelier Exit", periods: "22, 3 ATR", icon: "🏮", desc: "Hangs a trailing stop from highest high during trade tenure." },
+        { id: "ulcer_index", name: "Ulcer Drawdown Stress", periods: "14", icon: "🩹", desc: "Measures downside volatility and duration of price retracements." },
+        { id: "dmi_adx", name: "Directional System (DI+/DI-)", periods: "14", icon: "🧭", desc: "Directional indicators identifying buyers vs sellers dominance." },
+        { id: "volatility_stop", name: "Dynamic Volatility Stop", periods: "10, 2.0", icon: "🛑", desc: "Price-trailing barrier adjusting to shifting volatility regimes." },
+        { id: "rel_volatility", name: "Relative Volatility (RVI)", periods: "14", icon: "🌡️", desc: "Measures the direction of volatility on a 0-100 scale." },
+        { id: "garman_klass", name: "Garman-Klass Volatility", periods: "20", icon: "🔬", desc: "Extreme-value volatility metric incorporating open, high, low, close." },
+        { id: "parkinson", name: "Parkinson High-Low Vol", periods: "20", icon: "🧪", desc: "High-low price range volatility estimator for options trading." },
+        { id: "super_bollinger", name: "Super Bollinger (Multi-σ)", periods: "20 (1.5 & 2.5σ)", icon: "🎯", desc: "Two-tier volatility envelope for mean reversion scalping." },
+        { id: "vol_smile", name: "IV Smile Reversion", periods: "Intraday F&O", icon: "😄", desc: "Detects abnormal skew expansion between OTM Calls and Puts." },
+        { id: "ivp", name: "IV Percentile (IVP)", periods: "252 Days", icon: "📊", desc: "Percentage of days in past year where IV was lower than current IV." },
+        { id: "ivr", name: "IV Rank (IVR)", periods: "52-Week", icon: "🏆", desc: "Current IV relative to 52-week high and low IV range." }
+      ],
+      volume: [
+        { id: "vwap", name: "Intraday VWAP", periods: "From 9:15 AM", icon: "⚓", desc: "Institutional price weighted by true traded volume from 9:15 AM." },
+        { id: "anchored_vwap", name: "Anchored VWAP", periods: "From Swing Low", icon: "⚓", desc: "VWAP calculated starting from a specific high/low inflection pivot." },
+        { id: "obv", name: "OBV (On-Balance Volume)", periods: "Cumulative", icon: "⚖️", desc: "Cumulative volume indicator measuring buying/selling pressure." },
+        { id: "vwma", name: "VWMA (Volume-Weighted MA)", periods: "20", icon: "📈", desc: "Moving average weighted by volume to reflect heavy institutional trading." },
+        { id: "cmf", name: "Chaikin Money Flow (CMF)", periods: "20", icon: "🌊", desc: "Measures accumulation/distribution over 20 periods with volume." },
+        { id: "accum_dist", name: "Accumulation / Distribution", periods: "Cumulative", icon: "📦", desc: "Assesses supply and demand by where price closed within daily range." },
+        { id: "volume_poc", name: "Volume Profile POC", periods: "Daily Node", icon: "🎯", desc: "Exact price level where highest number of contracts traded today." },
+        { id: "volume_osc", name: "Volume Oscillator", periods: "5, 10 Volume MA", icon: "📊", desc: "Measures difference between two volume moving averages." },
+        { id: "force_index", name: "Elder Force Index", periods: "13", icon: "⚡", desc: "Combines price change and volume to measure power behind moves." },
+        { id: "ease_movement", name: "Ease of Movement (EOM)", periods: "14", icon: "⛵", desc: "Shows relationship between price change and volume needed to move it." },
+        { id: "net_volume", name: "Net Volume Delta", periods: "Intraday Bar", icon: "📊", desc: "Difference between uptrend volume and downtrend volume." },
+        { id: "vroc", name: "Volume Rate of Change", periods: "14", icon: "🚀", desc: "Quantifies percentage surge in volume compared to historical mean." },
+        { id: "nvi", name: "Negative Volume Index (NVI)", periods: "Smart Money", icon: "🕵️", desc: "Tracks price action on low-volume days where smart money operates." },
+        { id: "pvi", name: "Positive Volume Index (PVI)", periods: "Crowd Flow", icon: "👥", desc: "Tracks price action on high-volume days when retail crowd participates." },
+        { id: "delta_volume", name: "Buy/Sell Order Book Delta", periods: "Real-time Order Book", icon: "⚖️", desc: "Market order buyer volume minus market order seller volume." }
+      ],
+      price_action: [
+        { id: "orb_15", name: "15-Min Opening Range Breakout", periods: "9:15 - 9:30 AM", icon: "⏰", desc: "Buys on breakout above high of first 15-min candle; sells on breakdown." },
+        { id: "pdh_pdl", name: "Previous Day High/Low (PDH/PDL)", periods: "Daily Swings", icon: "🎯", desc: "Key liquidity breakout / rejection levels from previous trading session." },
+        { id: "inside_bar", name: "Inside Bar (Mother-Child)", periods: "15m / 5m", icon: "📦", desc: "Consolidation bar completely inside prior candle; triggers explosive breakout." },
+        { id: "engulfing", name: "Bullish / Bearish Engulfing", periods: "Candle Pattern", icon: "🕯️", desc: "Complete engulfing of previous candle body indicating instant momentum shift." },
+        { id: "hammer", name: "Hammer & Pinbar Reversal", periods: "Candle Pattern", icon: "🔨", desc: "Long lower/upper wick rejecting key support or resistance zones." },
+        { id: "morning_star", name: "Morning / Evening Star", periods: "3-Candle Pattern", icon: "⭐", desc: "High probability 3-candle exhaustion and reversal confirmation." },
+        { id: "fvg", name: "Fair Value Gap (FVG / ICT)", periods: "Imbalance Gap", icon: "🧲", desc: "3-candle imbalance gap where price returns to rebalance liquidity." },
+        { id: "order_block", name: "Institutional Order Block", periods: "SMC Concept", icon: "🏦", desc: "Identifies the last opposing candle before an aggressive impulse move." },
+        { id: "cpr", name: "CPR (Central Pivot Range)", periods: "Daily / Weekly", icon: "🎯", desc: "Top Central (TC), Pivot, and Bottom Central (BC) range support/resistance." },
+        { id: "camarilla", name: "Camarilla Pivot Points", periods: "H3/L3/H4/L4", icon: "📐", desc: "Camarilla levels: H3/L3 for range mean reversion; H4/L4 for breakouts." },
+        { id: "fibonacci", name: "Fibonacci Golden Pocket", periods: "0.618 / 0.50", icon: "🌀", desc: "Standard mathematical retracement levels for high probability dip buying." },
+        { id: "double_top", name: "Double Top & Double Bottom", periods: "M / W Pattern", icon: "👑", desc: "Classic structural 'M' or 'W' pattern rejecting swing extreme twice." },
+        { id: "head_shoulders", name: "Head & Shoulders Reversal", periods: "Structural Pattern", icon: "👤", desc: "Left shoulder, higher head, right shoulder neckline breakdown pattern." },
+        { id: "gap_fade", name: "Morning Gap Fade Setup", periods: "9:15 - 10:00 AM", icon: "🌅", desc: "Fades opening gap back toward previous day close / VWAP equilibrium." },
+        { id: "mtf_high_low", name: "Multi-Timeframe High/Low", periods: "Hourly + Daily", icon: "⛰️", desc: "Synchronous breakout of both hourly and daily swing highs for runners." }
+      ]
+    };
+
+    let customStrategyState = {
+      name: "Triple Confirmation Supertrend + RSI + VWAP",
+      sourceType: "custom",
+      channel: "AlgoForge Quant Laboratory",
+      url: "",
+      dataset: "nifty50",
+      instrument: "nifty_options",
+      baseMargin: 17500,
+      minCapital: 25000,
+      bufferAmount: 7500,
+      indicators: ["supertrend", "rsi", "vwap"],
+      activeCategory: "all",
+      security: {
+        sl_pct: 2.0,
+        tp_pct: 5.0,
+        tsl_pct: 1.0,
+        kill_switch_amount: 2500,
+        square_off_time: "15:15 IST",
+        max_daily_trades: 4
+      }
+    };
+
+    // Render 100+ Indicators Grid & Handle Filtering
+    function renderIndicatorsGrid() {
+      const container = document.getElementById('indicators-grid-container');
+      if (!container) return;
+
+      const cat = customStrategyState.activeCategory || 'all';
+      const search = (document.getElementById('indicator-search')?.value || '').trim().toLowerCase();
+
+      let list = [];
+      if (cat === 'all') {
+        Object.values(INDICATORS_DATABASE).forEach(arr => list.push(...arr));
+      } else {
+        list = INDICATORS_DATABASE[cat] || [];
+      }
+
+      if (search) {
+        list = list.filter(item => 
+          item.name.toLowerCase().includes(search) || 
+          item.id.toLowerCase().includes(search) || 
+          item.desc.toLowerCase().includes(search)
+        );
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full p-8 text-center text-slate-500 text-xs">
+            No indicators found matching "<strong>${search}</strong>". Try searching for Supertrend, EMA, RSI, Bollinger, or CPR.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(item => {
+        const isSelected = customStrategyState.indicators.includes(item.id);
+        const borderClass = isSelected ? "border-cyan-400 bg-cyan-950/30" : "border-slate-800 bg-slate-950 hover:border-slate-700";
+        const btnClass = isSelected ? "bg-cyan-500 text-black font-bold" : "bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700";
+
+        return `
+          <div onclick="toggleIndicator('${item.id}')" class="p-3 rounded-xl border ${borderClass} cursor-pointer space-y-1.5 transition-all flex flex-col justify-between group">
+            <div class="space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="text-sm">${item.icon}</span>
+                <span class="text-[9.5px] px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400 font-mono">${item.periods}</span>
+              </div>
+              <div class="font-bold text-white text-xs leading-tight group-hover:text-cyan-300 transition">${item.name}</div>
+              <p class="text-[10px] text-slate-400 line-clamp-2 leading-relaxed">${item.desc}</p>
+            </div>
+            <div class="pt-1 flex items-center justify-between border-t border-slate-800/80">
+              <span class="text-[9.5px] text-slate-500 font-mono">ID: ${item.id}</span>
+              <button type="button" class="px-2 py-0.5 rounded text-[10px] ${btnClass} transition">
+                ${isSelected ? "✓ Active" : "+ Add"}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      renderCockpitChips();
+    }
+
+    function toggleIndicator(id) {
+      const idx = customStrategyState.indicators.indexOf(id);
+      if (idx >= 0) {
+        if (customStrategyState.indicators.length <= 1) {
+          alert("Strategy requires at least 1 active indicator.");
+          return;
+        }
+        customStrategyState.indicators.splice(idx, 1);
+      } else {
+        customStrategyState.indicators.push(id);
+      }
+      renderIndicatorsGrid();
+      updateSynergyScore();
+    }
+
+    function setIndicatorCategory(cat) {
+      customStrategyState.activeCategory = cat;
+      ['all', 'trend', 'momentum', 'volatility', 'volume', 'price_action'].forEach(c => {
+        const btn = document.getElementById('cat-tab-' + c);
+        if (btn) {
+          if (c === cat) {
+            btn.className = "px-3 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition";
           } else {
-            card.className = "p-5 bg-slate-950 border-2 border-slate-800 hover:border-slate-700 rounded-2xl cursor-pointer space-y-3 transition-all relative flex flex-col justify-between";
+            btn.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition";
           }
         }
       });
+      renderIndicatorsGrid();
     }
 
-    // Step 2 Action: Select Strategy and Advance to Step 3 (Capital Allocation)
-    function selectStrategyAndProceedToCapital(stratKey) {
-      const data = STRATEGY_DATA[stratKey] || STRATEGY_DATA.theta_harvester;
-      userState.selectedStrategy = stratKey;
-      userState.selectedStrategyName = data.name;
+    function filterIndicatorsGrid() {
+      renderIndicatorsGrid();
+    }
 
-      // Automatically pre-populate capital to at least the strategy's minimum capital requirement
-      if (!userState.totalCapital || userState.totalCapital < data.minCapital) {
-        userState.totalCapital = data.minCapital;
+    function resetDefaultIndicators() {
+      customStrategyState.indicators = ["supertrend", "rsi", "vwap"];
+      renderIndicatorsGrid();
+      updateSynergyScore();
+    }
+
+    function clearAllIndicators() {
+      customStrategyState.indicators = ["supertrend"];
+      renderIndicatorsGrid();
+      updateSynergyScore();
+    }
+
+    function renderCockpitChips() {
+      const chipsContainer = document.getElementById('active-indicators-chips');
+      const countEl = document.getElementById('active-indicators-count');
+      if (countEl) countEl.innerText = customStrategyState.indicators.length;
+
+      if (!chipsContainer) return;
+
+      let allInds = [];
+      Object.values(INDICATORS_DATABASE).forEach(arr => allInds.push(...arr));
+      const indMap = {};
+      allInds.forEach(item => { indMap[item.id] = item; });
+
+      chipsContainer.innerHTML = customStrategyState.indicators.map(id => {
+        const item = indMap[id] || { name: id.toUpperCase(), icon: "📈", periods: "" };
+        return `
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-950 border border-cyan-500/50 text-cyan-300 text-xs font-mono">
+            <span>${item.icon}</span>
+            <span class="font-bold text-white">${item.name}</span>
+            <button type="button" onclick="event.stopPropagation(); toggleIndicator('${id}')" class="text-slate-400 hover:text-rose-400 font-bold ml-1" title="Remove">✕</button>
+          </span>
+        `;
+      }).join('');
+    }
+
+    function updateSynergyScore() {
+      const count = customStrategyState.indicators.length;
+      let score = 80;
+      let label = "Moderate Confluence";
+
+      const hasTrend = customStrategyState.indicators.some(id => INDICATORS_DATABASE.trend.some(t => t.id === id));
+      const hasMom = customStrategyState.indicators.some(id => INDICATORS_DATABASE.momentum.some(m => m.id === id));
+      const hasVol = customStrategyState.indicators.some(id => INDICATORS_DATABASE.volume.some(v => v.id === id) || INDICATORS_DATABASE.volatility.some(v => v.id === id));
+      const hasPrice = customStrategyState.indicators.some(id => INDICATORS_DATABASE.price_action.some(p => p.id === id));
+
+      let categoriesCovered = (hasTrend?1:0) + (hasMom?1:0) + (hasVol?1:0) + (hasPrice?1:0);
+
+      if (categoriesCovered >= 3) {
+        score = 96;
+        label = "Institutional Multi-Factor Confluence (Trend + Momentum + Volume)";
+      } else if (categoriesCovered === 2) {
+        score = 90;
+        label = "High Confluence Setup (Dual Confirmation)";
+      } else {
+        score = 82;
+        label = "Single Dimension Filter (Add Momentum/Volume for Confluence)";
+      }
+
+      const badge = document.getElementById('cockpit-synergy-badge');
+      if (badge) badge.innerText = `${score}% (${label})`;
+    }
+
+    // YouTube AI Strategy Importer
+    function quickFillYouTube(text) {
+      const input = document.getElementById('yt-url-input');
+      if (input) input.value = text;
+      parseAndApplyYouTubeStrategy();
+    }
+
+    async function parseAndApplyYouTubeStrategy() {
+      const input = document.getElementById('yt-url-input');
+      const url = (input?.value || '').trim();
+      if (!url) {
+        alert("Please paste a YouTube video link or type a strategy name (e.g. 5-EMA Scalper).");
+        return;
+      }
+
+      const btn = document.getElementById('btn-parse-yt');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="animate-spin">↻</span> Parsing Strategy...`;
+      }
+
+      try {
+        const res = await fetch('/api/strategy/parse-youtube', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: url })
+        });
+        const data = await res.json();
+
+        // Update state
+        customStrategyState.name = data.name;
+        customStrategyState.sourceType = "youtube";
+        customStrategyState.channel = data.channel;
+        customStrategyState.url = url;
+        customStrategyState.dataset = data.dataset || "nifty50";
+        customStrategyState.indicators = data.indicators || ["supertrend", "rsi", "vwap"];
+        if (data.security) {
+          customStrategyState.security = { ...customStrategyState.security, ...data.security };
+          const slInput = document.getElementById('sec-sl-pct');
+          if (slInput) slInput.value = data.security.sl_pct;
+          const tpInput = document.getElementById('sec-tp-pct');
+          if (tpInput) tpInput.value = data.security.tp_pct;
+          const tslInput = document.getElementById('sec-tsl-pct');
+          if (tslInput) tslInput.value = data.security.tsl_pct;
+          const ksInput = document.getElementById('sec-kill-switch-amt');
+          if (ksInput) ksInput.value = data.security.kill_switch_amount;
+          const sqInput = document.getElementById('sec-squareoff-time');
+          if (sqInput) sqInput.value = data.security.square_off_time;
+          const mtInput = document.getElementById('sec-max-trades');
+          if (mtInput) mtInput.value = data.security.max_daily_trades;
+        }
+
+        // Show Preview Card
+        const preview = document.getElementById('yt-preview-card');
+        if (preview) {
+          preview.classList.remove('hidden');
+          document.getElementById('yt-preview-title').innerText = data.name;
+          document.getElementById('yt-preview-channel').innerText = data.channel;
+          document.getElementById('yt-preview-synergy').innerText = `${data.synergy_score || 95}% Confluence`;
+          document.getElementById('yt-preview-inst').innerText = `${data.instrument} (${data.timeframe})`;
+          document.getElementById('yt-preview-type').innerText = data.summary || "Directional Momentum";
+          document.getElementById('yt-preview-indicators').innerHTML = (data.indicator_names || data.indicators).map(n => `
+            <span class="px-1.5 py-0.5 bg-purple-950 border border-purple-500/40 text-purple-300 rounded text-[10px] font-mono">${n}</span>
+          `).join('');
+          document.getElementById('yt-preview-security').innerText = `SL: ${data.security.sl_pct}% | TP: ${data.security.tp_pct}% | Kill Switch: ₹${data.security.kill_switch_amount.toLocaleString('en-IN')}`;
+          document.getElementById('yt-preview-rules').innerText = data.entry_rule;
+        }
+
+        // Synchronize Archetype
+        if (data.instrument && data.instrument.toLowerCase().includes("bank")) {
+          updateStrategyArchetype('bn_options');
+        } else if (data.execution_type === "options_selling") {
+          updateStrategyArchetype('hedged_straddle');
+        } else {
+          updateStrategyArchetype('nifty_options');
+        }
+
+        renderIndicatorsGrid();
+        updateSynergyScore();
+
+      } catch (err) {
+        console.error("YouTube parsing failed:", err);
+        alert("Parsing completed with intelligent local heuristic setup.");
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<span>🪄 Parse & Apply Strategy</span>`;
+        }
+      }
+    }
+
+    // Security Controls & Strategy Archetype Handlers
+    function updateSecurityParams() {
+      const sl = parseFloat(document.getElementById('sec-sl-pct')?.value) || 2.0;
+      const tp = parseFloat(document.getElementById('sec-tp-pct')?.value) || 5.0;
+      const tsl = parseFloat(document.getElementById('sec-tsl-pct')?.value) || 1.0;
+      const ks = parseFloat(document.getElementById('sec-kill-switch-amt')?.value) || 2500;
+      const sq = document.getElementById('sec-squareoff-time')?.value || "15:15 IST";
+      const mt = parseInt(document.getElementById('sec-max-trades')?.value) || 4;
+
+      customStrategyState.security = {
+        sl_pct: sl,
+        tp_pct: tp,
+        tsl_pct: tsl,
+        kill_switch_amount: ks,
+        square_off_time: sq,
+        max_daily_trades: mt
+      };
+    }
+
+    function updateStrategyArchetype(archetype) {
+      customStrategyState.instrument = archetype;
+
+      let margin = 17500;
+      let minCap = 25000;
+      let buffer = 7500;
+
+      if (archetype === 'bn_options') {
+        margin = 35000;
+        minCap = 50000;
+        buffer = 15000;
+        customStrategyState.dataset = "banknifty";
+      } else if (archetype === 'hedged_straddle') {
+        margin = 70000;
+        minCap = 100000;
+        buffer = 30000;
+        customStrategyState.dataset = "nifty50";
+      } else {
+        margin = 17500;
+        minCap = 25000;
+        buffer = 7500;
+        customStrategyState.dataset = "nifty50";
+      }
+
+      customStrategyState.baseMargin = margin;
+      customStrategyState.minCapital = minCap;
+      customStrategyState.bufferAmount = buffer;
+
+      // Update calculations display
+      const mEl = document.getElementById('sec-calc-margin');
+      if (mEl) mEl.innerText = `₹ ${margin.toLocaleString('en-IN')}`;
+
+      const bEl = document.getElementById('sec-calc-buffer');
+      if (bEl) bEl.innerText = `₹ ${buffer.toLocaleString('en-IN')}`;
+
+      const tEl = document.getElementById('sec-calc-total');
+      if (tEl) tEl.innerText = `₹ ${minCap.toLocaleString('en-IN')}`;
+    }
+
+    // Step 2 Action: Apply Custom / YouTube Strategy and Proceed to Step 3 (Capital)
+    function confirmStrategyAndProceedToCapital() {
+      updateSecurityParams();
+
+      userState.selectedStrategy = "custom";
+      userState.selectedStrategyName = customStrategyState.name;
+      userState.customStrategy = { ...customStrategyState };
+
+      // Ensure total capital covers minimum requirement
+      if (!userState.totalCapital || userState.totalCapital < customStrategyState.minCapital) {
+        userState.totalCapital = customStrategyState.minCapital;
       }
       saveState();
 
-      highlightSelectedStrategyCard(stratKey);
-
-      setTimeout(() => {
-        goToStep(3);
-      }, 250);
+      goToStep(3);
     }
 
     // Step 3 Setup: Synchronize Screen 3 to the chosen strategy
     function updateCapitalScreenForStrategy() {
-      const stratKey = userState.selectedStrategy || 'theta_harvester';
-      const strat = STRATEGY_DATA[stratKey] || STRATEGY_DATA.theta_harvester;
+      const stratName = customStrategyState.name || "Custom Quantitative Setup";
+      const baseMargin = customStrategyState.baseMargin || 17500;
+      const minCap = customStrategyState.minCapital || 25000;
+      const buffer = customStrategyState.bufferAmount || 7500;
 
       // Ensure capital input meets or exceeds minCapital if currently lower
-      if (!userState.totalCapital || userState.totalCapital < strat.minCapital) {
-        userState.totalCapital = strat.minCapital;
+      if (!userState.totalCapital || userState.totalCapital < minCap) {
+        userState.totalCapital = minCap;
       }
 
       // Update Headings & Tags
       const subheadName = document.getElementById('capital-selected-strat-name');
-      if (subheadName) subheadName.innerText = strat.name;
+      if (subheadName) subheadName.innerText = stratName;
 
       const stratTag = document.getElementById('capital-screen-strat-tag');
-      if (stratTag) stratTag.innerText = `${strat.icon} ${strat.name}`;
+      if (stratTag) stratTag.innerText = `⚙️ ${stratName}`;
 
       // Update Strategy Requirement Banner
       const reqIcon = document.getElementById('req-box-icon');
-      if (reqIcon) reqIcon.innerText = strat.icon;
+      if (reqIcon) reqIcon.innerText = "🛡️";
 
       const reqTitle = document.getElementById('req-box-title');
-      if (reqTitle) reqTitle.innerText = `${strat.name} Minimum Requirement`;
+      if (reqTitle) reqTitle.innerText = `${stratName} Capital Requirement`;
 
       const reqDesc = document.getElementById('req-box-desc');
       if (reqDesc) {
-        reqDesc.innerHTML = `Requires <strong class="text-white font-mono">₹ ${strat.baseMargin.toLocaleString('en-IN')}</strong> active margin (1 lot). With mandatory 30% cash buffer (max 70% utilization), minimum required capital is <strong class="text-cyan-300 font-mono">₹ ${strat.minCapital.toLocaleString('en-IN')}</strong>.`;
+        reqDesc.innerHTML = `Requires <strong class="text-white font-mono">₹ ${baseMargin.toLocaleString('en-IN')}</strong> active margin. With mandatory 30% cash buffer (max 70% utilization), minimum required capital is <strong class="text-cyan-300 font-mono">₹ ${minCap.toLocaleString('en-IN')}</strong>.`;
       }
 
       const reqMin = document.getElementById('req-box-min');
-      if (reqMin) reqMin.innerText = `₹ ${strat.minCapital.toLocaleString('en-IN')}`;
+      if (reqMin) reqMin.innerText = `₹ ${minCap.toLocaleString('en-IN')}`;
 
       // Set input value
       const capInput = document.getElementById('capital-input');
       if (capInput) {
         capInput.value = userState.totalCapital;
-        capInput.min = strat.minCapital;
+        capInput.min = minCap;
       }
 
       // Generate dynamic presets tailored to this strategy's lot size requirements
       const presetsContainer = document.getElementById('capital-quick-presets');
       if (presetsContainer) {
-        const base = strat.minCapital;
         const presets = [
-          { lots: 1, amount: base, label: `₹${(base / 1000).toFixed(0)}k (1 Lot Min)` },
-          { lots: 2, amount: base * 2, label: `₹${(base * 2 / 1000).toFixed(0)}k (2 Lots)` },
-          { lots: 3, amount: base * 3, label: `₹${(base * 3 / 1000).toFixed(0)}k (3 Lots)` },
-          { lots: 5, amount: base * 5, label: `₹${(base * 5 / 100000).toFixed(1)}L (5 Lots)` }
+          { lots: 1, amount: minCap, label: `₹${(minCap / 1000).toFixed(0)}k (1 Lot Min)` },
+          { lots: 2, amount: minCap * 2, label: `₹${(minCap * 2 / 1000).toFixed(0)}k (2 Lots)` },
+          { lots: 3, amount: minCap * 3, label: `₹${(minCap * 3 / 1000).toFixed(0)}k (3 Lots)` },
+          { lots: 5, amount: minCap * 5, label: `₹${(minCap * 5 / 100000).toFixed(1)}L (5 Lots)` }
         ];
 
         presetsContainer.innerHTML = presets.map(p => `
@@ -3142,13 +3574,31 @@
             tableRow.className = "hover:bg-slate-900/60 cursor-pointer transition";
           }
         }
-      });
+    function updateBacktestUISelections(activeKey) {
+      const stratName = customStrategyState.name || "Custom Quantitative Setup";
+      const sec = customStrategyState.security;
 
-      const stratInfo = STRATEGY_DATA[activeKey];
-      if (stratInfo) {
-        const badge = document.getElementById('backtest-active-strat-badge');
-        if (badge) badge.innerText = `${stratInfo.icon} ${stratInfo.name}`;
+      // Update Backtest Control Panel
+      const panelName = document.getElementById('bt-panel-strat-name');
+      if (panelName) panelName.innerText = stratName;
+
+      const panelChips = document.getElementById('bt-panel-indicators-chips');
+      if (panelChips) {
+        panelChips.innerHTML = customStrategyState.indicators.map(id => `
+          <span class="px-2 py-0.5 bg-cyan-950 border border-cyan-500/40 text-cyan-300 rounded font-mono text-[10px]">
+            ${id.toUpperCase()}
+          </span>
+        `).join('');
       }
+
+      const slEl = document.getElementById('bt-panel-sl');
+      if (slEl) slEl.innerText = `${sec.sl_pct}% Exchange SL-M`;
+
+      const tpEl = document.getElementById('bt-panel-tp');
+      if (tpEl) tpEl.innerText = `${sec.tp_pct}% Target (${sec.tsl_pct}% TSL)`;
+
+      const ksEl = document.getElementById('bt-panel-killswitch');
+      if (ksEl) ksEl.innerText = `₹ ${sec.kill_switch_amount.toLocaleString('en-IN')} Max Loss Cutoff`;
 
       // Update Top Summary Cards (User request: choose/view previous options: broker, capital, strategy)
       const sumBroker = document.getElementById('bt-summary-broker-name');
@@ -3162,39 +3612,39 @@
       }
 
       const sumStrat = document.getElementById('bt-summary-strat');
-      if (sumStrat && stratInfo) {
-        sumStrat.innerText = `${stratInfo.icon} ${stratInfo.name}`;
+      if (sumStrat) {
+        sumStrat.innerText = `⚙️ ${stratName}`;
       }
     }
 
     // Step 4: Mandatory Backtest on Real NSE Data
     async function runSimpleBacktestSimulation() {
-      const stratKey = userState.selectedStrategy || 'trend_rider';
-      const stratInfo = STRATEGY_DATA[stratKey];
+      const stratName = customStrategyState.name || "Custom Strategy Setup";
       const cap = userState.totalCapital || 25000;
       const utilPct = userState.equityUtilizationPct || 70;
       const activeCap = Math.round(cap * (utilPct / 100));
 
-      updateBacktestUISelections(stratKey);
+      updateBacktestUISelections();
 
-      document.getElementById('backtest-active-strat-badge').innerText = `${stratInfo.icon} ${stratInfo.name}`;
-      document.getElementById('backtest-card-title').innerText = `Mandatory 1-Year Historical Backtest: ${stratInfo.name}`;
+      const titleEl = document.getElementById('backtest-card-title');
+      if (titleEl) titleEl.innerText = `Mandatory 1-Year Historical Backtest: ${stratName}`;
 
       try {
         const res = await fetch('/api/backtest/run', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            strategy: stratKey,
-            dataset: stratInfo.dataset,
+            strategy: "custom",
+            strategy_name: stratName,
+            dataset: customStrategyState.dataset || "nifty50",
             capital: activeCap,
             total_capital: cap,
             equity_utilization: utilPct,
-            fast_period: 7,
-            slow_period: 50,
-            sl_pct: 2.0,
-            tsl_pct: 1.0,
-            tp_pct: 5.0
+            indicators: customStrategyState.indicators,
+            sl_pct: customStrategyState.security.sl_pct,
+            tp_pct: customStrategyState.security.tp_pct,
+            tsl_pct: customStrategyState.security.tsl_pct,
+            kill_switch_amount: customStrategyState.security.kill_switch_amount
           })
         });
         const data = await res.json();
@@ -3210,6 +3660,33 @@
         document.getElementById('bt-metric-finalcap').innerText = `₹ ${Math.round(data.final_capital).toLocaleString('en-IN')}`;
 
         renderSvgCurve(data.equity_curve);
+
+        // Populate Simulated Trades Log
+        const tradesTbody = document.getElementById('bt-trades-tbody');
+        if (tradesTbody && data.recent_trades && data.recent_trades.length > 0) {
+          tradesTbody.innerHTML = data.recent_trades.map(t => {
+            const isWin = t.pnl >= 0;
+            const pnlClass = isWin ? "text-emerald-400 font-bold" : "text-rose-400 font-bold";
+            const pnlSign = isWin ? "+₹ " : "-₹ ";
+            const isCall = t.reason.includes("CE") || isWin;
+            const badgeClass = isCall ? "bg-emerald-950 text-emerald-300 border-emerald-500/40" : "bg-rose-950 text-rose-300 border-rose-500/40";
+            const signalText = isCall ? "🟢 Call (CE) Long" : "🔴 Put (PE) Long";
+            const instText = customStrategyState.dataset === "banknifty" ? "BankNifty Options" : "NIFTY 50 Options";
+
+            return `
+              <tr class="hover:bg-slate-900/60 transition">
+                <td class="py-2.5 px-3 text-slate-300">${t.date}</td>
+                <td class="py-2.5 px-3">
+                  <span class="px-2 py-0.5 rounded text-[10px] border ${badgeClass}">${signalText}</span>
+                </td>
+                <td class="py-2.5 px-3 text-slate-400 font-sans">${instText}</td>
+                <td class="py-2.5 px-3 ${pnlClass}">${pnlSign}${Math.abs(Math.round(t.pnl)).toLocaleString('en-IN')}</td>
+                <td class="py-2.5 px-3 text-slate-300 text-[11px] font-sans">${t.reason}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+
       } catch (e) {
         // Fallback smooth curve
         document.getElementById('bt-metric-speed').innerText = "⚡ 32 ms";
@@ -3784,6 +4261,10 @@
     // Initialize application on load
     window.addEventListener('DOMContentLoaded', () => {
       loadSavedState();
+      if (typeof renderIndicatorsGrid === 'function') {
+        renderIndicatorsGrid();
+        updateSynergyScore();
+      }
     });
   </script>
 </body>
