@@ -240,9 +240,16 @@
         </button>
 
         <!-- Quick 1-Click Demo Bypass -->
-        <button type="button" onclick="performGoogleSignIn('trader.rahul@gmail.com', 'Rahul Sharma')" class="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5">
+        <button type="button" onclick="performGoogleSignIn('trader.rahul@gmail.com', 'Rahul Sharma')" class="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5 cursor-pointer">
           <span>⚡ Instant 1-Click Demo Enter (Skip Sign-In)</span>
         </button>
+
+        <!-- Admin Setup: Google OAuth 2.0 Client ID Config Modal Trigger -->
+        <div class="text-center pt-1">
+          <button type="button" onclick="openGoogleClientIdModal()" class="text-[10.5px] text-slate-500 hover:text-indigo-400 font-mono transition inline-flex items-center gap-1 underline cursor-pointer">
+            <span>⚙️</span> Configure Google OAuth 2.0 Client ID (Web Application)
+          </button>
+        </div>
 
         <!-- Compliance & Security Trust Badges -->
         <div class="border-t border-slate-800 pt-3.5 space-y-1.5 text-[11px] text-slate-400">
@@ -454,6 +461,160 @@
           </div>
         </div>
 
+        <!-- PRIMARY STRATEGY ARCHETYPES: 1-Click Deploy or Customize (Hedging, Buying, Scalping) -->
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
+            <div>
+              <h3 class="text-sm font-black text-white flex items-center gap-2">
+                <span>🎯</span> Choose Strategy Archetype: 1-Click Deploy or Customize
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">
+                Deploy directly with institutional execution rules (<span class="text-emerald-400 font-bold">Zero indicators required</span>), or customize with 100+ indicators & statistical tools like Z-Score.
+              </p>
+            </div>
+            <span class="text-[11px] font-mono text-cyan-400 px-2.5 py-1 bg-cyan-950/60 border border-cyan-500/30 rounded-lg">
+              3 Institutional Core Styles
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- 1. HEDGING & PAIRS ARBITRAGE -->
+            <div id="archetype-card-hedging" class="bg-gradient-to-b from-[#09151e] to-slate-950 border-2 border-emerald-500/40 hover:border-emerald-400/80 rounded-2xl p-4 flex flex-col justify-between space-y-3.5 transition-all shadow-xl hover:shadow-emerald-950/30">
+              <div class="space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-2xl p-2 bg-emerald-950/60 border border-emerald-500/40 rounded-xl">🛡️</span>
+                  <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40">
+                    Market Neutral
+                  </span>
+                </div>
+                <div>
+                  <h4 class="text-sm font-black text-white">Hedging & Pairs Arbitrage</h4>
+                  <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                    Statistical arbitrage pairs hedge (Nifty & BankNifty) or 9:20 AM delta-neutral hedged straddles.
+                  </p>
+                </div>
+                <div class="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1 text-[11px]">
+                  <div class="flex justify-between text-slate-300">
+                    <span>Active Margin:</span>
+                    <strong class="font-mono text-white">₹ 70,000</strong>
+                  </div>
+                  <div class="flex justify-between text-slate-300">
+                    <span>Total Account Capital:</span>
+                    <strong class="font-mono text-emerald-400">₹ 1,00,000</strong>
+                  </div>
+                  <div class="flex justify-between text-slate-300">
+                    <span>Daily Kill Switch:</span>
+                    <strong class="font-mono text-rose-300">10% (₹ 7,000)</strong>
+                  </div>
+                </div>
+                <div class="text-[10px] text-emerald-300/90 bg-emerald-950/40 border border-emerald-500/30 rounded-lg p-2 flex items-center gap-1.5">
+                  <span>💡</span>
+                  <span><strong>Zero indicators needed:</strong> Pure mathematical delta & ratio rebalancing rules.</span>
+                </div>
+              </div>
+              <div class="space-y-2 pt-1">
+                <button type="button" onclick="deployArchetypeDirect('hedging')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                  <span>⚡ Deploy Hedging (No Indicators)</span>
+                  <span>→</span>
+                </button>
+                <button type="button" onclick="customizeArchetypeWithZScore()" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-emerald-300 font-bold text-[11px] rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
+                  <span>+ Add Z-Score / Indicators</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 2. DIRECTIONAL BUYING (CE/PE) -->
+            <div id="archetype-card-buying" class="bg-gradient-to-b from-[#081724] to-slate-950 border-2 border-cyan-500/40 hover:border-cyan-400/80 rounded-2xl p-4 flex flex-col justify-between space-y-3.5 transition-all shadow-xl hover:shadow-cyan-950/30">
+              <div class="space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-2xl p-2 bg-cyan-950/60 border border-cyan-500/40 rounded-xl">🚀</span>
+                  <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40">
+                    Directional
+                  </span>
+                </div>
+                <div>
+                  <h4 class="text-sm font-black text-white">Directional Options Buying</h4>
+                  <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                    Automatic 2-way trend & breakout momentum buying Call (CE) or Put (PE) on Nifty & BankNifty.
+                  </p>
+                </div>
+                <div class="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1 text-[11px]">
+                  <div class="flex justify-between text-slate-300">
+                    <span>Active Margin:</span>
+                    <strong class="font-mono text-white">₹ 17,500</strong>
+                  </div>
+                  <div class="flex justify-between text-slate-300">
+                    <span>Total Account Capital:</span>
+                    <strong class="font-mono text-cyan-400">₹ 25,000</strong>
+                  </div>
+                  <div class="flex justify-between text-slate-300">
+                    <span>Daily Kill Switch:</span>
+                    <strong class="font-mono text-rose-300">10% (₹ 1,750)</strong>
+                  </div>
+                </div>
+                <div class="text-[10px] text-cyan-300/90 bg-cyan-950/40 border border-cyan-500/30 rounded-lg p-2 flex items-center gap-1.5">
+                  <span>💡</span>
+                  <span><strong>Zero indicators needed:</strong> High/Low price action momentum breakout.</span>
+                </div>
+              </div>
+              <div class="space-y-2 pt-1">
+                <button type="button" onclick="deployArchetypeDirect('buying')" class="w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-cyan-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                  <span>⚡ Deploy Buying (No Indicators)</span>
+                  <span>→</span>
+                </button>
+                <button type="button" onclick="customizeArchetypeWithIndicators('buying')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 text-cyan-300 font-bold text-[11px] rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
+                  <span>+ Add Indicators (Supertrend/RSI)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. INTRADAY SCALPING -->
+            <div id="archetype-card-scalping" class="bg-gradient-to-b from-[#1b1509] to-slate-950 border-2 border-amber-500/40 hover:border-amber-400/80 rounded-2xl p-4 flex flex-col justify-between space-y-3.5 transition-all shadow-xl hover:shadow-amber-950/30">
+              <div class="space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-2xl p-2 bg-amber-950/60 border border-amber-500/40 rounded-xl">⚡</span>
+                  <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-500/40">
+                    High Velocity
+                  </span>
+                </div>
+                <div>
+                  <h4 class="text-sm font-black text-white">Intraday Fast Scalper</h4>
+                  <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                    High-beta 1m / 3m rapid tick scalper with tight trailing stops and quick 15-90s momentum exits.
+                  </p>
+                </div>
+                <div class="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1 text-[11px]">
+                  <div class="flex justify-between text-slate-300">
+                    <span>Active Margin:</span>
+                    <strong class="font-mono text-white">₹ 20,000</strong>
+                  </div>
+                  <div class="flex justify-between text-slate-300">
+                    <span>Total Account Capital:</span>
+                    <strong class="font-mono text-amber-400">₹ 28,600</strong>
+                  </div>
+                  <div class="flex justify-between text-slate-300">
+                    <span>Daily Kill Switch:</span>
+                    <strong class="font-mono text-rose-300">10% (₹ 2,000)</strong>
+                  </div>
+                </div>
+                <div class="text-[10px] text-amber-300/90 bg-amber-950/40 border border-amber-500/30 rounded-lg p-2 flex items-center gap-1.5">
+                  <span>💡</span>
+                  <span><strong>Zero indicators needed:</strong> Fast tick volume surge and reversal rules.</span>
+                </div>
+              </div>
+              <div class="space-y-2 pt-1">
+                <button type="button" onclick="deployArchetypeDirect('scalping')" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-amber-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                  <span>⚡ Deploy Scalping (No Indicators)</span>
+                  <span>→</span>
+                </button>
+                <button type="button" onclick="customizeArchetypeWithIndicators('scalping')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-amber-500/40 text-amber-300 font-bold text-[11px] rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
+                  <span>+ Add Indicators (VWAP/EMA)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- TRACK A: 🪄 INSTANT YOUTUBE STRATEGY AI IMPORTER ("SUPERB OPTION") -->
         <div class="bg-gradient-to-br from-[#0c1427] via-slate-950 to-[#0e162e] border-2 border-indigo-500/50 rounded-2xl p-5 space-y-4 shadow-2xl relative overflow-hidden">
           <div class="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -616,7 +777,7 @@
                 Momentum (27)
               </button>
               <button type="button" id="cat-tab-volatility" onclick="setIndicatorCategory('volatility')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-                Volatility (21)
+                Volatility (22)
               </button>
               <button type="button" id="cat-tab-volume" onclick="setIndicatorCategory('volume')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
                 Volume (15)
@@ -1990,6 +2151,93 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- GOOGLE OAUTH 2.0 CLIENT ID (WEB APPLICATION) CONFIGURATION MODAL -->
+  <!-- ========================================================================= -->
+  <div id="modal-google-client-id" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-[#0b101e] border-2 border-indigo-500/60 w-full max-w-xl rounded-3xl p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">⚙️</span>
+          <div>
+            <h3 class="text-sm font-black text-white">Google OAuth 2.0 Client ID (Web Application)</h3>
+            <p class="text-[11px] text-slate-400">Configure your Google Cloud Client ID for native Google One-Tap & Sign-In</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeGoogleClientIdModal()" class="w-8 h-8 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold text-sm cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <!-- Current Status -->
+      <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+        <span class="text-slate-400">Google OAuth Status:</span>
+        <span id="google-client-id-status" class="font-mono text-[11px] px-2 py-0.5 rounded bg-slate-900 text-amber-300 border border-amber-500/30">
+          Checking status...
+        </span>
+      </div>
+
+      <!-- Client ID Input -->
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-white">Enter Your Google OAuth 2.0 Client ID:</label>
+        <div class="flex gap-2">
+          <input type="text" id="input-google-client-id" placeholder="e.g. 1029384756-abcdefg12345678.apps.googleusercontent.com" class="flex-1 bg-slate-950 border border-slate-700 focus:border-indigo-500 rounded-xl px-3 py-2.5 text-xs text-white outline-none font-mono">
+          <button type="button" onclick="saveGoogleClientId()" class="px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 text-white font-bold rounded-xl text-xs shrink-0 transition flex items-center gap-1.5 cursor-pointer">
+            <span>Save & Activate</span>
+          </button>
+        </div>
+        <p id="google-client-id-msg" class="text-[11px] text-slate-400 hidden"></p>
+      </div>
+
+      <!-- Step-by-Step Instructions Matching User's Google Cloud Screen -->
+      <div class="p-4 bg-slate-950 rounded-2xl border border-indigo-500/30 space-y-3 text-xs">
+        <div class="flex items-center gap-2 text-indigo-300 font-bold border-b border-slate-800/80 pb-2">
+          <span>📘</span>
+          <span>How to Create an OAuth 2.0 Client ID in Google Cloud (Project: "oneside"):</span>
+        </div>
+
+        <ol class="space-y-2.5 text-[11px] text-slate-300 list-decimal list-inside leading-relaxed">
+          <li>
+            In Google Cloud Console under <strong>Google Auth Platform</strong> (left sidebar), click <strong class="text-white">Clients</strong> (with the icon right below Audience).
+          </li>
+          <li>
+            At the top of the screen, click <strong class="text-emerald-400 font-bold">+ CREATE CLIENT</strong>.
+          </li>
+          <li>
+            Under <strong>Application type</strong>, select <strong class="text-cyan-300 font-bold">Web application</strong>.
+          </li>
+          <li>
+            Under <strong>Name</strong>, enter <code class="px-1.5 py-0.5 bg-slate-900 border border-slate-700 rounded text-cyan-200">SkipTheChart Web App</code>.
+          </li>
+          <li>
+            Under <strong class="text-white">Authorized JavaScript origins</strong>, click <strong>+ ADD URI</strong> and paste:
+            <div class="mt-1 pl-4 space-y-1 font-mono text-[10.5px]">
+              <div class="text-cyan-300 select-all">https://skipthechart.com</div>
+              <div class="text-cyan-300 select-all">http://139.59.8.234</div>
+              <div class="text-cyan-300 select-all">http://localhost:8888</div>
+            </div>
+          </li>
+          <li>
+            Under <strong class="text-white">Authorized redirect URIs</strong>, click <strong>+ ADD URI</strong> and paste:
+            <div class="mt-1 pl-4 space-y-1 font-mono text-[10.5px]">
+              <div class="text-emerald-300 select-all">https://skipthechart.com</div>
+              <div class="text-emerald-300 select-all">https://skipthechart.com/</div>
+              <div class="text-emerald-300 select-all">http://139.59.8.234</div>
+              <div class="text-emerald-300 select-all">http://139.59.8.234/</div>
+              <div class="text-emerald-300 select-all">http://localhost:8888</div>
+            </div>
+          </li>
+          <li>
+            Click <strong class="text-indigo-400 font-bold">CREATE</strong> at the bottom. Google will popup your <strong>Client ID</strong>.
+          </li>
+          <li>
+            Copy the <strong>Client ID</strong> and paste it into the box above, then click <strong>Save & Activate</strong>!
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
   <!-- Mandatory SEBI Regulatory Risk Disclosure Footer -->
   <footer class="mt-8 p-5 bg-[#0b101e] border border-slate-800/80 rounded-2xl text-[11px] text-slate-400 space-y-3 text-center leading-relaxed">
     <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-300 pb-2 border-b border-slate-800/60">
@@ -2163,6 +2411,19 @@
         sl: "Risk capped at max 3.0% premium loss.",
         tp: "Gamma spike target of 8.0%+ with trailing protection.",
         exit: "Expiry day square-off at 3:20 PM IST."
+      },
+      pairs_hedge: {
+        name: "Nifty & BankNifty Statistical Pairs Hedge",
+        icon: "🛡️",
+        baseMargin: 70000,
+        minCapital: 100000,
+        bufferAmount: 30000,
+        dataset: "banknifty",
+        style: "Market-Neutral Pairs Arbitrage (Z-Score)",
+        entry: "Monitors Nifty / BankNifty price ratio. When Z-Score diverges beyond ±2.0σ, buys the undervalued index and hedges by shorting overvalued index until mean reversion.",
+        sl: "Strict 1.8% spread stop-loss or Black Swan circuit protection.",
+        tp: "Statistical mean reversion target (Z-Score -> 0) or +4.0% spread profit.",
+        exit: "Intraday mean reversion close or 3:15 PM IST square-off."
       }
     };
 
@@ -2836,6 +3097,16 @@
       try {
         const res = await fetch('/api/auth/config');
         const config = await res.json();
+        
+        const statusEl = document.getElementById('google-client-id-status');
+        const inputEl = document.getElementById('input-google-client-id');
+        if (config.google_client_id) {
+          if (statusEl) statusEl.innerHTML = `<span class="text-emerald-400 font-bold">🟢 Active:</span> <span class="text-white">${config.google_client_id.slice(0, 18)}...</span>`;
+          if (inputEl && !inputEl.value) inputEl.value = config.google_client_id;
+        } else {
+          if (statusEl) statusEl.innerHTML = `<span class="text-amber-300 font-bold">⚪ Not Configured</span> (Using 1-Click Demo / Email)`;
+        }
+
         if (config.google_client_id && window.google && window.google.accounts) {
           window.GOOGLE_CLIENT_ID_CONFIGURED = true;
           window.google.accounts.id.initialize({
@@ -2855,6 +3126,51 @@
           }
         }
       } catch (e) {}
+    }
+
+    // Google Client ID Configuration Modal Handlers
+    function openGoogleClientIdModal() {
+      const modal = document.getElementById('modal-google-client-id');
+      if (modal) modal.classList.remove('hidden');
+      initGoogleAuth();
+    }
+
+    function closeGoogleClientIdModal() {
+      const modal = document.getElementById('modal-google-client-id');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function saveGoogleClientId() {
+      const input = document.getElementById('input-google-client-id');
+      const val = (input?.value || '').trim();
+      const msg = document.getElementById('google-client-id-msg');
+      if (!val) {
+        alert('Please enter a valid Google OAuth Client ID');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/save-google-client-id', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ google_client_id: val })
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (msg) {
+            msg.className = "text-[11px] text-emerald-400 font-semibold block";
+            msg.innerText = "✓ Google Client ID saved & activated! Initializing Google Sign-In...";
+          }
+          await initGoogleAuth();
+          setTimeout(() => {
+            closeGoogleClientIdModal();
+          }, 1500);
+        } else {
+          alert(data.error || 'Failed to save Google Client ID');
+        }
+      } catch (err) {
+        alert('Network error saving Google Client ID: ' + err.message);
+      }
     }
 
     // Top Header Auth Button Handler (Sign In / Sign Out)
@@ -3013,7 +3329,8 @@
         { id: "vol_smile", name: "IV Smile Reversion", periods: "Intraday F&O", icon: "😄", desc: "Detects abnormal skew expansion between OTM Calls and Puts." },
         { id: "ivp", name: "IV Percentile (IVP)", periods: "252 Days", icon: "📊", desc: "Percentage of days in past year where IV was lower than current IV." },
         { id: "ivr", name: "IV Rank (IVR)", periods: "52-Week", icon: "🏆", desc: "Current IV relative to 52-week high and low IV range." },
-        { id: "donchian_squeeze", name: "Donchian Bandwidth Squeeze", periods: "20", icon: "🗜️", desc: "Measures width of 20-period price extremes to detect volatility contraction." }
+        { id: "donchian_squeeze", name: "Donchian Bandwidth Squeeze", periods: "20", icon: "🗜️", desc: "Measures width of 20-period price extremes to detect volatility contraction." },
+        { id: "zscore", name: "Nifty & BankNifty Z-Score Spread (Pairs Hedge)", periods: "20, 2.0σ", icon: "📊", desc: "Statistical arbitrage ratio spread between Nifty and BankNifty for mean-reverting market-neutral pairs hedging." }
       ],
       volume: [
         { id: "vwap", name: "Intraday VWAP", periods: "From 9:15 AM", icon: "⚓", desc: "Institutional price weighted by true traded volume from 9:15 AM." },
@@ -3074,6 +3391,140 @@
         max_daily_trades: 4
       }
     };
+
+    // 1-Click Deploy Archetype (No Indicators Required)
+    function deployArchetypeDirect(archetypeKey) {
+      if (archetypeKey === 'hedging') {
+        userState.selectedStrategy = 'pairs_hedge';
+        userState.selectedStrategyName = 'Nifty & BankNifty Statistical Pairs Hedge';
+        customStrategyState.name = 'Nifty & BankNifty Statistical Pairs Hedge';
+        customStrategyState.dataset = 'banknifty';
+        customStrategyState.indicators = []; // Zero indicators needed
+        customStrategyState.baseMargin = 70000;
+        customStrategyState.minCapital = 100000;
+        customStrategyState.bufferAmount = 30000;
+        customStrategyState.security = {
+          sl_pct: 1.8,
+          tp_pct: 4.0,
+          tsl_pct: 1.0,
+          kill_switch_pct: 10.0,
+          kill_switch_amount: 7000,
+          square_off_time: '15:15 IST',
+          max_daily_trades: 3
+        };
+        userState.totalCapital = 100000;
+      } else if (archetypeKey === 'buying') {
+        userState.selectedStrategy = 'trend_rider';
+        userState.selectedStrategyName = 'Nifty Trend Rider (Options Buying)';
+        customStrategyState.name = 'Nifty Trend Rider (Directional Buying)';
+        customStrategyState.dataset = 'nifty50';
+        customStrategyState.indicators = []; // Zero indicators needed
+        customStrategyState.baseMargin = 17500;
+        customStrategyState.minCapital = 25000;
+        customStrategyState.bufferAmount = 7500;
+        customStrategyState.security = {
+          sl_pct: 2.0,
+          tp_pct: 5.0,
+          tsl_pct: 1.0,
+          kill_switch_pct: 10.0,
+          kill_switch_amount: 1750,
+          square_off_time: '15:15 IST',
+          max_daily_trades: 4
+        };
+        userState.totalCapital = 25000;
+      } else if (archetypeKey === 'scalping') {
+        userState.selectedStrategy = 'banknifty_scalp';
+        userState.selectedStrategyName = 'BankNifty Fast Scalper';
+        customStrategyState.name = 'BankNifty Fast Scalper (Intraday Tick)';
+        customStrategyState.dataset = 'banknifty';
+        customStrategyState.indicators = []; // Zero indicators needed
+        customStrategyState.baseMargin = 20000;
+        customStrategyState.minCapital = 28600;
+        customStrategyState.bufferAmount = 8600;
+        customStrategyState.security = {
+          sl_pct: 1.5,
+          tp_pct: 3.5,
+          tsl_pct: 0.8,
+          kill_switch_pct: 10.0,
+          kill_switch_amount: 2000,
+          square_off_time: '15:15 IST',
+          max_daily_trades: 5
+        };
+        userState.totalCapital = 28600;
+      }
+
+      saveState();
+      updateSecurityParams();
+      renderIndicatorsGrid();
+      updateSynergyScore();
+      
+      // Update Capital input value in Step 3
+      const capInput = document.getElementById('capital-input');
+      if (capInput) capInput.value = userState.totalCapital;
+      updateCapitalCalculations();
+
+      // Advance directly to Step 3 (Capital Allocation)
+      goToStep(3);
+    }
+
+    // Customize Hedging with Z-Score
+    function customizeArchetypeWithZScore() {
+      userState.selectedStrategy = 'pairs_hedge';
+      userState.selectedStrategyName = 'Nifty & BankNifty Statistical Pairs Hedge';
+      customStrategyState.name = 'Nifty & BankNifty Statistical Pairs Hedge (Z-Score)';
+      customStrategyState.dataset = 'banknifty';
+      customStrategyState.indicators = ['zscore'];
+      customStrategyState.baseMargin = 70000;
+      customStrategyState.minCapital = 100000;
+      customStrategyState.bufferAmount = 30000;
+      customStrategyState.security = {
+        sl_pct: 1.8,
+        tp_pct: 4.0,
+        tsl_pct: 1.0,
+        kill_switch_pct: 10.0,
+        kill_switch_amount: 7000,
+        square_off_time: '15:15 IST',
+        max_daily_trades: 3
+      };
+      userState.totalCapital = 100000;
+      saveState();
+      updateSecurityParams();
+      setIndicatorCategory('volatility');
+      renderIndicatorsGrid();
+      updateSynergyScore();
+
+      const target = document.getElementById('active-indicators-chips');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Customize with default indicator bundle
+    function customizeArchetypeWithIndicators(style) {
+      if (style === 'buying') {
+        userState.selectedStrategy = 'trend_rider';
+        customStrategyState.name = 'Nifty Options Trend Buying Setup';
+        customStrategyState.dataset = 'nifty50';
+        customStrategyState.indicators = ['supertrend', 'rsi'];
+        customStrategyState.baseMargin = 17500;
+        customStrategyState.minCapital = 25000;
+        customStrategyState.bufferAmount = 7500;
+      } else if (style === 'scalping') {
+        userState.selectedStrategy = 'banknifty_scalp';
+        customStrategyState.name = 'Fast Intraday Tick Scalper Setup';
+        customStrategyState.dataset = 'banknifty';
+        customStrategyState.indicators = ['vwap', 'ema'];
+        customStrategyState.baseMargin = 20000;
+        customStrategyState.minCapital = 28600;
+        customStrategyState.bufferAmount = 8600;
+      }
+      saveState();
+      updateSecurityParams();
+      setIndicatorCategory('all');
+      renderIndicatorsGrid();
+      updateSynergyScore();
+
+      const target = document.getElementById('active-indicators-chips');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
     // Render 100+ Indicators Grid & Handle Filtering
     function renderIndicatorsGrid() {
@@ -3138,10 +3589,6 @@
     function toggleIndicator(id) {
       const idx = customStrategyState.indicators.indexOf(id);
       if (idx >= 0) {
-        if (customStrategyState.indicators.length <= 1) {
-          alert("Strategy requires at least 1 active indicator.");
-          return;
-        }
         customStrategyState.indicators.splice(idx, 1);
       } else {
         customStrategyState.indicators.push(id);
@@ -3176,7 +3623,7 @@
     }
 
     function clearAllIndicators() {
-      customStrategyState.indicators = ["supertrend"];
+      customStrategyState.indicators = [];
       renderIndicatorsGrid();
       updateSynergyScore();
     }
@@ -3187,6 +3634,19 @@
       if (countEl) countEl.innerText = customStrategyState.indicators.length;
 
       if (!chipsContainer) return;
+
+      if (customStrategyState.indicators.length === 0) {
+        chipsContainer.innerHTML = `
+          <div class="px-3 py-2 rounded-xl bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 text-xs font-mono flex flex-wrap items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span><strong>Pure Execution Mode Active (Zero Indicators):</strong> Strategy runs directly on mathematical delta/price action rules & risk controls.</span>
+            </div>
+            <span class="text-[10px] text-slate-400 font-sans">Click any indicator below to add if desired</span>
+          </div>
+        `;
+        return;
+      }
 
       let allInds = [];
       Object.values(INDICATORS_DATABASE).forEach(arr => allInds.push(...arr));
@@ -3199,7 +3659,7 @@
           <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-950 border border-cyan-500/50 text-cyan-300 text-xs font-mono">
             <span>${item.icon}</span>
             <span class="font-bold text-white">${item.name}</span>
-            <button type="button" onclick="event.stopPropagation(); toggleIndicator('${id}')" class="text-slate-400 hover:text-rose-400 font-bold ml-1" title="Remove">✕</button>
+            <button type="button" onclick="event.stopPropagation(); toggleIndicator('${id}')" class="text-slate-400 hover:text-rose-400 font-bold ml-1 cursor-pointer" title="Remove">✕</button>
           </span>
         `;
       }).join('');
@@ -3207,6 +3667,15 @@
 
     function updateSynergyScore() {
       const count = customStrategyState.indicators.length;
+      const badge = document.getElementById('cockpit-synergy-badge');
+      if (!badge) return;
+
+      if (count === 0) {
+        badge.className = "font-mono font-bold text-xs text-emerald-400";
+        badge.innerText = "100% (Pure Algorithmic Execution)";
+        return;
+      }
+
       let score = 80;
       let label = "Moderate Confluence";
 
@@ -3228,8 +3697,8 @@
         label = "Single Dimension Filter (Add Momentum/Volume for Confluence)";
       }
 
-      const badge = document.getElementById('cockpit-synergy-badge');
-      if (badge) badge.innerText = `${score}% (${label})`;
+      badge.className = "font-mono font-bold text-xs text-emerald-400";
+      badge.innerText = `${score}% (${label})`;
     }
 
     // YouTube AI Strategy Importer
@@ -3375,11 +3844,11 @@
         minCap = 50000;
         buffer = 15000;
         customStrategyState.dataset = "banknifty";
-      } else if (archetype === 'hedged_straddle') {
+      } else if (archetype === 'hedged_straddle' || archetype === 'pairs_hedge') {
         margin = 70000;
         minCap = 100000;
         buffer = 30000;
-        customStrategyState.dataset = "nifty50";
+        customStrategyState.dataset = archetype === 'pairs_hedge' ? "banknifty" : "nifty50";
       } else {
         margin = 17500;
         minCap = 25000;

@@ -27,6 +27,21 @@ PORT = 8888
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
+def load_env():
+    env_path = os.path.join(BASE_DIR, ".env")
+    if os.path.exists(env_path):
+        try:
+            with open(env_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        os.environ[k.strip()] = v.strip().strip("'\"")
+        except Exception as e:
+            print("Notice: could not parse .env file:", e)
+
+load_env()
+
 # Registered Users Database (in-memory with default demo account)
 def hash_pw(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
@@ -202,7 +217,8 @@ INDICATORS_CATALOG = {
         {"id": "vol_smile", "name": "Implied Volatility Smile Reversion", "periods": "Intraday F&O", "desc": "Detects abnormal skew expansion between OTM Calls and Puts."},
         {"id": "ivp", "name": "IVP (Implied Volatility Percentile)", "periods": "252 Days", "desc": "Percentage of days in past year where IV was lower than current IV."},
         {"id": "ivr", "name": "IVR (Implied Volatility Rank)", "periods": "52-Week", "desc": "Current IV relative to 52-week high and low IV range."},
-        {"id": "donchian_squeeze", "name": "Donchian Bandwidth Squeeze", "periods": "20", "desc": "Measures width of 20-period price extremes to detect volatility contraction."}
+        {"id": "donchian_squeeze", "name": "Donchian Bandwidth Squeeze", "periods": "20", "desc": "Measures width of 20-period price extremes to detect volatility contraction."},
+        {"id": "zscore", "name": "Nifty & BankNifty Z-Score Spread (Pairs Hedge)", "periods": "20, 2.0σ", "desc": "Statistical arbitrage ratio spread between Nifty and BankNifty for mean-reverting market-neutral pairs hedging."}
     ],
     "volume": [
         {"id": "vwap", "name": "VWAP (Volume Weighted Average Price)", "periods": "Intraday Benchmark", "desc": "Institutional price weighted by true traded volume from 9:15 AM."},
@@ -434,7 +450,39 @@ def parse_youtube_strategy(url: str, description: str = "") -> dict:
             "summary": "Non-directional premium harvesting system with bought wing protection for maximum margin efficiency."
         }
 
-    # 7. Bollinger Bands Squeeze & Volatility Breakout
+    # 7. Nifty & BankNifty Statistical Pairs Hedge (Z-Score)
+    if any(k in text for k in ["hedge", "pairs", "z-score", "zscore", "arbitrage", "nifty and banknifty", "nifty banknifty"]):
+        return {
+            "success": True,
+            "strategy_id": "yt_pairs_hedge_zscore",
+            "name": "Nifty & BankNifty Statistical Pairs Hedge (Z-Score)",
+            "channel": "Statistical Arbitrage Quant Desk",
+            "url": url,
+            "instrument": "NIFTY & BANKNIFTY Futures / Spreads",
+            "dataset": "banknifty",
+            "execution_type": "hedging_pairs",
+            "timeframe": "15m",
+            "indicators": ["zscore", "bollinger", "atr"],
+            "indicator_names": ["Z-Score Spread", "Bollinger Bands", "ATR Volatility"],
+            "entry_rule": "Monitors Nifty/BankNifty ratio. When Z-Score crosses ±2.0σ, buys the undervalued index and hedges by shorting the overvalued index. Zero directional market exposure.",
+            "exit_rule": "Square off when Z-Score mean-reverts to 0, or upon 1.8% stop-loss. Auto square-off at 15:15 IST.",
+            "security": {
+                "sl_pct": 1.8,
+                "tp_pct": 4.0,
+                "tsl_pct": 1.0,
+                "kill_switch_pct": 10.0,
+                "kill_switch_amount": 7000,
+                "square_off_time": "15:15 IST",
+                "max_daily_trades": 3
+            },
+            "margin_required": 70000,
+            "min_capital": 100000,
+            "buffer_amount": 30000,
+            "synergy_score": 98,
+            "summary": "Market-neutral statistical arbitrage strategy exploiting pricing divergence between Nifty and BankNifty."
+        }
+
+    # 8. Bollinger Bands Squeeze & Volatility Breakout
     if any(k in text for k in ["bollinger", "squeeze"]):
         return {
             "success": True,
@@ -748,6 +796,28 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "message": "Authenticated successfully with Google.",
                 "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "139.59.8.234")
             })
+        elif parsed.path == "/api/auth/save-google-client-id":
+            client_id = payload.get("google_client_id", "").strip()
+            if client_id:
+                os.environ["GOOGLE_CLIENT_ID"] = client_id
+                env_path = os.path.join(BASE_DIR, ".env")
+                try:
+                    lines = []
+                    if os.path.exists(env_path):
+                        with open(env_path, "r", encoding="utf-8") as f:
+                            lines = [l for l in f.readlines() if not l.startswith("GOOGLE_CLIENT_ID=")]
+                    lines.append(f"GOOGLE_CLIENT_ID={client_id}\n")
+                    with open(env_path, "w", encoding="utf-8") as f:
+                        f.writelines(lines)
+                except Exception as ex:
+                    print("Error saving GOOGLE_CLIENT_ID to .env:", ex)
+                self.send_json_response(200, {
+                    "success": True,
+                    "message": "Google Client ID saved and activated successfully!",
+                    "google_client_id": client_id
+                })
+            else:
+                self.send_json_response(400, {"success": False, "error": "Client ID cannot be empty"})
         elif parsed.path == "/api/auth/logout":
             ACTIVE_SESSION["user_email"] = ""
             ACTIVE_SESSION["user_name"] = ""
@@ -1019,12 +1089,12 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         is_custom = (
             strat_key == "custom" or 
             strat_key.startswith("yt_") or 
-            bool(payload.get("indicators")) or 
+            "indicators" in payload or
             strat_key not in ["theta_harvester", "banknifty_scalp", "expiry_hunter"]
         )
 
-        if is_custom and (strat_key == "custom" or strat_key.startswith("yt_") or payload.get("indicators")):
-            custom_indicators = payload.get("indicators", ["supertrend", "rsi", "vwap"])
+        if is_custom and (strat_key == "custom" or strat_key.startswith("yt_") or "indicators" in payload):
+            custom_indicators = payload.get("indicators") if payload.get("indicators") is not None else ["supertrend", "rsi", "vwap"]
             custom_name = payload.get("strategy_name") or meta.get("name", "Custom Indicator Strategy")
             meta["name"] = custom_name
             n = len(candles)
@@ -1121,6 +1191,21 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     elif "inside_bar" in ind_lower or "orb" in ind_lower or "cpr" in ind_lower or "fvg" in ind_lower:
                         if closes[i] > highs[i-1]: bull_votes += 1
                         elif closes[i] < lows[i-1]: bear_votes += 1
+                    elif "zscore" in ind_lower or "pairs" in ind_lower or "hedge" in ind_lower or "arbitrage" in ind_lower:
+                        if closes[i] <= bb_mid[i]: bull_votes += 1
+                        else: bear_votes += 1
+
+                # If user selected pure execution with zero indicators:
+                if len(custom_indicators) == 0:
+                    if "hedge" in strat_key or "theta" in strat_key or "pairs" in strat_key:
+                        if closes[i] <= bb_mid[i]: bull_votes = 1
+                        else: bear_votes = 1
+                    elif "scalp" in strat_key:
+                        if closes[i] > closes[i-1]: bull_votes = 1
+                        else: bear_votes = 1
+                    else:
+                        if closes[i] > highs[i-1]: bull_votes = 1
+                        elif closes[i] < lows[i-1]: bear_votes = 1
 
                 if in_pos is None:
                     if bull_votes > bear_votes:
