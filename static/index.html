@@ -680,7 +680,7 @@
           <span class="text-slate-300">→</span>
           <button type="button" onclick="goToStep(4)" id="wizard-crumb-bt" class="flex items-center gap-1.5 text-slate-500 font-medium shrink-0 hover:underline">
             <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[10px] font-bold border border-slate-200">D</span>
-            <span>Backtest & SEBI Risk</span>
+            <span>Backtest</span>
           </button>
         </div>
 
@@ -697,84 +697,8 @@
         </div>
       </div>
 
-      <!-- Main Layout Grid: Left Docked Broker + Right Progressive Area -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        
-        <!-- LEFT COLUMN: Docked Broker & Live Specs Summary ("Towards my left hand side") -->
-        <div class="lg:col-span-3 space-y-4">
-          <div id="docked-broker-card" class="bg-white border border-slate-200/90 rounded-2xl p-4 space-y-3.5 shadow-sm sticky top-4" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 1px 3px 0 rgba(15, 23, 42, 0.05);">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-              <span class="text-[11px] font-mono text-emerald-800 font-bold uppercase tracking-wider">🏦 Active Broker</span>
-              <button type="button" onclick="goToStep(1)" class="text-[11px] text-emerald-700 hover:text-emerald-900 underline font-semibold">Change ↻</button>
-            </div>
-
-            <!-- Connected Broker Info -->
-            <div class="flex items-center gap-3">
-              <div id="docked-broker-logo" class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-lg font-black shrink-0">
-                FT
-              </div>
-              <div class="overflow-hidden">
-                <div id="docked-broker-name" class="font-black text-sm text-slate-900 truncate">Flattrade</div>
-                <div class="text-[10px] text-emerald-700 font-mono flex items-center gap-1 mt-0.5 font-bold">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span>API Connected</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Live Specifications Card -->
-            <div class="p-3 bg-slate-50/80 rounded-xl border border-slate-200/90 space-y-2 text-xs">
-              <div class="text-[10px] uppercase font-mono text-slate-500 font-semibold tracking-wider">Selected Configuration</div>
-              
-              <div class="flex items-center justify-between">
-                <span class="text-slate-500">Target Asset:</span>
-                <strong id="docked-summary-asset" class="font-mono text-slate-900 font-bold">NIFTY 50</strong>
-              </div>
-
-              <div class="flex items-center justify-between">
-                <span class="text-slate-500">Strategy Style:</span>
-                <strong id="docked-summary-strat" class="font-mono text-emerald-700 font-bold">Iron Butterfly</strong>
-              </div>
-
-              <div class="flex items-center justify-between" id="docked-summary-wings-row">
-                <span class="text-slate-500">Wings Width:</span>
-                <strong id="docked-summary-wings" class="font-mono text-amber-700 font-bold">200 pts</strong>
-              </div>
-
-              <div class="flex items-center justify-between">
-                <span class="text-slate-500">Indicators:</span>
-                <strong id="docked-summary-ind" class="font-mono text-slate-800 font-bold truncate max-w-[130px]">Pure Price Action</strong>
-              </div>
-
-              <div class="pt-2 border-t border-slate-200 space-y-1">
-                <div class="flex items-center justify-between text-[11px]">
-                  <span class="text-slate-500">Required Margin:</span>
-                  <strong id="docked-summary-margin" class="font-mono text-emerald-700 font-bold">₹ 17,500</strong>
-                </div>
-                <div class="flex items-center justify-between text-[11px]">
-                  <span class="text-slate-500">Account (+30% Buffer):</span>
-                  <strong id="docked-summary-cap" class="font-mono text-slate-900 font-bold">₹ 25,000</strong>
-                </div>
-              </div>
-            </div>
-
-            <!-- Mandatory Security Reassurance -->
-            <div class="p-3 bg-emerald-50/80 rounded-xl border border-emerald-200 text-[10px] text-emerald-900 space-y-1">
-              <div class="font-bold flex items-center gap-1 text-emerald-900">
-                <span>🛡️</span> Mandatory Guardrails Active:
-              </div>
-              <div class="font-mono text-[9.5px] text-emerald-800 space-y-0.5">
-                <div>• Stop-Loss (SL): 1.0% Auto-Exit</div>
-                <div>• Target Profit (TP): 2.5%</div>
-                <div>• Daily Kill Switch: 10% Capped</div>
-                <div>• 30% Cash Buffer Enforced</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT COLUMN: Progressive Wizard Steps -->
-        <div class="lg:col-span-9 space-y-5">
+      <!-- Progressive Wizard Steps (Full-Width Corporate Container) -->
+      <div class="w-full space-y-5">
           
           <!-- =================================================================== -->
           <!-- STEP 2 - THREE STRATEGY CREATION ENTRYWAYS                         -->
@@ -1430,7 +1354,6 @@
             </div>
           </div>
 
-        </div>
       </div>
     </div>
 
@@ -4401,13 +4324,13 @@
         const c = crumbs[k];
         if (c) {
           if (k === stage) {
-            c.className = "flex items-center gap-1.5 text-cyan-400 font-bold shrink-0 hover:underline";
+            c.className = "flex items-center gap-1.5 text-emerald-700 font-bold shrink-0 hover:underline";
             const badge = c.querySelector('span:first-child');
-            if (badge) badge.className = "w-5 h-5 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center text-[10px] font-black";
+            if (badge) badge.className = "w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-black shadow-xs";
           } else {
-            c.className = "flex items-center gap-1.5 text-slate-400 font-medium shrink-0 hover:underline";
+            c.className = "flex items-center gap-1.5 text-slate-500 font-medium shrink-0 hover:underline";
             const badge = c.querySelector('span:first-child');
-            if (badge) badge.className = "w-5 h-5 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold";
+            if (badge) badge.className = "w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[10px] font-bold border border-slate-200";
           }
         }
       });
