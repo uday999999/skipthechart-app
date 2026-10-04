@@ -2044,6 +2044,22 @@
                     </table>
                   </div>
                 </div>
+
+                <!-- Step C Strategy Improvement Container (SEBI-Compliant Quantitative Optimization) -->
+                <div id="combo-stepc-improvements-container" class="hidden space-y-3 pt-3 border-t border-slate-200">
+                  <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <span class="font-bold text-slate-900 flex items-center gap-1.5">
+                      <span>💡</span>
+                      <span>How to Improve This Strategy (SEBI-Compliant Quantitative Optimization):</span>
+                    </span>
+                    <span class="text-[10px] font-mono bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded font-bold">
+                      Non-Advisory Hygiene
+                    </span>
+                  </div>
+                  <div id="combo-stepc-improvements-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -2440,6 +2456,129 @@
                 <!-- Dynamically populated from /api/backtest/run recent_trades -->
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- ALL 31 CONFLUENCE PERMUTATIONS & LEADERBOARD (2^5 - 1 = 31) -->
+        <div class="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-4 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">⚡</span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base font-black text-slate-900">All 31 Confluence Permutations & Leaderboard</h3>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono font-bold">2⁵ - 1 = 31 Combos Tested</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">
+                  Vectorized simulation across 246 NSE sessions. Ranks all combinations by Profit Factor, Win Rate, and Net PnL.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="bt-combos-speed-tag" class="px-2.5 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-bold rounded-lg">
+                ⚡ 14 ms (31 Combos)
+              </span>
+            </div>
+          </div>
+
+          <!-- Champion Card (#1 Best Combination) -->
+          <div id="bt-champion-card" class="p-4 bg-gradient-to-r from-emerald-50/90 via-teal-50/50 to-white rounded-xl border-2 border-emerald-500 shadow-xs space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <span class="px-2.5 py-1 rounded bg-emerald-600 text-white font-black text-[10.5px] uppercase font-mono shadow-xs">🏆 #1 Champion Setup</span>
+                <span class="text-sm font-black text-slate-900" id="bt-champion-name">Quad Confluence</span>
+              </div>
+              <button type="button" id="btn-apply-champ-bt" onclick="applyChampionCombinationFromBt()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                <span>🚀</span> Apply Best Combo & Re-Test
+              </button>
+            </div>
+            <div id="bt-champion-chips" class="flex flex-wrap gap-1.5">
+              <!-- Champion indicator chips -->
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+              <div class="p-2 bg-white rounded-lg border border-emerald-200 shadow-2xs">
+                <span class="text-slate-500 block text-[10px]">Win Rate</span>
+                <strong class="text-emerald-700 font-bold text-sm" id="bt-champ-winrate">--</strong>
+              </div>
+              <div class="p-2 bg-white rounded-lg border border-emerald-200 shadow-2xs">
+                <span class="text-slate-500 block text-[10px]">Profit Factor</span>
+                <strong class="text-slate-900 font-bold text-sm" id="bt-champ-pf">--</strong>
+              </div>
+              <div class="p-2 bg-white rounded-lg border border-emerald-200 shadow-2xs">
+                <span class="text-slate-500 block text-[10px]">Simulated Net PnL</span>
+                <strong class="text-emerald-700 font-bold text-sm" id="bt-champ-pnl">--</strong>
+              </div>
+              <div class="p-2 bg-white rounded-lg border border-emerald-200 shadow-2xs">
+                <span class="text-slate-500 block text-[10px]">Max Drawdown</span>
+                <strong class="text-rose-600 font-bold text-sm" id="bt-champ-dd">--</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- All 31 Combinations Scrollable Table -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-xs text-slate-700 font-bold">
+              <span>Full Ranked Permutations Table (<span class="text-emerald-700 font-mono">31 Combinations</span>):</span>
+              <span class="text-[11px] text-slate-500 font-mono">Click 'Apply' to instantly simulate any combination</span>
+            </div>
+            <div class="max-h-80 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xs">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead class="bg-slate-100 text-slate-700 font-mono text-[11px] font-bold uppercase sticky top-0 border-b border-slate-200 shadow-xs">
+                  <tr>
+                    <th class="p-2.5 text-center">Rank</th>
+                    <th class="p-2.5">Combination Setup</th>
+                    <th class="p-2.5 text-center">Indicators</th>
+                    <th class="p-2.5 text-right">Win Rate</th>
+                    <th class="p-2.5 text-right">Profit Factor</th>
+                    <th class="p-2.5 text-right">Net Return</th>
+                    <th class="p-2.5 text-right">Max DD</th>
+                    <th class="p-2.5 text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="bt-combos-table-tbody" class="divide-y divide-slate-100 font-mono text-[11px]">
+                  <!-- Injected dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- HOW TO IMPROVE THIS STRATEGY (SEBI-COMPLIANT QUANTITATIVE OPTIMIZATION) -->
+        <div class="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-4 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">💡</span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base font-black text-slate-900">How to Improve This Strategy</h3>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-bold">
+                    SEBI-Compliant Algorithmic Hygiene (Non-Advisory)
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">
+                  Automated mathematical observations, risk-reward expectancy, execution window defense, and volatility regime filters.
+                </p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 bg-slate-100 text-slate-700 text-xs font-mono font-bold rounded-lg border border-slate-200">
+              5 Quantitative Optimization Rules
+            </span>
+          </div>
+
+          <!-- Dynamic Improvement Cards Grid -->
+          <div id="bt-improvements-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            <!-- Dynamically populated from data.strategy_improvements -->
+          </div>
+
+          <!-- Statutory SEBI Compliance Notice Box -->
+          <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-[11px] text-slate-600 leading-relaxed space-y-1">
+            <div class="flex items-center gap-1.5 font-bold text-slate-800">
+              <span>⚖️</span>
+              <span>SEBI Regulatory Statutory Disclosure (Non-Advisory Algorithm Technology):</span>
+            </div>
+            <p id="bt-sebi-compliance-text">
+              In accordance with SEBI guidelines, all optimizations and performance metrics displayed are purely mathematical, algorithmic historical simulations based on historical data. SkipTheChart is a technology and software platform provider, not a SEBI-registered Investment Adviser (RIA) or Research Analyst (RA). These insights are intended solely for educational, technical configuration, and algorithmic backtesting purposes. Past performance is no guarantee of future returns. Derivative trading involves substantial risk of loss.
+            </p>
           </div>
         </div>
 
@@ -4854,6 +4993,36 @@
           }
         }
 
+        // Render Strategy Improvements in Step C
+        const stepCImpsContainer = document.getElementById('combo-stepc-improvements-container');
+        const stepCImpsGrid = document.getElementById('combo-stepc-improvements-grid');
+        if (stepCImpsContainer && stepCImpsGrid && data.strategy_improvements && data.strategy_improvements.length > 0) {
+          stepCImpsContainer.classList.remove('hidden');
+          stepCImpsGrid.innerHTML = data.strategy_improvements.map(imp => {
+            const isHigh = imp.priority === 'High';
+            const pBadge = isHigh ?
+              `<span class="px-2 py-0.5 rounded-full bg-rose-50 text-rose-800 border border-rose-200 text-[9.5px] font-bold uppercase font-mono">⚠️ High Priority</span>` :
+              `<span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9.5px] font-bold uppercase font-mono">💡 Recommended</span>`;
+
+            return `
+              <div class="p-3 bg-white rounded-xl border border-slate-200 space-y-2 shadow-2xs">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-1.5">
+                    <span>${imp.icon || '💡'}</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">${imp.category || 'Hygiene'}</span>
+                  </div>
+                  ${pBadge}
+                </div>
+                <div class="text-xs font-bold text-slate-900">${imp.title}</div>
+                <p class="text-[11px] text-slate-600">${imp.observation}</p>
+                <div class="text-[10.5px] text-emerald-900 bg-emerald-50/80 p-2 rounded-lg border border-emerald-200 font-medium">
+                  <strong>💡 Action:</strong> ${imp.recommendation}
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
         showToast(`Tested all ${data.total_combinations} combinations in ${data.calc_time_ms}ms!`);
 
       } catch (err) {
@@ -6766,6 +6935,13 @@
           }).join('');
         }
 
+        // Render All 31 Combinations and SEBI-Compliant Strategy Improvements on Step 4
+        if (data.combinations && data.combinations.length > 0) {
+          renderStep4CombinationsAndImprovements(data);
+        } else if (data.combinations_data) {
+          renderStep4CombinationsAndImprovements(data.combinations_data);
+        }
+
       } catch (e) {
         // Fallback smooth curve
         document.getElementById('bt-metric-speed').innerText = "⚡ 32 ms";
@@ -6796,6 +6972,206 @@
       const d = "M" + pts.join(" L");
       const pathEl = document.getElementById('bt-svg-path');
       if (pathEl) pathEl.setAttribute('d', d);
+    }
+
+    // Step 4: 31 Combinations & SEBI Strategy Improvements Rendering Engine
+    let latestBacktestCombinations = null;
+
+    function renderStep4CombinationsAndImprovements(data) {
+      if (!data) return;
+      latestBacktestCombinations = data;
+
+      // 1. Update Speed Tag
+      const speedTag = document.getElementById('bt-combos-speed-tag');
+      if (speedTag && data.calc_time_ms) {
+        speedTag.innerText = `⚡ ${data.calc_time_ms} ms (31 Combos Tested)`;
+      }
+
+      // 2. Render Champion Card
+      const best = data.best_combination || (data.combinations && data.combinations[0]);
+      if (best) {
+        const champName = document.getElementById('bt-champion-name');
+        if (champName) champName.innerText = best.name;
+        const winrateEl = document.getElementById('bt-champ-winrate');
+        if (winrateEl) winrateEl.innerText = `${best.win_rate}%`;
+        const pfEl = document.getElementById('bt-champ-pf');
+        if (pfEl) pfEl.innerText = `${best.profit_factor}`;
+        const pnlEl = document.getElementById('bt-champ-pnl');
+        if (pnlEl) {
+          const sign = best.net_pnl >= 0 ? '+' : '';
+          pnlEl.innerText = `${sign} ₹${Math.round(best.net_pnl).toLocaleString('en-IN')}`;
+        }
+        const ddEl = document.getElementById('bt-champ-dd');
+        if (ddEl) ddEl.innerText = `${best.max_drawdown_percent}%`;
+
+        const chipsEl = document.getElementById('bt-champion-chips');
+        if (chipsEl && best.indicator_names) {
+          chipsEl.innerHTML = best.indicator_names.map(name => `
+            <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-900 border border-emerald-300 rounded font-mono text-[10.5px] font-bold">
+              ✓ ${name}
+            </span>
+          `).join('');
+        }
+      }
+
+      // 3. Render All 31 Combinations Table
+      const tbody = document.getElementById('bt-combos-table-tbody');
+      if (tbody && data.combinations && data.combinations.length > 0) {
+        tbody.innerHTML = data.combinations.map((c, i) => {
+          const isBest = i === 0;
+          const rowClass = isBest ? "bg-emerald-50/90 font-bold border-l-4 border-emerald-600" : "hover:bg-slate-50";
+          const pnlSign = c.net_pnl >= 0 ? '+' : '';
+          const pnlColor = c.net_pnl >= 0 ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold';
+          const rankBadge = isBest ?
+            `<span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white font-black text-[10px]">#1 🏆</span>` :
+            `<span class="text-slate-700 font-mono font-bold text-xs">#${c.rank}</span>`;
+
+          const indBadges = (c.indicator_names || []).map(n =>
+            `<span class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-800 font-semibold rounded text-[9.5px]">${n}</span>`
+          ).join(' ');
+
+          const indJson = JSON.stringify(c.indicators).replace(/"/g, '&quot;');
+
+          return `
+            <tr class="${rowClass} transition text-slate-800 border-b border-slate-100">
+              <td class="p-2.5 text-center">${rankBadge}</td>
+              <td class="p-2.5">
+                <div class="font-bold text-slate-900 text-xs">${c.name}</div>
+                <div class="flex flex-wrap gap-1 mt-1">${indBadges}</div>
+              </td>
+              <td class="p-2.5 text-center text-slate-900 font-bold font-mono text-xs">${c.count}</td>
+              <td class="p-2.5 text-right font-bold font-mono text-xs ${c.win_rate >= 50 ? 'text-emerald-700' : 'text-slate-800'}">${c.win_rate}%</td>
+              <td class="p-2.5 text-right font-bold font-mono text-xs text-slate-900">${c.profit_factor}</td>
+              <td class="p-2.5 text-right font-bold font-mono text-xs ${pnlColor}">${pnlSign} ₹${Math.round(c.net_pnl).toLocaleString('en-IN')}</td>
+              <td class="p-2.5 text-right font-bold font-mono text-xs text-rose-600">${c.max_drawdown_percent}%</td>
+              <td class="p-2.5 text-center">
+                <button type="button" onclick="applyCombinationFromCard(${indJson})" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
+                  Apply
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 4. Render Strategy Improvements Grid
+      const impsGrid = document.getElementById('bt-improvements-grid');
+      const improvements = data.strategy_improvements || [];
+      if (impsGrid && improvements.length > 0) {
+        impsGrid.innerHTML = improvements.map((imp) => {
+          const isHigh = imp.priority === 'High';
+          const pBadge = isHigh ?
+            `<span class="px-2 py-0.5 rounded-full bg-rose-50 text-rose-800 border border-rose-200 text-[9.5px] font-bold uppercase font-mono">⚠️ High Priority</span>` :
+            `<span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9.5px] font-bold uppercase font-mono">💡 Recommended</span>`;
+
+          let actionBtn = '';
+          if (imp.action_type === 'apply_combo' && imp.combo_indicators) {
+            const comboJson = JSON.stringify(imp.combo_indicators).replace(/"/g, '&quot;');
+            actionBtn = `
+              <button type="button" onclick="applyCombinationFromCard(${comboJson})" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-lg transition shadow-xs flex items-center gap-1 cursor-pointer">
+                <span>🚀</span> Apply Best Permutation
+              </button>
+            `;
+          } else if (imp.action_type === 'adjust_rr') {
+            actionBtn = `
+              <button type="button" onclick="applyOptimalRR()" class="px-3 py-1 bg-slate-900 hover:bg-slate-800 text-emerald-400 text-[11px] font-bold rounded-lg transition shadow-xs flex items-center gap-1 cursor-pointer">
+                <span>🎯</span> Enforce 1:3.0 RR (1.5% SL / 4.5% TP)
+              </button>
+            `;
+          } else if (imp.action_type === 'enable_tsl') {
+            actionBtn = `
+              <button type="button" onclick="applyTSL()" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-lg transition shadow-xs flex items-center gap-1 cursor-pointer">
+                <span>📈</span> Enable 1.0% Trailing SL
+              </button>
+            `;
+          } else if (imp.action_type === 'kill_switch') {
+            actionBtn = `
+              <button type="button" onclick="applyHardKillSwitch()" class="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold rounded-lg transition shadow-xs flex items-center gap-1 cursor-pointer">
+                <span>🛡️</span> Lock Hard Daily Kill Switch
+              </button>
+            `;
+          } else {
+            actionBtn = `
+              <span class="text-[10px] text-slate-500 font-mono">Automated Engine Rule</span>
+            `;
+          }
+
+          return `
+            <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-200 space-y-2.5 flex flex-col justify-between shadow-2xs hover:border-slate-300 transition">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-base">${imp.icon || '💡'}</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">${imp.category || 'Optimization'}</span>
+                  </div>
+                  ${pBadge}
+                </div>
+                <h4 class="text-xs font-black text-slate-900 leading-snug">${imp.title}</h4>
+                <div class="p-2 bg-white rounded-lg border border-slate-200/80 text-[11px] text-slate-600 leading-relaxed">
+                  <strong class="text-slate-800">📌 Observation:</strong> ${imp.observation}
+                </div>
+                <div class="p-2 bg-emerald-50/60 rounded-lg border border-emerald-200/70 text-[11px] text-emerald-950 leading-relaxed">
+                  <strong class="text-emerald-800">💡 Action:</strong> ${imp.recommendation}
+                </div>
+              </div>
+              <div class="pt-1 flex items-center justify-end">
+                ${actionBtn}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 5. Update SEBI Compliance Text
+      const sebiEl = document.getElementById('bt-sebi-compliance-text');
+      if (sebiEl && data.sebi_compliance_note) {
+        sebiEl.innerText = data.sebi_compliance_note;
+      }
+    }
+
+    function applyChampionCombinationFromBt() {
+      if (latestBacktestCombinations && latestBacktestCombinations.best_combination) {
+        applyCombinationDirectly(latestBacktestCombinations.best_combination.indicators);
+        runSimpleBacktestSimulation();
+        showToast("Applied #1 Champion setup to your strategy and re-tested!");
+      }
+    }
+
+    function applyCombinationFromCard(indicatorsList) {
+      applyCombinationDirectly(indicatorsList);
+      runSimpleBacktestSimulation();
+      showToast("Combination applied! Re-simulated 1-year backtest.");
+    }
+
+    function applyOptimalRR() {
+      customStrategyState.security.sl_pct = 1.5;
+      customStrategyState.security.tp_pct = 4.5;
+      const slEl = document.getElementById('sec-sl-pct');
+      if (slEl) slEl.value = "1.5";
+      const tpEl = document.getElementById('sec-tp-pct');
+      if (tpEl) tpEl.value = "4.5";
+      updateBacktestUISelections();
+      runSimpleBacktestSimulation();
+      showToast("Applied optimal 1:3.0 Risk:Reward (1.5% SL / 4.5% TP) and re-simulated!");
+    }
+
+    function applyTSL() {
+      customStrategyState.security.tsl_pct = 1.0;
+      const tslEl = document.getElementById('sec-tsl-pct');
+      if (tslEl) tslEl.value = "1.0";
+      updateBacktestUISelections();
+      runSimpleBacktestSimulation();
+      showToast("Enabled 1.0% Dynamic Trailing Stop-Loss and re-simulated!");
+    }
+
+    function applyHardKillSwitch() {
+      customStrategyState.security.kill_switch_pct = 5.0;
+      customStrategyState.security.kill_switch_amount = 2500;
+      const ksEl = document.getElementById('sec-kill-switch-pct');
+      if (ksEl) ksEl.value = "5.0";
+      updateBacktestUISelections();
+      runSimpleBacktestSimulation();
+      showToast("Enforced strict 5% / ₹2,500 Daily Kill Switch guardrail!");
     }
 
     // Step 5: Late-Stage API Key & Secret Modal
