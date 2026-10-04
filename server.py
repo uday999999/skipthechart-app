@@ -1530,7 +1530,14 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     elif "bollinger" in ind_lower or "keltner" in ind_lower or "atr" in ind_lower:
                         if closes[i] >= bb_mid[i]: bull_votes += 1
                         else: bear_votes += 1
-                    elif "inside_bar" in ind_lower or "orb" in ind_lower or "cpr" in ind_lower or "fvg" in ind_lower:
+                    elif "cpr" in ind_lower or "pivot" in ind_lower:
+                        prev_p = (highs[i-1] + lows[i-1] + closes[i-1]) / 3.0
+                        if closes[i] >= prev_p: bull_votes += 1
+                        else: bear_votes += 1
+                    elif "macd" in ind_lower:
+                        if ema_fast[i] > ema_slow[i] and closes[i] > closes[i-1]: bull_votes += 1
+                        else: bear_votes += 1
+                    elif "inside_bar" in ind_lower or "orb" in ind_lower or "fvg" in ind_lower:
                         if closes[i] > highs[i-1]: bull_votes += 1
                         elif closes[i] < lows[i-1]: bear_votes += 1
                     elif "zscore" in ind_lower or "pairs" in ind_lower or "hedge" in ind_lower or "arbitrage" in ind_lower:
@@ -1791,19 +1798,63 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             all_inds.extend(arr)
         ind_map = {item["id"]: item["name"] for item in all_inds}
 
-        # Ensure exactly 5 candidate indicators to always generate all 2^5 - 1 = 31 mathematical combinations
+        # Build comprehensive Name -> ID lookup
+        name_to_id = {}
+        for item in all_inds:
+            name_to_id[item["name"].lower()] = item["id"]
+            name_to_id[item["id"].lower()] = item["id"]
+        name_to_id.update({
+            "supertrend (7, 3)": "supertrend",
+            "supertrend": "supertrend",
+            "rsi (14)": "rsi",
+            "rsi": "rsi",
+            "vwap": "vwap",
+            "9 ema": "ema",
+            "ema": "ema",
+            "20 ema": "ema20",
+            "ema20": "ema20",
+            "50 ema": "ema50",
+            "ema50": "ema50",
+            "bollinger bands": "bollinger",
+            "bollinger": "bollinger",
+            "macd": "macd",
+            "cpr (central pivot)": "cpr",
+            "cpr (central pivot range)": "cpr",
+            "cpr": "cpr",
+            "standard pivots": "pivot",
+            "pivot": "pivot"
+        })
+
+        selected_candidates = []
+        if mode != "global_screen" and raw_indicators:
+            for raw in raw_indicators:
+                r_clean = str(raw).strip().lower()
+                cid = name_to_id.get(r_clean)
+                if not cid:
+                    if "cpr" in r_clean: cid = "cpr"
+                    elif "supertrend" in r_clean: cid = "supertrend"
+                    elif "vwap" in r_clean: cid = "vwap"
+                    elif "rsi" in r_clean: cid = "rsi"
+                    elif "20" in r_clean and "ema" in r_clean: cid = "ema20"
+                    elif "50" in r_clean and "ema" in r_clean: cid = "ema50"
+                    elif "ema" in r_clean: cid = "ema"
+                    elif "bollinger" in r_clean: cid = "bollinger"
+                    elif "macd" in r_clean: cid = "macd"
+                    elif "pivot" in r_clean: cid = "pivot"
+                    else: cid = r_clean
+                if cid and cid not in selected_candidates:
+                    selected_candidates.append(cid)
+
+        # Truncate to maximum 5
+        selected_candidates = selected_candidates[:5]
+
+        # Only pad up to 5 if fewer than 5 candidates were provided
         benchmark_pool = ["supertrend", "rsi", "vwap", "ema", "bollinger", "macd", "atr", "adx", "stochastic"]
-        if mode == "global_screen" or not raw_indicators:
-            # Autonomous Agent screens top 5 multi-regime alpha performers across categories
-            selected_candidates = ["supertrend", "rsi", "vwap", "ema", "bollinger"]
-        else:
-            # Prioritize strategy's active indicators, then pad to exactly 5 candidates (31 combos)
-            selected_candidates = [ind for ind in raw_indicators if ind in ind_map or ind in benchmark_pool][:5]
-            for b in benchmark_pool:
-                if len(selected_candidates) >= 5:
-                    break
-                if b not in selected_candidates:
-                    selected_candidates.append(b)
+        for b in benchmark_pool:
+            if len(selected_candidates) >= 5:
+                break
+            if b not in selected_candidates:
+                selected_candidates.append(b)
 
         # Generate all 2^k - 1 non-empty combinations (5 indicators = exactly 31 combinations)
         combos = []

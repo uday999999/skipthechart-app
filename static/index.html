@@ -4889,9 +4889,16 @@
           "Agent calculating all 31 mathematical combinations (Singles, Duals, Triples, Quads, 5-Way)...";
       }
 
-      const activeInds = customStrategyState.indicators.length > 0 ?
-        customStrategyState.indicators :
-        ["supertrend", "rsi", "vwap", "ema", "bollinger"];
+      let activeInds = [];
+      if (mode === 'active') {
+        if (customStrategyState.indicators && customStrategyState.indicators.length > 0) {
+          activeInds = [...customStrategyState.indicators];
+        } else if (wizardState.indicators && wizardState.indicators.length > 0) {
+          const idMap = {};
+          TOP_10_INDICATORS.forEach(item => { idMap[item.name] = item.id; });
+          activeInds = wizardState.indicators.map(n => idMap[n] || n.toLowerCase());
+        }
+      }
 
       const slVal = parseFloat(document.getElementById('sec-sl-pct')?.value) || 1.8;
       const tpVal = parseFloat(document.getElementById('sec-tp-pct')?.value) || 4.5;
@@ -5467,58 +5474,95 @@
       if (countDisplay) countDisplay.innerText = count;
     }
 
-    function toggleQuickIndicator(id, name) {
-      if (!wizardState.indicators) wizardState.indicators = [];
-      const idx = wizardState.indicators.indexOf(name);
-      if (idx !== -1) {
-        wizardState.indicators.splice(idx, 1);
-      } else {
-        if (wizardState.indicators.length >= 5) {
-          showNotification('Maximum 5 active indicators allowed for instant 31-combination testing.', 'warning');
-          return;
-        }
-        wizardState.indicators.push(name);
+    function syncIndicatorState(idsArray) {
+      customStrategyState.indicators = (idsArray || []).slice(0, 5);
+
+      const idToNameMap = {};
+      TOP_10_INDICATORS.forEach(item => { idToNameMap[item.id] = item.name; });
+      if (typeof INDICATORS_DATABASE !== 'undefined') {
+        Object.values(INDICATORS_DATABASE).forEach(arr => {
+          arr.forEach(item => { idToNameMap[item.id] = item.name; });
+        });
       }
-      wizardState.withoutIndicators = (wizardState.indicators.length === 0);
+
+      wizardState.indicators = customStrategyState.indicators.map(id => idToNameMap[id] || id.toUpperCase());
+      wizardState.withoutIndicators = (customStrategyState.indicators.length === 0);
+
       renderQuickIndicatorsGrid();
       renderActiveIndicatorChips();
-      
+      if (typeof renderIndicatorsGrid === 'function') renderIndicatorsGrid();
+      if (typeof renderCockpitChips === 'function') renderCockpitChips();
+      if (typeof updateSynergyScore === 'function') updateSynergyScore();
+      if (typeof updateDockedBrokerUI === 'function') updateDockedBrokerUI();
+
       const badge = document.getElementById('btn-ind-current-badge');
       if (badge) {
         badge.innerText = wizardState.indicators.length > 0 ? wizardState.indicators.join(' + ') : 'Pure Price Action';
       }
-      updateDockedBrokerUI();
+    }
+
+    function toggleQuickIndicator(id, name) {
+      let targetId = id;
+      if (!targetId && name) {
+        const found = TOP_10_INDICATORS.find(item => item.name === name);
+        targetId = found ? found.id : name.toLowerCase();
+      }
+      if (!targetId) return;
+
+      let currentIds = [...(customStrategyState.indicators || [])];
+      if (currentIds.length === 0 && wizardState.indicators && wizardState.indicators.length > 0) {
+        currentIds = wizardState.indicators.map(n => {
+          const f = TOP_10_INDICATORS.find(item => item.name === n);
+          return f ? f.id : n.toLowerCase();
+        });
+      }
+
+      const idx = currentIds.indexOf(targetId);
+      if (idx !== -1) {
+        currentIds.splice(idx, 1);
+      } else {
+        if (currentIds.length >= 5) {
+          showNotification('Maximum 5 active indicators allowed for instant 31-combination testing.', 'warning');
+          return;
+        }
+        currentIds.push(targetId);
+      }
+
+      syncIndicatorState(currentIds);
     }
 
     function renderActiveIndicatorChips() {
       const container = document.getElementById('active-indicators-chips');
       if (!container) return;
-      if (!wizardState.indicators || wizardState.indicators.length === 0) {
+      if (!customStrategyState.indicators || customStrategyState.indicators.length === 0) {
         container.innerHTML = '<span class="text-xs text-emerald-700 font-mono italic">No indicators selected (Pure Price Action active)</span>';
         return;
       }
-      container.innerHTML = wizardState.indicators.map(ind => `
-        <span class="px-2.5 py-1 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-lg text-xs font-mono flex items-center gap-1.5 shadow-xs">
-          <span>${ind}</span>
-          <button type="button" onclick="toggleQuickIndicator('', '${ind}')" class="text-rose-500 hover:text-rose-700 font-bold ml-1">×</button>
-        </span>
-      `).join('');
+      const idToNameMap = {};
+      TOP_10_INDICATORS.forEach(item => { idToNameMap[item.id] = item.name; });
+      if (typeof INDICATORS_DATABASE !== 'undefined') {
+        Object.values(INDICATORS_DATABASE).forEach(arr => {
+          arr.forEach(item => { idToNameMap[item.id] = item.name; });
+        });
+      }
+
+      container.innerHTML = customStrategyState.indicators.map(id => {
+        const dispName = idToNameMap[id] || id.toUpperCase();
+        return `
+          <span class="px-2.5 py-1 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-lg text-xs font-mono flex items-center gap-1.5 shadow-xs">
+            <span>${dispName}</span>
+            <button type="button" onclick="toggleQuickIndicator('${id}', '')" class="text-rose-500 hover:text-rose-700 font-bold ml-1 cursor-pointer">×</button>
+          </span>
+        `;
+      }).join('');
     }
 
     function resetDefaultIndicators() {
-      wizardState.indicators = ["VWAP", "Supertrend (7, 3)", "9 EMA"];
-      wizardState.withoutIndicators = false;
-      renderQuickIndicatorsGrid();
-      renderActiveIndicatorChips();
-      updateDockedBrokerUI();
+      syncIndicatorState(["vwap", "supertrend", "ema"]);
     }
 
     function clearAllIndicators() {
-      wizardState.indicators = [];
-      wizardState.withoutIndicators = true;
-      renderQuickIndicatorsGrid();
-      renderActiveIndicatorChips();
-      updateDockedBrokerUI();
+      syncIndicatorState([]);
     }
 
     function wizardNextFromIndicators() {
@@ -5527,7 +5571,11 @@
       userState.totalCapital = wizardState.minCapital;
       userState.baseMargin = wizardState.baseMargin;
       saveState();
-      
+
+      if (!customStrategyState.indicators || customStrategyState.indicators.length === 0) {
+        customStrategyState.indicators = ["vwap", "supertrend", "ema"];
+      }
+
       // Update screen-backtest summary badges
       const btBroker = document.getElementById('bt-summary-broker-name');
       if (btBroker) btBroker.innerText = userState.selectedBrokerName || 'Flattrade';
@@ -6044,18 +6092,18 @@
     }
 
     function toggleIndicator(id) {
-      const idx = customStrategyState.indicators.indexOf(id);
+      let currentIds = [...(customStrategyState.indicators || [])];
+      const idx = currentIds.indexOf(id);
       if (idx >= 0) {
-        customStrategyState.indicators.splice(idx, 1);
+        currentIds.splice(idx, 1);
       } else {
-        if (customStrategyState.indicators.length >= 5) {
+        if (currentIds.length >= 5) {
           showToast("⚠️ Maximum 5 indicators allowed per strategy! Restricting to ≤5 prevents indicator lag and allows testing all 31 combinations.");
           return;
         }
-        customStrategyState.indicators.push(id);
+        currentIds.push(id);
       }
-      renderIndicatorsGrid();
-      updateSynergyScore();
+      syncIndicatorState(currentIds);
     }
 
     function setIndicatorCategory(cat) {
@@ -6075,28 +6123,6 @@
 
     function filterIndicatorsGrid() {
       renderIndicatorsGrid();
-    }
-
-    function resetDefaultIndicators() {
-      customStrategyState.indicators = ["supertrend", "rsi", "vwap"];
-      wizardState.indicators = ["Supertrend (7, 3)", "RSI (14)", "VWAP"];
-      wizardState.withoutIndicators = false;
-      renderQuickIndicatorsGrid();
-      renderActiveIndicatorChips();
-      renderIndicatorsGrid();
-      updateSynergyScore();
-      updateDockedBrokerUI();
-    }
-
-    function clearAllIndicators() {
-      customStrategyState.indicators = [];
-      wizardState.indicators = [];
-      wizardState.withoutIndicators = true;
-      renderQuickIndicatorsGrid();
-      renderActiveIndicatorChips();
-      renderIndicatorsGrid();
-      updateSynergyScore();
-      updateDockedBrokerUI();
     }
 
     function renderCockpitChips() {
@@ -6824,9 +6850,19 @@
 
       const panelChips = document.getElementById('bt-panel-indicators-chips');
       if (panelChips) {
-        panelChips.innerHTML = customStrategyState.indicators.map(id => `
+        const idToNameMap = {};
+        TOP_10_INDICATORS.forEach(item => { idToNameMap[item.id] = item.name; });
+        if (typeof INDICATORS_DATABASE !== 'undefined') {
+          Object.values(INDICATORS_DATABASE).forEach(arr => {
+            arr.forEach(item => { idToNameMap[item.id] = item.name; });
+          });
+        }
+        const activeList = (customStrategyState.indicators && customStrategyState.indicators.length > 0)
+          ? customStrategyState.indicators
+          : (wizardState.indicators || ["vwap", "supertrend", "ema"]);
+        panelChips.innerHTML = activeList.map(id => `
           <span class="px-2 py-0.5 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded font-mono text-[10px] font-bold shadow-xs">
-            ${id.toUpperCase()}
+            ${idToNameMap[id] || id.toUpperCase()}
           </span>
         `).join('');
       }
@@ -6871,6 +6907,10 @@
       const utilPct = userState.equityUtilizationPct || 70;
       const activeCap = Math.round(cap * (utilPct / 100));
 
+      const reqIndicators = (customStrategyState.indicators && customStrategyState.indicators.length > 0)
+        ? customStrategyState.indicators
+        : (wizardState.indicators && wizardState.indicators.length > 0 ? wizardState.indicators : ["vwap", "supertrend", "ema"]);
+
       updateBacktestUISelections();
 
       const titleEl = document.getElementById('backtest-card-title');
@@ -6887,7 +6927,7 @@
             capital: activeCap,
             total_capital: cap,
             equity_utilization: utilPct,
-            indicators: customStrategyState.indicators,
+            indicators: reqIndicators,
             sl_pct: customStrategyState.security.sl_pct,
             tp_pct: customStrategyState.security.tp_pct,
             tsl_pct: customStrategyState.security.tsl_pct,
