@@ -978,7 +978,7 @@
                 </span>
                 <h3 class="text-lg font-black text-slate-900 mt-1">Choose Your Trading Asset</h3>
                 <p class="text-xs text-slate-500 mt-0.5">
-                  Select which index instrument you want your automated trading bot to execute on:
+                  Select which index instrument you want your automated trading bot to execute on (click to select, <strong class="text-emerald-700">double-click to move to next</strong>):
                 </p>
               </div>
               <span class="text-xs font-mono text-emerald-800 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200 font-bold">
@@ -989,7 +989,7 @@
             <!-- 5 Asset Cards Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
               <!-- 1. NIFTY 50 -->
-              <div onclick="selectWizardAsset('NIFTY 50', 75, 17500, 25000)" id="asset-card-nifty" class="p-4 bg-emerald-50/70 border-2 border-emerald-500 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs">
+              <div onclick="selectWizardAsset('NIFTY 50', 75, 17500, 25000)" ondblclick="selectWizardAsset('NIFTY 50', 75, 17500, 25000, true)" id="asset-card-nifty" class="p-4 bg-emerald-50/70 border-2 border-emerald-500 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-emerald-600 text-white">NSE</span>
                   <span class="text-xs text-emerald-700 font-mono font-bold">Margin ₹17,500</span>
@@ -1005,7 +1005,7 @@
               </div>
 
               <!-- 2. BANKNIFTY -->
-              <div onclick="selectWizardAsset('BANKNIFTY', 30, 35000, 50000)" id="asset-card-banknifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs">
+              <div onclick="selectWizardAsset('BANKNIFTY', 30, 35000, 50000)" ondblclick="selectWizardAsset('BANKNIFTY', 30, 35000, 50000, true)" id="asset-card-banknifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">NSE</span>
                   <span class="text-xs text-amber-700 font-mono font-bold">Margin ₹35,000</span>
@@ -1021,7 +1021,7 @@
               </div>
 
               <!-- 3. FINNIFTY -->
-              <div onclick="selectWizardAsset('FINNIFTY', 65, 20000, 28500)" id="asset-card-finnifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs">
+              <div onclick="selectWizardAsset('FINNIFTY', 65, 20000, 28500)" ondblclick="selectWizardAsset('FINNIFTY', 65, 20000, 28500, true)" id="asset-card-finnifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">NSE</span>
                   <span class="text-xs text-emerald-700 font-mono font-bold">Margin ₹20,000</span>
@@ -1037,7 +1037,7 @@
               </div>
 
               <!-- 4. SENSEX -->
-              <div onclick="selectWizardAsset('SENSEX', 20, 40000, 57000)" id="asset-card-sensex" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs">
+              <div onclick="selectWizardAsset('SENSEX', 20, 40000, 57000)" ondblclick="selectWizardAsset('SENSEX', 20, 40000, 57000, true)" id="asset-card-sensex" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">BSE</span>
                   <span class="text-xs text-purple-700 font-mono font-bold">Margin ₹40,000</span>
@@ -1053,7 +1053,7 @@
               </div>
 
               <!-- 5. MIDCPNIFTY -->
-              <div onclick="selectWizardAsset('MIDCPNIFTY', 120, 15000, 21500)" id="asset-card-midcpnifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs">
+              <div onclick="selectWizardAsset('MIDCPNIFTY', 120, 15000, 21500)" ondblclick="selectWizardAsset('MIDCPNIFTY', 120, 15000, 21500, true)" id="asset-card-midcpnifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">NSE</span>
                   <span class="text-xs text-teal-700 font-mono font-bold">Margin ₹15,000</span>
@@ -4920,7 +4920,15 @@
       }
     }
 
-    function selectWizardAsset(assetName, lotSize, margin, minCap) {
+    let lastAssetClickTime = 0;
+    let lastAssetClickedName = '';
+
+    function selectWizardAsset(assetName, lotSize, margin, minCap, isFromDblClick = false) {
+      const now = Date.now();
+      const isDbl = isFromDblClick || (lastAssetClickedName === assetName && (now - lastAssetClickTime) < 450);
+      lastAssetClickTime = now;
+      lastAssetClickedName = assetName;
+
       wizardState.asset = assetName;
       wizardState.lotSize = lotSize;
       wizardState.baseMargin = margin;
@@ -4942,13 +4950,25 @@
       if (badge) badge.innerText = assetName;
       
       updateDockedBrokerUI();
+
+      if (isDbl) {
+        wizardNextFromAsset();
+      }
     }
 
     function wizardNextFromAsset() {
       showStratWizard('payoff');
     }
 
-    function selectWizardStrategy(stratKey, stratName, legsCount, margin, minCap, hasWings) {
+    let lastStratClickTime = 0;
+    let lastStratClickedKey = '';
+
+    function selectWizardStrategy(stratKey, stratName, legsCount, margin, minCap, hasWings, isFromDblClick = false) {
+      const now = Date.now();
+      const isDbl = isFromDblClick || (lastStratClickedKey === stratKey && (now - lastStratClickTime) < 450);
+      lastStratClickTime = now;
+      lastStratClickedKey = stratKey;
+
       wizardState.strategyKey = stratKey;
       wizardState.strategyName = stratName;
       wizardState.legsCount = legsCount;
@@ -4971,6 +4991,10 @@
       if (badge) badge.innerText = `${stratName} (${wizardState.hasWings ? wizardState.wingPts + 'pt' : 'ATM'})`;
       
       updateDockedBrokerUI();
+
+      if (isDbl) {
+        wizardNextFromPayoff();
+      }
     }
 
     function filterStrategyPayoffs(category) {
