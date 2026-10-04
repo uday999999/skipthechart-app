@@ -707,75 +707,132 @@
           <!-- 3. Write strategy in your words (AI natural language prompt)       -->
           <!-- =================================================================== -->
           <div id="strat-panel-three-options" class="space-y-4">
-            <div class="bg-white border border-slate-200/90 rounded-2xl p-6 space-y-4 shadow-sm" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 1px 3px 0 rgba(15, 23, 42, 0.05);">
-              <div class="border-b border-slate-100 pb-3">
-                <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10.5px] font-mono font-bold uppercase">
-                  Pick Any 1 of 3 Simple Ways
-                </span>
-                <h3 class="text-xl font-black text-slate-900 mt-1">Choose How You Want to Create Your Strategy</h3>
-                <p class="text-xs text-slate-500 mt-0.5">
-                  Pick the fastest method for you. No technical experience required.
-                </p>
+            <div class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm ms-glass-card" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 20px -2px rgba(15, 23, 42, 0.04);">
+              <div class="border-b border-slate-100 pb-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-mono font-bold uppercase tracking-wider">
+                    Pick Any 1 of 3 Simple Ways
+                  </span>
+                  <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">Choose How You Want to Create Your Strategy</h3>
+                  <p class="text-sm text-slate-500 mt-1 font-normal">
+                    Select your preferred creation method below. Zero coding required — bank-grade automated execution.
+                  </p>
+                </div>
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-600">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>Instant Bot Compilation</span>
+                </div>
               </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
                 <!-- Option 1: Build Your Strategy by Your Own (100+ Indicators) -->
-                <div onclick="showStratWizard('asset')" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-2xl p-4 flex flex-col justify-between space-y-3 cursor-pointer transition-all hover:scale-[1.01] hover:shadow-md group shadow-xs">
-                  <div class="space-y-2">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-lg font-bold">
-                      🛠️
+                <div onclick="showStratWizard('asset')" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[420px]">
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                      <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center justify-center text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
+                        🛠️
+                      </div>
+                      <span class="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full uppercase tracking-wider">Option 1</span>
                     </div>
-                    <div>
-                      <span class="text-[10px] font-mono font-bold text-emerald-700 uppercase tracking-wider">Option 1</span>
-                      <h4 class="text-sm font-black text-slate-900 group-hover:text-emerald-700 transition">Build Your Strategy by Your Own</h4>
+                    <div class="space-y-1.5">
+                      <h4 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-emerald-700 transition tracking-tight">Build Your Strategy by Your Own</h4>
+                      <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
+                        Pick your asset, choose Buying/Selling/Hedged Spreads, customize Wings (Iron Butterfly), and select up to 5 indicators (or 0 for pure price action).
+                      </p>
                     </div>
-                    <p class="text-[11px] text-slate-600 leading-relaxed">
-                      Pick your asset, choose Buying/Selling/Hedged Spreads, customize Wings (Iron Butterfly), and select up to 5 indicators (or 0 for pure price action).
-                    </p>
+                    <!-- Feature Highlights Pills -->
+                    <div class="pt-2 space-y-2 border-t border-slate-100 text-xs">
+                      <div class="flex items-center gap-2 text-slate-700 font-medium">
+                        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
+                        <span>100+ Indicators & Pure Price Action</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-slate-700 font-medium">
+                        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
+                        <span>Options Spreads, Straddles & Wings</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-slate-700 font-medium">
+                        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
+                        <span>Instant 31-Confluence Mathematical Agent</span>
+                      </div>
+                    </div>
                   </div>
-                  <button type="button" class="w-full py-2.5 bg-emerald-600 group-hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5">
+                  <button type="button" class="w-full py-4 px-5 bg-emerald-600 group-hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md shadow-emerald-600/20 group-hover:shadow-lg group-hover:shadow-emerald-600/30 transition flex items-center justify-center gap-2">
                     <span>⚡ Build with Indicators</span>
-                    <span>→</span>
+                    <span class="group-hover:translate-x-1 transition-transform">→</span>
                   </button>
                 </div>
 
                 <!-- Option 2: Paste YouTube Video Link -->
-                <div onclick="focusYouTubeOption()" class="bg-white border-2 border-slate-200/90 hover:border-indigo-500 rounded-2xl p-4 flex flex-col justify-between space-y-3 cursor-pointer transition-all hover:scale-[1.01] hover:shadow-md group shadow-xs">
-                  <div class="space-y-2">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center justify-center text-lg font-bold">
-                      ▶
+                <div onclick="focusYouTubeOption()" class="bg-white border-2 border-slate-200/90 hover:border-indigo-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[420px]">
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                      <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-700 border border-indigo-200/80 flex items-center justify-center text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
+                        ▶
+                      </div>
+                      <span class="text-xs font-mono font-bold text-indigo-800 bg-indigo-50 border border-indigo-200/80 px-3 py-1 rounded-full uppercase tracking-wider">Option 2</span>
                     </div>
-                    <div>
-                      <span class="text-[10px] font-mono font-bold text-indigo-700 uppercase tracking-wider">Option 2</span>
-                      <h4 class="text-sm font-black text-slate-900 group-hover:text-indigo-700 transition">Paste a YouTube Video Link</h4>
+                    <div class="space-y-1.5">
+                      <h4 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-indigo-700 transition tracking-tight">Paste a YouTube Video Link</h4>
+                      <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
+                        Paste any video link — SkipTheChart extracts the buy/sell rules and injects mandatory safety features (SL, TP, and Daily Kill Switch).
+                      </p>
                     </div>
-                    <p class="text-[11px] text-slate-600 leading-relaxed">
-                      Paste any video link — SkipTheChart extracts the buy/sell rules and injects mandatory safety features (SL, TP, and Daily Kill Switch).
-                    </p>
+                    <!-- Feature Highlights Pills -->
+                    <div class="pt-2 space-y-2 border-t border-slate-100 text-xs">
+                      <div class="flex items-center gap-2 text-slate-700 font-medium">
+                        <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
+                        <span>AI Video Audio & Transcript Extraction</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-slate-700 font-medium">
+                        <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
+                        <span>Auto-Enforces SEBI Stop-Loss & Kill Switch</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-slate-700 font-medium">
+                        <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
+                        <span>1-Click Conversion to Live Executable Code</span>
+                      </div>
+                    </div>
                   </div>
-                  <button type="button" class="w-full py-2.5 bg-indigo-600 group-hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5">
+                  <button type="button" class="w-full py-4 px-5 bg-indigo-600 group-hover:bg-indigo-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md shadow-indigo-600/20 group-hover:shadow-lg group-hover:shadow-indigo-600/30 transition flex items-center justify-center gap-2">
                     <span>🪄 Import Video Strategy</span>
-                    <span>→</span>
+                    <span class="group-hover:translate-x-1 transition-transform">→</span>
                   </button>
                 </div>
 
                 <!-- Option 3: Write Strategy in Your Words -->
-                <div onclick="focusWordsOption()" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-2xl p-4 flex flex-col justify-between space-y-3 cursor-pointer transition-all hover:scale-[1.01] hover:shadow-md group shadow-xs">
-                  <div class="space-y-2">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-lg font-bold">
-                      ✍️
+                <div onclick="focusWordsOption()" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[420px]">
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                      <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center justify-center text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
+                        ✍️
+                      </div>
+                      <span class="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full uppercase tracking-wider">Option 3</span>
                     </div>
-                    <div>
-                      <span class="text-[10px] font-mono font-bold text-emerald-700 uppercase tracking-wider">Option 3</span>
-                      <h4 class="text-sm font-black text-slate-900 group-hover:text-emerald-700 transition">Write Strategy in Your Words</h4>
+                    <div class="space-y-1.5">
+                      <h4 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-emerald-700 transition tracking-tight">Write Strategy in Your Words</h4>
+                      <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
+                        Describe your setup in simple English (e.g. "Trade BankNifty 4-leg Iron Butterfly with 200pt wings and VWAP"). AI builds it instantly.
+                      </p>
                     </div>
-                    <p class="text-[11px] text-slate-600 leading-relaxed">
-                      Describe your setup in simple English (e.g. "Trade BankNifty 4-leg Iron Butterfly with 200pt wings and VWAP"). AI builds it instantly.
-                    </p>
+                    <!-- Feature Highlights Pills -->
+                    <div class="pt-2 space-y-2 border-t border-slate-100 text-xs">
+                      <div class="flex items-center gap-2 text-slate-700 font-medium">
+                        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
+                        <span>Plain English Natural Language Prompting</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-slate-700 font-medium">
+                        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
+                        <span>Zero Coding or Python Syntax Required</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-slate-700 font-medium">
+                        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
+                        <span>Real-Time Quant Agent Parameter Parsing</span>
+                      </div>
+                    </div>
                   </div>
-                  <button type="button" class="w-full py-2.5 bg-emerald-600 group-hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5">
+                  <button type="button" class="w-full py-4 px-5 bg-emerald-600 group-hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md shadow-emerald-600/20 group-hover:shadow-lg group-hover:shadow-emerald-600/30 transition flex items-center justify-center gap-2">
                     <span>✨ Write in Plain Words</span>
-                    <span>→</span>
+                    <span class="group-hover:translate-x-1 transition-transform">→</span>
                   </button>
                 </div>
               </div>
