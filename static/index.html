@@ -708,28 +708,13 @@
           <!-- =================================================================== -->
           <div id="strat-panel-three-options" class="space-y-4">
             <div class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm ms-glass-card" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 20px -2px rgba(15, 23, 42, 0.04);">
-              <div class="border-b border-slate-100 pb-4 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-mono font-bold uppercase tracking-wider">
-                    Pick Any 1 of 3 Simple Ways
-                  </span>
-                  <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">Choose How You Want to Create Your Strategy</h3>
-                  <p class="text-sm text-slate-500 mt-1 font-normal">
-                    Select your preferred creation method below. Zero coding required — bank-grade automated execution.
-                  </p>
-                </div>
-                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-600">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span>Instant Bot Compilation</span>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+              <!-- 3 Interactive Creation Panels (Moved to Top) -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Option 1: Build Your Strategy by Your Own (100+ Indicators) -->
-                <div onclick="showStratWizard('asset')" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[420px]">
+                <div onclick="showStratWizard('asset')" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[400px]">
                   <div class="space-y-4">
                     <div class="flex items-center justify-between">
-                      <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center justify-center text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
+                      <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center justify-center text-2xl sm:text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
                         🛠️
                       </div>
                       <span class="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full uppercase tracking-wider">Option 1</span>
@@ -763,10 +748,10 @@
                 </div>
 
                 <!-- Option 2: Paste YouTube Video Link -->
-                <div onclick="focusYouTubeOption()" class="bg-white border-2 border-slate-200/90 hover:border-indigo-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[420px]">
+                <div onclick="focusYouTubeOption()" class="bg-white border-2 border-slate-200/90 hover:border-indigo-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[400px]">
                   <div class="space-y-4">
                     <div class="flex items-center justify-between">
-                      <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-700 border border-indigo-200/80 flex items-center justify-center text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
+                      <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-700 border border-indigo-200/80 flex items-center justify-center text-2xl sm:text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
                         ▶
                       </div>
                       <span class="text-xs font-mono font-bold text-indigo-800 bg-indigo-50 border border-indigo-200/80 px-3 py-1 rounded-full uppercase tracking-wider">Option 2</span>
@@ -800,10 +785,10 @@
                 </div>
 
                 <!-- Option 3: Write Strategy in Your Words -->
-                <div onclick="focusWordsOption()" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[420px]">
+                <div onclick="focusWordsOption()" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[400px]">
                   <div class="space-y-4">
                     <div class="flex items-center justify-between">
-                      <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center justify-center text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
+                      <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center justify-center text-2xl sm:text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
                         ✍️
                       </div>
                       <span class="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full uppercase tracking-wider">Option 3</span>
@@ -834,6 +819,23 @@
                     <span>✨ Write in Plain Words</span>
                     <span class="group-hover:translate-x-1 transition-transform">→</span>
                   </button>
+                </div>
+              </div>
+
+              <!-- Header & Description Banner (Positioned Below the 3 Panels) -->
+              <div class="border-t border-slate-100 pt-5 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-mono font-bold uppercase tracking-wider">
+                    Pick Any 1 of 3 Simple Ways
+                  </span>
+                  <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-2 tracking-tight">Choose How You Want to Create Your Strategy</h3>
+                  <p class="text-xs sm:text-sm text-slate-500 mt-1 font-normal">
+                    Select your preferred creation method above. Zero coding required — bank-grade automated execution.
+                  </p>
+                </div>
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-600">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>Instant Bot Compilation</span>
                 </div>
               </div>
             </div>
