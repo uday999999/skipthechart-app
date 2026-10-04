@@ -1103,7 +1103,10 @@
               <!-- Style Filter Tabs / Quick View -->
               <div class="flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-medium">
                 <button type="button" id="tab-strat-all" onclick="filterStrategyPayoffs('all')" class="px-3 py-1.5 rounded-lg font-bold bg-emerald-600 text-white transition shadow-xs">
-                  ✨ All Payoffs (11)
+                  ✨ All Payoffs (13)
+                </button>
+                <button type="button" id="tab-strat-dynamic" onclick="filterStrategyPayoffs('dynamic')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition">
+                  🎯 Dynamic (CE & PE)
                 </button>
                 <button type="button" id="tab-strat-neutral" onclick="filterStrategyPayoffs('neutral')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition">
                   ⚖️ Neutral (3)
@@ -1120,9 +1123,120 @@
               </div>
             </div>
 
-            <!-- All Four Payoffs Displayed Together on a Single Page -->
+            <!-- All Payoff Categories Displayed Together on a Single Page -->
             <div class="space-y-7" id="strat-payoff-grid">
               
+              <!-- ======================================================== -->
+              <!-- SECTION 0: DYNAMIC DIRECTIONAL (CE ON BULL / PE ON BEAR) -->
+              <!-- ======================================================== -->
+              <div id="strat-section-dynamic" class="space-y-3">
+                <div class="flex items-center justify-between border-b border-emerald-200/80 pb-2.5">
+                  <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-emerald-600 shadow-xs"></span>
+                    <h4 class="text-sm font-black text-slate-900 tracking-wide flex items-center gap-1.5">
+                      <span>🎯</span> Dynamic Trend Trading (CE on Bullish / PE on Bearish)
+                    </h4>
+                  </div>
+                  <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 text-[10.5px] font-mono font-bold">Indicator-Driven • 2 Profiles</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <!-- Dynamic Card 1: Directional Options Buying (CE on Bull / PE on Bear) -->
+                  <div onclick="selectWizardStrategy('dynamic_ce_pe', 'Dynamic Directional Buying (CE & PE)', 1, 17500, 25000, false)" id="card-strat-dynamic_ce_pe" data-strat-cat="dynamic" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Dynamic Options Buying (CE & PE)</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-800 font-mono font-bold">1 Leg Dynamic • Trend Follower</span>
+                    </div>
+
+                    <!-- Execution Logic Rule Badge -->
+                    <div class="px-2.5 py-1.5 bg-emerald-50/60 rounded-xl border border-emerald-200/70 flex items-center justify-between text-[11px] font-mono">
+                      <span class="text-emerald-800 font-bold flex items-center gap-1">🟢 Bull: Buy ATM CE</span>
+                      <span class="text-slate-300">|</span>
+                      <span class="text-rose-700 font-bold flex items-center gap-1">🔴 Bear: Buy ATM PE</span>
+                    </div>
+
+                    <!-- Sensibull-style SVG Payoff Curve (Dual Hockey Stick with Central Range SL) -->
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="35" y="12" fill="#059669" font-size="7.5" font-family="monospace" font-weight="bold">PE on Drop</text>
+                        <text x="165" y="12" fill="#059669" font-size="7.5" font-family="monospace" text-anchor="end" font-weight="bold">CE on Rally</text>
+                        <path d="M 25 15 L 75 56 L 125 56 L 175 15" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="75" y1="56" x2="125" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="25" cy="15" r="3.5" fill="#059669"/>
+                        <circle cx="175" cy="15" r="3.5" fill="#059669"/>
+                        <text x="100" y="66" fill="#e11d48" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">Strict SL on Chop</text>
+                      </svg>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">Unlimited Trend</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Strict SL</span>
+                        <strong class="text-rose-600 font-bold">1.5% Premium</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">63.5%</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Dynamic Card 2: Dynamic Trend Spreads (Bull Call Spread on Bull / Bear Put Spread on Bear) -->
+                  <div onclick="selectWizardStrategy('dynamic_spreads', 'Dynamic Trend Spreads (Call/Put Spreads)', 2, 32000, 45000, false)" id="card-strat-dynamic_spreads" data-strat-cat="dynamic" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Dynamic Trend Spreads</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-800 font-mono font-bold">2 Legs Dynamic • Capped Risk</span>
+                    </div>
+
+                    <!-- Execution Logic Rule Badge -->
+                    <div class="px-2.5 py-1.5 bg-emerald-50/60 rounded-xl border border-emerald-200/70 flex items-center justify-between text-[11px] font-mono">
+                      <span class="text-emerald-800 font-bold flex items-center gap-1">🟢 Bull: Call Spread</span>
+                      <span class="text-slate-300">|</span>
+                      <span class="text-rose-700 font-bold flex items-center gap-1">🔴 Bear: Put Spread</span>
+                    </div>
+
+                    <!-- Sensibull-style SVG Payoff Curve (Dual Capped Spreads with Flat SL Center) -->
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="35" y="12" fill="#059669" font-size="7.5" font-family="monospace" font-weight="bold">Put Spread</text>
+                        <text x="165" y="12" fill="#059669" font-size="7.5" font-family="monospace" text-anchor="end" font-weight="bold">Call Spread</text>
+                        <path d="M 20 20 L 50 20 L 75 56 L 125 56 L 150 20 L 180 20" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="75" y1="56" x2="125" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="50" cy="20" r="3.5" fill="#059669"/>
+                        <circle cx="150" cy="20" r="3.5" fill="#059669"/>
+                        <text x="100" y="66" fill="#e11d48" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">Capped Debit SL</text>
+                      </svg>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">₹ 8,200 / Leg</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Loss</span>
+                        <strong class="text-rose-600 font-bold">- ₹ 3,800 Capped</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">67.8%</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <!-- ============================================== -->
               <!-- SECTION 1: NEUTRAL (RANGE BOUND & HIGH THETA)  -->
               <!-- ============================================== -->
@@ -4841,7 +4955,7 @@
     }
 
     function filterStrategyPayoffs(category) {
-      const tabs = ['all', 'neutral', 'bullish', 'bearish', 'hedge'];
+      const tabs = ['all', 'dynamic', 'neutral', 'bullish', 'bearish', 'hedge'];
       tabs.forEach(t => {
         const btn = document.getElementById('tab-strat-' + t);
         if (btn) {
@@ -4853,7 +4967,7 @@
         }
       });
       
-      const sections = ['neutral', 'bullish', 'bearish', 'hedge'];
+      const sections = ['dynamic', 'neutral', 'bullish', 'bearish', 'hedge'];
       sections.forEach(sec => {
         const secEl = document.getElementById('strat-section-' + sec);
         if (secEl) {
