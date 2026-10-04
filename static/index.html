@@ -1867,23 +1867,23 @@
                 </div>
 
                 <!-- Combinations Results Table Drawer -->
-                <div id="combo-results-container" class="hidden space-y-2">
-                  <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
-                    <span>Ranked Combinations (<span id="combo-results-count">31</span>):</span>
-                    <span class="text-[11px] text-emerald-700 font-mono font-semibold">Click Apply on any combination</span>
+                <div id="combo-results-container" class="hidden space-y-2.5">
+                  <div class="flex items-center justify-between text-xs text-slate-700 font-bold">
+                    <span>Ranked Combinations (<span id="combo-results-count" class="text-emerald-700 font-mono">31</span>):</span>
+                    <span class="text-[11px] text-emerald-800 font-mono font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Click Apply on any combination</span>
                   </div>
-                  <div class="max-h-52 overflow-y-auto rounded-xl border border-slate-200 bg-white">
+                  <div class="max-h-72 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xs">
                     <table class="w-full text-left border-collapse text-xs">
-                      <thead class="bg-slate-50 text-slate-500 font-mono text-[10.5px] uppercase sticky top-0 border-b border-slate-200">
+                      <thead class="bg-slate-100 text-slate-700 font-mono text-[11px] font-bold uppercase sticky top-0 border-b border-slate-200 shadow-xs">
                         <tr>
-                          <th class="p-2 text-center">Rank</th>
-                          <th class="p-2">Combination</th>
-                          <th class="p-2 text-center">Indicators</th>
-                          <th class="p-2 text-right">Win Rate</th>
-                          <th class="p-2 text-right">Profit Factor</th>
-                          <th class="p-2 text-right">Net Return</th>
-                          <th class="p-2 text-right">Max DD</th>
-                          <th class="p-2 text-center">Action</th>
+                          <th class="p-2.5 text-center">Rank</th>
+                          <th class="p-2.5">Combination</th>
+                          <th class="p-2.5 text-center">Indicators</th>
+                          <th class="p-2.5 text-right">Win Rate</th>
+                          <th class="p-2.5 text-right">Profit Factor</th>
+                          <th class="p-2.5 text-right">Net Return</th>
+                          <th class="p-2.5 text-right">Max DD</th>
+                          <th class="p-2.5 text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody id="combo-table-body" class="divide-y divide-slate-100 font-mono text-[11px]">
@@ -3953,15 +3953,15 @@
       if (alertBox) alertBox.className = "hidden";
 
       if (tab === 'signin') {
-        if (btnIn) btnIn.className = "flex-1 py-2 rounded-lg bg-cyan-600 text-white shadow transition text-center font-bold";
-        if (btnUp) btnUp.className = "flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition text-center font-bold";
+        if (btnIn) btnIn.className = "flex-1 py-2 rounded-lg bg-emerald-600 text-white shadow-xs transition text-center font-bold text-xs";
+        if (btnUp) btnUp.className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition text-center font-bold text-xs";
         if (formIn) formIn.classList.remove('hidden');
         if (formUp) formUp.classList.add('hidden');
         if (head) head.innerText = "Sign In to SkipTheChart";
         if (subhead) subhead.innerText = "Automated algorithmic execution engine for Indian retail traders. Zero coding needed.";
       } else {
-        if (btnUp) btnUp.className = "flex-1 py-2 rounded-lg bg-emerald-600 text-white shadow transition text-center font-bold";
-        if (btnIn) btnIn.className = "flex-1 py-2 rounded-lg text-slate-400 hover:text-white transition text-center font-bold";
+        if (btnUp) btnUp.className = "flex-1 py-2 rounded-lg bg-emerald-600 text-white shadow-xs transition text-center font-bold text-xs";
+        if (btnIn) btnIn.className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition text-center font-bold text-xs";
         if (formUp) formUp.classList.remove('hidden');
         if (formIn) formIn.classList.add('hidden');
         if (head) head.innerText = "Create Your Free Account";
@@ -3973,10 +3973,10 @@
       const el = document.getElementById('auth-alert-box');
       if (!el) return;
       if (isError) {
-        el.className = "p-3 rounded-xl text-xs border border-rose-500/50 bg-rose-950/40 text-rose-300 flex items-center gap-2";
+        el.className = "p-3 rounded-xl text-xs border border-rose-200 bg-rose-50 text-rose-800 flex items-center gap-2 font-medium";
         el.innerHTML = `<span>⚠️</span> <span>${msg}</span>`;
       } else {
-        el.className = "p-3 rounded-xl text-xs border border-emerald-500/50 bg-emerald-950/40 text-emerald-300 flex items-center gap-2";
+        el.className = "p-3 rounded-xl text-xs border border-emerald-200 bg-emerald-50 text-emerald-800 flex items-center gap-2 font-medium";
         el.innerHTML = `<span>✓</span> <span>${msg}</span>`;
       }
       el.classList.remove('hidden');
@@ -4364,10 +4364,10 @@
         const statusEl = document.getElementById('google-client-id-status');
         const inputEl = document.getElementById('input-google-client-id');
         if (config.google_client_id) {
-          if (statusEl) statusEl.innerHTML = `<span class="text-emerald-400 font-bold">🟢 Active:</span> <span class="text-white">${config.google_client_id.slice(0, 18)}...</span>`;
+          if (statusEl) statusEl.innerHTML = `<span class="text-emerald-700 font-bold">🟢 Active:</span> <span class="text-slate-800 font-mono font-semibold">${config.google_client_id.slice(0, 18)}...</span>`;
           if (inputEl && !inputEl.value) inputEl.value = config.google_client_id;
         } else {
-          if (statusEl) statusEl.innerHTML = `<span class="text-amber-300 font-bold">⚪ Not Configured</span> (Using 1-Click Demo / Email)`;
+          if (statusEl) statusEl.innerHTML = `<span class="text-amber-700 font-bold">⚪ Not Configured</span> <span class="text-slate-500">(Using 1-Click Demo / Email)</span>`;
         }
 
         if (config.google_client_id && window.google && window.google.accounts) {
@@ -4565,10 +4565,10 @@
       if (!toast) {
         toast = document.createElement('div');
         toast.id = 'global-toast';
-        toast.className = 'fixed bottom-6 right-6 z-50 px-4 py-3 bg-emerald-950 border border-emerald-500/80 text-emerald-200 text-xs font-mono font-bold rounded-xl shadow-2xl transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2 pointer-events-none';
+        toast.className = 'fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border border-emerald-300 text-slate-900 text-xs font-mono font-bold rounded-xl shadow-xl transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2 pointer-events-none';
         document.body.appendChild(toast);
       }
-      toast.innerHTML = `<span class="text-emerald-400">✓</span> <span>${msg}</span>`;
+      toast.innerHTML = `<span class="text-emerald-600 font-black">✓</span> <span>${msg}</span>`;
       toast.classList.remove('translate-y-10', 'opacity-0');
       setTimeout(() => {
         toast.classList.add('translate-y-10', 'opacity-0');
@@ -4652,7 +4652,7 @@
           const chipsContainer = document.getElementById('combo-champion-chips');
           if (chipsContainer) {
             chipsContainer.innerHTML = best.indicator_names.map(name => `
-              <span class="px-2 py-0.5 bg-emerald-950 border border-emerald-500/50 text-emerald-300 rounded font-mono text-[10px] font-bold">
+              <span class="px-2 py-0.5 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded font-mono text-[10px] font-bold">
                 ✓ ${name}
               </span>
             `).join('');
@@ -4668,31 +4668,31 @@
           if (tbody) {
             tbody.innerHTML = data.combinations.map((c, i) => {
               const isBest = i === 0;
-              const rowClass = isBest ? "bg-emerald-950/40 font-bold border-l-4 border-emerald-400" : "hover:bg-slate-900/60";
+              const rowClass = isBest ? "bg-emerald-50/80 font-bold border-l-4 border-emerald-600" : "hover:bg-slate-50";
               const pnlSign = c.net_pnl >= 0 ? '+' : '';
-              const pnlColor = c.net_pnl >= 0 ? 'text-emerald-400' : 'text-rose-400';
+              const pnlColor = c.net_pnl >= 0 ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold';
               const rankBadge = isBest ?
-                `<span class="px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950 font-black text-[10px]">#1 🏆</span>` :
-                `<span class="text-slate-400 font-mono">#${c.rank}</span>`;
+                `<span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white font-black text-[10.5px]">#1 🏆</span>` :
+                `<span class="text-slate-700 font-mono font-bold text-xs">#${c.rank}</span>`;
 
               const indBadges = c.indicator_names.map(n =>
-                `<span class="px-1.5 py-0.5 bg-slate-900 border border-slate-800 text-slate-300 rounded text-[9.5px]">${n}</span>`
+                `<span class="px-2 py-0.5 bg-slate-100 border border-slate-300 text-slate-800 font-semibold rounded-md text-[10px]">${n}</span>`
               ).join(' ');
 
               return `
-                <tr class="${rowClass} transition">
+                <tr class="${rowClass} transition text-slate-800 border-b border-slate-100">
                   <td class="p-2.5 text-center">${rankBadge}</td>
                   <td class="p-2.5">
-                    <div class="font-bold text-white text-[11px]">${c.name}</div>
+                    <div class="font-bold text-slate-900 text-xs">${c.name}</div>
                     <div class="flex flex-wrap gap-1 mt-1">${indBadges}</div>
                   </td>
-                  <td class="p-2.5 text-center text-cyan-300 font-bold">${c.count}</td>
-                  <td class="p-2.5 text-right font-bold ${c.win_rate >= 60 ? 'text-emerald-400' : 'text-slate-300'}">${c.win_rate}%</td>
-                  <td class="p-2.5 text-right font-bold text-cyan-300">${c.profit_factor}</td>
-                  <td class="p-2.5 text-right font-bold ${pnlColor}">${pnlSign} ₹${Math.round(c.net_pnl).toLocaleString('en-IN')}</td>
-                  <td class="p-2.5 text-right text-rose-300">${c.max_drawdown_percent}%</td>
+                  <td class="p-2.5 text-center text-slate-900 font-bold font-mono text-xs">${c.count}</td>
+                  <td class="p-2.5 text-right font-bold font-mono text-xs ${c.win_rate >= 50 ? 'text-emerald-700' : 'text-slate-800'}">${c.win_rate}%</td>
+                  <td class="p-2.5 text-right font-bold font-mono text-xs text-slate-900">${c.profit_factor}</td>
+                  <td class="p-2.5 text-right font-bold font-mono text-xs ${pnlColor}">${pnlSign} ₹${Math.round(c.net_pnl).toLocaleString('en-IN')}</td>
+                  <td class="p-2.5 text-right font-bold font-mono text-xs text-rose-600">${c.max_drawdown_percent}%</td>
                   <td class="p-2.5 text-center">
-                    <button type="button" onclick="applyCombinationDirectly(${JSON.stringify(c.indicators).replace(/"/g, '&quot;')})" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-[10px] font-bold transition cursor-pointer">
+                    <button type="button" onclick="applyCombinationDirectly(${JSON.stringify(c.indicators).replace(/"/g, '&quot;')})" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
                       Apply
                     </button>
                   </td>
@@ -4721,20 +4721,37 @@
     function applyCombinationDirectly(indicatorsList) {
       if (!Array.isArray(indicatorsList)) return;
       customStrategyState.indicators = indicatorsList.slice(0, 5);
+
+      // Also sync wizardState so Step C picker reflects the applied indicators
+      let allInds = [];
+      Object.values(INDICATORS_DATABASE).forEach(arr => allInds.push(...arr));
+      const indMap = {};
+      allInds.forEach(item => { indMap[item.id] = item; });
+
+      wizardState.indicators = customStrategyState.indicators.map(id => {
+        const item = indMap[id];
+        return item ? item.name : id.toUpperCase();
+      });
+      wizardState.withoutIndicators = (wizardState.indicators.length === 0);
+
+      renderQuickIndicatorsGrid();
+      renderActiveIndicatorChips();
       renderIndicatorsGrid();
       renderCockpitChips();
       updateSynergyScore();
+      updateDockedBrokerUI();
+
+      const badge = document.getElementById('btn-ind-current-badge');
+      if (badge) {
+        badge.innerText = wizardState.indicators.length > 0 ? wizardState.indicators.join(' + ') : 'Pure Price Action';
+      }
 
       // Update preview card badges if visible
       const prevInds = document.getElementById('yt-preview-indicators');
       if (prevInds) {
-        let allInds = [];
-        Object.values(INDICATORS_DATABASE).forEach(arr => allInds.push(...arr));
-        const indMap = {};
-        allInds.forEach(item => { indMap[item.id] = item; });
         prevInds.innerHTML = customStrategyState.indicators.map(id => {
           const item = indMap[id] || { name: id.toUpperCase() };
-          return `<span class="px-1.5 py-0.5 bg-emerald-950 border border-emerald-500/50 text-emerald-300 rounded text-[10px] font-mono font-bold">${item.name}</span>`;
+          return `<span class="px-2 py-0.5 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded font-mono text-[10px] font-bold">${item.name}</span>`;
         }).join('');
       }
 
@@ -4742,8 +4759,8 @@
       const chipsEl = document.getElementById('active-indicators-chips');
       if (chipsEl) {
         chipsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        chipsEl.classList.add('ring-2', 'ring-emerald-400');
-        setTimeout(() => chipsEl.classList.remove('ring-2', 'ring-emerald-400'), 2000);
+        chipsEl.classList.add('ring-2', 'ring-emerald-500');
+        setTimeout(() => chipsEl.classList.remove('ring-2', 'ring-emerald-500'), 2000);
       }
     }
 
@@ -5655,20 +5672,20 @@
 
       container.innerHTML = list.map(item => {
         const isSelected = customStrategyState.indicators.includes(item.id);
-        const borderClass = isSelected ? "border-cyan-400 bg-cyan-950/30" : "border-slate-800 bg-slate-950 hover:border-slate-700";
-        const btnClass = isSelected ? "bg-cyan-500 text-black font-bold" : "bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700";
+        const borderClass = isSelected ? "border-emerald-500 bg-emerald-50/60 shadow-xs" : "border-slate-200 bg-white hover:border-slate-300 shadow-xs";
+        const btnClass = isSelected ? "bg-emerald-600 text-white font-bold" : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200";
 
         return `
           <div onclick="toggleIndicator('${item.id}')" class="p-3 rounded-xl border ${borderClass} cursor-pointer space-y-1.5 transition-all flex flex-col justify-between group">
             <div class="space-y-1">
               <div class="flex items-center justify-between">
                 <span class="text-sm">${item.icon}</span>
-                <span class="text-[9.5px] px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400 font-mono">${item.periods}</span>
+                <span class="text-[9.5px] px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700 font-mono">${item.periods}</span>
               </div>
-              <div class="font-bold text-white text-xs leading-tight group-hover:text-cyan-300 transition">${item.name}</div>
-              <p class="text-[10px] text-slate-400 line-clamp-2 leading-relaxed">${item.desc}</p>
+              <div class="font-bold text-slate-900 text-xs leading-tight group-hover:text-emerald-700 transition">${item.name}</div>
+              <p class="text-[10px] text-slate-500 line-clamp-2 leading-relaxed">${item.desc}</p>
             </div>
-            <div class="pt-1 flex items-center justify-between border-t border-slate-800/80">
+            <div class="pt-1 flex items-center justify-between border-t border-slate-100">
               <span class="text-[9.5px] text-slate-500 font-mono">ID: ${item.id}</span>
               <button type="button" class="px-2 py-0.5 rounded text-[10px] ${btnClass} transition">
                 ${isSelected ? "✓ Active" : "+ Add"}
@@ -5702,9 +5719,9 @@
         const btn = document.getElementById('cat-tab-' + c);
         if (btn) {
           if (c === cat) {
-            btn.className = "px-3 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition";
+            btn.className = "px-3 py-1.5 rounded-lg font-bold bg-emerald-600 text-white transition";
           } else {
-            btn.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition";
+            btn.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-600 hover:text-slate-900 transition";
           }
         }
       });
@@ -5717,14 +5734,24 @@
 
     function resetDefaultIndicators() {
       customStrategyState.indicators = ["supertrend", "rsi", "vwap"];
+      wizardState.indicators = ["Supertrend (7, 3)", "RSI (14)", "VWAP"];
+      wizardState.withoutIndicators = false;
+      renderQuickIndicatorsGrid();
+      renderActiveIndicatorChips();
       renderIndicatorsGrid();
       updateSynergyScore();
+      updateDockedBrokerUI();
     }
 
     function clearAllIndicators() {
       customStrategyState.indicators = [];
+      wizardState.indicators = [];
+      wizardState.withoutIndicators = true;
+      renderQuickIndicatorsGrid();
+      renderActiveIndicatorChips();
       renderIndicatorsGrid();
       updateSynergyScore();
+      updateDockedBrokerUI();
     }
 
     function renderCockpitChips() {
@@ -5736,12 +5763,12 @@
 
       if (customStrategyState.indicators.length === 0) {
         chipsContainer.innerHTML = `
-          <div class="px-3 py-2 rounded-xl bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 text-xs font-mono flex flex-wrap items-center justify-between gap-2 w-full">
+          <div class="px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono flex flex-wrap items-center justify-between gap-2 w-full">
             <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
               <span><strong>Pure Execution Mode Active (Zero Indicators):</strong> Strategy runs directly on mathematical delta/price action rules & risk controls.</span>
             </div>
-            <span class="text-[10px] text-slate-400 font-sans">Click any indicator below to add if desired</span>
+            <span class="text-[10px] text-slate-500 font-sans">Click any indicator below to add if desired</span>
           </div>
         `;
         return;
@@ -5755,10 +5782,10 @@
       chipsContainer.innerHTML = customStrategyState.indicators.map(id => {
         const item = indMap[id] || { name: id.toUpperCase(), icon: "📈", periods: "" };
         return `
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-950 border border-cyan-500/50 text-cyan-300 text-xs font-mono">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-mono">
             <span>${item.icon}</span>
-            <span class="font-bold text-white">${item.name}</span>
-            <button type="button" onclick="event.stopPropagation(); toggleIndicator('${id}')" class="text-slate-400 hover:text-rose-400 font-bold ml-1 cursor-pointer" title="Remove">✕</button>
+            <span class="font-bold text-slate-900">${item.name}</span>
+            <button type="button" onclick="event.stopPropagation(); toggleIndicator('${id}')" class="text-slate-400 hover:text-rose-600 font-bold ml-1 cursor-pointer" title="Remove">✕</button>
           </span>
         `;
       }).join('');
@@ -5770,7 +5797,7 @@
       if (!badge) return;
 
       if (count === 0) {
-        badge.className = "font-mono font-bold text-xs text-emerald-400";
+        badge.className = "font-mono font-bold text-xs text-emerald-700";
         badge.innerText = "100% (Pure Algorithmic Execution)";
         return;
       }
@@ -5796,7 +5823,7 @@
         label = "Single Dimension Filter (Add Momentum/Volume for Confluence)";
       }
 
-      badge.className = "font-mono font-bold text-xs text-emerald-400";
+      badge.className = "font-mono font-bold text-xs text-emerald-700";
       badge.innerText = `${score}% (${label})`;
     }
 
@@ -6126,7 +6153,7 @@
 
       const reqDesc = document.getElementById('req-box-desc');
       if (reqDesc) {
-        reqDesc.innerHTML = `Requires <strong class="text-white font-mono">₹ ${baseMargin.toLocaleString('en-IN')}</strong> active margin. With mandatory 30% cash buffer (max 70% utilization), minimum required capital is <strong class="text-cyan-300 font-mono">₹ ${minCap.toLocaleString('en-IN')}</strong>.`;
+        reqDesc.innerHTML = `Requires <strong class="text-slate-900 font-bold font-mono">₹ ${baseMargin.toLocaleString('en-IN')}</strong> active margin. With mandatory 30% cash buffer (max 70% utilization), minimum required capital is <strong class="text-emerald-700 font-bold font-mono">₹ ${minCap.toLocaleString('en-IN')}</strong>.`;
       }
 
       const reqMin = document.getElementById('req-box-min');
@@ -7052,15 +7079,15 @@
       if (!str) return '';
       let res = escapeHtml(str);
       // Bold
-      res = res.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      res = res.replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900 font-bold">$1</strong>');
       // Inline code
-      res = res.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-slate-950 text-cyan-300 font-mono text-[10px]">$1</code>');
+      res = res.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-slate-200/70 text-slate-800 font-mono text-[10.5px] border border-slate-300">$1</code>');
       // Headers
-      res = res.replace(/^### (.*$)/gim, '<div class="font-bold text-white text-[13px] border-b border-slate-800 pb-1 mt-1">$1</div>');
+      res = res.replace(/^### (.*$)/gim, '<div class="font-black text-slate-900 text-[13px] border-b border-slate-200 pb-1 mt-1.5">$1</div>');
       // Bullet lists
-      res = res.replace(/^\- (.*$)/gim, '<div class="flex items-start gap-1.5 text-slate-300"><span class="text-cyan-400 font-bold">•</span><span>$1</span></div>');
+      res = res.replace(/^\- (.*$)/gim, '<div class="flex items-start gap-1.5 text-slate-700 leading-relaxed"><span class="text-emerald-600 font-bold">•</span><span>$1</span></div>');
       // Numbered lists
-      res = res.replace(/^(\d+)\. (.*$)/gim, '<div class="flex items-start gap-1.5 text-slate-300"><span class="text-cyan-400 font-bold">$1.</span><span>$2</span></div>');
+      res = res.replace(/^(\d+)\. (.*$)/gim, '<div class="flex items-start gap-1.5 text-slate-700 leading-relaxed"><span class="text-emerald-700 font-mono font-bold">$1.</span><span>$2</span></div>');
       // Paragraph line breaks
       res = res.replace(/\n\n/g, '<div class="h-1.5"></div>');
       return res;
