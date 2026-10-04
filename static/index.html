@@ -1100,456 +1100,503 @@
                 </p>
               </div>
               
-              <!-- Style Filter Tabs -->
+              <!-- Style Filter Tabs / Quick View -->
               <div class="flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-medium">
-                <button type="button" id="tab-strat-bullish" onclick="filterStrategyPayoffs('bullish')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 transition">
-                  🟢 Bullish
+                <button type="button" id="tab-strat-all" onclick="filterStrategyPayoffs('all')" class="px-3 py-1.5 rounded-lg font-bold bg-emerald-600 text-white transition shadow-xs">
+                  ✨ All Payoffs (11)
                 </button>
-                <button type="button" id="tab-strat-bearish" onclick="filterStrategyPayoffs('bearish')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 transition">
-                  🔴 Bearish
+                <button type="button" id="tab-strat-neutral" onclick="filterStrategyPayoffs('neutral')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition">
+                  ⚖️ Neutral (3)
                 </button>
-                <button type="button" id="tab-strat-neutral" onclick="filterStrategyPayoffs('neutral')" class="px-3 py-1.5 rounded-lg font-bold bg-emerald-600 text-white transition shadow-xs">
-                  ⚖️ Neutral (Range)
+                <button type="button" id="tab-strat-bullish" onclick="filterStrategyPayoffs('bullish')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition">
+                  🟢 Bullish (3)
                 </button>
-                <button type="button" id="tab-strat-hedge" onclick="filterStrategyPayoffs('hedge')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 transition">
-                  🛡️ Hedging (Buy+Sell)
+                <button type="button" id="tab-strat-bearish" onclick="filterStrategyPayoffs('bearish')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition">
+                  🔴 Bearish (3)
+                </button>
+                <button type="button" id="tab-strat-hedge" onclick="filterStrategyPayoffs('hedge')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition">
+                  🛡️ Hedging (2)
                 </button>
               </div>
             </div>
 
-            <!-- Payoff Cards Grid (Matching Sensibull Screenshot with SVG Curves) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="strat-payoff-grid">
+            <!-- All Four Payoffs Displayed Together on a Single Page -->
+            <div class="space-y-7" id="strat-payoff-grid">
               
               <!-- ============================================== -->
-              <!-- NEUTRAL CARDS (Visible by Default)             -->
+              <!-- SECTION 1: NEUTRAL (RANGE BOUND & HIGH THETA)  -->
               <!-- ============================================== -->
-
-              <!-- Neutral Card 1: Iron Butterfly (4 Legs) - Default Highlighted -->
-              <div onclick="selectWizardStrategy('iron_butterfly', 'Iron Butterfly (4 Legs)', 4, 35000, 50000, true)" id="card-strat-iron_butterfly" data-strat-cat="neutral" class="p-4 bg-emerald-50/70 border-2 border-emerald-500 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
+              <div id="strat-section-neutral" class="space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-200/80 pb-2.5">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <h4 class="text-sm font-black text-slate-900">Iron Butterfly (4 Legs)</h4>
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 shadow-xs"></span>
+                    <h4 class="text-sm font-black text-slate-900 tracking-wide">⚖️ Neutral Strategies (Range Bound & High Theta)</h4>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-[10px] text-emerald-800 font-mono font-bold">4 Legs • Defined Risk</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10.5px] font-mono font-bold">3 Profiles</span>
                 </div>
 
-                <!-- Sensibull-style SVG Payoff Curve -->
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg id="svg-payoff-butterfly" viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="100" y="12" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹7,600</text>
-                    <path id="path-payoff-butterfly" d="M 15 56 L 55 56 L 100 18 L 145 56 L 185 56" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-                    <line x1="15" y1="56" x2="55" y2="56" stroke="#e11d48" stroke-width="3"/>
-                    <line x1="145" y1="56" x2="185" y2="56" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="100" cy="18" r="3.5" fill="#0284c7"/>
-                  </svg>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <!-- Neutral Card 1: Iron Butterfly (4 Legs) - Default Highlighted -->
+                  <div onclick="selectWizardStrategy('iron_butterfly', 'Iron Butterfly (4 Legs)', 4, 35000, 50000, true)" id="card-strat-iron_butterfly" data-strat-cat="neutral" class="p-4 bg-emerald-50/70 border-2 border-emerald-500 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Iron Butterfly (4 Legs)</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-[10px] text-emerald-800 font-mono font-bold">4 Legs • Defined Risk</span>
+                    </div>
 
-                <!-- Interactive Wing Adjustment (Iron Butterfly) -->
-                <div class="p-2.5 bg-amber-50/70 rounded-xl border border-amber-200 space-y-1.5">
-                  <div class="flex items-center justify-between text-[11px]">
-                    <span class="font-bold text-amber-900 flex items-center gap-1">
-                      <span>🪽</span> Adjust Wings (Distance from Strike):
-                    </span>
-                    <span id="current-wings-badge" class="font-mono text-emerald-800 font-bold">200 pts</span>
-                  </div>
-                  <div class="grid grid-cols-4 gap-1.5 text-xs font-mono">
-                    <button type="button" onclick="setWizardWingPoints(100, event)" id="wing-btn-100" class="py-1 rounded bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-center font-bold">100 pt</button>
-                    <button type="button" onclick="setWizardWingPoints(200, event)" id="wing-btn-200" class="py-1 rounded bg-emerald-600 text-white font-bold border border-emerald-500 text-center shadow-xs">200 pt</button>
-                    <button type="button" onclick="setWizardWingPoints(300, event)" id="wing-btn-300" class="py-1 rounded bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-center font-bold">300 pt</button>
-                    <button type="button" onclick="setWizardWingPoints(400, event)" id="wing-btn-400" class="py-1 rounded bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-center font-bold">400 pt</button>
-                  </div>
-                </div>
+                    <!-- Sensibull-style SVG Payoff Curve -->
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg id="svg-payoff-butterfly" viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="100" y="12" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹7,600</text>
+                        <path id="path-payoff-butterfly" d="M 15 56 L 55 56 L 100 18 L 145 56 L 185 56" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="15" y1="56" x2="55" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <line x1="145" y1="56" x2="185" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="100" cy="18" r="3.5" fill="#0284c7"/>
+                      </svg>
+                    </div>
 
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Profit</span>
-                    <strong class="text-emerald-700 font-bold" id="card-max-profit">₹ 7,600</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Loss</span>
-                    <strong class="text-rose-600 font-bold" id="card-max-loss">- ₹ 4,400</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold" id="card-pop-butterfly">68.2%</strong>
-                  </div>
-                </div>
-              </div>
+                    <!-- Interactive Wing Adjustment (Iron Butterfly) -->
+                    <div class="p-2.5 bg-amber-50/70 rounded-xl border border-amber-200 space-y-1.5">
+                      <div class="flex items-center justify-between text-[11px]">
+                        <span class="font-bold text-amber-900 flex items-center gap-1">
+                          <span>🪽</span> Adjust Wings (Distance from Strike):
+                        </span>
+                        <span id="current-wings-badge" class="font-mono text-emerald-800 font-bold">200 pts</span>
+                      </div>
+                      <div class="grid grid-cols-4 gap-1.5 text-xs font-mono">
+                        <button type="button" onclick="setWizardWingPoints(100, event)" id="wing-btn-100" class="py-1 rounded bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-center font-bold">100 pt</button>
+                        <button type="button" onclick="setWizardWingPoints(200, event)" id="wing-btn-200" class="py-1 rounded bg-emerald-600 text-white font-bold border border-emerald-500 text-center shadow-xs">200 pt</button>
+                        <button type="button" onclick="setWizardWingPoints(300, event)" id="wing-btn-300" class="py-1 rounded bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-center font-bold">300 pt</button>
+                        <button type="button" onclick="setWizardWingPoints(400, event)" id="wing-btn-400" class="py-1 rounded bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-center font-bold">400 pt</button>
+                      </div>
+                    </div>
 
-              <!-- Neutral Card 2: Short Straddle (ATM CE+PE) -->
-              <div onclick="selectWizardStrategy('short_straddle', 'Short Straddle (ATM CE+PE)', 2, 70000, 100000, false)" id="card-strat-short_straddle" data-strat-cat="neutral" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
-                    <h4 class="text-sm font-black text-slate-900">Short Straddle (ATM CE+PE)</h4>
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold" id="card-max-profit">₹ 7,600</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Loss</span>
+                        <strong class="text-rose-600 font-bold" id="card-max-loss">- ₹ 4,400</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold" id="card-pop-butterfly">68.2%</strong>
+                      </div>
+                    </div>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[10px] text-slate-700 font-mono font-bold">2 Legs • High Theta</span>
-                </div>
 
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="100" y="12" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Peak Profit: ₹12,500</text>
-                    <path d="M 20 62 L 100 16 L 180 62" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-                    <line x1="20" y1="62" x2="55" y2="46" stroke="#e11d48" stroke-width="3"/>
-                    <line x1="145" y1="46" x2="180" y2="62" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="100" cy="16" r="3.5" fill="#0284c7"/>
-                  </svg>
-                </div>
+                  <!-- Neutral Card 2: Short Straddle (ATM CE+PE) -->
+                  <div onclick="selectWizardStrategy('short_straddle', 'Short Straddle (ATM CE+PE)', 2, 70000, 100000, false)" id="card-strat-short_straddle" data-strat-cat="neutral" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+                        <h4 class="text-sm font-black text-slate-900">Short Straddle (ATM CE+PE)</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[10px] text-slate-700 font-mono font-bold">2 Legs • High Theta</span>
+                    </div>
 
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Peak Theta</span>
-                    <strong class="text-emerald-700 font-bold">₹ 12,500</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Kill Switch SL</span>
-                    <strong class="text-rose-600 font-bold">- 10% Cut</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold">71.8%</strong>
-                  </div>
-                </div>
-              </div>
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="100" y="12" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Peak Profit: ₹12,500</text>
+                        <path d="M 20 62 L 100 16 L 180 62" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="20" y1="62" x2="55" y2="46" stroke="#e11d48" stroke-width="3"/>
+                        <line x1="145" y1="46" x2="180" y2="62" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="100" cy="16" r="3.5" fill="#0284c7"/>
+                      </svg>
+                    </div>
 
-              <!-- Neutral Card 3: Iron Condor (4 Legs) -->
-              <div onclick="selectWizardStrategy('iron_condor', 'Iron Condor (4 Legs)', 4, 38000, 52000, false)" id="card-strat-iron_condor" data-strat-cat="neutral" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <h4 class="text-sm font-black text-slate-900">Iron Condor (4 Legs)</h4>
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Peak Theta</span>
+                        <strong class="text-emerald-700 font-bold">₹ 12,500</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Kill Switch SL</span>
+                        <strong class="text-rose-600 font-bold">- 10% Cut</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">71.8%</strong>
+                      </div>
+                    </div>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-800 font-mono font-bold">4 Legs • Wide Range</span>
-                </div>
 
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="100" y="12" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹5,800</text>
-                    <path d="M 15 56 L 45 56 L 70 22 L 130 22 L 155 56 L 185 56" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-                    <line x1="15" y1="56" x2="45" y2="56" stroke="#e11d48" stroke-width="3"/>
-                    <line x1="155" y1="56" x2="185" y2="56" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="100" cy="22" r="3.5" fill="#0284c7"/>
-                  </svg>
-                </div>
+                  <!-- Neutral Card 3: Iron Condor (4 Legs) -->
+                  <div onclick="selectWizardStrategy('iron_condor', 'Iron Condor (4 Legs)', 4, 38000, 52000, false)" id="card-strat-iron_condor" data-strat-cat="neutral" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Iron Condor (4 Legs)</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-800 font-mono font-bold">4 Legs • Wide Range</span>
+                    </div>
 
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Profit</span>
-                    <strong class="text-emerald-700 font-bold">₹ 5,800</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Loss</span>
-                    <strong class="text-rose-600 font-bold">- ₹ 4,200</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold">78.4%</strong>
-                  </div>
-                </div>
-              </div>
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="100" y="12" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹5,800</text>
+                        <path d="M 15 56 L 45 56 L 70 22 L 130 22 L 155 56 L 185 56" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="15" y1="56" x2="45" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <line x1="155" y1="56" x2="185" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="100" cy="22" r="3.5" fill="#0284c7"/>
+                      </svg>
+                    </div>
 
-              <!-- ============================================== -->
-              <!-- BULLISH CARDS                                  -->
-              <!-- ============================================== -->
-
-              <!-- Bullish Card 1: Bull Call Spread (2 Legs) -->
-              <div onclick="selectWizardStrategy('bull_call_spread', 'Bull Call Spread (2 Legs)', 2, 22000, 31500, false)" id="card-strat-bull_call_spread" data-strat-cat="bullish" class="hidden p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <h4 class="text-sm font-black text-slate-900">Bull Call Spread (2 Legs)</h4>
-                  </div>
-                  <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-800 font-mono font-bold">2 Legs • Capped Loss</span>
-                </div>
-
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="145" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹8,200</text>
-                    <path d="M 20 56 L 65 56 L 135 20 L 180 20" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-                    <line x1="20" y1="56" x2="65" y2="56" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="135" cy="20" r="3.5" fill="#059669"/>
-                  </svg>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Profit</span>
-                    <strong class="text-emerald-700 font-bold">₹ 8,200</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Loss</span>
-                    <strong class="text-rose-600 font-bold">- ₹ 3,800</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold">64.5%</strong>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Bullish Card 2: Bull Put Credit Spread (2 Legs) -->
-              <div onclick="selectWizardStrategy('bull_put_spread', 'Bull Put Credit Spread (2 Legs)', 2, 28000, 42000, false)" id="card-strat-bull_put_spread" data-strat-cat="bullish" class="hidden p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <h4 class="text-sm font-black text-slate-900">Bull Put Credit Spread</h4>
-                  </div>
-                  <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-800 font-mono font-bold">2 Legs • High Prob</span>
-                </div>
-
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="145" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹5,600</text>
-                    <path d="M 20 58 L 60 58 L 110 26 L 180 26" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-                    <line x1="20" y1="58" x2="60" y2="58" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="110" cy="26" r="3.5" fill="#059669"/>
-                  </svg>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Profit</span>
-                    <strong class="text-emerald-700 font-bold">₹ 5,600</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Loss</span>
-                    <strong class="text-rose-600 font-bold">- ₹ 4,400</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold">72.8%</strong>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Bullish Card 3: Directional Options Buying Only -->
-              <div onclick="selectWizardStrategy('buying_only', 'Options Buying Only (CE Momentum)', 1, 17500, 25000, false)" id="card-strat-buying_only" data-strat-cat="bullish" class="hidden p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <h4 class="text-sm font-black text-slate-900">Options Buying Only (CE)</h4>
-                  </div>
-                  <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-800 font-mono font-bold">1 Leg • Momentum</span>
-                </div>
-
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="145" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Unlimited Upside</text>
-                    <path d="M 20 56 L 80 56 L 175 16" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-                    <line x1="20" y1="56" x2="80" y2="56" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="175" cy="16" r="3.5" fill="#059669"/>
-                  </svg>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Profit</span>
-                    <strong class="text-emerald-700 font-bold">Unlimited</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Strict SL</span>
-                    <strong class="text-rose-600 font-bold">1.5% Premium</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold">61.0%</strong>
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">₹ 5,800</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Loss</span>
+                        <strong class="text-rose-600 font-bold">- ₹ 4,200</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">78.4%</strong>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <!-- ============================================== -->
-              <!-- BEARISH CARDS                                  -->
+              <!-- SECTION 2: BULLISH (UPSIDE BIAS & MOMENTUM)    -->
               <!-- ============================================== -->
-
-              <!-- Bearish Card 1: Bear Put Spread (2 Legs) -->
-              <div onclick="selectWizardStrategy('bear_put_spread', 'Bear Put Spread (2 Legs)', 2, 24000, 35000, false)" id="card-strat-bear_put_spread" data-strat-cat="bearish" class="hidden p-4 bg-white border-2 border-slate-200/90 hover:border-rose-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
+              <div id="strat-section-bullish" class="space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-200/80 pb-2.5 pt-2">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                    <h4 class="text-sm font-black text-slate-900">Bear Put Spread (2 Legs)</h4>
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 shadow-xs"></span>
+                    <h4 class="text-sm font-black text-slate-900 tracking-wide">🟢 Bullish Strategies (Upside Bias)</h4>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-rose-50 border border-rose-200 text-[10px] text-rose-800 font-mono font-bold">2 Legs • Defined Risk</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10.5px] font-mono font-bold">3 Profiles</span>
                 </div>
 
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="55" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹7,800</text>
-                    <path d="M 20 20 L 65 20 L 135 56 L 180 56" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-                    <line x1="135" y1="56" x2="180" y2="56" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="65" cy="20" r="3.5" fill="#059669"/>
-                  </svg>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <!-- Bullish Card 1: Bull Call Spread (2 Legs) -->
+                  <div onclick="selectWizardStrategy('bull_call_spread', 'Bull Call Spread (2 Legs)', 2, 22000, 31500, false)" id="card-strat-bull_call_spread" data-strat-cat="bullish" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Bull Call Spread (2 Legs)</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-800 font-mono font-bold">2 Legs • Capped Loss</span>
+                    </div>
 
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Profit</span>
-                    <strong class="text-emerald-700 font-bold">₹ 7,800</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Loss</span>
-                    <strong class="text-rose-600 font-bold">- ₹ 4,200</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold">63.8%</strong>
-                  </div>
-                </div>
-              </div>
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="145" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹8,200</text>
+                        <path d="M 20 56 L 65 56 L 135 20 L 180 20" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="20" y1="56" x2="65" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="135" cy="20" r="3.5" fill="#059669"/>
+                      </svg>
+                    </div>
 
-              <!-- Bearish Card 2: Bear Call Credit Spread (2 Legs) -->
-              <div onclick="selectWizardStrategy('bear_call_spread', 'Bear Call Credit Spread (2 Legs)', 2, 29000, 44000, false)" id="card-strat-bear_call_spread" data-strat-cat="bearish" class="hidden p-4 bg-white border-2 border-slate-200/90 hover:border-rose-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                    <h4 class="text-sm font-black text-slate-900">Bear Call Credit Spread</h4>
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">₹ 8,200</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Loss</span>
+                        <strong class="text-rose-600 font-bold">- ₹ 3,800</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">64.5%</strong>
+                      </div>
+                    </div>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-rose-50 border border-rose-200 text-[10px] text-rose-800 font-mono font-bold">2 Legs • High Prob</span>
-                </div>
 
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="55" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹5,400</text>
-                    <path d="M 20 24 L 90 24 L 140 58 L 180 58" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-                    <line x1="140" y1="58" x2="180" y2="58" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="90" cy="24" r="3.5" fill="#059669"/>
-                  </svg>
-                </div>
+                  <!-- Bullish Card 2: Bull Put Credit Spread (2 Legs) -->
+                  <div onclick="selectWizardStrategy('bull_put_spread', 'Bull Put Credit Spread (2 Legs)', 2, 28000, 42000, false)" id="card-strat-bull_put_spread" data-strat-cat="bullish" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Bull Put Credit Spread</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-800 font-mono font-bold">2 Legs • High Prob</span>
+                    </div>
 
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Profit</span>
-                    <strong class="text-emerald-700 font-bold">₹ 5,400</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Loss</span>
-                    <strong class="text-rose-600 font-bold">- ₹ 4,600</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold">74.2%</strong>
-                  </div>
-                </div>
-              </div>
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="145" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹5,600</text>
+                        <path d="M 20 58 L 60 58 L 110 26 L 180 26" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="20" y1="58" x2="60" y2="58" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="110" cy="26" r="3.5" fill="#059669"/>
+                      </svg>
+                    </div>
 
-              <!-- Bearish Card 3: Directional Put Buying -->
-              <div onclick="selectWizardStrategy('pe_buying', 'Options Buying Only (PE Momentum)', 1, 17500, 25000, false)" id="card-strat-pe_buying" data-strat-cat="bearish" class="hidden p-4 bg-white border-2 border-slate-200/90 hover:border-rose-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                    <h4 class="text-sm font-black text-slate-900">Options Buying Only (PE)</h4>
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">₹ 5,600</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Loss</span>
+                        <strong class="text-rose-600 font-bold">- ₹ 4,400</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">72.8%</strong>
+                      </div>
+                    </div>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-rose-50 border border-rose-200 text-[10px] text-rose-800 font-mono font-bold">1 Leg • Momentum</span>
-                </div>
 
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="65" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Unlimited Crash Profit</text>
-                    <path d="M 25 14 L 120 56 L 180 56" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-                    <line x1="120" y1="56" x2="180" y2="56" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="25" cy="14" r="3.5" fill="#059669"/>
-                  </svg>
-                </div>
+                  <!-- Bullish Card 3: Directional Options Buying Only -->
+                  <div onclick="selectWizardStrategy('buying_only', 'Options Buying Only (CE Momentum)', 1, 17500, 25000, false)" id="card-strat-buying_only" data-strat-cat="bullish" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Options Buying Only (CE)</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-800 font-mono font-bold">1 Leg • Momentum</span>
+                    </div>
 
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Profit</span>
-                    <strong class="text-emerald-700 font-bold">Unlimited</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Strict SL</span>
-                    <strong class="text-rose-600 font-bold">1.5% Premium</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold">59.5%</strong>
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="145" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Unlimited Upside</text>
+                        <path d="M 20 56 L 80 56 L 175 16" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="20" y1="56" x2="80" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="175" cy="16" r="3.5" fill="#059669"/>
+                      </svg>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">Unlimited</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Strict SL</span>
+                        <strong class="text-rose-600 font-bold">1.5% Premium</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">61.0%</strong>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <!-- ============================================== -->
-              <!-- HEDGING CARDS                                  -->
+              <!-- SECTION 3: BEARISH (DOWNSIDE BIAS & CRASH)     -->
               <!-- ============================================== -->
-
-              <!-- Hedging Card 1: Long Strangle (2 Legs) -->
-              <div onclick="selectWizardStrategy('long_strangle', 'Long Strangle (Volatility Hedge)', 2, 12000, 20000, false)" id="card-strat-long_strangle" data-strat-cat="hedge" class="hidden p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
+              <div id="strat-section-bearish" class="space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-200/80 pb-2.5 pt-2">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
-                    <h4 class="text-sm font-black text-slate-900">Long Strangle (OTM CE+PE)</h4>
+                    <span class="w-3 h-3 rounded-full bg-rose-500 shadow-xs"></span>
+                    <h4 class="text-sm font-black text-slate-900 tracking-wide">🔴 Bearish Strategies (Downside Bias)</h4>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200 text-[10px] text-indigo-800 font-mono font-bold">2 Legs • Volatility Expansion</span>
+                  <span class="px-2 py-0.5 rounded-full bg-rose-50 text-rose-800 border border-rose-200 text-[10.5px] font-mono font-bold">3 Profiles</span>
                 </div>
 
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="100" y="12" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Both-Side Breakout Hedge</text>
-                    <path d="M 15 16 L 60 56 L 140 56 L 185 16" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-                    <line x1="60" y1="56" x2="140" y2="56" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="15" cy="16" r="3" fill="#059669"/>
-                    <circle cx="185" cy="16" r="3" fill="#059669"/>
-                  </svg>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <!-- Bearish Card 1: Bear Put Spread (2 Legs) -->
+                  <div onclick="selectWizardStrategy('bear_put_spread', 'Bear Put Spread (2 Legs)', 2, 24000, 35000, false)" id="card-strat-bear_put_spread" data-strat-cat="bearish" class="p-4 bg-white border-2 border-slate-200/90 hover:border-rose-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Bear Put Spread (2 Legs)</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-rose-50 border border-rose-200 text-[10px] text-rose-800 font-mono font-bold">2 Legs • Defined Risk</span>
+                    </div>
 
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Profit</span>
-                    <strong class="text-emerald-700 font-bold">Unlimited</strong>
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="55" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹7,800</text>
+                        <path d="M 20 20 L 65 20 L 135 56 L 180 56" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="135" y1="56" x2="180" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="65" cy="20" r="3.5" fill="#059669"/>
+                      </svg>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">₹ 7,800</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Loss</span>
+                        <strong class="text-rose-600 font-bold">- ₹ 4,200</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">63.8%</strong>
+                      </div>
+                    </div>
                   </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Loss</span>
-                    <strong class="text-rose-600 font-bold">- ₹ 3,200</strong>
+
+                  <!-- Bearish Card 2: Bear Call Credit Spread (2 Legs) -->
+                  <div onclick="selectWizardStrategy('bear_call_spread', 'Bear Call Credit Spread (2 Legs)', 2, 29000, 44000, false)" id="card-strat-bear_call_spread" data-strat-cat="bearish" class="p-4 bg-white border-2 border-slate-200/90 hover:border-rose-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Bear Call Credit Spread</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-rose-50 border border-rose-200 text-[10px] text-rose-800 font-mono font-bold">2 Legs • High Prob</span>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="55" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Max Profit: ₹5,400</text>
+                        <path d="M 20 24 L 90 24 L 140 58 L 180 58" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="140" y1="58" x2="180" y2="58" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="90" cy="24" r="3.5" fill="#059669"/>
+                      </svg>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">₹ 5,400</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Loss</span>
+                        <strong class="text-rose-600 font-bold">- ₹ 4,600</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">74.2%</strong>
+                      </div>
+                    </div>
                   </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold">54.0%</strong>
+
+                  <!-- Bearish Card 3: Directional Put Buying -->
+                  <div onclick="selectWizardStrategy('pe_buying', 'Options Buying Only (PE Momentum)', 1, 17500, 25000, false)" id="card-strat-pe_buying" data-strat-cat="bearish" class="p-4 bg-white border-2 border-slate-200/90 hover:border-rose-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Options Buying Only (PE)</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-rose-50 border border-rose-200 text-[10px] text-rose-800 font-mono font-bold">1 Leg • Momentum</span>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="65" y="13" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Unlimited Crash Profit</text>
+                        <path d="M 25 14 L 120 56 L 180 56" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="120" y1="56" x2="180" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="25" cy="14" r="3.5" fill="#059669"/>
+                      </svg>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">Unlimited</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Strict SL</span>
+                        <strong class="text-rose-600 font-bold">1.5% Premium</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">59.5%</strong>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Hedging Card 2: Calendar Spread (2 Legs) -->
-              <div onclick="selectWizardStrategy('calendar_spread', 'Calendar Spread (Theta Hedge)', 2, 26000, 38000, false)" id="card-strat-calendar_spread" data-strat-cat="hedge" class="hidden p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
-                <div class="flex items-center justify-between">
+              <!-- ============================================== -->
+              <!-- SECTION 4: HEDGING & VOLATILITY (DUAL WING)    -->
+              <!-- ============================================== -->
+              <div id="strat-section-hedge" class="space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-200/80 pb-2.5 pt-2">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
-                    <h4 class="text-sm font-black text-slate-900">Calendar Spread (Time Decay)</h4>
+                    <span class="w-3 h-3 rounded-full bg-indigo-500 shadow-xs"></span>
+                    <h4 class="text-sm font-black text-slate-900 tracking-wide">🛡️ Hedging & Volatility Strategies</h4>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200 text-[10px] text-indigo-800 font-mono font-bold">2 Legs • Near-Sell + Far-Buy</span>
+                  <span class="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-200 text-[10.5px] font-mono font-bold">2 Profiles</span>
                 </div>
 
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-                  <svg viewBox="0 0 200 70" class="w-full h-16">
-                    <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
-                    <text x="100" y="12" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Theta Positive Hedge</text>
-                    <path d="M 15 54 L 45 54 Q 100 12 155 54 L 185 54" fill="none" stroke="#059669" stroke-width="2.5"/>
-                    <line x1="15" y1="54" x2="45" y2="54" stroke="#e11d48" stroke-width="3"/>
-                    <line x1="155" y1="54" x2="185" y2="54" stroke="#e11d48" stroke-width="3"/>
-                    <circle cx="100" cy="20" r="3.5" fill="#6366f1"/>
-                  </svg>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <!-- Hedging Card 1: Long Strangle (2 Legs) -->
+                  <div onclick="selectWizardStrategy('long_strangle', 'Long Strangle (Volatility Hedge)', 2, 12000, 20000, false)" id="card-strat-long_strangle" data-strat-cat="hedge" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Long Strangle (OTM CE+PE)</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200 text-[10px] text-indigo-800 font-mono font-bold">2 Legs • Volatility Expansion</span>
+                    </div>
 
-                <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Profit</span>
-                    <strong class="text-emerald-700 font-bold">₹ 6,400</strong>
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="100" y="12" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Both-Side Breakout Hedge</text>
+                        <path d="M 15 16 L 60 56 L 140 56 L 185 16" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="60" y1="56" x2="140" y2="56" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="15" cy="16" r="3" fill="#059669"/>
+                        <circle cx="185" cy="16" r="3" fill="#059669"/>
+                      </svg>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">Unlimited</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Loss</span>
+                        <strong class="text-rose-600 font-bold">- ₹ 3,200</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">54.0%</strong>
+                      </div>
+                    </div>
                   </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">Max Loss</span>
-                    <strong class="text-rose-600 font-bold">- ₹ 3,100</strong>
-                  </div>
-                  <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                    <span class="text-slate-500 block">POP</span>
-                    <strong class="text-slate-900 font-bold">69.5%</strong>
+
+                  <!-- Hedging Card 2: Calendar Spread (2 Legs) -->
+                  <div onclick="selectWizardStrategy('calendar_spread', 'Calendar Spread (Theta Hedge)', 2, 26000, 38000, false)" id="card-strat-calendar_spread" data-strat-cat="hedge" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                        <h4 class="text-sm font-black text-slate-900">Calendar Spread (Time Decay)</h4>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200 text-[10px] text-indigo-800 font-mono font-bold">2 Legs • Near-Sell + Far-Buy</span>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 200 70" class="w-full h-16">
+                        <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
+                        <text x="100" y="12" fill="#059669" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Theta Positive Hedge</text>
+                        <path d="M 15 54 L 45 54 Q 100 12 155 54 L 185 54" fill="none" stroke="#059669" stroke-width="2.5"/>
+                        <line x1="15" y1="54" x2="45" y2="54" stroke="#e11d48" stroke-width="3"/>
+                        <line x1="155" y1="54" x2="185" y2="54" stroke="#e11d48" stroke-width="3"/>
+                        <circle cx="100" cy="20" r="3.5" fill="#6366f1"/>
+                      </svg>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Profit</span>
+                        <strong class="text-emerald-700 font-bold">₹ 6,400</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">Max Loss</span>
+                        <strong class="text-rose-600 font-bold">- ₹ 3,100</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block">POP</span>
+                        <strong class="text-slate-900 font-bold">69.5%</strong>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -4794,14 +4841,26 @@
     }
 
     function filterStrategyPayoffs(category) {
-      const tabs = ['bullish', 'bearish', 'neutral', 'hedge'];
+      const tabs = ['all', 'neutral', 'bullish', 'bearish', 'hedge'];
       tabs.forEach(t => {
         const btn = document.getElementById('tab-strat-' + t);
         if (btn) {
           if (t === category) {
             btn.className = "px-3 py-1.5 rounded-lg font-bold bg-emerald-600 text-white shadow-xs transition";
           } else {
-            btn.className = "px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition";
+            btn.className = "px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition";
+          }
+        }
+      });
+      
+      const sections = ['neutral', 'bullish', 'bearish', 'hedge'];
+      sections.forEach(sec => {
+        const secEl = document.getElementById('strat-section-' + sec);
+        if (secEl) {
+          if (category === 'all' || category === sec) {
+            secEl.classList.remove('hidden');
+          } else {
+            secEl.classList.add('hidden');
           }
         }
       });
@@ -4809,7 +4868,7 @@
       const cards = document.querySelectorAll('.strat-card');
       cards.forEach(c => {
         const cardCat = c.getAttribute('data-strat-cat');
-        if (cardCat === category) {
+        if (category === 'all' || cardCat === category) {
           c.classList.remove('hidden');
         } else {
           c.classList.add('hidden');
