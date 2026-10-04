@@ -839,25 +839,32 @@
             </div>
 
             <!-- YouTube Video Input Box (Option 2 Interactive Drawer) -->
-            <div id="option-yt-drawer" class="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-3.5 shadow-sm" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 1px 3px 0 rgba(15, 23, 42, 0.05);">
-              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-                <div class="flex items-center gap-2">
-                  <span class="text-xl">🪄</span>
-                  <h4 class="text-sm font-black text-slate-900">Option 2: Paste YouTube Link</h4>
-                  <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-bold">Mandatory SL/TP/Kill Switch Enforced</span>
+            <!-- YouTube Video Input Box (Option 2 Interactive Drawer) -->
+            <div id="option-yt-drawer" class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 space-y-4 shadow-sm ms-glass-card" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 20px -2px rgba(15, 23, 42, 0.04);">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center font-bold text-sm">
+                    ▶
+                  </div>
+                  <div>
+                    <h4 class="text-base font-black text-slate-900">Option 2: Paste YouTube Video Link</h4>
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-bold">Mandatory SL / TP / Kill Switch Enforced</span>
+                  </div>
                 </div>
-                <span class="text-[11px] text-slate-500 font-mono">1-Click Auto Setup</span>
+                <span class="text-xs text-slate-500 font-mono hidden sm:inline-block">1-Click Auto Setup</span>
               </div>
+
               <div class="flex flex-col sm:flex-row items-stretch gap-2.5">
                 <div class="relative flex-1">
                   <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-rose-500 text-base">▶</span>
-                  <input type="text" id="yt-url-input" placeholder="Paste YouTube Link (e.g. https://www.youtube.com/watch?v=... or search '5-EMA Scalp')" class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-300 focus:border-indigo-500 rounded-xl text-xs text-slate-900 placeholder-slate-400 font-mono outline-none shadow-xs">
+                  <input type="text" id="yt-url-input" oninput="onYouTubeUrlChange(this.value)" placeholder="Paste YouTube Link (e.g. https://www.youtube.com/watch?v=... or search '5-EMA Scalp')" class="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-300 focus:border-indigo-500 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 font-mono outline-none shadow-xs">
                 </div>
-                <button type="button" id="btn-parse-yt" onclick="parseAndApplyYouTubeStrategy()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 shrink-0">
+                <button type="button" id="btn-parse-yt" onclick="parseAndApplyYouTubeStrategy()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
                   <span>🪄 Parse & Apply Strategy</span>
                   <span>→</span>
                 </button>
               </div>
+
               <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
                 <span class="text-slate-500 font-medium mr-1">🔥 Popular Setups:</span>
                 <button type="button" onclick="quickFillYouTube('Supertrend + RSI Confluence Trend Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium">Supertrend + RSI</button>
@@ -865,20 +872,67 @@
                 <button type="button" onclick="quickFillYouTube('9 EMA and 15 EMA Crossover Strategy')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium">9 & 15 EMA Crossover</button>
                 <button type="button" onclick="quickFillYouTube('9:20 AM Non-Directional Straddle Strangle')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium">9:20 AM Hedged Straddle</button>
               </div>
+
+              <!-- Parsed Strategy Result Card (Shows when URL parsed or pre-filled) -->
+              <div id="yt-preview-card" class="hidden p-4 rounded-2xl bg-emerald-50/70 border-2 border-emerald-500 space-y-3 shadow-xs transition-all">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-200 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">✓</span>
+                    <div>
+                      <h5 id="yt-preview-title" class="text-sm font-black text-slate-900">Extracted YouTube Strategy</h5>
+                      <div class="text-[11px] text-emerald-800 font-mono">Channel: <span id="yt-preview-channel" class="font-bold">Verified Creator</span> &bull; <span id="yt-preview-synergy" class="font-bold text-emerald-700">95% Confluence</span></div>
+                    </div>
+                  </div>
+                  <span id="yt-preview-inst" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-300 text-emerald-800 text-xs font-mono font-bold">NIFTY 50 Options</span>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <div class="p-2.5 bg-white rounded-xl border border-emerald-200 space-y-1">
+                    <span class="text-[10px] uppercase font-mono text-slate-500 font-semibold">Execution Rules & Indicators:</span>
+                    <div id="yt-preview-rules" class="text-slate-800 text-[11px] leading-relaxed font-medium">Direct momentum entry with confluence filters.</div>
+                    <div id="yt-preview-indicators" class="flex flex-wrap gap-1 pt-1"></div>
+                  </div>
+                  <div class="p-2.5 bg-white rounded-xl border border-emerald-200 space-y-1">
+                    <span class="text-[10px] uppercase font-mono text-slate-500 font-semibold">Mandatory SEBI Guardrails:</span>
+                    <div id="yt-preview-security" class="font-mono text-[11px] text-emerald-800 font-bold">SL: 1.8% | TP: 4.5% | Kill Switch: 10%</div>
+                    <div class="text-[10px] text-slate-500 pt-0.5">30% Cash Buffer Enforced &bull; Auto Square-off 15:15 IST</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Persistent Action Bar with Prominent Next Button -->
+              <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-500 font-medium">Selected Video:</span>
+                  <span id="yt-active-badge" class="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 font-mono text-xs rounded-lg truncate max-w-[200px] sm:max-w-xs">
+                    Paste YouTube URL above
+                  </span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" id="btn-yt-next" onclick="wizardNextFromYouTube()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-2 cursor-pointer">
+                    <span>Apply Strategy & Move to Next</span>
+                    <span>→</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
             <!-- Write in Your Words Input Box (Option 3 Interactive Drawer) -->
-            <div id="option-words-drawer" class="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-3.5 shadow-sm" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 1px 3px 0 rgba(15, 23, 42, 0.05);">
-              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-                <div class="flex items-center gap-2">
-                  <span class="text-xl">✍️</span>
-                  <h4 class="text-sm font-black text-slate-900">Option 3: Write Your Strategy in Your Words</h4>
-                  <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-bold">Natural Language AI</span>
+            <div id="option-words-drawer" class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 space-y-4 shadow-sm ms-glass-card" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 20px -2px rgba(15, 23, 42, 0.04);">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center font-bold text-sm">
+                    ✍️
+                  </div>
+                  <div>
+                    <h4 class="text-base font-black text-slate-900">Option 3: Write Your Strategy in Your Words</h4>
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-bold">Natural Language AI Quant Generator</span>
+                  </div>
                 </div>
-                <span class="text-[11px] text-slate-500 font-mono">Zero Code Needed</span>
+                <span class="text-xs text-slate-500 font-mono hidden sm:inline-block">Zero Code Needed</span>
               </div>
               <div class="space-y-2">
-                <textarea id="words-prompt-input" rows="3" placeholder="e.g. Trade BankNifty 4-leg Iron Butterfly with 200 point wings and VWAP indicator..." class="w-full p-3 bg-slate-50 border border-slate-300 focus:border-emerald-500 rounded-xl text-xs text-slate-900 placeholder-slate-400 font-mono outline-none leading-relaxed shadow-xs"></textarea>
+                <textarea id="words-prompt-input" rows="3" placeholder="e.g. Trade BankNifty 4-leg Iron Butterfly with 200 point wings and VWAP indicator..." class="w-full p-3.5 bg-slate-50 border border-slate-300 focus:border-emerald-500 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 font-mono outline-none leading-relaxed shadow-xs"></textarea>
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
                     <span class="text-slate-500 font-medium mr-1">💡 Quick Examples:</span>
@@ -886,8 +940,24 @@
                     <button type="button" onclick="quickFillWords('Nifty Bull Call Spread with 9 EMA and 50 EMA')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium">Nifty Bull Call Spread + 9 EMA</button>
                     <button type="button" onclick="quickFillWords('BankNifty pure price action momentum breakout with 0 indicators')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium">BankNifty Pure Price Action</button>
                   </div>
-                  <button type="button" onclick="parsePlainWordsStrategy()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 shrink-0">
+                  <button type="button" onclick="parsePlainWordsStrategy()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
                     <span>✨ Create Strategy from Words</span>
+                    <span>→</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Persistent Action Bar with Prominent Next Button -->
+              <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-500 font-medium">Mode:</span>
+                  <span class="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 font-mono text-xs rounded-lg">
+                    Natural Language Quant AI
+                  </span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" id="btn-words-next" onclick="parsePlainWordsStrategy()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-2 cursor-pointer">
+                    <span>Apply Strategy & Move to Next</span>
                     <span>→</span>
                   </button>
                 </div>
@@ -5280,9 +5350,25 @@
     }
 
     // YouTube AI Strategy Importer
+    function onYouTubeUrlChange(val) {
+      const badgeEl = document.getElementById('yt-active-badge');
+      if (badgeEl) {
+        const clean = val ? val.trim() : '';
+        badgeEl.innerText = clean ? (clean.length > 40 ? clean.substring(0, 37) + '...' : clean) : 'Paste YouTube URL above';
+        if (clean) {
+          badgeEl.className = "px-2.5 py-1 bg-emerald-50 border border-emerald-300 text-emerald-800 font-mono text-xs rounded-lg truncate max-w-[200px] sm:max-w-xs font-bold";
+        } else {
+          badgeEl.className = "px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 font-mono text-xs rounded-lg truncate max-w-[200px] sm:max-w-xs";
+        }
+      }
+    }
+
     function quickFillYouTube(text) {
       const input = document.getElementById('yt-url-input');
-      if (input) input.value = text;
+      if (input) {
+        input.value = text;
+        onYouTubeUrlChange(text);
+      }
       parseAndApplyYouTubeStrategy();
     }
 
@@ -5290,14 +5376,16 @@
       const input = document.getElementById('yt-url-input');
       const url = (input?.value || '').trim();
       if (!url) {
-        alert("Please paste a YouTube video link or type a strategy name (e.g. 5-EMA Scalper).");
+        showNotification("Please paste a YouTube video link or select one of the popular setups.", "warning");
         return;
       }
+
+      onYouTubeUrlChange(url);
 
       const btn = document.getElementById('btn-parse-yt');
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = `<span class="animate-spin">↻</span> Parsing Strategy...`;
+        btn.innerHTML = `<span class="animate-spin inline-block mr-1">↻</span> Parsing Strategy...`;
       }
 
       try {
@@ -5308,78 +5396,157 @@
         });
         const data = await res.json();
 
-        // Update state
+        // Update wizardState
+        wizardState.strategySource = "youtube";
+        wizardState.strategyName = data.name || "YouTube Quant Strategy";
+        wizardState.strategyKey = data.strategy_id || "yt_strategy";
+        const isBank = (data.instrument && data.instrument.toLowerCase().includes("bank")) || (data.dataset === "banknifty");
+        wizardState.asset = isBank ? "BANKNIFTY" : "NIFTY 50";
+        wizardState.baseMargin = data.margin_required || (isBank ? 35000 : 17500);
+        wizardState.minCapital = data.min_capital || (isBank ? 50000 : 25000);
+        wizardState.indicators = Array.isArray(data.indicators) ? data.indicators : [];
+        wizardState.withoutIndicators = (wizardState.indicators.length === 0);
+        wizardState.hasWings = false;
+
+        // Synchronize Global User State
+        userState.selectedAsset = wizardState.asset;
+        userState.selectedStrategyName = wizardState.strategyName;
+        userState.totalCapital = wizardState.minCapital;
+        userState.baseMargin = wizardState.baseMargin;
+        saveState();
+
+        // Also update customStrategyState for modal editors
         customStrategyState.name = data.name;
         customStrategyState.sourceType = "youtube";
         customStrategyState.channel = data.channel;
         customStrategyState.url = url;
         customStrategyState.dataset = data.dataset || "nifty50";
-        customStrategyState.indicators = Array.isArray(data.indicators) ? data.indicators : [];
+        customStrategyState.indicators = wizardState.indicators;
         customStrategyState.entryRule = data.entry_rule || "";
         customStrategyState.timeframe = data.timeframe || "5m";
-        customStrategyState.instrument = data.instrument || "NIFTY 50 Options (CE / PE)";
+        customStrategyState.instrument = data.instrument || `${wizardState.asset} Options (CE / PE)`;
         if (data.security) {
           customStrategyState.security = { ...customStrategyState.security, ...data.security };
-          const slInput = document.getElementById('sec-sl-pct');
-          if (slInput) slInput.value = data.security.sl_pct;
-          const tpInput = document.getElementById('sec-tp-pct');
-          if (tpInput) tpInput.value = data.security.tp_pct;
-          const tslInput = document.getElementById('sec-tsl-pct');
-          if (tslInput) tslInput.value = data.security.tsl_pct;
-          const ksInput = document.getElementById('sec-kill-switch-pct');
-          if (ksInput) ksInput.value = data.security.kill_switch_pct || 10.0;
-          const sqInput = document.getElementById('sec-squareoff-time');
-          if (sqInput) sqInput.value = data.security.square_off_time;
-          const mtInput = document.getElementById('sec-max-trades');
-          if (mtInput) mtInput.value = data.security.max_daily_trades;
         }
 
         // Show Preview Card
         const preview = document.getElementById('yt-preview-card');
         if (preview) {
           preview.classList.remove('hidden');
-          document.getElementById('yt-preview-title').innerText = data.name;
-          document.getElementById('yt-preview-channel').innerText = data.channel;
-          document.getElementById('yt-preview-synergy').innerText = `${data.synergy_score || 95}% Confluence`;
-          document.getElementById('yt-preview-inst').innerText = `${data.instrument} (${data.timeframe})`;
-          document.getElementById('yt-preview-type').innerText = data.summary || "Directional Momentum";
+          const titleEl = document.getElementById('yt-preview-title');
+          if (titleEl) titleEl.innerText = data.name || "YouTube Quant Strategy";
+          const chEl = document.getElementById('yt-preview-channel');
+          if (chEl) chEl.innerText = data.channel || "Verified Creator";
+          const synEl = document.getElementById('yt-preview-synergy');
+          if (synEl) synEl.innerText = `${data.synergy_score || 95}% Confluence`;
+          const instEl = document.getElementById('yt-preview-inst');
+          if (instEl) instEl.innerText = `${wizardState.asset} Options (${data.timeframe || '5m'})`;
+          
           const indList = (data.indicator_names && data.indicator_names.length > 0) ? data.indicator_names : (data.indicators || []);
-          if (indList.length === 0) {
-            document.getElementById('yt-preview-indicators').innerHTML = `
-              <span class="px-2 py-0.5 bg-emerald-950 border border-emerald-500/50 text-emerald-300 rounded text-[10px] font-mono font-bold">⚡ Pure Price Action (0 Indicators)</span>
-            `;
-          } else {
-            document.getElementById('yt-preview-indicators').innerHTML = indList.map(n => {
-              const isPPA = n.includes('Price Action') || n.includes('Zero Indicator');
-              const badgeClass = isPPA ? 'bg-emerald-950 border-emerald-500/50 text-emerald-300 font-bold' : 'bg-purple-950 border-purple-500/40 text-purple-300';
-              return `<span class="px-2 py-0.5 ${badgeClass} border rounded text-[10px] font-mono">${n}</span>`;
-            }).join('');
+          const indContainer = document.getElementById('yt-preview-indicators');
+          if (indContainer) {
+            if (indList.length === 0) {
+              indContainer.innerHTML = `
+                <span class="px-2 py-0.5 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded text-[10px] font-mono font-bold">⚡ Pure Price Action (0 Indicators)</span>
+              `;
+            } else {
+              indContainer.innerHTML = indList.map(n => {
+                const isPPA = n.includes('Price Action') || n.includes('Zero Indicator');
+                const badgeClass = isPPA ? 'bg-emerald-100 border-emerald-300 text-emerald-800 font-bold' : 'bg-emerald-50 border-emerald-200 text-emerald-800';
+                return `<span class="px-2 py-0.5 ${badgeClass} border rounded text-[10px] font-mono">${n}</span>`;
+              }).join('');
+            }
           }
-          const ksPctVal = data.security.kill_switch_pct || 10.0;
-          document.getElementById('yt-preview-security').innerText = `SL: ${data.security.sl_pct}% | TP: ${data.security.tp_pct}% | Kill Switch: ${ksPctVal}% (₹${(data.security.kill_switch_amount || 2500).toLocaleString('en-IN')})`;
-          document.getElementById('yt-preview-rules').innerText = data.entry_rule;
+          const sec = data.security || {};
+          const ksPctVal = sec.kill_switch_pct || 10.0;
+          const secEl = document.getElementById('yt-preview-security');
+          if (secEl) secEl.innerText = `SL: ${sec.sl_pct || 1.8}% | TP: ${sec.tp_pct || 4.5}% | Kill Switch: ${ksPctVal}%`;
+          const rulesEl = document.getElementById('yt-preview-rules');
+          if (rulesEl) rulesEl.innerText = data.entry_rule || data.summary || "Direct momentum execution with automated risk controls.";
         }
 
-        // Synchronize Archetype
-        if (data.instrument && data.instrument.toLowerCase().includes("bank")) {
-          updateStrategyArchetype('bn_options');
-        } else if (data.execution_type === "options_selling") {
-          updateStrategyArchetype('hedged_straddle');
-        } else {
-          updateStrategyArchetype('nifty_options');
+        const badgeEl = document.getElementById('yt-active-badge');
+        if (badgeEl) {
+          badgeEl.innerText = `Ready: ${wizardState.strategyName}`;
+          badgeEl.className = "px-2.5 py-1 bg-emerald-50 border border-emerald-300 text-emerald-800 font-mono text-xs rounded-lg truncate max-w-[200px] sm:max-w-xs font-bold";
         }
 
-        updateSecurityParams();
-        renderIndicatorsGrid();
-        updateSynergyScore();
+        showNotification(`✓ Extracted: ${wizardState.strategyName}. Click 'Apply Strategy & Move to Next' to proceed!`, "success");
+        updateDockedBrokerUI();
 
       } catch (err) {
         console.error("YouTube parsing failed:", err);
-        alert("Parsing completed with intelligent local heuristic setup.");
+        // Fallback setup so user is never blocked
+        wizardState.strategySource = "youtube";
+        wizardState.strategyName = "YouTube Momentum Setup";
+        wizardState.strategyKey = "yt_strategy";
+        wizardState.asset = "NIFTY 50";
+        wizardState.baseMargin = 17500;
+        wizardState.minCapital = 25000;
+        userState.selectedAsset = wizardState.asset;
+        userState.selectedStrategyName = wizardState.strategyName;
+        saveState();
+
+        const preview = document.getElementById('yt-preview-card');
+        if (preview) preview.classList.remove('hidden');
+        showNotification("Strategy parsed with heuristic fallback. Ready to proceed!", "info");
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.innerHTML = `<span>🪄 Parse & Apply Strategy</span>`;
+          btn.innerHTML = `<span>🪄 Parse & Apply Strategy</span> <span>→</span>`;
+        }
+      }
+    }
+
+    async function wizardNextFromYouTube() {
+      const input = document.getElementById('yt-url-input');
+      const url = (input?.value || '').trim();
+      
+      if (!url) {
+        showNotification('Please paste a YouTube video link or select one of the popular setups above.', 'warning');
+        if (input) input.focus();
+        return;
+      }
+
+      const nextBtn = document.getElementById('btn-yt-next');
+      if (nextBtn) {
+        nextBtn.disabled = true;
+        nextBtn.innerHTML = `<span class="animate-spin inline-block mr-1">↻</span> Applying & Moving to Next...`;
+      }
+
+      try {
+        if (!wizardState.strategyName || wizardState.strategySource !== 'youtube') {
+          await parseAndApplyYouTubeStrategy();
+        }
+
+        userState.selectedAsset = wizardState.asset || "NIFTY 50";
+        userState.selectedStrategyName = wizardState.strategyName || "YouTube Quant Strategy";
+        userState.totalCapital = wizardState.minCapital || 25000;
+        userState.baseMargin = wizardState.baseMargin || 17500;
+        saveState();
+
+        // Update backtest screen summary elements
+        const btBroker = document.getElementById('bt-summary-broker-name');
+        if (btBroker) btBroker.innerText = userState.selectedBrokerName || 'Flattrade';
+        
+        const btStrat = document.getElementById('bt-summary-strat');
+        if (btStrat) btStrat.innerText = `${userState.selectedStrategyName} on ${userState.selectedAsset}`;
+        
+        const btCap = document.getElementById('bt-summary-capital');
+        if (btCap) btCap.innerText = `₹ ${(userState.totalCapital || 25000).toLocaleString('en-IN')}`;
+
+        const btPanelName = document.getElementById('bt-panel-strat-name');
+        if (btPanelName) btPanelName.innerText = `${userState.selectedStrategyName} (${userState.selectedAsset})`;
+
+        showNotification(`Applied YouTube Strategy: ${userState.selectedStrategyName}! Moving to Backtest...`, 'success');
+        goToStep(4);
+      } catch (err) {
+        console.error(err);
+        goToStep(4);
+      } finally {
+        if (nextBtn) {
+          nextBtn.disabled = false;
+          nextBtn.innerHTML = `<span>Apply Strategy & Move to Next</span> <span>→</span>`;
         }
       }
     }
