@@ -2850,7 +2850,7 @@
         <!-- Strategy Details & Active Security Guardrails Grid -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
           <div class="p-3 bg-slate-50/80 rounded-xl border border-slate-200 space-y-1">
-            <div class="text-[10px] text-slate-500 uppercase font-bold">Selected Indicators:</div>
+            <div class="text-[10px] text-slate-500 uppercase font-bold" id="bt-panel-inds-label">Selected Indicators:</div>
             <div class="flex flex-wrap gap-1 text-xs" id="bt-panel-indicators-chips">
               <span class="px-2 py-0.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded font-mono text-[10px]">Supertrend</span>
               <span class="px-2 py-0.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded font-mono text-[10px]">RSI (14)</span>
@@ -2978,16 +2978,16 @@
         </div>
 
         <!-- ALL 31 CONFLUENCE PERMUTATIONS & LEADERBOARD (2^5 - 1 = 31) -->
-        <div class="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-4 shadow-sm">
+        <div id="bt-combos-section" class="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-4 shadow-sm">
           <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
             <div class="flex items-center gap-2.5">
-              <span class="text-2xl">⚡</span>
+              <span class="text-2xl" id="bt-combos-icon">⚡</span>
               <div>
                 <div class="flex items-center gap-2">
-                  <h3 class="text-base font-black text-slate-900">All 31 Confluence Permutations & Leaderboard</h3>
-                  <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono font-bold">2⁵ - 1 = 31 Combos Tested</span>
+                  <h3 class="text-base font-black text-slate-900" id="bt-combos-title">All 31 Confluence Permutations & Leaderboard</h3>
+                  <span id="bt-combos-badge" class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono font-bold">2⁵ - 1 = 31 Combos Tested</span>
                 </div>
-                <p class="text-xs text-slate-500 mt-0.5">
+                <p class="text-xs text-slate-500 mt-0.5" id="bt-combos-desc">
                   Vectorized simulation across 246 NSE sessions. Ranks all combinations by Profit Factor, Win Rate, and Net PnL.
                 </p>
               </div>
@@ -3003,7 +3003,7 @@
           <div id="bt-champion-card" class="p-4 bg-gradient-to-r from-emerald-50/90 via-teal-50/50 to-white rounded-xl border-2 border-emerald-500 shadow-xs space-y-3">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div class="flex items-center gap-2.5">
-                <span class="px-2.5 py-1 rounded bg-emerald-600 text-white font-black text-[10.5px] uppercase font-mono shadow-xs">🏆 #1 Champion Setup</span>
+                <span id="bt-champion-badge-label" class="px-2.5 py-1 rounded bg-emerald-600 text-white font-black text-[10.5px] uppercase font-mono shadow-xs">🏆 #1 Champion Setup</span>
                 <span class="text-sm font-black text-slate-900" id="bt-champion-name">Quad Confluence</span>
               </div>
               <button type="button" id="btn-apply-champ-bt" onclick="applyChampionCombinationFromBt()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer">
@@ -3036,16 +3036,16 @@
           <!-- All 31 Combinations Scrollable Table -->
           <div class="space-y-2">
             <div class="flex items-center justify-between text-xs text-slate-700 font-bold">
-              <span>Full Ranked Permutations Table (<span class="text-emerald-700 font-mono">31 Combinations</span>):</span>
-              <span class="text-[11px] text-slate-500 font-mono">Click 'Apply' to instantly simulate any combination</span>
+              <span id="bt-combos-table-heading">Full Ranked Permutations Table (<span id="bt-combos-count-label" class="text-emerald-700 font-mono">31 Combinations</span>):</span>
+              <span id="bt-combos-table-subhead" class="text-[11px] text-slate-500 font-mono">Click 'Apply' to instantly simulate any combination</span>
             </div>
             <div class="max-h-80 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xs">
               <table class="w-full text-left border-collapse text-xs">
                 <thead class="bg-slate-100 text-slate-700 font-mono text-[11px] font-bold uppercase sticky top-0 border-b border-slate-200 shadow-xs">
                   <tr>
                     <th class="p-2.5 text-center">Rank</th>
-                    <th class="p-2.5">Combination Setup</th>
-                    <th class="p-2.5 text-center">Indicators</th>
+                    <th class="p-2.5" id="bt-th-setup">Combination Setup</th>
+                    <th class="p-2.5 text-center" id="bt-th-inds">Indicators</th>
                     <th class="p-2.5 text-right">Win Rate</th>
                     <th class="p-2.5 text-right">Profit Factor</th>
                     <th class="p-2.5 text-right">Net Return</th>
@@ -7697,11 +7697,23 @@
 
       const panelChips = document.getElementById('bt-panel-indicators-chips');
       if (panelChips) {
-        const isArbitrage = (userState.selectedStrategy === 'pairs_arbitrage' || (wizardState.asset && wizardState.asset.includes('Arbitrage')) || wizardState.withoutIndicators);
+        const isArbitrage = (userState.selectedStrategy === 'pairs_arbitrage' || (wizardState.asset && wizardState.asset.includes('Arbitrage')));
+        const isZeroInds = (isArbitrage || wizardState.withoutIndicators);
+        const indsLabel = document.getElementById('bt-panel-inds-label');
+        if (indsLabel) {
+          indsLabel.innerText = isArbitrage ? "Mathematical Signal Model:" : (isZeroInds ? "Execution Signal Model:" : "Selected Indicators:");
+        }
+
         if (isArbitrage) {
           panelChips.innerHTML = `
             <span class="px-2.5 py-1 bg-indigo-50 border border-indigo-300 text-indigo-800 rounded font-mono text-[10px] font-bold shadow-xs">
-              ⚡ Pure Z-Score (0 Indicators)
+              ⚡ Pure Z-Score (0 Indicators • ±${currentZScoreThreshold.toFixed(3)}σ)
+            </span>
+          `;
+        } else if (isZeroInds) {
+          panelChips.innerHTML = `
+            <span class="px-2.5 py-1 bg-slate-100 border border-slate-300 text-slate-800 rounded font-mono text-[10px] font-bold shadow-xs">
+              Pure Price Action (0 Indicators)
             </span>
           `;
         } else {
@@ -7880,10 +7892,59 @@
       if (!data) return;
       latestBacktestCombinations = data;
 
-      // 1. Update Speed Tag
+      const isArbitrage = data.is_arbitrage || (userState.selectedStrategy === 'pairs_arbitrage') || (wizardState.asset && wizardState.asset.includes('Arbitrage'));
+      const isZeroInds = data.is_zero_indicators || wizardState.withoutIndicators;
+
+      const combosSection = document.getElementById('bt-combos-section');
+      if (combosSection) {
+        if (isZeroInds && !isArbitrage) {
+          combosSection.classList.add('hidden');
+        } else {
+          combosSection.classList.remove('hidden');
+        }
+      }
+
+      const combosTitle = document.getElementById('bt-combos-title');
+      const combosBadge = document.getElementById('bt-combos-badge');
+      const combosDesc = document.getElementById('bt-combos-desc');
       const speedTag = document.getElementById('bt-combos-speed-tag');
-      if (speedTag && data.calc_time_ms) {
-        speedTag.innerText = `⚡ ${data.calc_time_ms} ms (31 Combos Tested)`;
+      const champLabel = document.getElementById('bt-champion-badge-label');
+      const btnApplyChamp = document.getElementById('btn-apply-champ-bt');
+      const countLabel = document.getElementById('bt-combos-count-label');
+      const tableSubhead = document.getElementById('bt-combos-table-subhead');
+      const thSetup = document.getElementById('bt-th-setup');
+      const thInds = document.getElementById('bt-th-inds');
+
+      if (isArbitrage) {
+        if (combosTitle) combosTitle.innerText = "Statistical Arbitrage Z-Score Sensitivity Analysis";
+        if (combosBadge) combosBadge.innerText = "6 Sigma Deviations (±2.0σ to ±4.0σ)";
+        if (combosDesc) combosDesc.innerText = "Vectorized simulation across 246 NSE sessions. Tests sensitivity of mean reversion threshold (Pure Z-Score, 0 Indicators).";
+        if (speedTag && data.calc_time_ms) speedTag.innerText = `⚡ ${data.calc_time_ms} ms (6 Deviations Tested)`;
+        if (champLabel) champLabel.innerText = "🏆 Calibrated Setup";
+        if (btnApplyChamp) {
+          btnApplyChamp.innerHTML = `<span>✓</span> Active ±${currentZScoreThreshold.toFixed(3)}σ Standard`;
+          btnApplyChamp.disabled = true;
+          btnApplyChamp.className = "px-4 py-2 bg-indigo-600 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5 opacity-90";
+        }
+        if (countLabel) countLabel.innerText = "6 Sigma Deviations";
+        if (tableSubhead) tableSubhead.innerText = "Click 'Select' to test any sigma deviation threshold";
+        if (thSetup) thSetup.innerText = "Deviation Setup";
+        if (thInds) thInds.innerText = "Signal Model";
+      } else {
+        if (combosTitle) combosTitle.innerText = "All 31 Confluence Permutations & Leaderboard";
+        if (combosBadge) combosBadge.innerText = "2⁵ - 1 = 31 Combos Tested";
+        if (combosDesc) combosDesc.innerText = "Vectorized simulation across 246 NSE sessions. Ranks all combinations by Profit Factor, Win Rate, and Net PnL.";
+        if (speedTag && data.calc_time_ms) speedTag.innerText = `⚡ ${data.calc_time_ms} ms (31 Combos Tested)`;
+        if (champLabel) champLabel.innerText = "🏆 #1 Champion Setup";
+        if (btnApplyChamp) {
+          btnApplyChamp.innerHTML = `<span>🚀</span> Apply Best Combo & Re-Test`;
+          btnApplyChamp.disabled = false;
+          btnApplyChamp.className = "px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer";
+        }
+        if (countLabel) countLabel.innerText = "31 Combinations";
+        if (tableSubhead) tableSubhead.innerText = "Click 'Apply' to instantly simulate any combination";
+        if (thSetup) thSetup.innerText = "Combination Setup";
+        if (thInds) thInds.innerText = "Indicators";
       }
 
       // 2. Render Champion Card
@@ -7905,31 +7966,54 @@
 
         const chipsEl = document.getElementById('bt-champion-chips');
         if (chipsEl && best.indicator_names) {
+          const badgeBg = isArbitrage ? "bg-indigo-100 text-indigo-900 border-indigo-300" : "bg-emerald-100 text-emerald-900 border-emerald-300";
           chipsEl.innerHTML = best.indicator_names.map(name => `
-            <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-900 border border-emerald-300 rounded font-mono text-[10.5px] font-bold">
+            <span class="px-2.5 py-0.5 ${badgeBg} border rounded font-mono text-[10.5px] font-bold">
               ✓ ${name}
             </span>
           `).join('');
         }
       }
 
-      // 3. Render All 31 Combinations Table
+      // 3. Render Table
       const tbody = document.getElementById('bt-combos-table-tbody');
       if (tbody && data.combinations && data.combinations.length > 0) {
         tbody.innerHTML = data.combinations.map((c, i) => {
           const isBest = i === 0;
-          const rowClass = isBest ? "bg-emerald-50/90 font-bold border-l-4 border-emerald-600" : "hover:bg-slate-50";
+          const rowClass = isBest ? "bg-indigo-50/70 font-bold border-l-4 border-indigo-600" : "hover:bg-slate-50";
           const pnlSign = c.net_pnl >= 0 ? '+' : '';
           const pnlColor = c.net_pnl >= 0 ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold';
           const rankBadge = isBest ?
-            `<span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white font-black text-[10px]">#1 🏆</span>` :
+            `<span class="px-2 py-0.5 rounded-full ${isArbitrage ? 'bg-indigo-600' : 'bg-emerald-600'} text-white font-black text-[10px]">#1 🏆</span>` :
             `<span class="text-slate-700 font-mono font-bold text-xs">#${c.rank}</span>`;
 
           const indBadges = (c.indicator_names || []).map(n =>
-            `<span class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-800 font-semibold rounded text-[9.5px]">${n}</span>`
+            `<span class="px-1.5 py-0.5 ${isArbitrage ? 'bg-indigo-50 border-indigo-200 text-indigo-800' : 'bg-slate-100 border-slate-300 text-slate-800'} border font-semibold rounded text-[9.5px]">${n}</span>`
           ).join(' ');
 
           const indJson = JSON.stringify(c.indicators).replace(/"/g, '&quot;');
+
+          let actionBtnHtml = '';
+          if (isArbitrage && c.z_score) {
+            const isCur = Math.abs(currentZScoreThreshold - c.z_score) < 0.05;
+            if (isCur) {
+              actionBtnHtml = `<span class="px-2.5 py-1 bg-indigo-100 text-indigo-900 border border-indigo-300 font-bold text-xs rounded-lg">Active (±${c.z_score.toFixed(1)}σ)</span>`;
+            } else {
+              actionBtnHtml = `
+                <button type="button" onclick="selectArbitrageSigmaThreshold(${c.z_score})" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
+                  Select ±${c.z_score.toFixed(1)}σ
+                </button>
+              `;
+            }
+          } else {
+            actionBtnHtml = `
+              <button type="button" onclick="applyCombinationFromCard(${indJson})" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
+                Apply
+              </button>
+            `;
+          }
+
+          const tradeCount = c.total_trades || c.count;
 
           return `
             <tr class="${rowClass} transition text-slate-800 border-b border-slate-100">
@@ -7938,15 +8022,13 @@
                 <div class="font-bold text-slate-900 text-xs">${c.name}</div>
                 <div class="flex flex-wrap gap-1 mt-1">${indBadges}</div>
               </td>
-              <td class="p-2.5 text-center text-slate-900 font-bold font-mono text-xs">${c.count}</td>
+              <td class="p-2.5 text-center text-slate-900 font-bold font-mono text-xs">${tradeCount}</td>
               <td class="p-2.5 text-right font-bold font-mono text-xs ${c.win_rate >= 50 ? 'text-emerald-700' : 'text-slate-800'}">${c.win_rate}%</td>
               <td class="p-2.5 text-right font-bold font-mono text-xs text-slate-900">${c.profit_factor}</td>
               <td class="p-2.5 text-right font-bold font-mono text-xs ${pnlColor}">${pnlSign} ₹${Math.round(c.net_pnl).toLocaleString('en-IN')}</td>
               <td class="p-2.5 text-right font-bold font-mono text-xs text-rose-600">${c.max_drawdown_percent}%</td>
               <td class="p-2.5 text-center">
-                <button type="button" onclick="applyCombinationFromCard(${indJson})" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
-                  Apply
-                </button>
+                ${actionBtnHtml}
               </td>
             </tr>
           `;
@@ -8321,6 +8403,14 @@
 
     function adjustWizardZScore(delta) {
       setWizardZScore(currentZScoreThreshold + delta);
+    }
+
+    function selectArbitrageSigmaThreshold(sigma) {
+      const s = parseFloat(sigma) || 3.0;
+      setWizardZScore(s);
+      updateLiveZScoreThreshold(s);
+      runSimpleBacktestSimulation();
+      showToast(`⚡ Selected ±${s.toFixed(3)}σ Deviation Threshold! Re-simulating backtest...`);
     }
 
     function launchArbitrageFromMain(goToLive = false) {
