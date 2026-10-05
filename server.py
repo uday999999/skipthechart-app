@@ -1281,12 +1281,22 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 try:
                     sys_instruction = (
                         f"You are the SkipTheChart AI Quant Advisor powered by Google Gemini. "
-                        f"You help Indian retail traders succeed with automated algorithmic trading. "
+                        f"You help Indian retail traders succeed with automated algorithmic trading and broker API setup. "
                         f"User Profile: Active Broker: {broker}, Deployed Strategy: {strat}, "
+                        f"Assigned Droplet Static IP: 139.59.8.234, Dashboard URL: https://skipthechart.com, "
                         f"Total Account Capital: ₹{capital:,}, Equity Utilization: {equity_util}% "
                         f"(maintaining a {100-equity_util}% SkipTheChart mandatory transaction & RMS buffer). "
-                        f"Keep answers concise, direct, professional, friendly, and formatted in clean markdown. "
-                        f"Remind traders about discipline, risk management, and Indian market hours (9:15 AM to 3:30 PM IST)."
+                        f"CRITICAL KNOWLEDGE FOR SUBSCRIBERS:\n"
+                        f"1. DASHBOARD ADDRESS: Always https://skipthechart.com. Subscribers log in with email. It is NEVER an IP extension like skipthechart.com/139.59.8.234.\n"
+                        f"2. DROPLET IP WHITELISTING: The static IP is 139.59.8.234. It is strictly for entering in the broker's 'Allowed IPs' or 'Whitelist IP' field.\n"
+                        f"3. EXISTING VS NEW API: If subscriber already has a broker API key, they only need to EDIT the app, change Allowed IP to 139.59.8.234, and save. If new, they create a new app named 'SkipTheChart' with Allowed IP 139.59.8.234.\n"
+                        f"4. BROKER PORTALS:\n"
+                        f"   - Flattrade: https://wallstreet.flattrade.in (Pi Connect Open API)\n"
+                        f"   - Angel One: https://smartapi.angelbroking.com (SmartAPI Trading)\n"
+                        f"   - Zerodha: https://kite.trade (Kite Connect v3)\n"
+                        f"   - Dhan: https://web.dhan.co (DhanHQ Direct API)\n"
+                        f"   - Alice Blue: https://develop-api.aliceblueonline.com\n"
+                        f"Keep answers clear, highly structured, friendly, and formatted in clean markdown with bullet points and copyable snippets."
                     )
                     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
                     req_payload = {
@@ -1295,7 +1305,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         ],
                         "generationConfig": {
                             "temperature": 0.4,
-                            "maxOutputTokens": 600
+                            "maxOutputTokens": 800
                         }
                     }
                     req = urllib.request.Request(
@@ -1315,14 +1325,54 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 source = "gemini_expert_engine"
                 lower_msg = user_msg.lower()
                 
-                if any(w in lower_msg for w in ["equity", "utilization", "70%", "buffer", "cash"]):
+                if any(w in lower_msg for w in ["dashboard", "url", "address", "website link", "where to open", "access"]):
+                    reply = (
+                        f"### 🏢 Your SkipTheChart Dashboard Address\n\n"
+                        f"Your private dashboard is always accessed at:\n"
+                        f"👉 **`https://skipthechart.com`** (or `https://skipthechart.com/dashboard`)\n\n"
+                        f"- **How to Log In**: Simply open the website on your phone, Mac, or PC and sign in with your registered email.\n"
+                        f"- **Is it an IP Extension?**: **No!** You never need to type `skipthechart.com/139.59.8.234`. All subscribers use the clean, bank-grade encrypted domain `https://skipthechart.com`.\n"
+                        f"- **What is the Droplet IP for?**: Your assigned server IP (`139.59.8.234`) is **strictly for broker whitelisting** in your {broker} developer portal so {broker} knows your cloud trading bot is authorized."
+                    )
+                elif any(w in lower_msg for w in ["broker", "api", "key", "secret", "totp", "whitelist", "droplet", "ip", "connect", "existing"]):
+                    broker_portals = {
+                        "flattrade": ("Flattrade Wallstreet Developer Portal", "https://wallstreet.flattrade.in", "Fortune Open API"),
+                        "angelone": ("Angel One SmartAPI Portal", "https://smartapi.angelbroking.com", "SmartAPI Trading"),
+                        "zerodha": ("Zerodha Kite Developer Console", "https://kite.trade", "Kite Connect v3"),
+                        "dhan": ("DhanHQ Developer Portal", "https://web.dhan.co", "DhanHQ API"),
+                        "aliceblue": ("Alice Blue Developer API", "https://develop-api.aliceblueonline.com", "ANT API v2"),
+                    }
+                    b_info = broker_portals.get(broker.lower().replace(" ", ""), ("Broker Developer Portal", "https://wallstreet.flattrade.in", f"{broker} API"))
+                    reply = (
+                        f"### 🔌 Step-by-Step API & IP Whitelist Guide for {broker}\n\n"
+                        f"Your dedicated cloud worker has been assigned static IP:\n"
+                        f"```text\nAllowed IP: 139.59.8.234\n```\n\n"
+                        f"#### Do You Have an Existing API Key or Creating a New One?\n\n"
+                        f"**Option A: If You Already Have an Existing API Key (Takes 30 seconds)**:\n"
+                        f"1. Open [{b_info[0]}]({b_info[1]}).\n"
+                        f"2. Click on your existing App and choose **Edit**.\n"
+                        f"3. In the **Allowed IPs / Whitelist IP** field, replace any old IP with: `139.59.8.234`.\n"
+                        f"4. Click **Save Changes**. Your existing API Key & Secret will now authorize your SkipTheChart bot!\n\n"
+                        f"**Option B: If You Are Creating a New API Key from Scratch (Takes 2 minutes)**:\n"
+                        f"1. Log in to [{b_info[0]}]({b_info[1]}).\n"
+                        f"2. Click **Create New App / API**.\n"
+                        f"3. Enter App Name: `SkipTheChart`.\n"
+                        f"4. Set Redirect URL: `https://skipthechart.com`.\n"
+                        f"5. In **Allowed IP / Whitelist IP**, paste: `139.59.8.234`.\n"
+                        f"6. Copy your generated **API Key** and **API Secret** and paste them into SkipTheChart.\n\n"
+                        f"#### 🔒 What About TOTP?\n"
+                        f"Enable TOTP in your broker profile using Google Authenticator or copy the Secret TOTP Key. SkipTheChart uses this to auto-authenticate your session every morning at **09:15 AM** without requiring manual SMS OTPs.\n\n"
+                        f"#### 🏢 Dashboard Access Note:\n"
+                        f"Your personal trading dashboard is **always at https://skipthechart.com**."
+                    )
+                elif any(w in lower_msg for w in ["equity", "utilization", "70%", "buffer", "cash"]):
                     reply = (
                         f"### 🛡️ Why 70% Equity Utilization Protects Your Capital\n\n"
                         f"At **{equity_util}% equity utilization** with **₹{capital:,} capital**, your active trading margin is **₹{int(capital * equity_util / 100):,}**, "
                         f"leaving an untouchable **₹{int(capital * (100 - equity_util) / 100):,} (30% Mandatory Buffer)**.\n\n"
                         f"1. **SkipTheChart RMS Shield**: Intraday span + exposure margin spikes won't trigger broker penalty squares.\n"
                         f"2. **Drawdown Protection**: Consecutive losing trades cannot deplete your core principal.\n"
-                        f"3. **Zero Margin Call Risk**: You have ample room to absorb overnight gap movements if applicable."
+                        f"3. **Zero Margin Call Risk**: You have ample room to absorb intraday volatility spikes."
                     )
                 elif any(w in lower_msg for w in ["strategy", "trend rider", "theta", "switch", "rule", "scalper"]):
                     reply = (
@@ -1330,35 +1380,27 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         f"You are currently running **{strat}**.\n\n"
                         f"- **Execution Philosophy**: Vectorized algorithmic rules on NSE underlying indices.\n"
                         f"- **Stop-Loss Discipline**: Pre-programmed exchange stop-loss placed synchronously at order fill.\n"
-                        f"- **Switching Flexibility**: You can edit rules unlimited times and switch between our 4 pre-built strategies up to **3 times per trading day** to prevent erratic overtrading.\n"
+                        f"- **Switching Flexibility**: You can edit rules unlimited times and switch between pre-built strategies up to **3 times per trading day** to prevent erratic overtrading.\n"
                         f"- **Auto-Squareoff**: 3:15 PM IST intraday liquidation safeguards against overnight decay."
-                    )
-                elif any(w in lower_msg for w in ["broker", "api", "key", "secret", "totp", "zerodha", "fyers", "connect"]):
-                    reply = (
-                        f"### 🔌 Connecting Your Broker: {broker}\n\n"
-                        f"AlgoForge supports **16 top Indian brokers** via direct TSP APIs:\n\n"
-                        f"- **Security First**: Your password, funds, and bank account remain 100% inside {broker}. AlgoForge only requests authorized execution scope.\n"
-                        f"- **Step 1**: In Step 5 of onboarding, paste your `{broker}` API Key & Secret.\n"
-                        f"- **Step 2**: Enter your morning TOTP/MPIN to enable automatic 9:15 AM pre-market handshake.\n"
-                        f"- **Test Agent**: You can run our **Broker Sentinel Agent** anytime from the top bar to verify sub-25ms round-trip OMS pings!"
                     )
                 elif any(w in lower_msg for w in ["z-score", "ratio", "sigma", "math", "arbitrage"]):
                     reply = (
-                        f"### ⚡ Understanding the Live Math Engine\n\n"
-                        f"- **Z-Score Divergence (-1.000)**: Measures standard deviations between Nifty and BankNifty relative ratios.\n"
-                        f"- **Mean Reversion (2.5 Sigma)**: Triggers high-probability trades only when extreme historical divergence occurs, anticipating a snap-back to mean.\n"
-                        f"- **Strict Limit Orders**: Algorithmic order execution queueing ensures you avoid retail market order slippage."
+                        f"### ⚡ Understanding the Nifty ↔ BankNifty Arbitrage Engine\n\n"
+                        f"- **Co-integration Alpha**: Nifty and BankNifty move together 95% of the time. When their ratio stretches beyond **±3.000σ**, an anomaly has occurred.\n"
+                        f"- **Mean Reversion**: The bot buys the undervalued index spread and shorts the overvalued index spread, profiting when the ratio snaps back to 0.00.\n"
+                        f"- **Morning Volatility Filter**: The engine sleeps until **09:30 AM IST** to ignore erratic opening spread widening.\n"
+                        f"- **Strict Limit Orders**: Orders are placed with limit orders only (LMT) on {broker}, preventing retail market order slippage."
                     )
                 else:
                     reply = (
-                        f"### 🤖 SkipTheChart Assistant\n\n"
-                        f"Hello! I'm your Gemini-powered quant assistant for **SkipTheChart**. I see you are set up with **{broker}** running **{strat}**.\n\n"
-                        f"You can ask me about:\n"
-                        f"- How our **70% equity guardrail** prevents margin penalties\n"
-                        f"- Generating API keys & morning tokens for any of our **16 Indian brokers**\n"
-                        f"- Customizing EMA periods, stop-loss percentages, and intraday trailing rules\n"
-                        f"- Live index mark prices, Z-score reversion, or backtest validation metrics\n\n"
-                        f"*How can I assist your trading today?*"
+                        f"### 🤖 SkipTheChart Quant Copilot\n\n"
+                        f"Hello! I am your AI assistant for **SkipTheChart**. I see you are configured with **{broker}** and strategy **{strat}**.\n\n"
+                        f"I can guide you through:\n"
+                        f"- 🔌 **Step-by-step Broker API setup & IP whitelisting** (Allowed IP: `139.59.8.234`)\n"
+                        f"- 🏢 **Dashboard Access**: Always at `https://skipthechart.com`\n"
+                        f"- ⚡ **Nifty ↔ BankNifty Pairs Arbitrage**: How the Z-score & 4-leg hedged spreads work\n"
+                        f"- 🛡️ **Risk Guardrails**: Why 70% equity utilization and SEBI kill switches protect your capital\n\n"
+                        f"*How can I assist you right now?*"
                     )
 
             self.send_json_response(200, {
