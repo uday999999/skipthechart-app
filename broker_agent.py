@@ -36,7 +36,7 @@ class BrokerSentinelAgent:
     def __init__(self, verbose=True):
         self.verbose = verbose
 
-    def run_diagnostic(self, broker_key, strategy_name="Nifty Safe Trend Rider"):
+    def run_diagnostic(self, broker_key, strategy_name="Nifty Trend Rider"):
         profile = BROKER_PROFILES.get(broker_key.lower())
         if not profile:
             return {
@@ -117,7 +117,7 @@ class BrokerSentinelAgent:
             "timestamp": time.strftime("%Y-%m-%d %H:%M:%S IST")
         }
 
-    def run_all(self, strategy_name="Nifty Safe Trend Rider"):
+    def run_all(self, strategy_name="Nifty Trend Rider"):
         results = []
         for key in BROKER_PROFILES.keys():
             results.append(self.run_diagnostic(key, strategy_name))
@@ -151,7 +151,7 @@ class BrokerSentinelAgent:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="AlgoForge Sentinel Broker Diagnostic Agent")
     parser.add_argument("--broker", type=str, help="Specific broker key to test (e.g. zerodha, fyers, flattrade)")
-    parser.add_argument("--strategy", type=str, default="Nifty Safe Trend Rider", help="Strategy to test dispatch for")
+    parser.add_argument("--strategy", type=str, default="Nifty Trend Rider", help="Strategy to test dispatch for")
     parser.add_argument("--all", action="store_true", help="Run diagnostic across all 18 supported brokers")
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
 

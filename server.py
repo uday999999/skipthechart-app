@@ -1441,7 +1441,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 })
             else:
                 USER_SUBSCRIPTION["daily_strategy_switches_remaining"] = rem - 1
-                new_strat = payload.get("strategy_name", "Nifty Safe Trend Rider")
+                new_strat = payload.get("strategy_name", "Nifty Trend Rider")
                 self.send_json_response(200, {
                     "success": True,
                     "new_strategy": new_strat,
@@ -1449,7 +1449,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     "message": f"Strategy switched to {new_strat}. {USER_SUBSCRIPTION['daily_strategy_switches_remaining']} switch(es) remaining today."
                 })
         elif parsed.path == "/api/strategy/deploy" or parsed.path == "/api/bot/quick-start":
-            strategy_name = payload.get("strategy_name", "Nifty Safe Trend Rider")
+            strategy_name = payload.get("strategy_name", "Nifty Trend Rider")
             capital = payload.get("capital", 25000)
             broker = payload.get("broker", "zerodha")
             self.send_json_response(200, {
@@ -1481,8 +1481,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         initial_cap = capital
 
         strategy_meta = {
-            "trend_rider": {"name": "Nifty Safe Trend Rider", "default_dataset": "nifty50", "style": "Momentum Trend Following (CE/PE)"},
-            "theta_harvester": {"name": "Daily Income Harvester", "default_dataset": "nifty50", "style": "Non-Directional Daily Straddle (Theta Decay)"},
+            "trend_rider": {"name": "Nifty Trend Rider", "default_dataset": "nifty50", "style": "Momentum Trend Following (CE/PE)"},
+            "theta_harvester": {"name": "Intraday Theta Harvester", "default_dataset": "nifty50", "style": "Non-Directional Daily Straddle (Theta Decay)"},
             "banknifty_scalp": {"name": "BankNifty Fast Scalper", "default_dataset": "banknifty", "style": "High-Beta Momentum Scalp"},
             "expiry_hunter": {"name": "FinNifty & Midcap Expiry Hunter", "default_dataset": "nifty50", "style": "Weekly Expiry Gamma Spikes"},
             "pairs_arbitrage": {"name": "Nifty ↔ BankNifty Statistical Arbitrage", "default_dataset": "banknifty", "style": "Market-Neutral Pairs Arbitrage (Z-Score)"}
@@ -2077,7 +2077,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "icon": "📈",
                 "title": "Enable Dynamic Trailing Stop-Loss (TSL)",
                 "observation": f"Your current RR is healthy ({rr_ratio}:1), but fixed Take-Profit targets often exit high-velocity intraday breakouts prematurely.",
-                "recommendation": "Activate a 1.0% Trailing Stop-Loss. Once the trade reaches +2.0% profit, the engine will trail the stop at market price, letting outsized winners run up to 50–80 points while guaranteeing zero loss on reversals.",
+                "recommendation": "Activate a 1.0% Trailing Stop-Loss. Once the trade reaches +2.0% profit, the engine will trail the stop at market price, letting outsized winners run while protecting floating gains against adverse reversals.",
                 "action_type": "enable_tsl"
             })
 
