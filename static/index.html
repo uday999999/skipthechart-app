@@ -144,6 +144,10 @@
         <div class="w-9 h-9 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 flex items-center justify-center text-xs font-bold" id="nav-user-avatar">
           R
         </div>
+        <button type="button" onclick="toggleOnboardingGuide()" id="nav-btn-setup-guide" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer" title="Open Step-by-Step New Subscriber Deployment Guide">
+          <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+          <span>🎯 Setup Guide</span>
+        </button>
         <button type="button" onclick="openSentinelDiagnosticModal()" id="nav-btn-sentinel" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300/80 text-emerald-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Run Sentinel Diagnostic Agent across 18 Indian brokers & deployed strategy">
           <span>🤖</span> Broker Sentinel Agent
         </button>
@@ -4230,6 +4234,99 @@
   </footer>
 
   <!-- ========================================================================= -->
+  <!-- INTERACTIVE SUBSCRIBER ONBOARDING GUIDE WIDGET (PROGRESS & NEXT STEPS)    -->
+  <!-- ========================================================================= -->
+  <div id="subscriber-guide-widget" class="fixed bottom-5 left-5 z-40 font-sans max-w-sm w-[340px] sm:w-[380px]">
+    <!-- Collapsed Floating Pill -->
+    <div id="guide-collapsed-btn" onclick="toggleOnboardingGuide()" class="hidden cursor-pointer inline-flex items-center gap-2 px-3.5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-full shadow-2xl border border-slate-700/80 backdrop-blur-md transition hover:scale-105">
+      <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[11px] font-bold">🎯</span>
+      <span class="text-xs font-bold" id="guide-collapsed-text">Setup Guide: Step 1 of 5 (20%)</span>
+      <span class="text-[10px] text-emerald-400 font-mono font-bold ml-1">Open ↑</span>
+    </div>
+
+    <!-- Expanded Guide Card -->
+    <div id="guide-expanded-card" class="bg-white border-2 border-emerald-500/90 rounded-3xl shadow-2xl overflow-hidden ms-glass-card space-y-3 p-4 sm:p-5 transition-all">
+      <!-- Top Header -->
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-sm font-bold shadow-2xs">
+            🎯
+          </div>
+          <div>
+            <h4 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+              <span>Deployment Mission Guide</span>
+              <span id="guide-step-tag" class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9.5px] font-mono font-bold">Step 1/5</span>
+            </h4>
+            <div class="text-[10px] text-slate-500 font-medium">Guiding you till your bot runs live</div>
+          </div>
+        </div>
+        <button type="button" onclick="toggleOnboardingGuide()" class="text-slate-400 hover:text-slate-700 text-xs font-bold p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer" title="Minimize Guide">
+          ✕
+        </button>
+      </div>
+
+      <!-- Live Progress Bar -->
+      <div class="space-y-1">
+        <div class="flex items-center justify-between text-[10.5px] font-mono font-bold">
+          <span class="text-slate-600">Progress to Live Execution</span>
+          <span id="guide-progress-pct" class="text-emerald-700">20%</span>
+        </div>
+        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+          <div id="guide-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500" style="width: 20%;"></div>
+        </div>
+      </div>
+
+      <!-- Current Action Needed Callout -->
+      <div id="guide-current-action-box" class="p-3 bg-gradient-to-r from-emerald-50 via-teal-50/50 to-slate-50 rounded-2xl border border-emerald-200 space-y-1 shadow-2xs">
+        <div class="flex items-center gap-1.5 text-emerald-900 font-bold text-xs">
+          <span>👉</span> <span id="guide-action-title">Step 1: Choose Your Broker</span>
+        </div>
+        <p id="guide-action-desc" class="text-[11px] text-slate-600 leading-relaxed font-normal">
+          Click your broker (e.g. <strong>Flattrade</strong>) to link your execution gateway. Zero balance required to start.
+        </p>
+      </div>
+
+      <!-- Checklist Items -->
+      <div class="space-y-1.5 text-xs border-t border-slate-100 pt-2 font-medium">
+        <div id="guide-item-1" class="flex items-center justify-between text-indigo-900 font-bold">
+          <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">1</span> <span>1. Select Broker</span></span>
+          <span id="guide-status-1" class="text-[10px] font-mono text-indigo-700 font-bold">ACTIVE</span>
+        </div>
+        <div id="guide-item-2" class="flex items-center justify-between text-slate-400">
+          <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">2</span> <span>2. Pick Strategy (Pairs Arbitrage)</span></span>
+          <span id="guide-status-2" class="text-[10px] font-mono text-slate-400">PENDING</span>
+        </div>
+        <div id="guide-item-3" class="flex items-center justify-between text-slate-400">
+          <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">3</span> <span>3. Capital &amp; 30% Buffer</span></span>
+          <span id="guide-status-3" class="text-[10px] font-mono text-slate-400">PENDING</span>
+        </div>
+        <div id="guide-item-4" class="flex items-center justify-between text-slate-400">
+          <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">4</span> <span>4. Mandatory 1-Year Backtest</span></span>
+          <span id="guide-status-4" class="text-[10px] font-mono text-slate-400">PENDING</span>
+        </div>
+        <div id="guide-item-5" class="flex items-center justify-between text-slate-400">
+          <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">5</span> <span>5. Droplet Node (139.59.8.234)</span></span>
+          <span id="guide-status-5" class="text-[10px] font-mono text-slate-400">PENDING</span>
+        </div>
+        <div id="guide-item-6" class="flex items-center justify-between text-slate-400">
+          <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">6</span> <span>6. Whitelist IP &amp; Bot Running</span></span>
+          <span id="guide-status-6" class="text-[10px] font-mono text-slate-400">PENDING</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2 pt-1 border-t border-slate-100">
+        <button type="button" onclick="performGuideNextAction()" id="guide-btn-next-action" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>Take Me to Next Step</span> <span>→</span>
+        </button>
+        <button type="button" onclick="openCopilotFromGuide()" class="py-2 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-bold text-xs rounded-xl border border-indigo-200 transition flex items-center justify-center gap-1 cursor-pointer">
+          <span>✨</span> <span>Copilot</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- FLOATING GEMINI AI CHATBOT WIDGET FOR SUBSCRIBERS                         -->
   <!-- ========================================================================= -->
   <div id="gemini-chat-widget" class="fixed bottom-5 right-5 z-50 font-sans">
@@ -4793,6 +4890,10 @@
         runSimpleBacktestSimulation();
       } else if (stepNum === 5) {
         showScreen('screen-payment');
+      }
+
+      if (typeof updateOnboardingGuideUI === 'function') {
+        updateOnboardingGuideUI(stepNum);
       }
     }
 
@@ -8503,6 +8604,130 @@
       document.getElementById('modal-legal').classList.add('hidden');
     }
 
+    // Subscriber Deployment Mission Guide Logic
+    function updateOnboardingGuideUI(stepNum) {
+      const step = stepNum || userState.currentStep || 1;
+      const isSubscribed = userState.subscriptionActive;
+      const isLive = (step === 6 || isSubscribed);
+
+      const pcts = { 1: 15, 2: 35, 3: 55, 4: 75, 5: 90, 6: 100 };
+      const currentPct = isLive ? 100 : (pcts[step] || 20);
+
+      const pBar = document.getElementById('guide-progress-bar');
+      const pText = document.getElementById('guide-progress-pct');
+      const stepTag = document.getElementById('guide-step-tag');
+      const colText = document.getElementById('guide-collapsed-text');
+      const actionTitle = document.getElementById('guide-action-title');
+      const actionDesc = document.getElementById('guide-action-desc');
+      const nextBtnText = document.querySelector('#guide-btn-next-action span:first-child');
+
+      if (pBar) pBar.style.width = currentPct + '%';
+      if (pText) pText.innerText = currentPct + '%';
+      if (stepTag) stepTag.innerText = isLive ? 'Bot Live' : `Step ${step}/5`;
+      if (colText) colText.innerText = isLive ? '🎉 Bot Live & Running (100%)' : `Setup Guide: Step ${step} of 5 (${currentPct}%)`;
+
+      // Dynamic instructions per step
+      if (isLive) {
+        if (actionTitle) actionTitle.innerText = "🎉 All Systems Operational!";
+        if (actionDesc) actionDesc.innerHTML = "Your bot is <strong>actively running</strong> on dedicated node <code>139.59.8.234</code>. 09:30 AM morning volatility filter is armed.";
+        if (nextBtnText) nextBtnText.innerText = "View Live Status";
+      } else if (step === 1) {
+        if (actionTitle) actionTitle.innerText = "Step 1: Choose Your Broker";
+        if (actionDesc) actionDesc.innerHTML = `Select your preferred trading broker (e.g. <strong>${userState.selectedBrokerName || 'Flattrade'}</strong>) below, then click Next.`;
+        if (nextBtnText) nextBtnText.innerText = "Proceed to Strategy";
+      } else if (step === 2) {
+        if (actionTitle) actionTitle.innerText = "Step 2: Pick or Build Strategy";
+        if (actionDesc) actionDesc.innerHTML = "Select <strong>Nifty ↔ BankNifty Statistical Arbitrage</strong> or customize wings, then click 'Apply Strategy & Move to Next'.";
+        if (nextBtnText) nextBtnText.innerText = "Proceed to Capital";
+      } else if (step === 3) {
+        if (actionTitle) actionTitle.innerText = "Step 3: Set Capital & Risk Guardrail";
+        if (actionDesc) actionDesc.innerHTML = `Set your total trading capital. SkipTheChart enforces a <strong>30% cash buffer</strong> to protect your principal.`;
+        if (nextBtnText) nextBtnText.innerText = "Run 1-Yr Backtest";
+      } else if (step === 4) {
+        if (actionTitle) actionTitle.innerText = "Step 4: Verify 1-Year Backtest";
+        if (actionDesc) actionDesc.innerHTML = "Review real NSE tick backtest metrics (Win Rate 76.4%, CAGR), then click <strong>'Subscribe & Provision Cloud Server'</strong>.";
+        if (nextBtnText) nextBtnText.innerText = "Proceed to Activation";
+      } else if (step === 5) {
+        if (actionTitle) actionTitle.innerText = "Step 5: Cloud Server Activation";
+        if (actionDesc) actionDesc.innerHTML = "Complete dedicated droplet server subscription (₹1,599/mo). Your bot engine itself is <strong>100% free lifetime</strong>.";
+        if (nextBtnText) nextBtnText.innerText = "Pay & Deploy Droplet";
+      }
+
+      // Update checklist item styles
+      for (let i = 1; i <= 6; i++) {
+        const item = document.getElementById(`guide-item-${i}`);
+        const status = document.getElementById(`guide-status-${i}`);
+        if (!item || !status) continue;
+
+        if (isLive || i < step) {
+          item.className = "flex items-center justify-between text-emerald-800 font-bold";
+          const badge = item.querySelector('span:first-child span:first-child');
+          if (badge) {
+            badge.className = "w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]";
+            badge.innerText = "✓";
+          }
+          status.className = "text-[10px] font-mono text-emerald-700 font-bold";
+          status.innerText = "COMPLETED";
+        } else if (i === step) {
+          item.className = "flex items-center justify-between text-indigo-900 font-bold";
+          const badge = item.querySelector('span:first-child span:first-child');
+          if (badge) {
+            badge.className = "w-4 h-4 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]";
+            badge.innerText = `${i}`;
+          }
+          status.className = "text-[10px] font-mono text-indigo-700 font-bold";
+          status.innerText = "ACTIVE";
+        } else {
+          item.className = "flex items-center justify-between text-slate-400";
+          const badge = item.querySelector('span:first-child span:first-child');
+          if (badge) {
+            badge.className = "w-4 h-4 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]";
+            badge.innerText = `${i}`;
+          }
+          status.className = "text-[10px] font-mono text-slate-400";
+          status.innerText = "PENDING";
+        }
+      }
+    }
+
+    function performGuideNextAction() {
+      if (userState.subscriptionActive) {
+        showScreen('screen-live-dashboard');
+      } else if (userState.currentStep === 1) {
+        goToStep(2);
+      } else if (userState.currentStep === 2) {
+        goToStep(3);
+      } else if (userState.currentStep === 3) {
+        goToStep(4);
+      } else if (userState.currentStep === 4) {
+        goToStep(5);
+      } else if (userState.currentStep === 5) {
+        completeServerSubscriptionPayment();
+      }
+    }
+
+    function openCopilotFromGuide() {
+      const win = document.getElementById('gemini-chat-window');
+      const btn = document.getElementById('gemini-toggle-btn');
+      if (win && win.classList.contains('hidden')) {
+        toggleGeminiChat();
+      }
+      sendGeminiPreset(`I am currently on Step ${userState.currentStep} of deployment. Guide me on what to do next.`);
+    }
+
+    function toggleOnboardingGuide() {
+      const card = document.getElementById('guide-expanded-card');
+      const btn = document.getElementById('guide-collapsed-btn');
+      if (!card || !btn) return;
+      if (card.classList.contains('hidden')) {
+        card.classList.remove('hidden');
+        btn.classList.add('hidden');
+      } else {
+        card.classList.add('hidden');
+        btn.classList.remove('hidden');
+      }
+    }
+
     // Initialize application on load
     window.addEventListener('DOMContentLoaded', () => {
       loadSavedState();
@@ -8515,6 +8740,9 @@
       if (typeof renderIndicatorsGrid === 'function') {
         renderIndicatorsGrid();
         updateSynergyScore();
+      }
+      if (typeof updateOnboardingGuideUI === 'function') {
+        updateOnboardingGuideUI(userState.currentStep || 1);
       }
     });
   </script>
