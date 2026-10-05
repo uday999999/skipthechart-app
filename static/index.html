@@ -7803,7 +7803,8 @@
             tp_pct: customStrategyState.security.tp_pct,
             tsl_pct: customStrategyState.security.tsl_pct,
             kill_switch_pct: customStrategyState.security.kill_switch_pct || 10.0,
-            kill_switch_amount: customStrategyState.security.kill_switch_amount
+            kill_switch_amount: customStrategyState.security.kill_switch_amount,
+            z_score_threshold: currentZScoreThreshold
           })
         });
         const data = await res.json();
@@ -7948,10 +7949,25 @@
       }
 
       // 2. Render Champion Card
-      const best = data.best_combination || (data.combinations && data.combinations[0]);
+      let best = data.best_combination;
+      if (isArbitrage && data.combinations && data.combinations.length > 0) {
+        const found = data.combinations.find(c => Math.abs(c.z_score - currentZScoreThreshold) < 0.05);
+        if (found) best = found;
+      }
+      if (!best && data.combinations && data.combinations.length > 0) {
+        best = data.combinations[0];
+      }
+
       if (best) {
         const champName = document.getElementById('bt-champion-name');
-        if (champName) champName.innerText = best.name;
+        if (champName) {
+          if (isArbitrage) {
+            const zNum = best.z_score || currentZScoreThreshold;
+            champName.innerText = `±${zNum.toFixed(3)}σ Entry (Active Calibrated Threshold)`;
+          } else {
+            champName.innerText = best.name;
+          }
+        }
         const winrateEl = document.getElementById('bt-champ-winrate');
         if (winrateEl) winrateEl.innerText = `${best.win_rate}%`;
         const pfEl = document.getElementById('bt-champ-pf');
@@ -7965,13 +7981,27 @@
         if (ddEl) ddEl.innerText = `${best.max_drawdown_percent}%`;
 
         const chipsEl = document.getElementById('bt-champion-chips');
-        if (chipsEl && best.indicator_names) {
-          const badgeBg = isArbitrage ? "bg-indigo-100 text-indigo-900 border-indigo-300" : "bg-emerald-100 text-emerald-900 border-emerald-300";
-          chipsEl.innerHTML = best.indicator_names.map(name => `
-            <span class="px-2.5 py-0.5 ${badgeBg} border rounded font-mono text-[10.5px] font-bold">
-              ✓ ${name}
-            </span>
-          `).join('');
+        if (chipsEl) {
+          if (isArbitrage) {
+            const zNum = best.z_score || currentZScoreThreshold;
+            chipsEl.innerHTML = `
+              <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-900 border border-indigo-300 rounded font-mono text-[10.5px] font-bold">
+                ✓ Pure Z-Score (±${zNum.toFixed(3)}σ)
+              </span>
+              <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-900 border border-indigo-300 rounded font-mono text-[10.5px] font-bold">
+                ✓ Zero Indicators
+              </span>
+              <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-900 border border-indigo-300 rounded font-mono text-[10.5px] font-bold">
+                ✓ Market-Neutral Spreads
+              </span>
+            `;
+          } else if (best.indicator_names) {
+            chipsEl.innerHTML = best.indicator_names.map(name => `
+              <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-900 border border-emerald-300 rounded font-mono text-[10.5px] font-bold">
+                ✓ ${name}
+              </span>
+            `).join('');
+          }
         }
       }
 
@@ -7979,12 +8009,12 @@
       const tbody = document.getElementById('bt-combos-table-tbody');
       if (tbody && data.combinations && data.combinations.length > 0) {
         tbody.innerHTML = data.combinations.map((c, i) => {
-          const isBest = i === 0;
-          const rowClass = isBest ? "bg-indigo-50/70 font-bold border-l-4 border-indigo-600" : "hover:bg-slate-50";
+          const isRowActive = isArbitrage ? (Math.abs(c.z_score - currentZScoreThreshold) < 0.05) : (i === 0);
+          const rowClass = isRowActive ? "bg-indigo-50/80 font-bold border-l-4 border-indigo-600" : "hover:bg-slate-50";
           const pnlSign = c.net_pnl >= 0 ? '+' : '';
           const pnlColor = c.net_pnl >= 0 ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold';
-          const rankBadge = isBest ?
-            `<span class="px-2 py-0.5 rounded-full ${isArbitrage ? 'bg-indigo-600' : 'bg-emerald-600'} text-white font-black text-[10px]">#1 🏆</span>` :
+          const rankBadge = isRowActive ?
+            `<span class="px-2 py-0.5 rounded-full ${isArbitrage ? 'bg-indigo-600' : 'bg-emerald-600'} text-white font-black text-[10px]">Active ⚡</span>` :
             `<span class="text-slate-700 font-mono font-bold text-xs">#${c.rank}</span>`;
 
           const indBadges = (c.indicator_names || []).map(n =>
@@ -7995,8 +8025,7 @@
 
           let actionBtnHtml = '';
           if (isArbitrage && c.z_score) {
-            const isCur = Math.abs(currentZScoreThreshold - c.z_score) < 0.05;
-            if (isCur) {
+            if (isRowActive) {
               actionBtnHtml = `<span class="px-2.5 py-1 bg-indigo-100 text-indigo-900 border border-indigo-300 font-bold text-xs rounded-lg">Active (±${c.z_score.toFixed(1)}σ)</span>`;
             } else {
               actionBtnHtml = `
