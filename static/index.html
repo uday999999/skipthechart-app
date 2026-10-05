@@ -1119,6 +1119,9 @@
                 <button type="button" id="tab-strat-bearish" onclick="filterStrategyPayoffs('bearish')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition">
                   🔴 Bearish (3)
                 </button>
+                <button type="button" id="tab-strat-arbitrage" onclick="filterStrategyPayoffs('arbitrage')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition">
+                  ⚡ Arbitrage (Pairs)
+                </button>
                 <button type="button" id="tab-strat-hedge" onclick="filterStrategyPayoffs('hedge')" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition">
                   🛡️ Hedging (2)
                 </button>
@@ -1862,6 +1865,137 @@
                         <span class="text-slate-500 block">POP</span>
                         <strong class="text-slate-900 font-bold">69.5%</strong>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ======================================================== -->
+              <!-- SECTION 5: STATISTICAL ARBITRAGE & PAIRS TRADING (Z-SCORE)-->
+              <!-- ======================================================== -->
+              <div id="strat-section-arbitrage" class="space-y-3.5">
+                <div class="flex flex-wrap items-center justify-between border-b border-indigo-200/80 pb-2.5 pt-2 gap-2">
+                  <div class="flex items-center gap-2">
+                    <span class="w-3.5 h-3.5 rounded-full bg-indigo-600 shadow-xs flex items-center justify-center text-white text-[9px] font-bold">⚡</span>
+                    <h4 class="text-base font-black text-slate-900 tracking-tight flex items-center gap-1.5">
+                      <span>⚡</span> Statistical Arbitrage & Pairs Trading (Nifty ↔ BankNifty)
+                    </h4>
+                  </div>
+                  <span class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-300 text-[10.5px] font-mono font-bold">
+                    Market-Neutral Divergence Engine • Delta-Hedged Spreads
+                  </span>
+                </div>
+
+                <!-- Easy Explainer Banner -->
+                <div class="p-3.5 bg-gradient-to-r from-indigo-50/90 via-sky-50/60 to-slate-50 border border-indigo-200 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs shadow-xs">
+                  <div class="flex items-start sm:items-center gap-2.5">
+                    <span class="text-2xl shrink-0">📐</span>
+                    <div>
+                      <div class="font-bold text-slate-900 text-xs sm:text-sm">How Pairs Arbitrage Works in 1 Simple Sentence:</div>
+                      <p class="text-[11.5px] text-slate-600 mt-0.5 leading-relaxed">
+                        Nifty and BankNifty move together 95% of the time. When their ratio stretches beyond <strong class="text-indigo-700">±3.000σ</strong>, the bot buys the undervalued index and shorts the overvalued index using hedged spreads, pocketing profit as they snap back to equilibrium!
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2 text-[10.5px] font-mono text-indigo-800 font-bold bg-white px-3 py-1 rounded-xl border border-indigo-200 shrink-0 shadow-xs">
+                    <span>⏰ 09:30 AM Start (15-min Morning Filter Active)</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <!-- Arbitrage Card 1: Nifty ↔ BankNifty Statistical Arbitrage (Z-Score) -->
+                  <div onclick="selectWizardStrategy('pairs_arbitrage', 'Nifty ↔ BankNifty Statistical Arbitrage', 4, 70000, 100000, false)" ondblclick="selectWizardStrategy('pairs_arbitrage', 'Nifty ↔ BankNifty Statistical Arbitrage', 4, 70000, 100000, false, true)" id="card-strat-pairs_arbitrage" data-strat-cat="arbitrage" class="p-4 bg-white border-2 border-slate-200/90 hover:border-indigo-500 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs strat-card" title="Double-click to select and proceed to backtest">
+                    <div class="flex items-center justify-between">
+                      <div class="space-y-0.5">
+                        <div class="flex items-center gap-2">
+                          <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                          <h4 class="text-base font-black text-slate-900">Nifty ↔ BankNifty Statistical Arbitrage</h4>
+                        </div>
+                        <p class="text-[11px] text-slate-500 font-normal">Market-Neutral • 4-Leg Hedged Spreads • Mean Reversion</p>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200 text-[10px] text-indigo-800 font-mono font-bold">4 Legs • Delta-Hedged</span>
+                    </div>
+
+                    <!-- Crystal Clear Strategy Rules Box -->
+                    <div class="space-y-1.5 bg-slate-50/90 p-2.5 rounded-xl border border-slate-200/80 text-[11px] leading-relaxed">
+                      <div class="flex items-center justify-between text-indigo-900 font-bold">
+                        <span class="flex items-center gap-1.5"><span>📈 Upper Spike (Z &ge; +3.000σ):</span> <span class="font-normal text-slate-700">Short BankNifty / Long Nifty Spread</span></span>
+                        <span class="text-[10px] font-mono bg-indigo-100 text-indigo-900 px-1.5 py-0.5 rounded font-bold">Reversion Profit</span>
+                      </div>
+                      <div class="flex items-center justify-between text-indigo-900 font-bold">
+                        <span class="flex items-center gap-1.5"><span>📉 Lower Dip (Z &le; -3.000σ):</span> <span class="font-normal text-slate-700">Long BankNifty / Short Nifty Spread</span></span>
+                        <span class="text-[10px] font-mono bg-indigo-100 text-indigo-900 px-1.5 py-0.5 rounded font-bold">Reversion Profit</span>
+                      </div>
+                      <div class="flex items-center justify-between text-slate-600 pt-1 border-t border-slate-200/60 text-[10.5px]">
+                        <span class="flex items-center gap-1.5"><span>🛡️ Safety Execution:</span> <span class="font-normal">Limit Orders only (LMT) • Flattrade RMS Safe</span></span>
+                        <span class="text-[10px] font-mono text-emerald-700 font-bold">Zero-Balance Ready</span>
+                      </div>
+                    </div>
+
+                    <!-- Visual Z-Score Bell Curve / Divergence Diagram -->
+                    <div class="p-2.5 bg-slate-50/90 rounded-xl border border-slate-200">
+                      <svg viewBox="0 0 240 68" class="w-full h-16 overflow-visible">
+                        <!-- Background Mean Reference Zone -->
+                        <rect x="70" y="8" width="100" height="52" fill="#f8fafc" stroke="#e2e8f0" rx="6" />
+                        <line x1="120" y1="8" x2="120" y2="60" stroke="#059669" stroke-width="1.5" stroke-dasharray="3,3" />
+                        <text x="120" y="66" fill="#047857" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">Mean (Z = 0.00)</text>
+
+                        <!-- Upper & Lower Entry Threshold Lines -->
+                        <line x1="30" y1="8" x2="30" y2="60" stroke="#6366f1" stroke-width="2" />
+                        <text x="30" y="6" fill="#4f46e5" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">-3.000σ Trigger</text>
+
+                        <line x1="210" y1="8" x2="210" y2="60" stroke="#6366f1" stroke-width="2" />
+                        <text x="210" y="6" fill="#4f46e5" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">+3.000σ Trigger</text>
+
+                        <!-- Ratio Wave -->
+                        <path d="M 10 34 Q 30 14 50 34 T 90 34 T 130 34 T 170 34 Q 190 54 210 34 T 235 34" fill="none" stroke="#94a3b8" stroke-width="2" />
+                        <circle cx="30" cy="22" r="3.5" fill="#4f46e5" />
+                        <circle cx="210" cy="46" r="3.5" fill="#4f46e5" />
+                      </svg>
+                      <div class="mt-1 text-center text-[10px] font-mono text-slate-600 bg-white py-1 px-2 rounded border border-slate-200/80 font-semibold flex items-center justify-center gap-1.5">
+                        <span>⚡</span> <span>Bot trades when Z-score crosses threshold & exits when ratio reverts to 0</span>
+                      </div>
+                    </div>
+
+                    <!-- Interactive Editable Z-Score Stepper Box for Subscribers -->
+                    <div class="p-2.5 bg-indigo-50/70 rounded-xl border border-indigo-200 space-y-1.5" onclick="event.stopPropagation()">
+                      <div class="flex items-center justify-between text-[11px]">
+                        <span class="font-bold text-indigo-950 flex items-center gap-1">
+                          <span>⚙️</span> Customize Z-Score Divergence Threshold:
+                        </span>
+                        <span id="wizard-zscore-badge" class="font-mono text-indigo-700 font-bold bg-white px-2 py-0.5 rounded border border-indigo-200">±3.000σ</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <button type="button" onclick="adjustWizardZScore(-0.25)" class="w-8 h-8 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 font-bold text-sm shadow-2xs flex items-center justify-center cursor-pointer">-</button>
+                        <input type="number" step="0.05" min="1.50" max="5.00" id="wizard-zscore-input" value="3.000" onchange="setWizardZScore(this.value)" class="flex-1 bg-white border border-indigo-300 focus:border-indigo-600 rounded-lg p-1.5 text-center font-mono font-bold text-indigo-950 text-xs shadow-2xs">
+                        <button type="button" onclick="adjustWizardZScore(0.25)" class="w-8 h-8 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 font-bold text-sm shadow-2xs flex items-center justify-center cursor-pointer">+</button>
+                      </div>
+                      <div class="flex items-center justify-between text-[9.5px] text-indigo-800/80 font-mono">
+                        <button type="button" onclick="setWizardZScore(2.500)" class="hover:underline">Quick: 2.500σ</button>
+                        <button type="button" onclick="setWizardZScore(2.750)" class="hover:underline">Quick: 2.750σ</button>
+                        <button type="button" onclick="setWizardZScore(3.000)" class="hover:underline font-bold text-indigo-950">Default: 3.000σ</button>
+                        <button type="button" onclick="setWizardZScore(3.500)" class="hover:underline">Quick: 3.500σ</button>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block text-[10px]">Avg Win / Trade</span>
+                        <strong class="text-emerald-700 font-bold text-xs">+ ₹ 6,800</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block text-[10px]">Max Spread Risk</span>
+                        <strong class="text-rose-600 font-bold text-xs">- ₹ 3,200 Capped</strong>
+                      </div>
+                      <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
+                        <span class="text-slate-500 block text-[10px]">POP</span>
+                        <strong class="text-slate-900 font-bold text-xs">76.4%</strong>
+                      </div>
+                    </div>
+
+                    <div class="text-[10.5px] text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100 flex items-center gap-1.5">
+                      <span class="text-indigo-600 font-bold">💡 Best For:</span>
+                      <span>Market-neutral quants seeking consistent statistical alpha independent of market trend.</span>
                     </div>
                   </div>
                 </div>
@@ -2738,9 +2872,18 @@
               NIFTY/BANKNIFTY <span class="text-emerald-700">QUANT ENGINE 3.0</span>
             </h2>
           </div>
-          <p class="text-[11px] text-slate-500 font-mono">
-            Dynamic Mean Reversion (2.5 Sigma) | Strict Limit Orders | Live Arbitrage Tracker
-          </p>
+          <div class="flex flex-wrap items-center gap-2 pt-0.5">
+            <span class="text-[11px] text-slate-500 font-mono">
+              Dynamic Mean Reversion | Strict Limit Orders | Live Arbitrage Tracker
+            </span>
+            <div class="flex items-center gap-1.5 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-lg text-indigo-950 font-mono text-[11px]">
+              <span class="font-bold">Trigger Threshold:</span>
+              <button type="button" onclick="adjustLiveZScoreThreshold(-0.25)" class="w-5 h-5 bg-white border border-indigo-300 hover:bg-indigo-100 rounded text-xs font-bold leading-none cursor-pointer flex items-center justify-center">-</button>
+              <input type="number" step="0.05" min="1.50" max="5.00" id="live-zscore-input" value="3.000" onchange="updateLiveZScoreThreshold(this.value)" class="w-16 bg-white border border-indigo-300 rounded text-center font-bold text-xs py-0.5 text-indigo-900 shadow-2xs">
+              <button type="button" onclick="adjustLiveZScoreThreshold(0.25)" class="w-5 h-5 bg-white border border-indigo-300 hover:bg-indigo-100 rounded text-xs font-bold leading-none cursor-pointer flex items-center justify-center">+</button>
+              <span class="text-indigo-600 font-bold" id="live-zscore-badge">±3.000σ</span>
+            </div>
+          </div>
         </div>
 
         <!-- Mode Toggle & Action Controls -->
@@ -2808,9 +2951,15 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Metric 1: Live Z-Score Divergence -->
         <div class="p-4 bg-white border border-slate-200/90 rounded-2xl space-y-1 shadow-sm ms-glass-card">
-          <div class="text-xs text-slate-500 font-medium">LIVE Z-SCORE (DIVERGENCE)</div>
+          <div class="flex items-center justify-between">
+            <div class="text-xs text-slate-500 font-medium">LIVE Z-SCORE (DIVERGENCE)</div>
+            <span class="text-[10px] font-mono font-bold bg-indigo-50 border border-indigo-200 text-indigo-700 px-1.5 py-0.2 rounded" id="card-threshold-tag">Threshold: ±3.000σ</span>
+          </div>
           <div class="text-2xl font-black text-emerald-700 font-mono" id="dash-z-score">-1.000</div>
-          <div class="text-[11px] text-slate-400 font-mono">Target Reversion: 0.00</div>
+          <div class="text-[11px] text-slate-400 font-mono flex items-center justify-between">
+            <span>Target Reversion: 0.00</span>
+            <span class="text-indigo-600 font-bold cursor-pointer hover:underline" onclick="document.getElementById('live-zscore-input').focus()">✎ Edit</span>
+          </div>
         </div>
 
         <!-- Metric 2: Nifty 50 Mark Price -->
@@ -3090,6 +3239,25 @@
         <button type="button" onclick="closeApiCredentialsModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold text-sm">
           ✕
         </button>
+      </div>
+
+      <!-- Dedicated Node Static IP Whitelist Card -->
+      <div class="p-3 bg-gradient-to-r from-emerald-50 via-teal-50 to-slate-50 border border-emerald-300 rounded-2xl flex flex-wrap items-center justify-between gap-2.5 text-xs shadow-2xs">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <div>
+            <div class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Your Dedicated Cloud Node Static IP:</div>
+            <div class="font-mono font-black text-slate-900 text-sm tracking-wide" id="modal-node-ip-display">139.59.8.234</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="copyNodeStaticIp()" id="btn-copy-node-ip" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 transition shadow-xs cursor-pointer">
+            <span>📋</span> <span id="btn-copy-ip-text">Copy Allowed IP</span>
+          </button>
+        </div>
+      </div>
+      <div class="text-[10.5px] text-slate-500 -mt-2">
+        Paste this IP into Flattrade's <strong>"Allowed IP / Static IP"</strong> box on <a href="https://wall.flattrade.in" target="_blank" class="text-emerald-700 underline font-semibold">wall.flattrade.in</a> for SEBI API order approval.
       </div>
 
       <!-- Credential Fields -->
@@ -5324,7 +5492,7 @@
     }
 
     function filterStrategyPayoffs(category) {
-      const tabs = ['all', 'dynamic', 'neutral', 'bullish', 'bearish', 'hedge'];
+      const tabs = ['all', 'dynamic', 'neutral', 'bullish', 'bearish', 'arbitrage', 'hedge'];
       tabs.forEach(t => {
         const btn = document.getElementById('tab-strat-' + t);
         if (btn) {
@@ -5336,7 +5504,7 @@
         }
       });
       
-      const sections = ['dynamic', 'neutral', 'bullish', 'bearish', 'hedge'];
+      const sections = ['dynamic', 'neutral', 'bullish', 'bearish', 'arbitrage', 'hedge'];
       sections.forEach(sec => {
         const secEl = document.getElementById('strat-section-' + sec);
         if (secEl) {
@@ -7415,8 +7583,75 @@
 
           const rat = document.getElementById('table-current-ratio');
           if (rat) rat.innerText = data.current_ratio;
+
+          // Update live Z-Score and threshold tag
+          const zEl = document.getElementById('dash-z-score');
+          if (zEl && data.z_score !== undefined) {
+            zEl.innerText = (data.z_score >= 0 ? '+' : '') + Number(data.z_score).toFixed(3);
+          }
+          const sigEl = document.getElementById('table-sigma-dev');
+          if (sigEl && data.sigma_deviation !== undefined) {
+            sigEl.innerText = (data.sigma_deviation >= 0 ? '+' : '') + Number(data.sigma_deviation).toFixed(3);
+          }
+          if (data.z_score_threshold) {
+            const badge = document.getElementById('live-zscore-badge');
+            if (badge) badge.innerText = `±${Number(data.z_score_threshold).toFixed(3)}σ`;
+            const tag = document.getElementById('card-threshold-tag');
+            if (tag) tag.innerText = `Threshold: ±${Number(data.z_score_threshold).toFixed(3)}σ`;
+          }
         } catch (e) {}
       }, 3000);
+    }
+
+    // Interactive Z-Score Threshold Adjusters
+    let currentZScoreThreshold = 3.000;
+
+    function setWizardZScore(val) {
+      currentZScoreThreshold = Math.max(1.0, Math.min(6.0, parseFloat(val) || 3.0));
+      const inp = document.getElementById('wizard-zscore-input');
+      if (inp) inp.value = currentZScoreThreshold.toFixed(3);
+      const b = document.getElementById('wizard-zscore-badge');
+      if (b) b.innerText = `±${currentZScoreThreshold.toFixed(3)}σ`;
+      updateLiveZScoreThreshold(currentZScoreThreshold);
+    }
+
+    function adjustWizardZScore(delta) {
+      setWizardZScore(currentZScoreThreshold + delta);
+    }
+
+    async function updateLiveZScoreThreshold(val) {
+      currentZScoreThreshold = Math.max(1.0, Math.min(6.0, parseFloat(val) || 3.0));
+      const inp = document.getElementById('live-zscore-input');
+      if (inp) inp.value = currentZScoreThreshold.toFixed(3);
+      const badge = document.getElementById('live-zscore-badge');
+      if (badge) badge.innerText = `±${currentZScoreThreshold.toFixed(3)}σ`;
+      const tag = document.getElementById('card-threshold-tag');
+      if (tag) tag.innerText = `Threshold: ±${currentZScoreThreshold.toFixed(3)}σ`;
+
+      try {
+        await fetch('/api/strategy/update-zscore', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ z_score_threshold: currentZScoreThreshold })
+        });
+      } catch (e) {}
+    }
+
+    function adjustLiveZScoreThreshold(delta) {
+      updateLiveZScoreThreshold(currentZScoreThreshold + delta);
+    }
+
+    function copyNodeStaticIp() {
+      const ip = document.getElementById('modal-node-ip-display')?.innerText || '139.59.8.234';
+      navigator.clipboard.writeText(ip).then(() => {
+        const text = document.getElementById('btn-copy-ip-text');
+        if (text) {
+          text.innerText = "✓ Copied IP!";
+          setTimeout(() => { text.innerText = "Copy Allowed IP"; }, 2000);
+        }
+      }).catch(() => {
+        alert("Copied IP: " + ip);
+      });
     }
 
     // Sentinel Agent Modal & Execution Handlers

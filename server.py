@@ -104,6 +104,19 @@ ACTIVE_SESSION = {
     "max_allowed_systems": 1
 }
 
+BOT_RUNTIME_STATE = {
+    "strategy_name": "Nifty ↔ BankNifty Statistical Arbitrage",
+    "strategy_key": "pairs_arbitrage",
+    "z_score_threshold": 3.000,
+    "current_z_score": -1.000,
+    "target_reversion": 0.00,
+    "trading_start_time": "09:30 IST",
+    "squareoff_time": "15:15 IST",
+    "morning_filter_active": False,
+    "execution_mode": "paper",
+    "bot_status": "RUNNING"
+}
+
 USER_SUBSCRIPTION = {
     "is_active": True,
     "plan_name": "Dedicated Cloud Execution Server",
@@ -854,23 +867,37 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             n_curr = round(nifty_base + jitter, 2)
             bn_curr = round(banknifty_base + (jitter * 2.4), 2)
             ratio = round(n_curr / bn_curr, 5)
+            # Simulated rolling z-score around -1.000 to +1.800 with occasional excursions
+            z_curr = round(-1.000 + (jitter * 0.45), 3)
+            BOT_RUNTIME_STATE["current_z_score"] = z_curr
+
             self.send_json_response(200, {
                 "nifty_mark": n_curr,
                 "banknifty_mark": bn_curr,
-                "z_score": -1.000,
+                "z_score": z_curr,
+                "z_score_threshold": BOT_RUNTIME_STATE.get("z_score_threshold", 3.000),
                 "target_reversion": 0.00,
                 "broker_wallet_balance": "₹ 2,00,000.00",
                 "available_margin": "₹ 1,75,000.00",
                 "current_ratio": ratio,
                 "mean_ratio_120m": 0.41601,
-                "sigma_deviation": -1.000,
+                "sigma_deviation": z_curr,
                 "timestamp": time.strftime("%H:%M:%S IST"),
+                "strategy": BOT_RUNTIME_STATE.get("strategy_name", "Nifty ↔ BankNifty Statistical Arbitrage"),
                 "terminal_logs": [
                     f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: WebSocket feed synchronized at 14ms latency",
-                    f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: Math engine sigma tracking: -1.000 (Z-Score Divergence stable)",
-                    f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: Trailing SL engine active. No drawdown triggers breached.",
-                    f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: Heartbeat OK. Memory: 184MB / 1024MB | CPU: 4.2%"
+                    f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: Math engine z-score: {z_curr:+.3f}σ (Threshold: ±{BOT_RUNTIME_STATE.get('z_score_threshold', 3.000):.3f}σ)",
+                    f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: Morning filter: 09:15-09:30 AM blackout enforced. Starts 09:30 AM.",
+                    f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: Flattrade OMS status: LIMIT orders verified. Memory: 184MB / 1024MB"
                 ]
+            })
+        elif parsed.path == "/api/strategy/update-zscore":
+            new_z = float(payload.get("z_score_threshold", 3.000))
+            BOT_RUNTIME_STATE["z_score_threshold"] = round(new_z, 3)
+            self.send_json_response(200, {
+                "success": True,
+                "z_score_threshold": BOT_RUNTIME_STATE["z_score_threshold"],
+                "message": f"Z-Score threshold updated to ±{BOT_RUNTIME_STATE['z_score_threshold']:.3f}σ"
             })
         elif parsed.path == "/api/indicators/catalog":
             self.send_json_response(200, {
@@ -1413,7 +1440,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "trend_rider": {"name": "Nifty Safe Trend Rider", "default_dataset": "nifty50", "style": "Momentum Trend Following (CE/PE)"},
             "theta_harvester": {"name": "Daily Income Harvester", "default_dataset": "nifty50", "style": "Non-Directional Daily Straddle (Theta Decay)"},
             "banknifty_scalp": {"name": "BankNifty Fast Scalper", "default_dataset": "banknifty", "style": "High-Beta Momentum Scalp"},
-            "expiry_hunter": {"name": "FinNifty & Midcap Expiry Hunter", "default_dataset": "nifty50", "style": "Weekly Expiry Gamma Spikes"}
+            "expiry_hunter": {"name": "FinNifty & Midcap Expiry Hunter", "default_dataset": "nifty50", "style": "Weekly Expiry Gamma Spikes"},
+            "pairs_arbitrage": {"name": "Nifty ↔ BankNifty Statistical Arbitrage", "default_dataset": "banknifty", "style": "Market-Neutral Pairs Arbitrage (Z-Score)"}
         }
         meta = strategy_meta.get(strat_key, strategy_meta["trend_rider"])
 
