@@ -138,11 +138,11 @@
       <!-- User Profile & Reset Controls -->
       <div class="flex items-center gap-3">
         <div class="hidden sm:block text-right text-xs" id="nav-user-info">
-          <div class="font-semibold text-slate-800" id="nav-user-email">trader.rahul@gmail.com</div>
-          <div class="text-[10px] text-emerald-600 font-mono font-semibold" id="nav-server-status">Server Active (₹1,599/mo)</div>
+          <div class="font-semibold text-slate-800" id="nav-user-email">Guest Trader</div>
+          <div class="text-[10px] text-slate-400 font-mono font-medium" id="nav-server-status">Free Tier (No Node Active)</div>
         </div>
-        <div class="w-9 h-9 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 flex items-center justify-center text-xs font-bold" id="nav-user-avatar">
-          R
+        <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-300 text-slate-700 flex items-center justify-center text-xs font-bold" id="nav-user-avatar">
+          ?
         </div>
         <button type="button" onclick="toggleOnboardingGuide()" id="nav-btn-setup-guide" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer" title="Open Step-by-Step New Subscriber Deployment Guide">
           <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
@@ -4417,22 +4417,37 @@
   <!-- JAVASCRIPT: PROGRESSIVE MULTI-STEP FLOW & LIVE ENGINE LOGIC               -->
   <!-- ========================================================================= -->
   <script>
+    // Isolated User Account State Helpers
+    function getDefaultUserState(email = '', name = '') {
+      const cleanEmail = (email || '').trim().toLowerCase();
+      const cleanName = (name || '').trim() || (cleanEmail ? cleanEmail.split('@')[0] : 'Guest');
+      return {
+        isLoggedIn: !!cleanEmail,
+        userEmail: cleanEmail,
+        userName: cleanName,
+        currentStep: 1, // 0: Auth, 1: Broker, 2: Strategy, 3: Capital, 4: Backtest, 5: Payment, 6: Live Dashboard
+        selectedBroker: null, // No broker pre-selected for new accounts
+        selectedBrokerName: '',
+        selectedBrokerLetter: '',
+        selectedBrokerIconClass: '',
+        totalCapital: 25000,
+        equityUtilizationPct: 70,
+        selectedStrategy: null, // No strategy pre-selected for new accounts
+        selectedStrategyName: '',
+        hasBacktested: false,
+        subscriptionActive: false,
+        botRunning: false,
+        dailySwitchesRemaining: 3
+      };
+    }
+
+    function getStorageKey(email) {
+      if (!email) return 'algoforge_state_guest';
+      return 'algoforge_user_' + email.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+    }
+
     // State Machine
-    let userState = {
-      isLoggedIn: true,
-      userEmail: 'trader.rahul@gmail.com',
-      userName: 'Rahul Sharma',
-      currentStep: 1, // 0: Auth, 1: Broker, 2: Strategy, 3: Capital, 4: Backtest, 5: Payment, 6: Live Dashboard
-      selectedBroker: 'flattrade',
-      selectedBrokerName: 'Flattrade',
-      totalCapital: 25000,
-      equityUtilizationPct: 70,
-      selectedStrategy: 'trend_rider',
-      selectedStrategyName: 'Nifty Safe Trend Rider',
-      hasBacktested: true,
-      subscriptionActive: false,
-      dailySwitchesRemaining: 3
-    };
+    let userState = getDefaultUserState();
 
     // Strategy Configurations & Exact Margin Requirements (with 30% cash buffer)
     const STRATEGY_DATA = {
@@ -4745,20 +4760,53 @@
       }
     };
 
-    // Load State on Startup
+    // Isolated State Persistence
     function loadSavedState() {
+      let activeEmail = '';
       try {
-        const saved = localStorage.getItem('algoforge_state_v3');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          userState = { ...userState, ...parsed };
-        }
+        activeEmail = localStorage.getItem('algoforge_active_user') || '';
       } catch (e) {}
 
-      updateHeaderUserInfo();
+      if (activeEmail) {
+        try {
+          const saved = localStorage.getItem(getStorageKey(activeEmail));
+          if (saved) {
+            userState = JSON.parse(saved);
+          } else {
+            userState = getDefaultUserState(activeEmail);
+          }
+        } catch (e) {
+          userState = getDefaultUserState(activeEmail);
+        }
+      } else {
+        try {
+          const legacy = localStorage.getItem('algoforge_state_v3');
+          if (legacy) {
+            const parsed = JSON.parse(legacy);
+            // If legacy had a real user email, use it; otherwise initialize fresh
+            if (parsed && parsed.userEmail && parsed.userEmail !== 'trader.rahul@gmail.com') {
+              userState = { ...getDefaultUserState(parsed.userEmail, parsed.userName), ...parsed };
+            } else {
+              userState = getDefaultUserState();
+            }
+          } else {
+            userState = getDefaultUserState();
+          }
+        } catch (e) {
+          userState = getDefaultUserState();
+        }
+      }
 
-      // If user has active subscription, skip onboarding and jump straight to live dashboard!
-      if (userState.subscriptionActive) {
+      // Safeguard: A user without completed subscription and bot launch is never live
+      if (!userState.subscriptionActive) {
+        userState.botRunning = false;
+      }
+
+      updateHeaderUserInfo();
+      updateBrokerCardsHighlight();
+
+      // If user has active subscription AND live running bot, go straight to live dashboard!
+      if (userState.isLoggedIn && userState.subscriptionActive && userState.botRunning) {
         showScreen('screen-live-dashboard');
         updateLiveDashboardUI();
         startLiveMarketTickSimulation();
@@ -4772,30 +4820,79 @@
 
     function saveState() {
       try {
+        if (userState.userEmail) {
+          localStorage.setItem('algoforge_active_user', userState.userEmail);
+          localStorage.setItem(getStorageKey(userState.userEmail), JSON.stringify(userState));
+        }
         localStorage.setItem('algoforge_state_v3', JSON.stringify(userState));
       } catch (e) {}
     }
 
-    function resetDemoFlow() {
-      localStorage.removeItem('algoforge_state_v3');
-      userState = {
-        isLoggedIn: true,
-        userEmail: 'trader.rahul@gmail.com',
-        userName: 'Rahul Sharma',
-        currentStep: 1,
-        selectedBroker: 'flattrade',
-        selectedBrokerName: 'Flattrade',
-        totalCapital: 25000,
-        equityUtilizationPct: 70,
-        selectedStrategy: 'trend_rider',
-        selectedStrategyName: 'Nifty Safe Trend Rider',
-        hasBacktested: true,
-        subscriptionActive: false,
-        dailySwitchesRemaining: 3
-      };
+    function applyLoggedInUser(email, name) {
+      if (!email) return;
+      email = email.trim().toLowerCase();
+      name = (name || '').trim() || email.split('@')[0];
+
+      try {
+        localStorage.setItem('algoforge_active_user', email);
+        const userKey = getStorageKey(email);
+        const existing = localStorage.getItem(userKey);
+        if (existing) {
+          const parsed = JSON.parse(existing);
+          if (parsed && parsed.userEmail === email) {
+            userState = { ...parsed, isLoggedIn: true, userEmail: email };
+            if (name) userState.userName = name;
+          } else {
+            userState = getDefaultUserState(email, name);
+          }
+        } else {
+          // BRAND NEW USER: Completely clean onboarding state!
+          userState = getDefaultUserState(email, name);
+        }
+      } catch (e) {
+        userState = getDefaultUserState(email, name);
+      }
+
       saveState();
       updateHeaderUserInfo();
+      updateBrokerCardsHighlight();
+      if (typeof updateDockedBrokerUI === 'function') {
+        updateDockedBrokerUI();
+      }
+
+      if (userState.subscriptionActive && userState.botRunning) {
+        showScreen('screen-live-dashboard');
+        updateLiveDashboardUI();
+        startLiveMarketTickSimulation();
+      } else {
+        goToStep(userState.currentStep || 1);
+      }
+
+      if (typeof updateOnboardingGuideUI === 'function') {
+        updateOnboardingGuideUI(userState.currentStep || 1);
+      }
+    }
+
+    function resetDemoFlow() {
+      const curEmail = userState.userEmail || '';
+      const curName = userState.userName || '';
+      if (curEmail) {
+        try {
+          localStorage.removeItem(getStorageKey(curEmail));
+        } catch (e) {}
+      }
+      try {
+        localStorage.removeItem('algoforge_state_v3');
+      } catch (e) {}
+      userState = getDefaultUserState(curEmail, curName);
+      saveState();
+      updateHeaderUserInfo();
+      updateBrokerCardsHighlight();
       goToStep(1);
+      if (typeof updateOnboardingGuideUI === 'function') {
+        updateOnboardingGuideUI(1);
+      }
+      showToast('✓ Started fresh at Step 1: Select Broker.');
     }
 
     // Screen Switcher
@@ -4831,7 +4928,7 @@
       const navLiveBtn = document.getElementById('nav-btn-live-dash');
       const navStratBtn = document.getElementById('nav-btn-strategy-home');
       if (navLiveBtn && navStratBtn) {
-        if (userState.subscriptionActive) {
+        if (userState.subscriptionActive && userState.botRunning) {
           if (screenId === 'screen-live-dashboard') {
             navLiveBtn.classList.add('hidden');
             navStratBtn.classList.remove('hidden');
@@ -4846,6 +4943,19 @@
 
     // Step Navigator
     function goToStep(stepNum) {
+      // Guardrails: ensure preceding selections exist before jumping
+      if (stepNum > 1 && !userState.selectedBroker) {
+        showToast('👉 Please select your trading broker from Step 1 first.');
+        stepNum = 1;
+      }
+      if (stepNum > 2 && !userState.selectedStrategy) {
+        showToast('👉 Please select or configure a strategy from Step 2 first.');
+        stepNum = 2;
+      }
+      if (stepNum > 5 && (!userState.subscriptionActive || !userState.botRunning)) {
+        stepNum = 5;
+      }
+
       userState.currentStep = stepNum;
       saveState();
 
@@ -4983,11 +5093,7 @@
         const data = await res.json();
 
         if (res.ok && data.success) {
-          userState.isLoggedIn = true;
-          userState.userEmail = data.email || email;
-          userState.userName = data.name || (email.split('@')[0]);
-          saveState();
-          updateHeaderUserInfo();
+          applyLoggedInUser(data.email || email, data.name || email.split('@')[0]);
           showAuthAlert("✓ Signed in successfully! Loading terminal...", false);
 
           setTimeout(() => {
@@ -4998,11 +5104,7 @@
         }
       } catch (e) {
         // Fallback for offline/local simulation
-        userState.isLoggedIn = true;
-        userState.userEmail = email;
-        userState.userName = email.split('@')[0];
-        saveState();
-        updateHeaderUserInfo();
+        applyLoggedInUser(email, email.split('@')[0]);
         goToStep(1);
       } finally {
         if (btn) {
@@ -5043,11 +5145,7 @@
         const data = await res.json();
 
         if (res.ok && data.success) {
-          userState.isLoggedIn = true;
-          userState.userEmail = data.email || email;
-          userState.userName = data.name || name || 'Trader';
-          saveState();
-          updateHeaderUserInfo();
+          applyLoggedInUser(data.email || email, data.name || name || 'Trader');
           showAuthAlert("✓ Welcome to SkipTheChart! Launching onboarding setup...", false);
 
           setTimeout(() => {
@@ -5058,11 +5156,7 @@
         }
       } catch (e) {
         // Fallback
-        userState.isLoggedIn = true;
-        userState.userEmail = email;
-        userState.userName = name || 'Trader';
-        saveState();
-        updateHeaderUserInfo();
+        applyLoggedInUser(email, name || 'Trader');
         goToStep(1);
       } finally {
         if (btn) {
@@ -5121,6 +5215,8 @@
       const email = claims.email || 'trader.rahul@gmail.com';
       const name = claims.name || claims.given_name || 'Google User';
 
+      let userEmail = email;
+      let userName = name;
       try {
         const res = await fetch('/api/auth/google', {
           method: 'POST',
@@ -5133,16 +5229,11 @@
           })
         });
         const data = await res.json();
-        userState.userEmail = data.email || email;
-        userState.userName = data.name || name;
-      } catch (e) {
-        userState.userEmail = email;
-        userState.userName = name;
-      }
+        if (data.email) userEmail = data.email;
+        if (data.name) userName = data.name;
+      } catch (e) {}
 
-      userState.isLoggedIn = true;
-      saveState();
-      updateHeaderUserInfo();
+      applyLoggedInUser(userEmail, userName);
       openTotpSetupModal();
     }
 
@@ -5158,6 +5249,9 @@
         btn.innerHTML = `<span class="animate-spin text-sm">↻</span> <span>Signing in with Google...</span>`;
       }
 
+      let userEmail = email;
+      let userName = name;
+
       try {
         const res = await fetch('/api/auth/google', {
           method: 'POST',
@@ -5165,29 +5259,24 @@
           body: JSON.stringify({ email: email, name: name })
         });
         const data = await res.json();
-        if (data.email) userState.userEmail = data.email;
-        if (data.name) userState.userName = data.name;
-      } catch (e) {
-        userState.userEmail = email;
-        userState.userName = name;
-      } finally {
-        if (btn) {
-          btn.disabled = false;
-          btn.innerHTML = `
-            <svg class="w-4 h-4" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-            </svg>
-            <span>Continue with Google (Gmail)</span>
-          `;
-        }
+        if (data.email) userEmail = data.email;
+        if (data.name) userName = data.name;
+      } catch (e) {}
+
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Continue with Google (Gmail)</span>
+        `;
       }
 
-      userState.isLoggedIn = true;
-      saveState();
-      updateHeaderUserInfo();
+      applyLoggedInUser(userEmail, userName);
       openTotpSetupModal();
     }
 
@@ -5765,11 +5854,15 @@
           fetch('/api/auth/logout', { method: 'POST' });
         } catch (e) {}
 
+        try {
+          localStorage.removeItem('algoforge_active_user');
+        } catch (e) {}
+
+        userState = getDefaultUserState('', 'Guest');
         userState.isLoggedIn = false;
-        userState.userEmail = '';
-        userState.userName = 'Guest';
         saveState();
         updateHeaderUserInfo();
+        updateBrokerCardsHighlight();
         showScreen('screen-auth');
         switchAuthTab('signin');
       } else {
@@ -5785,6 +5878,8 @@
       const avatarEl = document.getElementById('nav-user-avatar');
       const authBtnIcon = document.getElementById('nav-auth-btn-icon');
       const authBtnText = document.getElementById('nav-auth-btn-text');
+      const statusEl = document.getElementById('nav-server-status');
+      const liveBtn = document.getElementById('nav-btn-live-dash');
 
       if (userState.isLoggedIn && userState.userEmail) {
         if (emailEl) emailEl.innerText = userState.userEmail;
@@ -5794,11 +5889,32 @@
         }
         if (authBtnIcon) authBtnIcon.innerText = '🚪';
         if (authBtnText) authBtnText.innerText = 'Sign Out';
+
+        if (statusEl) {
+          if (userState.subscriptionActive && userState.botRunning) {
+            statusEl.className = "text-[10px] text-emerald-600 font-mono font-semibold";
+            statusEl.innerText = "Dedicated Server Active (₹1,599/mo)";
+            if (liveBtn) liveBtn.classList.remove('hidden');
+          } else if (userState.subscriptionActive) {
+            statusEl.className = "text-[10px] text-amber-600 font-mono font-semibold";
+            statusEl.innerText = "Droplet Node Active (Ready to Deploy)";
+            if (liveBtn) liveBtn.classList.add('hidden');
+          } else {
+            statusEl.className = "text-[10px] text-slate-400 font-mono font-medium";
+            statusEl.innerText = "Free Tier (No Node Active)";
+            if (liveBtn) liveBtn.classList.add('hidden');
+          }
+        }
       } else {
         if (emailEl) emailEl.innerText = 'Not Signed In';
         if (avatarEl) avatarEl.innerText = '?';
         if (authBtnIcon) authBtnIcon.innerText = '🔑';
         if (authBtnText) authBtnText.innerText = 'Sign In';
+        if (statusEl) {
+          statusEl.className = "text-[10px] text-slate-400 font-mono font-medium";
+          statusEl.innerText = "Guest Mode";
+        }
+        if (liveBtn) liveBtn.classList.add('hidden');
       }
     }
 
@@ -7986,7 +8102,13 @@
       } catch (e) {}
 
       userState.subscriptionActive = true;
+      userState.botRunning = true;
+      userState.currentStep = 6;
       saveState();
+      updateHeaderUserInfo();
+      if (typeof updateOnboardingGuideUI === 'function') {
+        updateOnboardingGuideUI(6);
+      }
 
       setTimeout(() => {
         text.innerText = "✓ Server Deployed! Launching Live Command Center...";
@@ -8607,11 +8729,17 @@
     // Subscriber Deployment Mission Guide Logic
     function updateOnboardingGuideUI(stepNum) {
       const step = stepNum || userState.currentStep || 1;
-      const isSubscribed = userState.subscriptionActive;
-      const isLive = (step === 6 || isSubscribed);
+      const isBotLive = (step === 6 || (userState.subscriptionActive && userState.botRunning));
 
-      const pcts = { 1: 15, 2: 35, 3: 55, 4: 75, 5: 90, 6: 100 };
-      const currentPct = isLive ? 100 : (pcts[step] || 20);
+      const pcts = { 
+        1: (userState.selectedBroker ? 20 : 10), 
+        2: (userState.selectedStrategy ? 40 : 25), 
+        3: 55, 
+        4: 75, 
+        5: (userState.subscriptionActive ? 90 : 80), 
+        6: 100 
+      };
+      const currentPct = isBotLive ? 100 : (pcts[step] || 15);
 
       const pBar = document.getElementById('guide-progress-bar');
       const pText = document.getElementById('guide-progress-pct');
@@ -8623,18 +8751,24 @@
 
       if (pBar) pBar.style.width = currentPct + '%';
       if (pText) pText.innerText = currentPct + '%';
-      if (stepTag) stepTag.innerText = isLive ? 'Bot Live' : `Step ${step}/5`;
-      if (colText) colText.innerText = isLive ? '🎉 Bot Live & Running (100%)' : `Setup Guide: Step ${step} of 5 (${currentPct}%)`;
+      if (stepTag) stepTag.innerText = isBotLive ? 'Bot Live' : `Step ${step}/5`;
+      if (colText) colText.innerText = isBotLive ? '🎉 Bot Live & Running (100%)' : `Setup Guide: Step ${step} of 5 (${currentPct}%)`;
 
       // Dynamic instructions per step
-      if (isLive) {
+      if (isBotLive) {
         if (actionTitle) actionTitle.innerText = "🎉 All Systems Operational!";
         if (actionDesc) actionDesc.innerHTML = "Your bot is <strong>actively running</strong> on dedicated node <code>139.59.8.234</code>. 09:30 AM morning volatility filter is armed.";
         if (nextBtnText) nextBtnText.innerText = "View Live Status";
       } else if (step === 1) {
-        if (actionTitle) actionTitle.innerText = "Step 1: Choose Your Broker";
-        if (actionDesc) actionDesc.innerHTML = `Select your preferred trading broker (e.g. <strong>${userState.selectedBrokerName || 'Flattrade'}</strong>) below, then click Next.`;
-        if (nextBtnText) nextBtnText.innerText = "Proceed to Strategy";
+        if (userState.selectedBroker) {
+          if (actionTitle) actionTitle.innerText = `Step 1: Broker Selected (${userState.selectedBrokerName})`;
+          if (actionDesc) actionDesc.innerHTML = `You have selected <strong>${userState.selectedBrokerName}</strong>. Click below to proceed to Strategy Selection.`;
+          if (nextBtnText) nextBtnText.innerText = "Proceed to Strategy";
+        } else {
+          if (actionTitle) actionTitle.innerText = "Step 1: Choose Your Broker";
+          if (actionDesc) actionDesc.innerHTML = "Click your preferred trading broker from the directory below to connect your execution gateway. Zero balance required to start.";
+          if (nextBtnText) nextBtnText.innerText = "Select Broker Below";
+        }
       } else if (step === 2) {
         if (actionTitle) actionTitle.innerText = "Step 2: Pick or Build Strategy";
         if (actionDesc) actionDesc.innerHTML = "Select <strong>Nifty ↔ BankNifty Statistical Arbitrage</strong> or customize wings, then click 'Apply Strategy & Move to Next'.";
@@ -8650,16 +8784,26 @@
       } else if (step === 5) {
         if (actionTitle) actionTitle.innerText = "Step 5: Cloud Server Activation";
         if (actionDesc) actionDesc.innerHTML = "Complete dedicated droplet server subscription (₹1,599/mo). Your bot engine itself is <strong>100% free lifetime</strong>.";
-        if (nextBtnText) nextBtnText.innerText = "Pay & Deploy Droplet";
+        if (nextBtnText) nextBtnText.innerText = userState.subscriptionActive ? "Deploy & Run Bot" : "Pay & Deploy Droplet";
       }
 
       // Update checklist item styles
-      for (let i = 1; i <= 6; i++) {
-        const item = document.getElementById(`guide-item-${i}`);
-        const status = document.getElementById(`guide-status-${i}`);
-        if (!item || !status) continue;
+      const checklistRules = [
+        { num: 1, isDone: !!userState.selectedBroker, labelDone: (userState.selectedBrokerName ? `Selected: ${userState.selectedBrokerName}` : 'COMPLETED'), labelActive: 'SELECT BROKER' },
+        { num: 2, isDone: !!userState.selectedStrategy && step > 2, labelDone: (userState.selectedStrategyName || 'COMPLETED'), labelActive: 'PICK STRATEGY' },
+        { num: 3, isDone: step > 3, labelDone: 'CAPITAL BUFFER SET', labelActive: 'SET CAPITAL' },
+        { num: 4, isDone: step > 4 && userState.hasBacktested, labelDone: '1-YR BACKTEST OK', labelActive: 'RUN BACKTEST' },
+        { num: 5, isDone: userState.subscriptionActive, labelDone: 'NODE 139.59.8.234 ACTIVE', labelActive: 'PROVISION NODE' },
+        { num: 6, isDone: isBotLive, labelDone: 'BOT RUNNING LIVE', labelActive: 'WHITELIST IP & RUN' }
+      ];
 
-        if (isLive || i < step) {
+      checklistRules.forEach((rule, idx) => {
+        const itemNum = idx + 1;
+        const item = document.getElementById(`guide-item-${itemNum}`);
+        const status = document.getElementById(`guide-status-${itemNum}`);
+        if (!item || !status) return;
+
+        if (isBotLive || rule.isDone) {
           item.className = "flex items-center justify-between text-emerald-800 font-bold";
           const badge = item.querySelector('span:first-child span:first-child');
           if (badge) {
@@ -8667,33 +8811,38 @@
             badge.innerText = "✓";
           }
           status.className = "text-[10px] font-mono text-emerald-700 font-bold";
-          status.innerText = "COMPLETED";
-        } else if (i === step) {
+          status.innerText = rule.labelDone;
+        } else if (itemNum === step) {
           item.className = "flex items-center justify-between text-indigo-900 font-bold";
           const badge = item.querySelector('span:first-child span:first-child');
           if (badge) {
             badge.className = "w-4 h-4 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]";
-            badge.innerText = `${i}`;
+            badge.innerText = `${itemNum}`;
           }
           status.className = "text-[10px] font-mono text-indigo-700 font-bold";
-          status.innerText = "ACTIVE";
+          status.innerText = rule.labelActive;
         } else {
           item.className = "flex items-center justify-between text-slate-400";
           const badge = item.querySelector('span:first-child span:first-child');
           if (badge) {
             badge.className = "w-4 h-4 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]";
-            badge.innerText = `${i}`;
+            badge.innerText = `${itemNum}`;
           }
           status.className = "text-[10px] font-mono text-slate-400";
           status.innerText = "PENDING";
         }
-      }
+      });
     }
 
     function performGuideNextAction() {
-      if (userState.subscriptionActive) {
+      if (userState.subscriptionActive && userState.botRunning) {
         showScreen('screen-live-dashboard');
       } else if (userState.currentStep === 1) {
+        if (!userState.selectedBroker) {
+          focusBrokerSelection();
+          showToast('👉 Please click on your broker from the directory below to proceed.');
+          return;
+        }
         goToStep(2);
       } else if (userState.currentStep === 2) {
         goToStep(3);
@@ -8702,7 +8851,19 @@
       } else if (userState.currentStep === 4) {
         goToStep(5);
       } else if (userState.currentStep === 5) {
-        completeServerSubscriptionPayment();
+        if (!userState.subscriptionActive) {
+          completeServerSubscriptionPayment();
+        } else {
+          // Launch bot
+          userState.botRunning = true;
+          userState.currentStep = 6;
+          saveState();
+          updateHeaderUserInfo();
+          updateOnboardingGuideUI(6);
+          showScreen('screen-live-dashboard');
+          updateLiveDashboardUI();
+          startLiveMarketTickSimulation();
+        }
       }
     }
 

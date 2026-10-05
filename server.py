@@ -114,19 +114,19 @@ BOT_RUNTIME_STATE = {
     "squareoff_time": "15:15 IST",
     "morning_filter_active": False,
     "execution_mode": "paper",
-    "bot_status": "RUNNING"
+    "bot_status": "STOPPED"
 }
 
 USER_SUBSCRIPTION = {
-    "is_active": True,
+    "is_active": False,
     "plan_name": "Dedicated Cloud Execution Server",
     "fee_monthly": 1599,
     "bot_fee": 0,
     "currency": "INR",
     "droplet_ip": ACTIVE_SESSION["assigned_droplet_ip"],
     "droplet_region": "blr1 (Bangalore)",
-    "expires_at": time.time() + (30 * 86400),
-    "reminder_at": time.time() + (27 * 86400),
+    "expires_at": 0,
+    "reminder_at": 0,
     "daily_strategy_switches_remaining": 3,
     "max_switches_per_day": 3,
     "last_switch_date": time.strftime("%Y-%m-%d")
@@ -1113,6 +1113,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             ACTIVE_SESSION["user_email"] = ""
             ACTIVE_SESSION["user_name"] = ""
             ACTIVE_SESSION["totp_verified"] = False
+            USER_SUBSCRIPTION["is_active"] = False
+            BOT_RUNTIME_STATE["bot_status"] = "STOPPED"
             self.send_json_response(200, {
                 "success": True,
                 "message": "Logged out successfully."
