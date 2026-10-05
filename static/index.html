@@ -4762,6 +4762,15 @@
 
     // Isolated State Persistence
     function loadSavedState() {
+      // Automatic self-healing: purge stale test cache from prior versions so NO USER ever needs to manually click reset
+      try {
+        if (!localStorage.getItem('algoforge_clean_v4_init')) {
+          localStorage.removeItem('algoforge_state_v3');
+          localStorage.removeItem('algoforge_active_user');
+          localStorage.setItem('algoforge_clean_v4_init', 'true');
+        }
+      } catch (e) {}
+
       let activeEmail = '';
       try {
         activeEmail = localStorage.getItem('algoforge_active_user') || '';
@@ -4779,22 +4788,7 @@
           userState = getDefaultUserState(activeEmail);
         }
       } else {
-        try {
-          const legacy = localStorage.getItem('algoforge_state_v3');
-          if (legacy) {
-            const parsed = JSON.parse(legacy);
-            // If legacy had a real user email, use it; otherwise initialize fresh
-            if (parsed && parsed.userEmail && parsed.userEmail !== 'trader.rahul@gmail.com') {
-              userState = { ...getDefaultUserState(parsed.userEmail, parsed.userName), ...parsed };
-            } else {
-              userState = getDefaultUserState();
-            }
-          } else {
-            userState = getDefaultUserState();
-          }
-        } catch (e) {
-          userState = getDefaultUserState();
-        }
+        userState = getDefaultUserState();
       }
 
       // Safeguard: A user without completed subscription and bot launch is never live
