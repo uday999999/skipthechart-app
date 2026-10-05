@@ -4796,6 +4796,10 @@
         userState.botRunning = false;
       }
 
+      if (userState.arbitrageZScoreThreshold) {
+        currentZScoreThreshold = Math.max(1.0, Math.min(6.0, parseFloat(userState.arbitrageZScoreThreshold) || 3.0));
+      }
+
       updateHeaderUserInfo();
       updateBrokerCardsHighlight();
 
@@ -7923,7 +7927,7 @@
         if (speedTag && data.calc_time_ms) speedTag.innerText = `⚡ ${data.calc_time_ms} ms (6 Deviations Tested)`;
         if (champLabel) champLabel.innerText = "🏆 Calibrated Setup";
         if (btnApplyChamp) {
-          btnApplyChamp.innerHTML = `<span>✓</span> Active ±${currentZScoreThreshold.toFixed(3)}σ Standard`;
+          btnApplyChamp.innerHTML = `<span>✓</span> Active ±${currentZScoreThreshold.toFixed(3)}σ Threshold`;
           btnApplyChamp.disabled = true;
           btnApplyChamp.className = "px-4 py-2 bg-indigo-600 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5 opacity-90";
         }
@@ -7951,8 +7955,16 @@
       // 2. Render Champion Card
       let best = data.best_combination;
       if (isArbitrage && data.combinations && data.combinations.length > 0) {
-        const found = data.combinations.find(c => Math.abs(c.z_score - currentZScoreThreshold) < 0.05);
-        if (found) best = found;
+        let closest = data.combinations[0];
+        let minDiff = 999999;
+        for (const c of data.combinations) {
+          const diff = Math.abs(c.z_score - currentZScoreThreshold);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closest = c;
+          }
+        }
+        best = closest;
       }
       if (!best && data.combinations && data.combinations.length > 0) {
         best = data.combinations[0];
@@ -8026,11 +8038,11 @@
           let actionBtnHtml = '';
           if (isArbitrage && c.z_score) {
             if (isRowActive) {
-              actionBtnHtml = `<span class="px-2.5 py-1 bg-indigo-100 text-indigo-900 border border-indigo-300 font-bold text-xs rounded-lg">Active (±${c.z_score.toFixed(1)}σ)</span>`;
+              actionBtnHtml = `<span class="px-2.5 py-1 bg-indigo-100 text-indigo-900 border border-indigo-300 font-bold text-xs rounded-lg">Active (±${c.z_score.toFixed(3)}σ)</span>`;
             } else {
               actionBtnHtml = `
                 <button type="button" onclick="selectArbitrageSigmaThreshold(${c.z_score})" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">
-                  Select ±${c.z_score.toFixed(1)}σ
+                  Select ±${c.z_score.toFixed(3)}σ
                 </button>
               `;
             }
@@ -8416,6 +8428,10 @@
 
     function setWizardZScore(val) {
       currentZScoreThreshold = Math.max(1.0, Math.min(6.0, parseFloat(val) || 3.0));
+      if (typeof userState !== 'undefined') {
+        userState.arbitrageZScoreThreshold = currentZScoreThreshold;
+        if (typeof saveState === 'function') saveState();
+      }
       ['wizard-zscore-input', 'main-wizard-zscore-input', 'asset-wizard-zscore-input'].forEach(id => {
         const inp = document.getElementById(id);
         if (inp) inp.value = currentZScoreThreshold.toFixed(3);
@@ -8435,7 +8451,12 @@
     }
 
     function selectArbitrageSigmaThreshold(sigma) {
-      const s = parseFloat(sigma) || 3.0;
+      const s = Math.max(1.0, Math.min(6.0, parseFloat(sigma) || 3.0));
+      currentZScoreThreshold = s;
+      if (typeof userState !== 'undefined') {
+        userState.arbitrageZScoreThreshold = s;
+        if (typeof saveState === 'function') saveState();
+      }
       setWizardZScore(s);
       updateLiveZScoreThreshold(s);
       runSimpleBacktestSimulation();
@@ -9069,6 +9090,9 @@
     // Initialize application on load
     window.addEventListener('DOMContentLoaded', () => {
       loadSavedState();
+      if (typeof setWizardZScore === 'function') {
+        setWizardZScore(currentZScoreThreshold);
+      }
       if (typeof updateBrokerCardsHighlight === 'function') {
         updateBrokerCardsHighlight();
       }
