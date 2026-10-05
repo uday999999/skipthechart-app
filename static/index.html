@@ -4943,8 +4943,19 @@
         stepNum = 1;
       }
       if (stepNum > 2 && !userState.selectedStrategy) {
-        showToast('👉 Please select or configure a strategy from Step 2 first.');
-        stepNum = 2;
+        // Auto-heal if wizardState already selected a strategy or asset
+        if (wizardState.strategyKey) {
+          userState.selectedStrategy = wizardState.strategyKey;
+          userState.selectedStrategyName = wizardState.strategyName || 'Selected Strategy';
+          saveState();
+        } else if (wizardState.asset && wizardState.asset.includes('Arbitrage')) {
+          userState.selectedStrategy = 'pairs_arbitrage';
+          userState.selectedStrategyName = 'Nifty ↔ BankNifty Statistical Arbitrage';
+          saveState();
+        } else {
+          showToast('👉 Please select or configure a strategy from Step 2 first.');
+          stepNum = 2;
+        }
       }
       if (stepNum > 5 && (!userState.subscriptionActive || !userState.botRunning)) {
         stepNum = 5;
@@ -6067,6 +6078,14 @@
         wizardState.indicators = [];
         customStrategyState.name = "Nifty ↔ BankNifty Statistical Arbitrage";
         customStrategyState.dataset = "nifty_banknifty_pairs";
+        customStrategyState.indicators = [];
+
+        userState.selectedStrategy = 'pairs_arbitrage';
+        userState.selectedStrategyName = 'Nifty ↔ BankNifty Statistical Arbitrage';
+        userState.selectedAsset = 'NIFTY ↔ BANKNIFTY Arbitrage';
+        userState.totalCapital = minCap || 100000;
+        userState.baseMargin = margin || 70000;
+        saveState();
 
         const panel = document.getElementById('asset-step-arbitrage-panel');
         if (panel) {
@@ -6083,6 +6102,15 @@
 
     function wizardNextFromAsset() {
       if (wizardState.asset && (wizardState.asset.includes('Arbitrage') || wizardState.strategyKey === 'pairs_arbitrage')) {
+        userState.selectedStrategy = 'pairs_arbitrage';
+        userState.selectedStrategyName = 'Nifty ↔ BankNifty Statistical Arbitrage';
+        userState.selectedAsset = 'NIFTY ↔ BANKNIFTY Arbitrage';
+        userState.totalCapital = wizardState.minCapital || 100000;
+        userState.baseMargin = wizardState.baseMargin || 70000;
+        customStrategyState.name = "Nifty ↔ BankNifty Statistical Arbitrage";
+        customStrategyState.dataset = "nifty_banknifty_pairs";
+        customStrategyState.indicators = [];
+        saveState();
         goToStep(4);
       } else {
         showStratWizard('payoff');
@@ -6104,6 +6132,19 @@
       wizardState.baseMargin = margin;
       wizardState.minCapital = minCap;
       wizardState.hasWings = !!hasWings;
+
+      userState.selectedStrategy = stratKey;
+      userState.selectedStrategyName = stratName;
+      if (minCap) userState.totalCapital = minCap;
+      if (margin) userState.baseMargin = margin;
+      customStrategyState.name = stratName;
+      if (stratKey === 'pairs_arbitrage') {
+        wizardState.withoutIndicators = true;
+        wizardState.indicators = [];
+        customStrategyState.indicators = [];
+        customStrategyState.dataset = "nifty_banknifty_pairs";
+      }
+      saveState();
       
       const cards = document.querySelectorAll('.strat-card');
       cards.forEach(c => {
@@ -6369,25 +6410,28 @@
     }
 
     function wizardNextFromIndicators() {
-      userState.selectedAsset = wizardState.asset;
-      userState.selectedStrategyName = wizardState.strategyName;
-      userState.totalCapital = wizardState.minCapital;
-      userState.baseMargin = wizardState.baseMargin;
-      saveState();
+      userState.selectedStrategy = wizardState.strategyKey || userState.selectedStrategy || 'custom';
+      userState.selectedAsset = wizardState.asset || userState.selectedAsset || 'NIFTY 50';
+      userState.selectedStrategyName = wizardState.strategyName || userState.selectedStrategyName || 'Algorithmic Strategy';
+      userState.totalCapital = wizardState.minCapital || userState.totalCapital || 25000;
+      userState.baseMargin = wizardState.baseMargin || userState.baseMargin || 17500;
 
       if (!customStrategyState.indicators || customStrategyState.indicators.length === 0) {
-        customStrategyState.indicators = ["vwap", "supertrend", "ema"];
+        if (!wizardState.withoutIndicators && userState.selectedStrategy !== 'pairs_arbitrage') {
+          customStrategyState.indicators = ["vwap", "supertrend", "ema"];
+        }
       }
+      saveState();
 
       // Update screen-backtest summary badges
       const btBroker = document.getElementById('bt-summary-broker-name');
       if (btBroker) btBroker.innerText = userState.selectedBrokerName || 'Flattrade';
       
       const btStrat = document.getElementById('bt-summary-strat');
-      if (btStrat) btStrat.innerText = `${wizardState.strategyName} on ${wizardState.asset}`;
+      if (btStrat) btStrat.innerText = `${userState.selectedStrategyName} on ${userState.selectedAsset}`;
       
       const btCap = document.getElementById('bt-summary-capital');
-      if (btCap) btCap.innerText = `₹ ${wizardState.minCapital.toLocaleString('en-IN')}`;
+      if (btCap) btCap.innerText = `₹ ${(userState.totalCapital || 25000).toLocaleString('en-IN')}`;
       
       goToStep(4);
     }
@@ -7653,21 +7697,30 @@
 
       const panelChips = document.getElementById('bt-panel-indicators-chips');
       if (panelChips) {
-        const idToNameMap = {};
-        TOP_10_INDICATORS.forEach(item => { idToNameMap[item.id] = item.name; });
-        if (typeof INDICATORS_DATABASE !== 'undefined') {
-          Object.values(INDICATORS_DATABASE).forEach(arr => {
-            arr.forEach(item => { idToNameMap[item.id] = item.name; });
-          });
+        const isArbitrage = (userState.selectedStrategy === 'pairs_arbitrage' || (wizardState.asset && wizardState.asset.includes('Arbitrage')) || wizardState.withoutIndicators);
+        if (isArbitrage) {
+          panelChips.innerHTML = `
+            <span class="px-2.5 py-1 bg-indigo-50 border border-indigo-300 text-indigo-800 rounded font-mono text-[10px] font-bold shadow-xs">
+              ⚡ Pure Z-Score (0 Indicators)
+            </span>
+          `;
+        } else {
+          const idToNameMap = {};
+          TOP_10_INDICATORS.forEach(item => { idToNameMap[item.id] = item.name; });
+          if (typeof INDICATORS_DATABASE !== 'undefined') {
+            Object.values(INDICATORS_DATABASE).forEach(arr => {
+              arr.forEach(item => { idToNameMap[item.id] = item.name; });
+            });
+          }
+          const activeList = (customStrategyState.indicators && customStrategyState.indicators.length > 0)
+            ? customStrategyState.indicators
+            : (wizardState.indicators || ["vwap", "supertrend", "ema"]);
+          panelChips.innerHTML = activeList.map(id => `
+            <span class="px-2 py-0.5 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded font-mono text-[10px] font-bold shadow-xs">
+              ${idToNameMap[id] || id.toUpperCase()}
+            </span>
+          `).join('');
         }
-        const activeList = (customStrategyState.indicators && customStrategyState.indicators.length > 0)
-          ? customStrategyState.indicators
-          : (wizardState.indicators || ["vwap", "supertrend", "ema"]);
-        panelChips.innerHTML = activeList.map(id => `
-          <span class="px-2 py-0.5 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded font-mono text-[10px] font-bold shadow-xs">
-            ${idToNameMap[id] || id.toUpperCase()}
-          </span>
-        `).join('');
       }
 
       const slEl = document.getElementById('bt-panel-sl');
@@ -7710,9 +7763,12 @@
       const utilPct = userState.equityUtilizationPct || 70;
       const activeCap = Math.round(cap * (utilPct / 100));
 
-      const reqIndicators = (customStrategyState.indicators && customStrategyState.indicators.length > 0)
-        ? customStrategyState.indicators
-        : (wizardState.indicators && wizardState.indicators.length > 0 ? wizardState.indicators : ["vwap", "supertrend", "ema"]);
+      const isArbitrage = (userState.selectedStrategy === 'pairs_arbitrage' || (wizardState.asset && wizardState.asset.includes('Arbitrage')) || wizardState.withoutIndicators);
+      const reqIndicators = isArbitrage
+        ? []
+        : ((customStrategyState.indicators && customStrategyState.indicators.length > 0)
+          ? customStrategyState.indicators
+          : (wizardState.indicators && wizardState.indicators.length > 0 ? wizardState.indicators : ["vwap", "supertrend", "ema"]));
 
       updateBacktestUISelections();
 
@@ -7724,7 +7780,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            strategy: "custom",
+            strategy: userState.selectedStrategy || "custom",
             strategy_name: stratName,
             dataset: customStrategyState.dataset || "nifty50",
             capital: activeCap,
@@ -8268,9 +8324,17 @@
     }
 
     function launchArbitrageFromMain(goToLive = false) {
+      userState.selectedStrategy = 'pairs_arbitrage';
+      userState.selectedStrategyName = 'Nifty ↔ BankNifty Statistical Arbitrage';
+      userState.selectedAsset = 'NIFTY 50 & BANKNIFTY';
+      userState.totalCapital = 100000;
+      userState.baseMargin = 70000;
+      saveState();
+
       selectWizardStrategy('pairs_arbitrage', 'Nifty ↔ BankNifty Statistical Arbitrage', 4, 70000, 100000, false);
       customStrategyState.name = "Nifty ↔ BankNifty Statistical Arbitrage";
       customStrategyState.dataset = "nifty_banknifty_pairs";
+      customStrategyState.indicators = [];
       wizardState.asset = 'NIFTY 50 & BANKNIFTY';
       wizardState.strategyKey = 'pairs_arbitrage';
       wizardState.strategyName = 'Nifty ↔ BankNifty Statistical Arbitrage';

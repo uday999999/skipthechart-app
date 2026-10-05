@@ -1636,7 +1636,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
 
                 # If user selected pure execution with zero indicators:
                 if len(custom_indicators) == 0:
-                    if "hedge" in strat_key or "theta" in strat_key or "pairs" in strat_key:
+                    if "hedge" in strat_key or "theta" in strat_key or "pairs" in strat_key or "arbitrage" in strat_key:
                         if closes[i] <= bb_mid[i]: bull_votes = 1
                         else: bear_votes = 1
                     elif "scalp" in strat_key:
