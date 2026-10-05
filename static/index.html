@@ -840,7 +840,204 @@
               </div>
             </div>
 
-            <!-- YouTube Video Input Box (Option 2 Interactive Drawer) -->
+            <!-- =================================================================== -->
+            <!-- FEATURED DIRECT STRATEGY: STATISTICAL ARBITRAGE & PAIRS TRADING     -->
+            <!-- Direct access on Screen 2 without navigating through Asset/Payoff   -->
+            <!-- =================================================================== -->
+            <div id="strat-panel-main-arbitrage" class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 space-y-5 shadow-sm ms-glass-card" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 20px -2px rgba(15, 23, 42, 0.04);">
+              <div class="flex flex-wrap items-center justify-between border-b border-indigo-200/80 pb-3 gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center text-sm font-bold shadow-2xs">⚡</span>
+                  <div>
+                    <h4 class="text-lg font-black text-slate-900 tracking-tight flex items-center gap-1.5">
+                      <span>Statistical Arbitrage &amp; Pairs Trading (Nifty ↔ BankNifty)</span>
+                    </h4>
+                    <p class="text-xs text-slate-500 font-normal">Pre-configured mathematical alpha bot • Direct 1-click launch</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-300 text-xs font-mono font-bold">
+                    Market-Neutral Divergence Engine • Delta-Hedged Spreads
+                  </span>
+                </div>
+              </div>
+
+              <!-- Easy Explainer Banner -->
+              <div class="p-4 bg-gradient-to-r from-indigo-50/90 via-sky-50/60 to-slate-50 border border-indigo-200 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs shadow-xs">
+                <div class="flex items-start sm:items-center gap-3">
+                  <span class="text-3xl shrink-0">📐</span>
+                  <div>
+                    <div class="font-bold text-slate-900 text-xs sm:text-sm">How Pairs Arbitrage Works in 1 Simple Sentence:</div>
+                    <p class="text-[12px] text-slate-600 mt-0.5 leading-relaxed">
+                      Nifty and BankNifty move together 95% of the time. When their ratio stretches beyond <strong class="text-indigo-700">±3.000σ</strong>, the bot buys the undervalued index and shorts the overvalued index using hedged spreads, pocketing profit as they snap back to equilibrium!
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 text-[11px] font-mono text-indigo-800 font-bold bg-white px-3 py-1.5 rounded-xl border border-indigo-200 shrink-0 shadow-xs">
+                  <span>⏰ 09:30 AM Start (15-min Morning Filter Active)</span>
+                </div>
+              </div>
+
+              <!-- Main Strategy Card & Alpha Spec Grid -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div onclick="launchArbitrageFromMain(false)" id="card-strat-main-arbitrage" class="p-5 bg-white border-2 border-indigo-500 hover:border-indigo-600 rounded-2xl cursor-pointer space-y-3.5 transition-all shadow-sm">
+                  <div class="flex items-center justify-between">
+                    <div class="space-y-0.5">
+                      <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-indigo-600 animate-pulse"></span>
+                        <h4 class="text-base font-black text-slate-900">Nifty ↔ BankNifty Statistical Arbitrage</h4>
+                      </div>
+                      <p class="text-xs text-slate-500 font-normal">Market-Neutral • 4-Leg Hedged Spreads • Mean Reversion</p>
+                    </div>
+                    <span class="px-2.5 py-1 rounded bg-indigo-50 border border-indigo-200 text-[11px] text-indigo-800 font-mono font-bold">4 Legs • Delta-Hedged</span>
+                  </div>
+
+                  <!-- Strategy Rules Box -->
+                  <div class="space-y-1.5 bg-slate-50/90 p-3 rounded-xl border border-slate-200/80 text-xs leading-relaxed">
+                    <div class="flex items-center justify-between text-indigo-900 font-bold">
+                      <span class="flex items-center gap-1.5"><span>📈 Upper Spike (Z &ge; +3.000σ):</span> <span class="font-normal text-slate-700">Short BankNifty / Long Nifty Spread</span></span>
+                      <span class="text-[10.5px] font-mono bg-indigo-100 text-indigo-900 px-2 py-0.5 rounded font-bold">Reversion Profit</span>
+                    </div>
+                    <div class="flex items-center justify-between text-indigo-900 font-bold">
+                      <span class="flex items-center gap-1.5"><span>📉 Lower Dip (Z &le; -3.000σ):</span> <span class="font-normal text-slate-700">Long BankNifty / Short Nifty Spread</span></span>
+                      <span class="text-[10.5px] font-mono bg-indigo-100 text-indigo-900 px-2 py-0.5 rounded font-bold">Reversion Profit</span>
+                    </div>
+                    <div class="flex items-center justify-between text-slate-600 pt-1.5 border-t border-slate-200/60 text-[11px]">
+                      <span class="flex items-center gap-1.5"><span>🛡️ Safety Execution:</span> <span class="font-normal">Limit Orders only (LMT) • Flattrade RMS Safe</span></span>
+                      <span class="text-[10.5px] font-mono text-emerald-700 font-bold">Zero-Balance Ready</span>
+                    </div>
+                  </div>
+
+                  <!-- Visual Z-Score Bell Curve / Divergence Diagram -->
+                  <div class="p-3 bg-slate-50/90 rounded-xl border border-slate-200">
+                    <svg viewBox="0 0 240 68" class="w-full h-16 overflow-visible">
+                      <rect x="70" y="8" width="100" height="52" fill="#f8fafc" stroke="#e2e8f0" rx="6" />
+                      <line x1="120" y1="8" x2="120" y2="60" stroke="#059669" stroke-width="1.5" stroke-dasharray="3,3" />
+                      <text x="120" y="66" fill="#047857" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">Mean (Z = 0.00)</text>
+
+                      <line x1="30" y1="8" x2="30" y2="60" stroke="#6366f1" stroke-width="2" />
+                      <text x="30" y="6" fill="#4f46e5" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">-3.000σ Trigger</text>
+
+                      <line x1="210" y1="8" x2="210" y2="60" stroke="#6366f1" stroke-width="2" />
+                      <text x="210" y="6" fill="#4f46e5" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">+3.000σ Trigger</text>
+
+                      <path d="M 10 34 Q 30 14 50 34 T 90 34 T 130 34 T 170 34 Q 190 54 210 34 T 235 34" fill="none" stroke="#94a3b8" stroke-width="2" />
+                      <circle cx="30" cy="22" r="3.5" fill="#4f46e5" />
+                      <circle cx="210" cy="46" r="3.5" fill="#4f46e5" />
+                    </svg>
+                    <div class="mt-1.5 text-center text-[10.5px] font-mono text-slate-600 bg-white py-1 px-2 rounded border border-slate-200/80 font-semibold flex items-center justify-center gap-1.5">
+                      <span>⚡</span> <span>Bot trades when Z-score crosses threshold &amp; exits when ratio reverts to 0</span>
+                    </div>
+                  </div>
+
+                  <!-- Interactive Editable Z-Score Stepper Box for Subscribers -->
+                  <div class="p-3 bg-indigo-50/70 rounded-xl border border-indigo-200 space-y-2" onclick="event.stopPropagation()">
+                    <div class="flex items-center justify-between text-xs">
+                      <span class="font-bold text-indigo-950 flex items-center gap-1">
+                        <span>⚙️</span> Customize Z-Score Divergence Threshold:
+                      </span>
+                      <span id="main-wizard-zscore-badge" class="font-mono text-indigo-700 font-bold bg-white px-2.5 py-0.5 rounded border border-indigo-200">±3.000σ</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button type="button" onclick="adjustWizardZScore(-0.25)" class="w-9 h-9 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 font-bold text-base shadow-2xs flex items-center justify-center cursor-pointer">-</button>
+                      <input type="number" step="0.05" min="1.50" max="5.00" id="main-wizard-zscore-input" value="3.000" onchange="setWizardZScore(this.value)" class="flex-1 bg-white border border-indigo-300 focus:border-indigo-600 rounded-lg p-2 text-center font-mono font-bold text-indigo-950 text-sm shadow-2xs">
+                      <button type="button" onclick="adjustWizardZScore(0.25)" class="w-9 h-9 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 font-bold text-base shadow-2xs flex items-center justify-center cursor-pointer">+</button>
+                    </div>
+                    <div class="flex items-center justify-between text-[10px] text-indigo-800/80 font-mono">
+                      <button type="button" onclick="setWizardZScore(2.500)" class="hover:underline">Quick: 2.500σ</button>
+                      <button type="button" onclick="setWizardZScore(2.750)" class="hover:underline">Quick: 2.750σ</button>
+                      <button type="button" onclick="setWizardZScore(3.000)" class="hover:underline font-bold text-indigo-950">Default: 3.000σ</button>
+                      <button type="button" onclick="setWizardZScore(3.500)" class="hover:underline">Quick: 3.500σ</button>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-3 gap-2.5 text-center text-xs font-mono">
+                    <div class="p-2 bg-slate-50 rounded-xl border border-slate-200">
+                      <span class="text-slate-500 block text-[10.5px]">Avg Win / Trade</span>
+                      <strong class="text-emerald-700 font-bold text-sm">+ ₹ 6,800</strong>
+                    </div>
+                    <div class="p-2 bg-slate-50 rounded-xl border border-slate-200">
+                      <span class="text-slate-500 block text-[10.5px]">Max Spread Risk</span>
+                      <strong class="text-rose-600 font-bold text-sm">- ₹ 3,200 Capped</strong>
+                    </div>
+                    <div class="p-2 bg-slate-50 rounded-xl border border-slate-200">
+                      <span class="text-slate-500 block text-[10.5px]">POP</span>
+                      <strong class="text-slate-900 font-bold text-sm">76.4%</strong>
+                    </div>
+                  </div>
+
+                  <div class="text-xs text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100 flex items-center gap-1.5">
+                    <span class="text-indigo-600 font-bold">💡 Best For:</span>
+                    <span>Market-neutral quants seeking consistent statistical alpha independent of market trend.</span>
+                  </div>
+                </div>
+
+                <!-- Right Side: Quantitative Edge & Live Readiness Column -->
+                <div class="flex flex-col justify-between space-y-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl p-5">
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs font-mono font-bold text-indigo-800 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-full uppercase">Alpha Specification</span>
+                      <span class="text-xs font-mono text-emerald-700 font-bold flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Live Market Feed Ready
+                      </span>
+                    </div>
+                    <h5 class="text-base font-black text-slate-900">Why Nifty ↔ BankNifty Statistical Arbitrage Works</h5>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                      Nifty and BankNifty have a historical cointegration correlation exceeding 0.94. Extreme market divergences caused by sectoral news or temporary liquidity flows create high-probability mean-reverting anomalies.
+                    </p>
+                    <div class="space-y-2 pt-2 border-t border-slate-200 text-xs">
+                      <div class="flex items-center gap-2 text-slate-700">
+                        <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center text-[11px] font-bold">✓</span>
+                        <span><strong>15-Minute Opening Volatility Filter:</strong> Bot sleeps until 09:30 AM to avoid fake opening spreads.</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-slate-700">
+                        <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center text-[11px] font-bold">✓</span>
+                        <span><strong>Pre-Flight Margin Check:</strong> Calculates required margin (₹70,000) and executes only when balance allows.</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-slate-700">
+                        <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center text-[11px] font-bold">✓</span>
+                        <span><strong>Auto Intraday Square-off:</strong> Strict 15:15 IST liquidation ensures zero overnight gap risk.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="pt-4 border-t border-slate-200/90 space-y-3">
+                    <div class="p-3 bg-white rounded-xl border border-indigo-200 flex items-center justify-between text-xs">
+                      <div class="flex items-center gap-2">
+                        <span class="text-lg">🤖</span>
+                        <div>
+                          <div class="font-bold text-slate-900">1-Click Live &amp; Backtest Execution</div>
+                          <div class="text-[11px] text-slate-500">Applies configured Z-score and runs the pairs engine.</div>
+                        </div>
+                      </div>
+                      <span class="px-2.5 py-1 bg-emerald-50 text-emerald-800 font-mono font-bold text-[11px] rounded-lg border border-emerald-200">Zero Code</span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-stretch gap-2.5">
+                      <button type="button" onclick="launchArbitrageFromMain(false)" class="flex-1 py-3.5 px-5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm rounded-xl shadow-md shadow-emerald-600/20 hover:shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+                        <span>⚡ Apply Strategy &amp; Move to Next</span>
+                        <span>→</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Persistent Bottom Action Bar -->
+              <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-500 font-medium">Selected Strategy:</span>
+                  <span id="btn-strat-arb-main-badge" class="px-3 py-1 bg-indigo-50 border border-indigo-200 text-indigo-800 font-mono font-bold text-xs rounded-lg">
+                    Nifty ↔ BankNifty Statistical Arbitrage (±3.000σ)
+                  </span>
+                </div>
+                <button type="button" onclick="launchArbitrageFromMain(false)" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-2 cursor-pointer">
+                  <span>Apply Strategy &amp; Move to Next</span>
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+
             <!-- YouTube Video Input Box (Option 2 Interactive Drawer) -->
             <div id="option-yt-drawer" class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 space-y-4 shadow-sm ms-glass-card" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 20px -2px rgba(15, 23, 42, 0.04);">
               <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -7608,15 +7805,49 @@
 
     function setWizardZScore(val) {
       currentZScoreThreshold = Math.max(1.0, Math.min(6.0, parseFloat(val) || 3.0));
-      const inp = document.getElementById('wizard-zscore-input');
-      if (inp) inp.value = currentZScoreThreshold.toFixed(3);
-      const b = document.getElementById('wizard-zscore-badge');
-      if (b) b.innerText = `±${currentZScoreThreshold.toFixed(3)}σ`;
+      ['wizard-zscore-input', 'main-wizard-zscore-input'].forEach(id => {
+        const inp = document.getElementById(id);
+        if (inp) inp.value = currentZScoreThreshold.toFixed(3);
+      });
+      ['wizard-zscore-badge', 'main-wizard-zscore-badge'].forEach(id => {
+        const b = document.getElementById(id);
+        if (b) b.innerText = `±${currentZScoreThreshold.toFixed(3)}σ`;
+      });
+      const arbBadge = document.getElementById('btn-strat-arb-main-badge');
+      if (arbBadge) arbBadge.innerText = `Nifty ↔ BankNifty Statistical Arbitrage (±${currentZScoreThreshold.toFixed(3)}σ)`;
+
       updateLiveZScoreThreshold(currentZScoreThreshold);
     }
 
     function adjustWizardZScore(delta) {
       setWizardZScore(currentZScoreThreshold + delta);
+    }
+
+    function launchArbitrageFromMain(goToLive = false) {
+      selectWizardStrategy('pairs_arbitrage', 'Nifty ↔ BankNifty Statistical Arbitrage', 4, 70000, 100000, false);
+      customStrategyState.name = "Nifty ↔ BankNifty Statistical Arbitrage";
+      customStrategyState.dataset = "nifty_banknifty_pairs";
+      wizardState.asset = 'NIFTY 50 & BANKNIFTY';
+      wizardState.strategyKey = 'pairs_arbitrage';
+      wizardState.strategyName = 'Nifty ↔ BankNifty Statistical Arbitrage';
+      wizardState.legsCount = 4;
+      wizardState.baseMargin = 70000;
+      wizardState.minCapital = 100000;
+      wizardState.withoutIndicators = true;
+      wizardState.indicators = [];
+      updateDockedBrokerUI();
+      if (typeof showNotification === 'function') {
+        showNotification(`Applied Nifty ↔ BankNifty Arbitrage Strategy (±${currentZScoreThreshold.toFixed(3)}σ)`, 'success');
+      }
+
+      if (goToLive && userState.isSubscribed) {
+        showScreen('screen-live-dashboard');
+        if (typeof startArbitrageBot === 'function') {
+          startArbitrageBot('live');
+        }
+      } else {
+        goToStep(4);
+      }
     }
 
     async function updateLiveZScoreThreshold(val) {
