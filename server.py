@@ -824,6 +824,25 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         parsed = urlparse(self.path)
         if parsed.path == "/api/session/status":
             self.send_json_response(200, ACTIVE_SESSION)
+        elif parsed.path == "/api/broker/flattrade/status":
+            session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
+            if os.path.exists(session_file):
+                try:
+                    with open(session_file, "r") as sf:
+                        sdata = json.load(sf)
+                    self.send_json_response(200, {
+                        "success": True,
+                        "is_live": True,
+                        "session": sdata
+                    })
+                    return
+                except Exception:
+                    pass
+            self.send_json_response(200, {
+                "success": False,
+                "is_live": False,
+                "message": "No active live Flattrade session"
+            })
         elif parsed.path == "/api/data/status":
             summary = {}
             for k, v in HISTORICAL_DATASETS.items():
