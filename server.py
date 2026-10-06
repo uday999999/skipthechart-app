@@ -1330,7 +1330,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         f"2. DROPLET IP WHITELISTING: The static IP is 139.59.8.234. It is strictly for entering in the broker's 'Allowed IPs' or 'Whitelist IP' field.\n"
                         f"3. EXISTING VS NEW API: If subscriber already has a broker API key, they only need to EDIT the app, change Allowed IP to 139.59.8.234, and save. If new, they create a new app named 'SkipTheChart' with Allowed IP 139.59.8.234.\n"
                         f"4. BROKER PORTALS:\n"
-                        f"   - Flattrade: https://wallstreet.flattrade.in (Pi Connect Open API)\n"
+                        f"   - Flattrade: https://wall.flattrade.in (Pi Connect Open API)\n"
                         f"   - Angel One: https://smartapi.angelbroking.com (SmartAPI Trading)\n"
                         f"   - Zerodha: https://kite.trade (Kite Connect v3)\n"
                         f"   - Dhan: https://web.dhan.co (DhanHQ Direct API)\n"
@@ -1375,13 +1375,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     )
                 elif any(w in lower_msg for w in ["broker", "api", "key", "secret", "totp", "whitelist", "droplet", "ip", "connect", "existing"]):
                     broker_portals = {
-                        "flattrade": ("Flattrade Wallstreet Developer Portal", "https://wallstreet.flattrade.in", "Fortune Open API"),
+                        "flattrade": ("Flattrade Wall Developer Portal", "https://wall.flattrade.in", "Pi Connect Open API"),
                         "angelone": ("Angel One SmartAPI Portal", "https://smartapi.angelbroking.com", "SmartAPI Trading"),
                         "zerodha": ("Zerodha Kite Developer Console", "https://kite.trade", "Kite Connect v3"),
                         "dhan": ("DhanHQ Developer Portal", "https://web.dhan.co", "DhanHQ API"),
                         "aliceblue": ("Alice Blue Developer API", "https://develop-api.aliceblueonline.com", "ANT API v2"),
                     }
-                    b_info = broker_portals.get(broker.lower().replace(" ", ""), ("Broker Developer Portal", "https://wallstreet.flattrade.in", f"{broker} API"))
+                    b_info = broker_portals.get(broker.lower().replace(" ", ""), ("Broker Developer Portal", "https://wall.flattrade.in", f"{broker} API"))
                     reply = (
                         f"### 🔌 Step-by-Step API & IP Whitelist Guide for {broker}\n\n"
                         f"Your dedicated cloud worker has been assigned static IP:\n"
