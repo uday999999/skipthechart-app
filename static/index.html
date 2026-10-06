@@ -8314,10 +8314,62 @@
     }
 
     function generateDailyToken() {
-      alert(`🔑 Today's session token generated successfully for ${userState.selectedBrokerName.toUpperCase()}! Morning handshake complete.`);
+      const authUrl = "https://auth.flattrade.in/?app_key=47b52b557fd349809bae6f0ad775156f";
+      const w = window.open(authUrl, "_blank");
+      if (!w) {
+        window.location.href = authUrl;
+      }
     }
 
-    function restartBotWorker() {
+    async function exchangeFlattradeAuthCode(code) {
+      if (!code) return;
+      showToast("🔑 Authenticating live Flattrade session on cloud droplet...");
+      try {
+        const res = await fetch('/api/broker/flattrade/exchange-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code: code,
+            client_id: 'FZ59015',
+            api_key: '47b52b557fd349809bae6f0ad775156f',
+            api_secret: '2026.25fb2fc3f6e2472b805a250acaac0f4e4dec27c572bf8ac2'
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`⚡ Flattrade Live OMS Active for ${data.client_id}! Funds: ${data.funds_available}`);
+          const tokenInput = document.getElementById('dash-access-token');
+          if (tokenInput && data.token) tokenInput.value = data.token;
+          const statusTitle = document.getElementById('dash-broker-conn-title');
+          if (statusTitle) statusTitle.innerText = `API CONNECTION (FLATTRADE • LIVE OMS ACTIVE • ${data.client_id})`;
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } else {
+          showToast(`⚠️ Flattrade Auth: ${data.error || 'Token exchange failed'}`, 'error');
+        }
+      } catch (e) {
+        showToast(`⚠️ Auth error: ${e.message}`, 'error');
+      }
+    }
+
+    async function checkUrlForBrokerAuthCode() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code') || params.get('request_code');
+      if (code) {
+        await exchangeFlattradeAuthCode(code);
+      } else {
+        // Probe current live status
+        try {
+          const res = await fetch('/api/broker/flattrade/status');
+          const data = await res.json();
+          if (data.success && data.session) {
+            const tokenInput = document.getElementById('dash-access-token');
+            if (tokenInput && data.session.session_token) tokenInput.value = data.session.session_token;
+            const statusTitle = document.getElementById('dash-broker-conn-title');
+            if (statusTitle) statusTitle.innerText = `API CONNECTION (FLATTRADE • LIVE OMS ACTIVE • ${data.session.client_id})`;
+          }
+        } catch (e) {}
+      }
+    }
       alert("🔄 Dedicated Cloud Worker restarted! Real-time tick stream synchronized.");
     }
 
@@ -9105,6 +9157,9 @@
       }
       if (typeof updateOnboardingGuideUI === 'function') {
         updateOnboardingGuideUI(userState.currentStep || 1);
+      }
+      if (typeof checkUrlForBrokerAuthCode === 'function') {
+        checkUrlForBrokerAuthCode();
       }
     });
   </script>
