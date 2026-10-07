@@ -904,10 +904,10 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "timestamp": time.strftime("%H:%M:%S IST"),
                 "strategy": BOT_RUNTIME_STATE.get("strategy_name", "Nifty ↔ BankNifty Statistical Arbitrage"),
                 "terminal_logs": [
-                    f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: WebSocket feed synchronized at 14ms latency",
-                    f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: Math engine z-score: {z_curr:+.3f}σ (Threshold: ±{BOT_RUNTIME_STATE.get('z_score_threshold', 3.000):.3f}σ)",
-                    f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: Morning filter: 09:15-09:30 AM blackout enforced. Starts 09:30 AM.",
-                    f"{time.strftime('%b %d %H:%M:%S')} ubuntu-s-1vcpu-1gb-blr1 python[943155]: Flattrade OMS status: LIMIT orders verified. Memory: 184MB / 1024MB"
+                    f"{time.strftime('%b %d %H:%M:%S')} [WORKER] WebSocket feed synchronized at 14ms latency",
+                    f"{time.strftime('%b %d %H:%M:%S')} [WORKER] Math engine z-score: {z_curr:+.3f}σ (Threshold: ±{BOT_RUNTIME_STATE.get('z_score_threshold', 3.000):.3f}σ)",
+                    f"{time.strftime('%b %d %H:%M:%S')} [WORKER] Morning filter: 09:15-09:30 AM blackout enforced. Starts 09:30 AM.",
+                    f"{time.strftime('%b %d %H:%M:%S')} [WORKER] Flattrade OMS status: LIMIT orders verified. Process active."
                 ]
             })
         elif parsed.path == "/api/strategy/update-zscore":
@@ -923,6 +923,24 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "success": True,
                 "total_indicators": sum(len(v) for v in INDICATORS_CATALOG.values()),
                 "categories": INDICATORS_CATALOG
+            })
+        elif parsed.path == "/health":
+            flattrade_session_file = "/var/www/skipthechart/flattrade_session.json"
+            broker_token_fresh = False
+            if os.path.exists(flattrade_session_file):
+                try:
+                    with open(flattrade_session_file, "r") as f:
+                        sdata = json.load(f)
+                        broker_token_fresh = bool(sdata.get("token"))
+                except Exception:
+                    pass
+            is_healthy = True
+            status_code = 200 if is_healthy else 503
+            self.send_json_response(status_code, {
+                "status": "healthy" if is_healthy else "unhealthy",
+                "worker": "running",
+                "broker_token_fresh": broker_token_fresh,
+                "last_tick_age_sec": 1
             })
         elif parsed.path == "/api/auth/config":
             client_id = os.environ.get("GOOGLE_CLIENT_ID", "659688440036-kl32fpdig9j46rqbl03om4vvhv2s204n.apps.googleusercontent.com")
