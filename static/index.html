@@ -138,7 +138,7 @@
             </span>
             <span class="hidden px-2.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold rounded-full items-center gap-1" id="header-node-badge">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span id="header-node-ip-text">DEDICATED NODE: 139.59.8.234</span>
+              <span id="header-node-ip-text">DEDICATED NODE ACTIVE</span>
             </span>
           </div>
           <p class="text-[11px] text-slate-500 mt-0.5">Click & Connect • Quantitative Mathematical Models • Dedicated Private Cloud Execution (Early Access)</p>
@@ -421,10 +421,10 @@
                 </div>
                 <div class="min-w-0">
                   <div class="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
-                    <span>Zero-Knowledge Security</span>
+                    <span>Non-Custodial Architecture</span>
                     <span class="px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 text-[9px] font-mono font-bold">AES-256</span>
                   </div>
-                  <div class="text-[11px] text-slate-500 truncate">Credentials remain encrypted with your broker</div>
+                  <div class="text-[11px] text-slate-500 truncate">Broker keys stored encrypted; non-custodial execution</div>
                 </div>
               </div>
 
@@ -652,7 +652,7 @@
         <!-- ========================================================================= -->
     <!-- SCREEN 2: PROGRESSIVE STRATEGY WORKFLOW WITH LEFT-DOCKED BROKER           -->
     <!-- As requested: docked broker on left; 3 Entry Options -> Asset ->          -->
-    <!-- Strategy Legs & Sensibull Payoff (with Wing Adjustment) -> Indicators (<=5)-->
+    <!-- Strategy Legs & Mathematical Payoff (with Wing Adjustment) -> Indicators (<=5)-->
     <!-- ========================================================================= -->
     <div id="screen-strategy" class="space-y-5 hidden">
       
@@ -1219,7 +1219,7 @@
                 </div>
                 <div class="text-[10px] text-slate-600 font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 flex justify-between">
                   <span>Min Capital (+30% Buffer):</span>
-                  <strong class="text-amber-700">₹ 50,000</strong>
+                  <strong class="text-amber-700">₹ 45,500</strong>
                 </div>
               </div>
 
@@ -1474,7 +1474,7 @@
           </div>
 
           <!-- =================================================================== -->
-          <!-- STEP B: STRATEGY LEGS & SENSIBULL PAYOFF CARDS (WITH WING ADJUST)   -->
+          <!-- STEP B: STRATEGY LEGS & MATHEMATICAL PAYOFF CARDS (WITH WING ADJUST)   -->
           <!-- =================================================================== -->
           <div id="strat-panel-payoff" class="hidden bg-white border border-slate-200/90 rounded-2xl p-6 space-y-5 shadow-sm" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 1px 3px 0 rgba(15, 23, 42, 0.05);">
             <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
@@ -1686,7 +1686,7 @@
                         <span class="text-[10px] font-mono bg-rose-100 text-rose-900 px-1.5 py-0.5 rounded font-bold">+ ₹8,200 Capped</span>
                       </div>
                       <div class="flex items-center justify-between text-slate-600 pt-1 border-t border-slate-200/60 text-[10.5px]">
-                        <span class="flex items-center gap-1.5"><span>🛡️ Maximum Risk Guarantee:</span> <span class="font-normal">100% Capped at Net Debit</span></span>
+                        <span class="flex items-center gap-1.5"><span>🛡️ Defined Risk Profile:</span> <span class="font-normal">Capped at Net Debit Paid</span></span>
                         <span class="text-[10px] font-mono text-rose-700 font-bold">- ₹3,800 Max Loss</span>
                       </div>
                     </div>
@@ -1801,7 +1801,7 @@
                       <span class="px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-[10px] text-emerald-800 font-mono font-bold">4 Legs • Defined Risk</span>
                     </div>
 
-                    <!-- Sensibull-style SVG Payoff Curve -->
+                    <!-- Mathematical SVG Payoff Curve -->
                     <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
                       <svg id="svg-payoff-butterfly" viewBox="0 0 200 70" class="w-full h-16">
                         <line x1="5" y1="46" x2="195" y2="46" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1"/>
@@ -3182,7 +3182,7 @@
                 <span>🖥️</span> Dedicated Isolated Cloud Droplet (blr1 Bangalore)
               </div>
               <div class="text-slate-500 text-[11px]">
-                Individual Static IP: <span class="font-mono text-emerald-700 font-bold" id="pay-assigned-ip">139.59.8.234</span> (100% Private Hardware Isolation)
+                Individual Static IP: <span class="font-mono text-emerald-700 font-bold" id="pay-assigned-ip">Dedicated Private Node</span> (100% Private Hardware Isolation)
               </div>
             </div>
             <div class="text-right">
@@ -3475,10 +3475,10 @@
           <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider font-mono flex items-center gap-2">
             <span>💻</span> SYSTEM EXECUTION LOGS
           </h3>
-          <span class="text-[10px] text-emerald-700 font-mono font-bold" id="dash-node-badge">CLOUD NODE (139.59.8.234)</span>
+          <span class="text-[10px] text-emerald-700 font-mono font-bold" id="dash-node-badge">CLOUD NODE ACTIVE</span>
         </div>
         <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-[11px] text-emerald-400/90 h-36 overflow-y-auto space-y-1.5 leading-relaxed" id="dash-terminal-logs">
-          <div><span class="text-slate-500">12:01:43</span> [SYSTEM] Execution node online (139.59.8.234). Session verified.</div>
+          <div><span class="text-slate-500">12:01:43</span> [SYSTEM] Execution node online. Session verified.</div>
           <div><span class="text-slate-500">12:02:15</span> [MATH-ENGINE] Mathematical ratio model active. Tracking sigma deviation.</div>
           <div><span class="text-slate-500">12:05:00</span> [RISK-MANAGER] Risk threshold check passed. Buffer verified.</div>
           <div><span class="text-slate-500">12:07:30</span> [EXECUTION] Order dispatcher idle. Monitoring tick stream.</div>
@@ -3625,8 +3625,8 @@
             🔑
           </div>
           <div>
-            <h3 class="text-base font-black text-slate-900" id="modal-api-title">Enter Flattrade API Key & Secret</h3>
-            <p class="text-xs text-slate-500">Required to connect your dedicated node (139.59.8.234) to your broker account</p>
+            <h3 class="text-base font-black text-slate-900" id="modal-api-title">Enter Broker API Key & Secret</h3>
+            <p class="text-xs text-slate-500" id="modal-api-subtitle">Required to connect your dedicated node to your broker account</p>
           </div>
         </div>
         <button type="button" onclick="closeApiCredentialsModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold text-sm">
@@ -3640,7 +3640,7 @@
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <div>
             <div class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Your Dedicated Cloud Node Static IP:</div>
-            <div class="font-mono font-black text-slate-900 text-sm tracking-wide" id="modal-node-ip-display">139.59.8.234</div>
+            <div class="font-mono font-black text-slate-900 text-sm tracking-wide" id="modal-node-ip-display">Loading...</div>
           </div>
         </div>
         <div class="flex items-center gap-2">
@@ -4027,92 +4027,7 @@
     </div>
   </div>
 
-  <!-- ========================================================================= -->
-  <!-- GOOGLE OAUTH 2.0 CLIENT ID (WEB APPLICATION) CONFIGURATION MODAL -->
-  <!-- ========================================================================= -->
-  <div id="modal-google-client-id" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
-    <div class="bg-white border border-slate-200/90 w-full max-w-xl rounded-3xl p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto ms-glass-card">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div class="flex items-center gap-2">
-          <span class="text-xl">⚙️</span>
-          <div>
-            <h3 class="text-sm font-black text-slate-900">Google OAuth 2.0 Client ID (Web Application)</h3>
-            <p class="text-[11px] text-slate-500">Configure your Google Cloud Client ID for native Google One-Tap & Sign-In</p>
-          </div>
-        </div>
-        <button type="button" onclick="closeGoogleClientIdModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold text-sm cursor-pointer">
-          ✕
-        </button>
-      </div>
 
-      <!-- Current Status -->
-      <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
-        <span class="text-slate-600">Google OAuth Status:</span>
-        <span id="google-client-id-status" class="font-mono text-[11px] px-2 py-0.5 rounded bg-white text-amber-800 border border-amber-300 font-bold shadow-xs">
-          Checking status...
-        </span>
-      </div>
-
-      <!-- Client ID Input -->
-      <div class="space-y-2">
-        <label class="block text-xs font-bold text-slate-800">Enter Your Google OAuth 2.0 Client ID:</label>
-        <div class="flex gap-2">
-          <input type="text" id="input-google-client-id" placeholder="e.g. 1029384756-abcdefg12345678.apps.googleusercontent.com" class="flex-1 bg-white border border-slate-300 focus:border-emerald-500 rounded-xl px-3 py-2.5 text-xs text-slate-900 outline-none font-mono shadow-xs">
-          <button type="button" onclick="saveGoogleClientId()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shrink-0 transition flex items-center gap-1.5 cursor-pointer shadow-xs">
-            <span>Save & Activate</span>
-          </button>
-        </div>
-        <p id="google-client-id-msg" class="text-[11px] text-slate-500 hidden"></p>
-      </div>
-
-      <!-- Step-by-Step Instructions Matching User's Google Cloud Screen -->
-      <div class="p-4 bg-slate-50/80 rounded-2xl border border-slate-200 space-y-3 text-xs">
-        <div class="flex items-center gap-2 text-emerald-800 font-bold border-b border-slate-200 pb-2">
-          <span>📘</span>
-          <span>How to Create an OAuth 2.0 Client ID in Google Cloud (Project: "oneside"):</span>
-        </div>
-
-        <ol class="space-y-2.5 text-[11px] text-slate-600 list-decimal list-inside leading-relaxed">
-          <li>
-            In Google Cloud Console under <strong>Google Auth Platform</strong> (left sidebar), click <strong class="text-slate-900">Clients</strong> (with the icon right below Audience).
-          </li>
-          <li>
-            At the top of the screen, click <strong class="text-emerald-700 font-bold">+ CREATE CLIENT</strong>.
-          </li>
-          <li>
-            Under <strong>Application type</strong>, select <strong class="text-emerald-700 font-bold">Web application</strong>.
-          </li>
-          <li>
-            Under <strong>Name</strong>, enter <code class="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-slate-800 font-mono shadow-xs">SkipTheChart Web App</code>.
-          </li>
-          <li>
-            Under <strong class="text-slate-900">Authorized JavaScript origins</strong>, click <strong>+ ADD URI</strong> and paste:
-            <div class="mt-1 pl-4 space-y-1 font-mono text-[10.5px]">
-              <div class="text-emerald-800 select-all">https://skipthechart.com</div>
-              <div class="text-emerald-800 select-all">http://139.59.8.234</div>
-              <div class="text-emerald-800 select-all">http://localhost:8888</div>
-            </div>
-          </li>
-          <li>
-            Under <strong class="text-slate-900">Authorized redirect URIs</strong>, click <strong>+ ADD URI</strong> and paste:
-            <div class="mt-1 pl-4 space-y-1 font-mono text-[10.5px]">
-              <div class="text-emerald-800 select-all">https://skipthechart.com</div>
-              <div class="text-emerald-800 select-all">https://skipthechart.com/</div>
-              <div class="text-emerald-800 select-all">http://139.59.8.234</div>
-              <div class="text-emerald-800 select-all">http://139.59.8.234/</div>
-              <div class="text-emerald-800 select-all">http://localhost:8888</div>
-            </div>
-          </li>
-          <li>
-            Click <strong class="text-emerald-700 font-bold">CREATE</strong> at the bottom. Google will popup your <strong>Client ID</strong>.
-          </li>
-          <li>
-            Copy the <strong>Client ID</strong> and paste it into the box above, then click <strong>Save & Activate</strong>!
-          </li>
-        </ol>
-      </div>
-    </div>
-  </div>
 
   <!-- Modal: Edit YouTube / Custom Strategy -->
   <div id="modal-edit-strategy" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
@@ -4315,7 +4230,7 @@
           <span id="guide-status-4" class="text-[10px] font-mono text-slate-400">PENDING</span>
         </div>
         <div id="guide-item-5" class="flex items-center justify-between text-slate-400">
-          <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">5</span> <span>5. Droplet Node (139.59.8.234)</span></span>
+          <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">5</span> <span>5. Dedicated Cloud Node</span></span>
           <span id="guide-status-5" class="text-[10px] font-mono text-slate-400">PENDING</span>
         </div>
         <div id="guide-item-6" class="flex items-center justify-between text-slate-400">
@@ -4372,7 +4287,7 @@
         <div class="p-2 rounded-xl bg-white border border-indigo-200/80 flex items-center justify-between text-[10.5px] font-mono shadow-2xs">
           <div class="flex items-center gap-1.5 text-slate-600">
             <span class="text-indigo-600 font-bold">IP:</span>
-            <span class="font-bold text-slate-900">139.59.8.234</span>
+            <span class="font-bold text-slate-900" id="copilot-node-ip-display">Protected (Login to View)</span>
             <button type="button" onclick="copyCopilotIp(this)" class="text-[9.5px] px-2 py-0.5 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold border border-indigo-200 transition cursor-pointer">Copy IP</button>
           </div>
           <div class="text-slate-500 truncate text-[10px]">
@@ -4427,6 +4342,19 @@
   <!-- JAVASCRIPT: PROGRESSIVE MULTI-STEP FLOW & LIVE ENGINE LOGIC               -->
   <!-- ========================================================================= -->
   <script>
+    // Server config for dedicated execution droplet node (loaded dynamically from server config)
+    window.SERVER_CONFIG_NODE_IP = "";
+    fetch('/api/auth/config')
+      .then(r => r.json())
+      .then(d => {
+        if (d && d.assigned_droplet_ip) {
+          window.SERVER_CONFIG_NODE_IP = d.assigned_droplet_ip;
+          const ipEl = document.getElementById('modal-node-ip-display');
+          if (ipEl && ipEl.innerText === 'Loading...') ipEl.innerText = d.assigned_droplet_ip;
+        }
+      })
+      .catch(() => {});
+
     // Isolated User Account State Helpers
     function getDefaultUserState(email = '', name = '') {
       const cleanEmail = (email || '').trim().toLowerCase();
@@ -5938,7 +5866,7 @@
 
     
     // ============================================================================
-    // PROGRESSIVE STRATEGY WIZARD, DOCKED BROKER & SENSIBULL PAYOFF LOGIC
+    // PROGRESSIVE STRATEGY WIZARD, DOCKED BROKER & MULTI-LEG PAYOFF LOGIC
     // ============================================================================
     let wizardState = {
       asset: "NIFTY 50",
@@ -6234,7 +6162,7 @@
       const badge = document.getElementById('current-wings-badge');
       if (badge) badge.innerText = `${pts} pts`;
       
-      // Sensibull SVG path dynamic coordinate adjustments
+      // Multi-leg SVG path dynamic coordinate adjustments
       const pathEl = document.getElementById('path-payoff-butterfly');
       const profitEl = document.getElementById('card-max-profit');
       const lossEl = document.getElementById('card-max-loss');
@@ -7674,7 +7602,7 @@
         // Return to live dashboard and update parameters
         showScreen('screen-live-dashboard');
         updateLiveDashboardUI();
-        alert(`💾 Strategy Settings for "${userState.selectedStrategyName}" saved and synchronized with your dedicated droplet (139.59.8.234)!`);
+        alert(`💾 Strategy Settings for "${userState.selectedStrategyName}" saved and synchronized with your dedicated droplet!`);
         openedFromDashboard = false;
       } else {
         goToStep(3); // Advance to Step 3: Capital & Equity Allocation
@@ -7874,8 +7802,8 @@
         document.getElementById('bt-metric-trades').innerText = "15 W / 7 L (22 trades)";
         document.getElementById('bt-metric-dd').innerText = "-3.8%";
         document.getElementById('bt-metric-pf').innerText = "2.34";
-        document.getElementById('bt-metric-pnl').innerText = "+₹ 86,400";
-        document.getElementById('bt-metric-roi').innerText = "+17.3% ROI";
+        document.getElementById('bt-metric-pnl').innerText = "+₹ 11,400";
+        document.getElementById('bt-metric-roi').innerText = "+11.4% ROI";
         document.getElementById('bt-metric-finalcap').innerText = "₹ 1,11,400";
       }
     }
@@ -8223,6 +8151,9 @@
       const stepsHtml = guide.steps.map(s => `<div>${s}</div>`).join('');
       document.getElementById('modal-guide-steps').innerHTML = stepsHtml;
 
+      const ipEl = document.getElementById('modal-node-ip-display');
+      if (ipEl) ipEl.innerText = window.SERVER_CONFIG_NODE_IP || '';
+
       document.getElementById('modal-api-credentials').classList.remove('hidden');
     }
 
@@ -8277,7 +8208,7 @@
       const btn = document.getElementById('btn-pay-subscription');
       const text = document.getElementById('btn-pay-text');
       btn.disabled = true;
-      text.innerText = "Provisioning Dedicated Cloud Server (139.59.8.234)...";
+      text.innerText = "Provisioning Dedicated Cloud Server...";
 
       try {
         await fetch('/api/subscription/create', { method: 'POST' });
@@ -8584,7 +8515,7 @@
     }
 
     function copyNodeStaticIp() {
-      const ip = document.getElementById('modal-node-ip-display')?.innerText || '139.59.8.234';
+      const ip = document.getElementById('modal-node-ip-display')?.innerText || window.SERVER_CONFIG_NODE_IP;
       navigator.clipboard.writeText(ip).then(() => {
         const text = document.getElementById('btn-copy-ip-text');
         if (text) {
@@ -8851,11 +8782,12 @@
     }
 
     function copyCopilotIp(btn) {
-      navigator.clipboard.writeText('139.59.8.234').then(() => {
+      const nodeIp = window.SERVER_CONFIG_NODE_IP || '';
+      navigator.clipboard.writeText(nodeIp).then(() => {
         const oldText = btn ? btn.innerText : 'Copy IP';
         if (btn) btn.innerText = '✓ Copied!';
         if (typeof showNotification === 'function') {
-          showNotification('Copied Allowed Droplet IP (139.59.8.234) to clipboard!', 'success');
+          showNotification('Copied Allowed Droplet IP to clipboard!', 'success');
         }
         setTimeout(() => { if (btn) btn.innerText = oldText; }, 2000);
       });
@@ -8876,12 +8808,13 @@
         const data = await res.json();
         removeThinkingBubble(thinkingId);
         
+        const nodeIp = window.SERVER_CONFIG_NODE_IP || '';
         appendChatMessage('gemini', 
           `### 🟢 Broker Handshake Verified!\n\n` +
           `- **Broker**: **${broker.toUpperCase()}**\n` +
           `- **Gateway**: \`${data.gateway || 'piconnect.flattrade.in (Flattrade Fortune OMS)'}\`\n` +
           `- **Round-Trip Ping Latency**: **${data.ping_ms || 16} ms** (Ultra-Low Latency • Benchmark < 50ms PASSED)\n` +
-          `- **Whitelisted Server IP**: \`139.59.8.234\`\n` +
+          `- **Whitelisted Server IP**: \`${nodeIp}\`\n` +
           `- **Execution Node Status**: **READY_FOR_EXECUTION**\n\n` +
           `Your dedicated execution worker is fully operational and authorized. When your strategy generates a signal, limit orders will route through this verified pipe!\n\n` +
           `*Dashboard Address: Always log in securely at **https://skipthechart.com**.*`
@@ -9029,7 +8962,7 @@
       // Dynamic instructions per step
       if (isBotLive) {
         if (actionTitle) actionTitle.innerText = "🎉 All Systems Operational!";
-        if (actionDesc) actionDesc.innerHTML = "Your bot is <strong>actively running</strong> on dedicated node <code>139.59.8.234</code>. 09:30 AM morning volatility filter is armed.";
+        if (actionDesc) actionDesc.innerHTML = "Your bot is <strong>actively running</strong> on your dedicated node. 09:30 AM morning volatility filter is armed.";
         if (nextBtnText) nextBtnText.innerText = "View Live Status";
       } else if (step === 1) {
         if (userState.selectedBroker) {
@@ -9065,7 +8998,7 @@
         { num: 2, isDone: !!userState.selectedStrategy && step > 2, labelDone: (userState.selectedStrategyName || 'COMPLETED'), labelActive: 'PICK STRATEGY' },
         { num: 3, isDone: step > 3, labelDone: 'CAPITAL BUFFER SET', labelActive: 'SET CAPITAL' },
         { num: 4, isDone: step > 4 && userState.hasBacktested, labelDone: '1-YR BACKTEST OK', labelActive: 'RUN BACKTEST' },
-        { num: 5, isDone: userState.subscriptionActive, labelDone: 'NODE 139.59.8.234 ACTIVE', labelActive: 'PROVISION NODE' },
+        { num: 5, isDone: userState.subscriptionActive, labelDone: 'CLOUD NODE ACTIVE', labelActive: 'PROVISION NODE' },
         { num: 6, isDone: isBotLive, labelDone: 'BOT RUNNING LIVE', labelActive: 'WHITELIST IP & RUN' }
       ];
 
