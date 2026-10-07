@@ -1224,23 +1224,23 @@
               </div>
 
               <!-- 3. FINNIFTY -->
-              <div onclick="selectWizardAsset('FINNIFTY', 65, 20000, 28500)" ondblclick="selectWizardAsset('FINNIFTY', 65, 20000, 28500, true)" id="asset-card-finnifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
+              <div onclick="selectWizardAsset('FINNIFTY', 60, 20000, 26000)" ondblclick="selectWizardAsset('FINNIFTY', 60, 20000, 26000, true)" id="asset-card-finnifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">NSE</span>
                   <span class="text-xs text-emerald-700 font-mono font-bold">Margin ₹20,000</span>
                 </div>
                 <div>
                   <h4 class="text-base font-black text-slate-900">FINNIFTY</h4>
-                  <div class="text-[11px] text-slate-500">Financial Services • Lot Size: 65</div>
+                  <div class="text-[11px] text-slate-500">Financial Services • Lot Size: 60</div>
                 </div>
                 <div class="text-[10px] text-slate-600 font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 flex justify-between">
                   <span>Min Capital (+30% Buffer):</span>
-                  <strong class="text-emerald-700">₹ 28,500</strong>
+                  <strong class="text-emerald-700">₹ 26,000</strong>
                 </div>
               </div>
 
               <!-- 4. SENSEX -->
-              <div onclick="selectWizardAsset('SENSEX', 20, 40000, 57000)" ondblclick="selectWizardAsset('SENSEX', 20, 40000, 57000, true)" id="asset-card-sensex" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
+              <div onclick="selectWizardAsset('SENSEX', 20, 40000, 52000)" ondblclick="selectWizardAsset('SENSEX', 20, 40000, 52000, true)" id="asset-card-sensex" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">BSE</span>
                   <span class="text-xs text-purple-700 font-mono font-bold">Margin ₹40,000</span>
@@ -1251,12 +1251,12 @@
                 </div>
                 <div class="text-[10px] text-slate-600 font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 flex justify-between">
                   <span>Min Capital (+30% Buffer):</span>
-                  <strong class="text-purple-700">₹ 57,000</strong>
+                  <strong class="text-purple-700">₹ 52,000</strong>
                 </div>
               </div>
 
               <!-- 5. MIDCPNIFTY -->
-              <div onclick="selectWizardAsset('MIDCPNIFTY', 120, 15000, 21500)" ondblclick="selectWizardAsset('MIDCPNIFTY', 120, 15000, 21500, true)" id="asset-card-midcpnifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
+              <div onclick="selectWizardAsset('MIDCPNIFTY', 120, 15000, 19500)" ondblclick="selectWizardAsset('MIDCPNIFTY', 120, 15000, 19500, true)" id="asset-card-midcpnifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">NSE</span>
                   <span class="text-xs text-teal-700 font-mono font-bold">Margin ₹15,000</span>
@@ -1267,7 +1267,7 @@
                 </div>
                 <div class="text-[10px] text-slate-600 font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 flex justify-between">
                   <span>Min Capital (+30% Buffer):</span>
-                  <strong class="text-teal-700">₹ 21,500</strong>
+                  <strong class="text-teal-700">₹ 19,500</strong>
                 </div>
               </div>
 
@@ -2742,7 +2742,7 @@
                 </div>
                 <div class="flex justify-between">
                   <span class="text-slate-500">Execution Lot Size:</span>
-                  <span class="text-slate-900 font-mono font-bold" id="breakdown-lots">1 Lot (50 Qty)</span>
+                  <span class="text-slate-900 font-mono font-bold" id="breakdown-lots">1 Lot (65 Qty • NIFTY 50)</span>
                 </div>
               </div>
 
@@ -5870,7 +5870,7 @@
     // ============================================================================
     let wizardState = {
       asset: "NIFTY 50",
-      lotSize: 75,
+      lotSize: 65,
       strategyKey: "iron_butterfly",
       strategyName: "Iron Butterfly (4 Legs)",
       legsCount: 4,
@@ -7416,8 +7416,22 @@
       const pt = document.getElementById('breakdown-profit-target');
       if (pt) pt.innerText = `+₹ ${profitTarget.toLocaleString('en-IN')}`;
 
+      // Exchange-mandated Lot Sizes
+      const ASSET_LOT_SIZES = {
+        'NIFTY 50': 65,
+        'NIFTY': 65,
+        'BANKNIFTY': 30,
+        'FINNIFTY': 60,
+        'MIDCPNIFTY': 120,
+        'SENSEX': 20
+      };
+
+      const currentAsset = wizardState.asset || 'NIFTY 50';
+      const assetLotSize = ASSET_LOT_SIZES[currentAsset] || 65;
+      const totalQty = lots * assetLotSize;
+
       const lt = document.getElementById('breakdown-lots');
-      if (lt) lt.innerText = `${lots} Lot${lots > 1 ? 's' : ''} (${lots * 50} Qty)`;
+      if (lt) lt.innerText = `${lots} Lot${lots > 1 ? 's' : ''} (${totalQty} Qty • ${currentAsset})`;
 
       // Dynamic Validation Pill for the chosen strategy
       const validationContainer = document.getElementById('capital-strategy-validation-status');
