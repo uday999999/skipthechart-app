@@ -2615,9 +2615,16 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
 
+class ThreadedServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    # One thread per request so a slow client or slow broker API call
+    # can no longer block every other request (root cause of nginx 504s).
+    daemon_threads = True
+    allow_reuse_address = True
+
 if __name__ == "__main__":
-    socketserver.TCPServer.allow_reuse_address = True
+    # Drop idle/stalled client sockets after 30s instead of hanging forever.
+    AlgoForgeHandler.timeout = 30
     handler = partial(AlgoForgeHandler, directory=STATIC_DIR)
-    print(f"Starting AlgoForge Quant X on http://localhost:{PORT}")
-    with socketserver.TCPServer(("", PORT), handler) as httpd:
+    print(f"Starting AlgoForge Quant X on http://localhost:{PORT}", flush=True)
+    with ThreadedServer(("", PORT), handler) as httpd:
         httpd.serve_forever()
