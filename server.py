@@ -97,7 +97,7 @@ ACTIVE_SESSION = {
     "user_name": "Rahul Sharma",
     "active_hwid": "HWID-MAC-M3-9821",
     "device_name": "Rahul's MacBook Pro M3",
-    "assigned_droplet_ip": "139.59.8.234",
+    "assigned_droplet_ip": "127.0.0.1",
     "droplet_region": "blr1 (Bangalore)",
     "status": "ONLINE",
     "last_heartbeat": time.time(),
@@ -927,29 +927,38 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         elif parsed.path == "/health":
             flattrade_session_file = "/var/www/skipthechart/flattrade_session.json"
             broker_token_fresh = False
+            token_age_sec = 0
             if os.path.exists(flattrade_session_file):
                 try:
                     with open(flattrade_session_file, "r") as f:
                         sdata = json.load(f)
                         broker_token_fresh = bool(sdata.get("token"))
+                        mtime = os.path.getmtime(flattrade_session_file)
+                        token_age_sec = int(time.time() - mtime)
                 except Exception:
                     pass
-            is_healthy = True
+            
+            # Determine health: worker operational
+            worker_running = (BOT_RUNTIME_STATE.get("bot_status") in ["RUNNING", "STOPPED", "PAUSED"])
+            is_healthy = worker_running
             status_code = 200 if is_healthy else 503
             self.send_json_response(status_code, {
                 "status": "healthy" if is_healthy else "unhealthy",
-                "worker": "running",
+                "worker": "running" if worker_running else "stopped",
                 "broker_token_fresh": broker_token_fresh,
-                "last_tick_age_sec": 1
+                "last_tick_age_sec": 1 if worker_running else 9999
             })
         elif parsed.path == "/api/auth/config":
             client_id = os.environ.get("GOOGLE_CLIENT_ID", "659688440036-kl32fpdig9j46rqbl03om4vvhv2s204n.apps.googleusercontent.com")
-            self.send_json_response(200, {
+            is_authenticated = bool(ACTIVE_SESSION.get("user_email"))
+            resp_data = {
                 "success": True,
                 "google_client_id": client_id,
-                "app_domain": "skipthechart.com",
-                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "139.59.8.234")
-            })
+                "app_domain": "skipthechart.com"
+            }
+            if is_authenticated:
+                resp_data["assigned_droplet_ip"] = ACTIVE_SESSION.get("assigned_droplet_ip", "127.0.0.1")
+            self.send_json_response(200, resp_data)
         elif parsed.path == "/api/auth/totp/setup":
             email = ACTIVE_SESSION.get("user_email") or "trader.rahul@gmail.com"
             user = USERS_DB.get(email)
@@ -1077,7 +1086,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "email": email,
                 "name": user["name"],
                 "message": "Signed in successfully!",
-                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "139.59.8.234")
+                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "127.0.0.1")
             })
         elif parsed.path == "/api/auth/google":
             credential = payload.get("credential", "")
@@ -1122,7 +1131,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "name": name,
                 "picture": picture,
                 "message": "Authenticated successfully with Google.",
-                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "139.59.8.234")
+                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "127.0.0.1")
             })
         elif parsed.path == "/api/auth/save-google-client-id":
             client_id = payload.get("google_client_id", "").strip()
@@ -1471,13 +1480,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         f"You are the SkipTheChart AI Quant Advisor powered by Google Gemini. "
                         f"You help Indian retail traders succeed with automated algorithmic trading and broker API setup. "
                         f"User Profile: Active Broker: {broker}, Deployed Strategy: {strat}, "
-                        f"Assigned Droplet Static IP: 139.59.8.234, Dashboard URL: https://skipthechart.com, "
+                        f"Assigned Droplet Static IP: 127.0.0.1, Dashboard URL: https://skipthechart.com, "
                         f"Total Account Capital: ₹{capital:,}, Equity Utilization: {equity_util}% "
                         f"(maintaining a {100-equity_util}% SkipTheChart mandatory transaction & RMS buffer). "
                         f"CRITICAL KNOWLEDGE FOR SUBSCRIBERS:\n"
-                        f"1. DASHBOARD ADDRESS: Always https://skipthechart.com. Subscribers log in with email. It is NEVER an IP extension like skipthechart.com/139.59.8.234.\n"
-                        f"2. DROPLET IP WHITELISTING: The static IP is 139.59.8.234. It is strictly for entering in the broker's 'Allowed IPs' or 'Whitelist IP' field.\n"
-                        f"3. EXISTING VS NEW API: If subscriber already has a broker API key, they only need to EDIT the app, change Allowed IP to 139.59.8.234, and save. If new, they create a new app named 'SkipTheChart' with Allowed IP 139.59.8.234.\n"
+                        f"1. DASHBOARD ADDRESS: Always https://skipthechart.com. Subscribers log in with email. It is NEVER an IP extension like skipthechart.com/127.0.0.1.\n"
+                        f"2. DROPLET IP WHITELISTING: The static IP is 127.0.0.1. It is strictly for entering in the broker's 'Allowed IPs' or 'Whitelist IP' field.\n"
+                        f"3. EXISTING VS NEW API: If subscriber already has a broker API key, they only need to EDIT the app, change Allowed IP to 127.0.0.1, and save. If new, they create a new app named 'SkipTheChart' with Allowed IP 127.0.0.1.\n"
                         f"4. BROKER PORTALS:\n"
                         f"   - Flattrade: https://wall.flattrade.in (Pi Connect Open API)\n"
                         f"   - Angel One: https://smartapi.angelbroking.com (SmartAPI Trading)\n"
@@ -1519,8 +1528,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         f"Your private dashboard is always accessed at:\n"
                         f"👉 **`https://skipthechart.com`** (or `https://skipthechart.com/dashboard`)\n\n"
                         f"- **How to Log In**: Simply open the website on your phone, Mac, or PC and sign in with your registered email.\n"
-                        f"- **Is it an IP Extension?**: **No!** You never need to type `skipthechart.com/139.59.8.234`. All subscribers use the clean, bank-grade encrypted domain `https://skipthechart.com`.\n"
-                        f"- **What is the Droplet IP for?**: Your assigned server IP (`139.59.8.234`) is **strictly for broker whitelisting** in your {broker} developer portal so {broker} knows your cloud trading bot is authorized."
+                        f"- **Is it an IP Extension?**: **No!** You never need to type `skipthechart.com/127.0.0.1`. All subscribers use the clean, bank-grade encrypted domain `https://skipthechart.com`.\n"
+                        f"- **What is the Droplet IP for?**: Your assigned server IP (`127.0.0.1`) is **strictly for broker whitelisting** in your {broker} developer portal so {broker} knows your cloud trading bot is authorized."
                     )
                 elif any(w in lower_msg for w in ["broker", "api", "key", "secret", "totp", "whitelist", "droplet", "ip", "connect", "existing"]):
                     broker_portals = {
@@ -1534,19 +1543,19 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     reply = (
                         f"### 🔌 Step-by-Step API & IP Whitelist Guide for {broker}\n\n"
                         f"Your dedicated cloud worker has been assigned static IP:\n"
-                        f"```text\nAllowed IP: 139.59.8.234\n```\n\n"
+                        f"```text\nAllowed IP: 127.0.0.1\n```\n\n"
                         f"#### Do You Have an Existing API Key or Creating a New One?\n\n"
                         f"**Option A: If You Already Have an Existing API Key (Takes 30 seconds)**:\n"
                         f"1. Open [{b_info[0]}]({b_info[1]}).\n"
                         f"2. Click on your existing App and choose **Edit**.\n"
-                        f"3. In the **Allowed IPs / Whitelist IP** field, replace any old IP with: `139.59.8.234`.\n"
+                        f"3. In the **Allowed IPs / Whitelist IP** field, replace any old IP with: `127.0.0.1`.\n"
                         f"4. Click **Save Changes**. Your existing API Key & Secret will now authorize your SkipTheChart bot!\n\n"
                         f"**Option B: If You Are Creating a New API Key from Scratch (Takes 2 minutes)**:\n"
                         f"1. Log in to [{b_info[0]}]({b_info[1]}).\n"
                         f"2. Click **Create New App / API**.\n"
                         f"3. Enter App Name: `SkipTheChart`.\n"
                         f"4. Set Redirect URL: `https://skipthechart.com`.\n"
-                        f"5. In **Allowed IP / Whitelist IP**, paste: `139.59.8.234`.\n"
+                        f"5. In **Allowed IP / Whitelist IP**, paste: `127.0.0.1`.\n"
                         f"6. Copy your generated **API Key** and **API Secret** and paste them into SkipTheChart.\n\n"
                         f"#### 🔒 What About TOTP?\n"
                         f"Enable TOTP in your broker profile using Google Authenticator or copy the Secret TOTP Key. SkipTheChart uses this to auto-authenticate your session every morning at **09:15 AM** without requiring manual SMS OTPs.\n\n"
@@ -1574,7 +1583,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 elif any(w in lower_msg for w in ["z-score", "ratio", "sigma", "math", "arbitrage"]):
                     reply = (
                         f"### ⚡ Understanding the Nifty ↔ BankNifty Arbitrage Engine\n\n"
-                        f"- **Co-integration Alpha**: Nifty and BankNifty move together 95% of the time. When their ratio stretches beyond **±3.000σ**, an anomaly has occurred.\n"
+                        f"- **Co-integration Alpha**: Nifty and BankNifty historically exhibit high statistical co-movement. When their ratio stretches beyond **±3.000σ**, an anomaly has occurred.\n"
                         f"- **Mean Reversion**: The bot buys the undervalued index spread and shorts the overvalued index spread, profiting when the ratio snaps back to 0.00.\n"
                         f"- **Morning Volatility Filter**: The engine sleeps until **09:30 AM IST** to ignore erratic opening spread widening.\n"
                         f"- **Strict Limit Orders**: Orders are placed with limit orders only (LMT) on {broker}, preventing retail market order slippage."
@@ -1584,7 +1593,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         f"### 🤖 SkipTheChart Quant Copilot\n\n"
                         f"Hello! I am your AI assistant for **SkipTheChart**. I see you are configured with **{broker}** and strategy **{strat}**.\n\n"
                         f"I can guide you through:\n"
-                        f"- 🔌 **Step-by-step Broker API setup & IP whitelisting** (Allowed IP: `139.59.8.234`)\n"
+                        f"- 🔌 **Step-by-step Broker API setup & IP whitelisting** (Allowed IP: `127.0.0.1`)\n"
                         f"- 🏢 **Dashboard Access**: Always at `https://skipthechart.com`\n"
                         f"- ⚡ **Nifty ↔ BankNifty Pairs Arbitrage**: How the Z-score & 4-leg hedged spreads work\n"
                         f"- 🛡️ **Risk Guardrails**: Why 70% equity utilization and SEBI kill switches protect your capital\n\n"
