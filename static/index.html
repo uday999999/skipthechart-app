@@ -62,6 +62,38 @@
       animation: none !important;
       transform: none !important;
     }
+
+    /* AI Voice Call Animations */
+    @keyframes voiceWave {
+      0%, 100% { height: 8px; opacity: 0.4; }
+      50% { height: 36px; opacity: 1; }
+    }
+    .voice-wave-bar {
+      width: 4px;
+      height: 12px;
+      border-radius: 9999px;
+      background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+      transition: height 0.15s ease;
+    }
+    .voice-wave-active .voice-wave-bar {
+      animation: voiceWave 1.1s ease-in-out infinite;
+    }
+    .voice-wave-active .voice-wave-bar:nth-child(1) { animation-delay: 0.1s; }
+    .voice-wave-active .voice-wave-bar:nth-child(2) { animation-delay: 0.3s; }
+    .voice-wave-active .voice-wave-bar:nth-child(3) { animation-delay: 0.05s; }
+    .voice-wave-active .voice-wave-bar:nth-child(4) { animation-delay: 0.25s; }
+    .voice-wave-active .voice-wave-bar:nth-child(5) { animation-delay: 0.4s; }
+    .voice-wave-active .voice-wave-bar:nth-child(6) { animation-delay: 0.15s; }
+    .voice-wave-active .voice-wave-bar:nth-child(7) { animation-delay: 0.35s; }
+    
+    @keyframes callPulse {
+      0% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 14px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    .call-pulse-active {
+      animation: callPulse 2.2s infinite;
+    }
     
     .ms-glass-card {
       background: #ffffff;
@@ -4541,15 +4573,120 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- FLOATING GEMINI AI CHATBOT WIDGET FOR SUBSCRIBERS                         -->
+  <!-- MODAL: HYBRID AI LIVE VOICE CALL SCREEN (MULTILINGUAL)                    -->
   <!-- ========================================================================= -->
-  <div id="gemini-chat-widget" class="fixed bottom-5 right-5 z-50 font-sans">
-    <!-- Collapsed Floating Button -->
-    <button type="button" onclick="toggleGeminiChat()" id="gemini-toggle-btn" class="flex items-center gap-2.5 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-full shadow-2xl shadow-emerald-600/30 border border-emerald-400/40 transition hover:scale-105">
-      <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-sm">✨</span>
-      <span>Ask Gemini Quant AI</span>
-      <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
-    </button>
+  <div id="modal-ai-voice-call" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border border-slate-800 text-white w-full max-w-md rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl relative flex flex-col items-center text-center">
+      
+      <!-- Top Call Status & Language Bar -->
+      <div class="w-full flex items-center justify-between text-xs border-b border-slate-800/80 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+          </span>
+          <span id="call-status-badge" class="font-mono text-emerald-400 font-bold tracking-wide">Connecting...</span>
+        </div>
+        
+        <!-- Language Selector -->
+        <div class="flex items-center gap-1.5 bg-slate-800/90 px-2.5 py-1 rounded-full border border-slate-700/80 text-[11px]">
+          <span class="text-slate-400">Language:</span>
+          <select id="call-lang-select" onchange="switchCallLanguage(this.value)" class="bg-transparent text-emerald-300 font-bold border-0 outline-none cursor-pointer text-[11px] focus:ring-0">
+            <option value="auto" class="bg-slate-900 text-white">🌐 Auto (Native Indian)</option>
+            <option value="hi" class="bg-slate-900 text-white">🇮🇳 हिन्दी / Hinglish</option>
+            <option value="en" class="bg-slate-900 text-white">🇬🇧 English</option>
+            <option value="ta" class="bg-slate-900 text-white">🇮🇳 தமிழ் (Tamil)</option>
+            <option value="te" class="bg-slate-900 text-white">🇮🇳 తెలుగు (Telugu)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Caller Profile Display -->
+      <div class="space-y-2.5 flex flex-col items-center">
+        <div class="relative">
+          <div id="call-avatar-pulse" class="w-24 h-24 rounded-full bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-400 flex items-center justify-center text-4xl shadow-xl shadow-emerald-500/20 call-pulse-active border-4 border-slate-800">
+            🤖
+          </div>
+          <span class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center text-[10px]">🎙️</span>
+        </div>
+        <div>
+          <h3 class="text-lg font-black text-white tracking-tight">SkipTheChart AI Voice Copilot</h3>
+          <p class="text-xs text-slate-400 font-mono" id="call-active-broker-display">Active Broker: Flattrade • 24/7 Setup Guide</p>
+        </div>
+      </div>
+
+      <!-- Animated Sound Wave Visualizer -->
+      <div id="call-waveform-container" class="h-12 flex items-center justify-center gap-1.5 px-6 py-2 bg-slate-800/40 rounded-2xl border border-slate-800 w-full voice-wave-active">
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+      </div>
+
+      <!-- Live Subtitle & Transcript Card -->
+      <div class="w-full bg-slate-800/40 border border-slate-800 rounded-2xl p-4 text-left space-y-2 max-h-36 overflow-y-auto">
+        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center justify-between">
+          <span>Live Conversation</span>
+          <span id="call-timer" class="font-mono text-emerald-400">00:00</span>
+        </div>
+        <div id="call-transcript-user" class="text-xs text-slate-300 italic min-h-[1.25rem]">
+          "Speak now in English, Hindi, Tamil, or Telugu..."
+        </div>
+        <div id="call-transcript-ai" class="text-xs text-emerald-300 font-medium min-h-[1.5rem] border-t border-slate-800/80 pt-1.5">
+          Connecting to AI Quant voice engine...
+        </div>
+      </div>
+
+      <!-- Call Action Controls -->
+      <div class="flex items-center justify-center gap-5 pt-1">
+        <!-- Mute Button -->
+        <button type="button" onclick="toggleCallMute()" id="btn-call-mute" class="w-12 h-12 rounded-full bg-slate-800 hover:bg-slate-700 text-white flex flex-col items-center justify-center gap-0.5 border border-slate-700 transition cursor-pointer shadow-lg" title="Mute Microphone">
+          <span class="text-base" id="icon-call-mute">🎙️</span>
+          <span class="text-[9px] font-bold text-slate-300" id="label-call-mute">Mute</span>
+        </button>
+
+        <!-- Red End Call Button -->
+        <button type="button" onclick="endAiVoiceCall()" class="w-16 h-16 rounded-full bg-rose-600 hover:bg-rose-700 text-white flex flex-col items-center justify-center gap-0.5 transition cursor-pointer shadow-xl shadow-rose-600/40 hover:scale-105" title="End Voice Call">
+          <span class="text-xl">📞</span>
+          <span class="text-[9px] font-black uppercase tracking-wider">End</span>
+        </button>
+
+        <!-- Speaker / Sound Button -->
+        <button type="button" onclick="toggleCallSpeaker()" id="btn-call-speaker" class="w-12 h-12 rounded-full bg-slate-800 hover:bg-slate-700 text-white flex flex-col items-center justify-center gap-0.5 border border-slate-700 transition cursor-pointer shadow-lg" title="Audio Speaker Output">
+          <span class="text-base" id="icon-call-speaker">🔊</span>
+          <span class="text-[9px] font-bold text-slate-300" id="label-call-speaker">Sound</span>
+        </button>
+      </div>
+
+      <div class="text-[10.5px] text-slate-500 font-mono">
+        💡 Ask about your broker API, Allowed IP whitelisting, 2FA TOTP, or strategy risks.
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- FLOATING AI ASSISTANT: VOICE CALL + CHAT (PERSISTENT ON ALL PAGES)         -->
+  <!-- ========================================================================= -->
+  <div id="gemini-chat-widget" class="fixed bottom-4 sm:bottom-5 right-3 sm:right-5 z-50 font-sans">
+    
+    <!-- Floating Action Buttons: Call AI Voice + Chat -->
+    <div id="ai-floating-triggers" class="flex items-center gap-2">
+      <!-- 1. AI Voice Call Button (Persistent on All Pages) -->
+      <button type="button" onclick="startAiVoiceCall()" id="btn-ai-call-trigger" class="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-full shadow-2xl shadow-emerald-600/40 border border-emerald-300/40 transition hover:scale-105 cursor-pointer call-pulse-active" title="Talk to AI Voice Copilot in English, Hindi, Tamil, Telugu">
+        <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-sm">📞</span>
+        <span>Call AI Copilot</span>
+        <span class="text-[9.5px] px-1.5 py-0.5 rounded-full bg-white/20 text-white font-mono uppercase font-bold tracking-tight">Voice 24/7</span>
+      </button>
+
+      <!-- 2. AI Chat Button -->
+      <button type="button" onclick="toggleGeminiChat()" id="gemini-toggle-btn" class="flex items-center gap-1.5 px-3 sm:px-3.5 py-2.5 sm:py-3 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-full shadow-xl border border-slate-200 transition hover:scale-105 cursor-pointer" title="Open Text Chat Copilot">
+        <span class="text-sm">💬</span>
+        <span class="hidden md:inline">Chat</span>
+      </button>
+    </div>
 
     <!-- Expanded Chat Window (Hidden by default) -->
     <div id="gemini-chat-window" class="hidden w-[380px] sm:w-[420px] h-[550px] bg-white border border-slate-200/90 rounded-3xl shadow-2xl flex flex-col overflow-hidden ms-glass-card">
@@ -9805,6 +9942,346 @@
         removeThinkingBubble(thinkingId);
         appendChatMessage('gemini', '### ⚠️ Handshake Test Notice\nCould not reach the broker test gateway. Please verify your connection.');
       }
+    }
+
+    // =========================================================================
+    // HYBRID AI VOICE CALL COPILOT ENGINE (MULTILINGUAL)
+    // =========================================================================
+    let voiceCallActive = false;
+    let voiceCallMuted = false;
+    let voiceCallSpeaker = true;
+    let voiceCallTimerInterval = null;
+    let voiceCallSeconds = 0;
+    let voiceRecognition = null;
+    let currentSpeechUtterance = null;
+    let selectedCallLanguage = 'auto';
+    let audioStream = null;
+
+    // Plays realistic dual-tone phone connection beep using Web Audio API
+    function playPhoneConnectSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc1.type = 'sine';
+        osc1.frequency.value = 440; // 440Hz
+        osc2.type = 'sine';
+        osc2.frequency.value = 480; // 480Hz
+
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc1.start();
+        osc2.start();
+        osc1.stop(audioCtx.currentTime + 0.4);
+        osc2.stop(audioCtx.currentTime + 0.4);
+      } catch (e) {}
+    }
+
+    function switchCallLanguage(lang) {
+      selectedCallLanguage = lang || 'auto';
+      if (voiceRecognition) {
+        if (lang === 'hi') voiceRecognition.lang = 'hi-IN';
+        else if (lang === 'ta') voiceRecognition.lang = 'ta-IN';
+        else if (lang === 'te') voiceRecognition.lang = 'te-IN';
+        else if (lang === 'en') voiceRecognition.lang = 'en-IN';
+        else voiceRecognition.lang = 'en-IN';
+      }
+      showToast(`Voice language set to ${lang.toUpperCase()}`);
+    }
+
+    async function startAiVoiceCall() {
+      const modal = document.getElementById('modal-ai-voice-call');
+      if (!modal) return;
+
+      modal.classList.remove('hidden');
+      voiceCallActive = true;
+      voiceCallMuted = false;
+      voiceCallSpeaker = true;
+      voiceCallSeconds = 0;
+
+      // Update broker context on call screen
+      const bName = userState.selectedBrokerName || "Flattrade";
+      const bDisp = document.getElementById('call-active-broker-display');
+      if (bDisp) bDisp.innerText = `Active Broker: ${bName} • Step ${userState.currentStep || 1} • 24/7 Voice Guide`;
+
+      const statusEl = document.getElementById('call-status-badge');
+      if (statusEl) statusEl.innerText = "Dialing Copilot...";
+
+      playPhoneConnectSound();
+
+      // Check for SpeechRecognition support
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Your browser does not support live speech recognition. You can still use the 'Chat' button to talk to the AI!");
+      }
+
+      // Request microphone access
+      try {
+        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (err) {
+        console.warn("Microphone access not granted:", err);
+        const userTr = document.getElementById('call-transcript-user');
+        if (userTr) userTr.innerText = "⚠️ Microphone access needed to speak. Please allow mic in browser.";
+      }
+
+      // Connection succeeded
+      setTimeout(() => {
+        if (!voiceCallActive) return;
+        if (statusEl) statusEl.innerText = "Connected 🟢";
+        startVoiceCallTimer();
+        initSpeechRecognition();
+        // Send initial greeting prompt
+        sendVoiceCallPrompt("call_connected");
+      }, 700);
+    }
+
+    function startVoiceCallTimer() {
+      clearInterval(voiceCallTimerInterval);
+      const timerEl = document.getElementById('call-timer');
+      voiceCallTimerInterval = setInterval(() => {
+        voiceCallSeconds++;
+        const mins = String(Math.floor(voiceCallSeconds / 60)).padStart(2, '0');
+        const secs = String(voiceCallSeconds % 60).padStart(2, '0');
+        if (timerEl) timerEl.innerText = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
+
+      if (voiceRecognition) {
+        try { voiceRecognition.stop(); } catch(e) {}
+      }
+
+      voiceRecognition = new SpeechRecognition();
+      voiceRecognition.continuous = true;
+      voiceRecognition.interimResults = true;
+      
+      if (selectedCallLanguage === 'hi') voiceRecognition.lang = 'hi-IN';
+      else if (selectedCallLanguage === 'ta') voiceRecognition.lang = 'ta-IN';
+      else if (selectedCallLanguage === 'te') voiceRecognition.lang = 'te-IN';
+      else if (selectedCallLanguage === 'en') voiceRecognition.lang = 'en-IN';
+      else voiceRecognition.lang = 'en-IN'; // Auto default
+
+      let finalSpokenText = '';
+
+      voiceRecognition.onresult = (event) => {
+        if (!voiceCallActive || voiceCallMuted) return;
+
+        let interimText = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalSpokenText += event.results[i][0].transcript;
+          } else {
+            interimText += event.results[i][0].transcript;
+          }
+        }
+
+        const displayText = finalSpokenText || interimText;
+        const userTr = document.getElementById('call-transcript-user');
+        if (userTr && displayText) {
+          userTr.innerText = `"${displayText}"`;
+          setWaveformActive(true);
+        }
+
+        // Send to AI when a complete sentence or thought is spoken
+        if (finalSpokenText.trim().length > 3) {
+          const toSend = finalSpokenText.trim();
+          finalSpokenText = '';
+          sendVoiceCallPrompt(toSend);
+        }
+      };
+
+      voiceRecognition.onerror = (event) => {
+        console.warn("Voice recognition error:", event.error);
+        if (event.error === 'not-allowed') {
+          showToast("Microphone permission was denied.");
+        }
+      };
+
+      voiceRecognition.onend = () => {
+        // Auto-restart if call is still active and not muted
+        if (voiceCallActive && !voiceCallMuted) {
+          try { voiceRecognition.start(); } catch(e) {}
+        }
+      };
+
+      try {
+        voiceRecognition.start();
+      } catch (e) {}
+    }
+
+    async function sendVoiceCallPrompt(query) {
+      const aiTr = document.getElementById('call-transcript-ai');
+      if (aiTr) aiTr.innerText = "Thinking...";
+      setWaveformActive(true);
+
+      try {
+        const res = await fetch('/api/ai/voice-call', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: query,
+            context: {
+              broker: userState.selectedBrokerName || 'Flattrade',
+              strategy: userState.selectedStrategyName || 'Pairs Arbitrage',
+              step: userState.currentStep || 1,
+              capital: userState.totalCapital || 25000,
+              language: selectedCallLanguage
+            }
+          })
+        });
+        const data = await res.json();
+        const replyText = data.reply || "I am listening. How can I help you with your setup?";
+        const langCode = data.lang || 'en-IN';
+
+        if (aiTr) {
+          aiTr.innerText = replyText;
+        }
+
+        // Speak aloud
+        speakVoiceText(replyText, langCode);
+      } catch (err) {
+        if (aiTr) aiTr.innerText = "I had trouble connecting. Could you please repeat that?";
+        speakVoiceText("I had trouble connecting. Could you please repeat that?", 'en-IN');
+      }
+    }
+
+    function speakVoiceText(text, langCode = 'en-IN') {
+      if (!voiceCallActive || !voiceCallSpeaker) return;
+
+      // Stop any ongoing speech
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      setWaveformActive(true);
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.lang = langCode || 'en-IN';
+
+      // Pick high quality Indian voice if available
+      const voices = window.speechSynthesis.getVoices();
+      if (voices && voices.length > 0) {
+        const indVoice = voices.find(v => v.lang.includes(langCode) || v.lang.includes('IN') || v.name.includes('India'));
+        if (indVoice) utterance.voice = indVoice;
+      }
+
+      utterance.onstart = () => {
+        setWaveformActive(true);
+        // Temporarily pause recognition to prevent mic echo feedback
+        if (voiceRecognition) {
+          try { voiceRecognition.stop(); } catch(e) {}
+        }
+      };
+
+      utterance.onend = () => {
+        setWaveformActive(false);
+        // Resume listening for subscriber
+        if (voiceCallActive && !voiceCallMuted && voiceRecognition) {
+          try { voiceRecognition.start(); } catch(e) {}
+        }
+      };
+
+      utterance.onerror = () => {
+        setWaveformActive(false);
+        if (voiceCallActive && !voiceCallMuted && voiceRecognition) {
+          try { voiceRecognition.start(); } catch(e) {}
+        }
+      };
+
+      currentSpeechUtterance = utterance;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function setWaveformActive(active) {
+      const container = document.getElementById('call-waveform-container');
+      if (container) {
+        if (active) container.classList.add('voice-wave-active');
+        else container.classList.remove('voice-wave-active');
+      }
+    }
+
+    function toggleCallMute() {
+      voiceCallMuted = !voiceCallMuted;
+      const icon = document.getElementById('icon-call-mute');
+      const label = document.getElementById('label-call-mute');
+      const btn = document.getElementById('btn-call-mute');
+
+      if (voiceCallMuted) {
+        if (icon) icon.innerText = "🔇";
+        if (label) label.innerText = "Unmute";
+        if (btn) btn.classList.add('bg-amber-600', 'border-amber-500');
+        if (voiceRecognition) {
+          try { voiceRecognition.stop(); } catch(e) {}
+        }
+        showToast("Microphone muted");
+      } else {
+        if (icon) icon.innerText = "🎙️";
+        if (label) label.innerText = "Mute";
+        if (btn) btn.classList.remove('bg-amber-600', 'border-amber-500');
+        if (voiceRecognition) {
+          try { voiceRecognition.start(); } catch(e) {}
+        }
+        showToast("Microphone active");
+      }
+    }
+
+    function toggleCallSpeaker() {
+      voiceCallSpeaker = !voiceCallSpeaker;
+      const icon = document.getElementById('icon-call-speaker');
+      const label = document.getElementById('label-call-speaker');
+      const btn = document.getElementById('btn-call-speaker');
+
+      if (!voiceCallSpeaker) {
+        if (icon) icon.innerText = "🔈";
+        if (label) label.innerText = "Muted";
+        if (btn) btn.classList.add('bg-amber-600', 'border-amber-500');
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        showToast("Audio output silenced");
+      } else {
+        if (icon) icon.innerText = "🔊";
+        if (label) label.innerText = "Sound";
+        if (btn) btn.classList.remove('bg-amber-600', 'border-amber-500');
+        showToast("Speaker active");
+      }
+    }
+
+    function endAiVoiceCall() {
+      voiceCallActive = false;
+      clearInterval(voiceCallTimerInterval);
+
+      // Stop speech
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      // Stop recognition
+      if (voiceRecognition) {
+        try { voiceRecognition.stop(); } catch(e) {}
+        voiceRecognition = null;
+      }
+
+      // Stop mic tracks
+      if (audioStream) {
+        audioStream.getTracks().forEach(t => t.stop());
+        audioStream = null;
+      }
+
+      const modal = document.getElementById('modal-ai-voice-call');
+      if (modal) modal.classList.add('hidden');
+
+      showToast("📞 Voice call ended");
     }
 
     function escapeHtml(str) {
