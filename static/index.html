@@ -4192,7 +4192,7 @@
   <!-- ========================================================================= -->
   <!-- MODAL: GOOGLE AUTHENTICATOR (TOTP) 2FA SETUP & VERIFICATION               -->
   <!-- ========================================================================= -->
-  <div id="modal-totp-auth" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
+  <div id="modal-totp-auth" onclick="if(event.target === this) closeTotpModal(false)" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
     <div class="bg-white border border-slate-200/90 w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl relative ms-glass-card">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
@@ -4256,7 +4256,7 @@
   <!-- ========================================================================= -->
   <!-- MODAL: GOOGLE SIGN-IN SELECTOR & GMAIL ENTRY                               -->
   <!-- ========================================================================= -->
-  <div id="modal-google-auth" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
+  <div id="modal-google-auth" onclick="if(event.target === this) closeGoogleSignInModal()" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 hidden">
     <div class="bg-white border border-slate-200/90 w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl relative ms-glass-card">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2">
@@ -4268,7 +4268,7 @@
           </svg>
           <h3 class="text-sm font-black text-slate-900">Google Account Sign-In</h3>
         </div>
-        <button type="button" onclick="closeGoogleSignInModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold text-sm">
+        <button type="button" onclick="closeGoogleSignInModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold text-sm cursor-pointer">
           ✕
         </button>
       </div>
@@ -4277,7 +4277,7 @@
         <p class="text-slate-600">Choose how you want to sign in with Google:</p>
 
         <!-- Option 1: 1-Click Demo Profile -->
-        <button type="button" onclick="performGoogleSignIn('trader.rahul@gmail.com', 'Rahul Sharma')" class="w-full p-3 bg-slate-50 hover:bg-emerald-50/60 border border-slate-200 hover:border-emerald-500 rounded-2xl flex items-center gap-3 text-left transition group">
+        <button type="button" onclick="performGoogleSignIn('trader.rahul@gmail.com', 'Rahul Sharma')" class="w-full p-3 bg-slate-50 hover:bg-emerald-50/60 border border-slate-200 hover:border-emerald-500 rounded-2xl flex items-center gap-3 text-left transition group cursor-pointer">
           <div class="w-9 h-9 rounded-full bg-emerald-600 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-xs">
             R
           </div>
@@ -4292,8 +4292,8 @@
         <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
           <label class="block text-[11px] font-bold text-slate-700">Or Enter Your Own Gmail:</label>
           <div class="flex gap-2">
-            <input type="email" id="custom-google-email" placeholder="your.name@gmail.com" class="flex-1 bg-white border border-slate-300 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs text-slate-900 outline-none font-mono shadow-xs">
-            <button type="button" onclick="submitCustomGoogleEmail()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shrink-0 transition shadow-xs">
+            <input type="email" id="custom-google-email" placeholder="your.name@gmail.com" onkeydown="if(event.key==='Enter') submitCustomGoogleEmail()" class="flex-1 bg-white border border-slate-300 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs text-slate-900 outline-none font-mono shadow-xs">
+            <button type="button" onclick="submitCustomGoogleEmail()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shrink-0 transition shadow-xs cursor-pointer">
               Sign In
             </button>
           </div>
@@ -5439,10 +5439,6 @@
         if (res.ok && data.success) {
           applyLoggedInUser(data.email || email, data.name || email.split('@')[0]);
           showAuthAlert("✓ Signed in successfully! Loading terminal...", false);
-
-          setTimeout(() => {
-            openTotpSetupModal(); // Prompt for Google Authenticator TOTP
-          }, 300);
         } else {
           showAuthAlert(data.error || "Authentication failed. Please check your credentials.");
         }
@@ -5491,10 +5487,6 @@
         if (res.ok && data.success) {
           applyLoggedInUser(data.email || email, data.name || name || 'Trader');
           showAuthAlert("✓ Welcome to SkipTheChart! Launching onboarding setup...", false);
-
-          setTimeout(() => {
-            openTotpSetupModal(); // Advance to Google Authenticator TOTP
-          }, 300);
         } else {
           showAuthAlert(data.error || "Could not register account. Please check your details.");
         }
@@ -5524,6 +5516,8 @@
       if (modal) {
         modal.classList.remove('hidden');
         modal.style.display = 'flex';
+        const input = document.getElementById('custom-google-email');
+        if (input) setTimeout(() => input.focus(), 150);
       } else {
         const email = prompt('Enter your Google (Gmail) address to sign in:');
         if (email && email.includes('@')) {
@@ -5535,7 +5529,12 @@
 
     function openGoogleSignInModal() {
       const modal = document.getElementById('modal-google-auth');
-      if (modal) modal.classList.remove('hidden');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+        const input = document.getElementById('custom-google-email');
+        if (input) setTimeout(() => input.focus(), 150);
+      }
       if (window.google && window.google.accounts && window.GOOGLE_CLIENT_ID_CONFIGURED) {
         try {
           window.google.accounts.id.prompt();
@@ -5545,7 +5544,10 @@
 
     function closeGoogleSignInModal() {
       const modal = document.getElementById('modal-google-auth');
-      if (modal) modal.classList.add('hidden');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
     }
 
     function submitCustomGoogleEmail() {
@@ -5599,8 +5601,8 @@
         if (data.name) userName = data.name;
       } catch (e) {}
 
+      closeGoogleSignInModal();
       applyLoggedInUser(userEmail, userName);
-      openTotpSetupModal();
     }
 
     // Unified Google Sign-In Execution
@@ -5643,7 +5645,6 @@
       }
 
       applyLoggedInUser(userEmail, userName);
-      openTotpSetupModal();
     }
 
     // =========================================================================
@@ -5671,21 +5672,28 @@
           if (errEl) errEl.classList.add('hidden');
 
           const modal = document.getElementById('modal-totp-auth');
-          if (modal) modal.classList.remove('hidden');
-        } else {
-          goToStep(1);
+          if (modal) {
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+          }
         }
       } catch (e) {
         console.error('TOTP setup error:', e);
-        goToStep(1);
       }
     }
 
     function closeTotpModal(proceedToStep1 = false) {
       const modal = document.getElementById('modal-totp-auth');
-      if (modal) modal.classList.add('hidden');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
       if (proceedToStep1) {
-        goToStep(1);
+        if (userState && userState.subscriptionActive && userState.botRunning) {
+          showScreen('screen-live-dashboard');
+        } else {
+          goToStep(userState?.currentStep || 1);
+        }
       }
     }
 
