@@ -3338,6 +3338,9 @@
             </div>
           </div>
           <div class="flex items-center gap-2">
+            <button type="button" onclick="toggleBrokerApiGuidePanel()" id="btn-toggle-broker-guide" class="px-3.5 py-1.5 bg-sky-50 hover:bg-sky-100 border border-sky-300 text-sky-800 font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+              <span>📖</span> <span id="btn-guide-toggle-label">How to Setup API &amp; 2FA (Guide)</span>
+            </button>
             <button type="button" onclick="openApiCredentialsModal()" id="dash-btn-open-creds" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-xs transition cursor-pointer">
               <span>🔑</span> <span id="dash-btn-creds-text">Configure API Keys</span>
             </button>
@@ -3354,9 +3357,14 @@
               <div class="text-[11px] text-amber-800">Your dedicated cloud node requires your Flattrade Client Code, API Key & Secret to place trades.</div>
             </div>
           </div>
-          <button type="button" onclick="openApiCredentialsModal()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-black rounded-xl text-xs shadow-xs transition cursor-pointer flex items-center gap-1.5">
-            <span>🔑</span> Add Flattrade API Keys Now →
-          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="openBrokerApiGuidePanel()" class="px-3 py-1.5 bg-white hover:bg-amber-100 border border-amber-400 text-amber-900 font-bold rounded-xl text-xs transition cursor-pointer flex items-center gap-1 shadow-2xs">
+              <span>📖</span> How to Create Keys &amp; TOTP
+            </button>
+            <button type="button" onclick="openApiCredentialsModal()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-black rounded-xl text-xs shadow-xs transition cursor-pointer flex items-center gap-1.5">
+              <span>🔑</span> Add Flattrade API Keys Now →
+            </button>
+          </div>
         </div>
 
         <!-- Success Banner if Keys Active -->
@@ -3373,9 +3381,175 @@
               </div>
             </div>
           </div>
-          <button type="button" onclick="openApiCredentialsModal()" class="px-3 py-1.5 bg-white hover:bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold rounded-xl text-xs transition cursor-pointer flex items-center gap-1">
-            <span>✎</span> Edit Keys
-          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="toggleBrokerApiGuidePanel()" class="px-3 py-1.5 bg-white hover:bg-sky-50 border border-sky-300 text-sky-800 font-bold rounded-xl text-xs transition cursor-pointer flex items-center gap-1">
+              <span>📖</span> Guide
+            </button>
+            <button type="button" onclick="openApiCredentialsModal()" class="px-3 py-1.5 bg-white hover:bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold rounded-xl text-xs transition cursor-pointer flex items-center gap-1">
+              <span>✎</span> Edit Keys
+            </button>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- HOW-TO GUIDE PANEL: API KEY GENERATION, 2FA TOTP, & BROKER SUPPORT DESK   -->
+        <!-- ========================================================================= -->
+        <div id="panel-broker-api-guide" class="bg-gradient-to-br from-slate-50 via-white to-sky-50/50 border-2 border-sky-300/80 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm transition-all hidden">
+          
+          <!-- Guide Top Bar: Title, Broker Dropdown & Close Button -->
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-sky-100 pb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-sky-100 text-sky-800 border border-sky-300 flex items-center justify-center text-lg font-bold">
+                📖
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-sm font-black text-slate-900" id="guide-panel-main-title">Flattrade: API Key & 2FA TOTP Step-by-Step Guide</h3>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">Broker Integration Guide</span>
+                </div>
+                <p class="text-[11px] text-slate-500">Follow the 3 tabs below to generate your keys, setup automatic morning 2FA, or get direct phone/chat broker assistance.</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <!-- Broker Switcher -->
+              <div class="flex items-center gap-1.5 text-xs text-slate-600 font-semibold bg-white px-2.5 py-1 rounded-xl border border-slate-200">
+                <span>Broker:</span>
+                <select id="guide-broker-select" onchange="switchBrokerGuideTab(this.value)" class="font-bold text-slate-900 bg-transparent border-0 focus:ring-0 cursor-pointer text-xs">
+                  <option value="flattrade">Flattrade</option>
+                  <option value="zerodha">Zerodha</option>
+                  <option value="angelone">Angel One</option>
+                  <option value="dhan">Dhan</option>
+                  <option value="upstox">Upstox</option>
+                  <option value="shoonya">Shoonya (Finvasia)</option>
+                  <option value="fyers">Fyers</option>
+                  <option value="aliceblue">Alice Blue</option>
+                  <option value="kotakneo">Kotak Neo</option>
+                  <option value="groww">Groww</option>
+                  <option value="fivepaisa">5paisa</option>
+                </select>
+              </div>
+              <button type="button" onclick="closeBrokerApiGuidePanel()" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold text-xs cursor-pointer" title="Hide Guide">
+                ✕
+              </button>
+            </div>
+          </div>
+
+          <!-- Dedicated Droplet Allowed IP Callout -->
+          <div class="p-3 bg-white border border-emerald-300 rounded-xl flex flex-wrap items-center justify-between gap-2.5 text-xs shadow-2xs">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <div>
+                <div class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Your Dedicated Cloud Node Static IP:</div>
+                <div class="font-mono font-black text-slate-900 text-sm tracking-wide" id="guide-node-ip-display">Loading...</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] text-slate-500 hidden sm:inline">Paste into broker's <strong>"Allowed IP / Static IP"</strong> box</span>
+              <button type="button" onclick="copyNodeStaticIp()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-lg text-xs flex items-center gap-1.5 transition shadow-xs cursor-pointer">
+                <span>📋</span> <span>Copy Allowed IP</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3 Guide Tabs -->
+          <div class="flex items-center gap-2 border-b border-slate-200 text-xs font-bold">
+            <button type="button" onclick="setGuideSubTab('tab-guide-api')" id="btn-tab-guide-api" class="pb-2.5 px-3 border-b-2 border-sky-600 text-sky-800 flex items-center gap-1.5 cursor-pointer">
+              <span>🔑</span> 1. Create API Keys
+            </button>
+            <button type="button" onclick="setGuideSubTab('tab-guide-totp')" id="btn-tab-guide-totp" class="pb-2.5 px-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5 cursor-pointer">
+              <span>🛡️</span> 2. Setup 2FA / TOTP
+            </button>
+            <button type="button" onclick="setGuideSubTab('tab-guide-support')" id="btn-tab-guide-support" class="pb-2.5 px-3 border-b-2 border-transparent text-rose-600 hover:text-rose-700 flex items-center gap-1.5 cursor-pointer">
+              <span>📞</span> 3. Need Help? Call / Chat Broker
+            </button>
+          </div>
+
+          <!-- Tab 1: How to Generate API Key & Secret -->
+          <div id="tab-guide-api" class="space-y-3 text-xs">
+            <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-2">
+              <div class="font-bold text-slate-900 flex items-center justify-between">
+                <span id="guide-api-step-title">Steps to generate Flattrade API Keys:</span>
+                <a id="guide-portal-direct-link" href="https://wall.flattrade.in" target="_blank" class="text-sky-700 hover:underline font-bold flex items-center gap-1">
+                  <span>Open Broker Developer Portal</span> ↗
+                </a>
+              </div>
+              <div id="guide-api-steps-list" class="space-y-1.5 text-slate-600 text-[11.5px] leading-relaxed">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: How to Setup 2FA Authenticator TOTP -->
+          <div id="tab-guide-totp" class="space-y-3 text-xs hidden">
+            <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-2.5">
+              <div class="font-bold text-slate-900 flex items-center justify-between">
+                <span id="guide-totp-step-title">How to Setup 2FA TOTP in Flattrade:</span>
+                <span class="text-[10.5px] text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-bold">Enables 08:45 AM Auto-Handshake</span>
+              </div>
+              <div id="guide-totp-steps-list" class="space-y-1.5 text-slate-600 text-[11.5px] leading-relaxed">
+                <!-- Dynamically rendered -->
+              </div>
+              <div class="p-2.5 bg-amber-50/80 border border-amber-200 rounded-xl text-[11px] text-amber-900 flex items-start gap-2">
+                <span class="text-base">💡</span>
+                <span><strong>Tip:</strong> When your broker displays a QR code to enable 2FA, look for a small link like <em>"Can't scan QR? / Copy secret key"</em>. Copy that alphanumeric text and paste it into the TOTP field in SkipTheChart.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: Broker Support Help Desk (Call / Chat Script) -->
+          <div id="tab-guide-support" class="space-y-3 text-xs hidden">
+            <div class="p-4 bg-gradient-to-r from-rose-50 via-amber-50 to-white border border-rose-200 rounded-xl space-y-3">
+              <div class="flex items-start gap-2.5">
+                <span class="text-2xl">📞</span>
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm" id="guide-support-broker-name">Can't generate on your own? Call or chat with Flattrade support!</h4>
+                  <p class="text-[11.5px] text-slate-600 mt-0.5">
+                    Every broker has a dedicated API & IT technical desk to help subscribers enable API access and TOTP in under 2 minutes. You don't have to figure it out alone!
+                  </p>
+                </div>
+              </div>
+
+              <!-- Contact Details Grid -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                <div class="p-2.5 bg-white border border-slate-200 rounded-xl space-y-0.5">
+                  <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Toll-Free / Phone:</div>
+                  <div class="font-mono font-bold text-slate-900 text-xs" id="guide-support-phone">+91 044 4560 9696</div>
+                </div>
+                <div class="p-2.5 bg-white border border-slate-200 rounded-xl space-y-0.5">
+                  <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Email Support:</div>
+                  <div class="font-mono font-bold text-slate-900 text-xs truncate" id="guide-support-email">support@flattrade.in</div>
+                </div>
+                <div class="p-2.5 bg-white border border-slate-200 rounded-xl space-y-0.5">
+                  <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Live Chat / Desk:</div>
+                  <a id="guide-support-chat-link" href="https://flattrade.in" target="_blank" class="font-bold text-sky-700 hover:underline text-xs flex items-center gap-1">
+                    <span>Open Broker Chat</span> ↗
+                  </a>
+                </div>
+              </div>
+
+              <!-- Ready-to-use Script -->
+              <div class="p-3 bg-white border border-rose-200 rounded-xl space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-slate-900 text-[11px] uppercase tracking-wider">📋 What to say or paste in broker chat:</span>
+                  <button type="button" onclick="copySupportScript()" id="btn-copy-support-script" class="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-[10.5px] transition cursor-pointer flex items-center gap-1">
+                    <span>📋</span> <span id="btn-copy-script-label">Copy Script</span>
+                  </button>
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200 font-mono text-[11px] text-slate-800 italic" id="guide-support-script-text">
+                  "Hello, I am setting up automated trading on SkipTheChart on my private dedicated cloud server. Please help me generate my API Key, API Secret, and enable TOTP authentication for my account so I can connect it."
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Guide Action Footer -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-sky-100">
+            <span class="text-[11px] text-slate-500">Ready with your credentials? Click below to save them into your dedicated node.</span>
+            <button type="button" onclick="openApiCredentialsModal()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5 cursor-pointer">
+              <span>🔑</span> Enter My API Keys &amp; TOTP Now →
+            </button>
+          </div>
         </div>
 
         <!-- Step-by-Step Connection Row -->
@@ -3766,16 +3940,44 @@
           <span><strong>Why TOTP is needed:</strong> Enables your dedicated node to authenticate automatically at 08:45 AM each morning without requiring manual phone SMS OTPs.</span>
         </div>
 
-        <!-- Quick 3-Step Guide to get keys -->
-        <div class="p-3 bg-slate-50/80 border border-slate-200 rounded-xl space-y-1.5 text-[11px] text-slate-700">
-          <div class="font-bold text-slate-900 flex justify-between">
-            <span id="modal-guide-header">Where to get Flattrade API Keys:</span>
-            <a id="modal-guide-url" href="https://wall.flattrade.in" target="_blank" class="text-emerald-700 hover:underline font-semibold">Open Portal ↗</a>
+        <!-- Interactive 3-Tab Guide inside Modal -->
+        <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2.5 text-xs">
+          <div class="flex items-center justify-between border-b border-slate-200/80 pb-2">
+            <span class="font-bold text-slate-900" id="modal-guide-header">Where to get Flattrade API Keys &amp; TOTP:</span>
+            <div class="flex items-center gap-2">
+              <a id="modal-guide-url" href="https://wall.flattrade.in" target="_blank" class="text-sky-700 hover:underline font-bold text-[11px]">Open Broker Portal ↗</a>
+            </div>
           </div>
-          <div id="modal-guide-steps" class="space-y-1 text-slate-500">
-            <div>1. Log into wall.flattrade.in > Profile > API Keys</div>
-            <div>2. Click 'Generate Free API Key'</div>
-            <div>3. Copy your API Key & Secret and paste above</div>
+
+          <!-- Modal Guide Sub-tabs -->
+          <div class="flex items-center gap-1.5 text-[11px] font-bold">
+            <button type="button" onclick="setModalGuideSubTab('m-tab-api')" id="m-btn-tab-api" class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 transition cursor-pointer">
+              🔑 1. Create API Keys
+            </button>
+            <button type="button" onclick="setModalGuideSubTab('m-tab-totp')" id="m-btn-tab-totp" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 transition cursor-pointer">
+              🛡️ 2. Setup 2FA / TOTP
+            </button>
+            <button type="button" onclick="setModalGuideSubTab('m-tab-support')" id="m-btn-tab-support" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-rose-600 transition cursor-pointer">
+              📞 3. Call/Chat Broker Desk
+            </button>
+          </div>
+
+          <div id="m-tab-api" class="space-y-1 text-slate-600 text-[11px] leading-relaxed">
+            <div id="modal-guide-steps" class="space-y-1"></div>
+          </div>
+
+          <div id="m-tab-totp" class="space-y-1 text-slate-600 text-[11px] leading-relaxed hidden">
+            <div id="modal-totp-steps" class="space-y-1"></div>
+          </div>
+
+          <div id="m-tab-support" class="space-y-2 text-slate-700 text-[11px] hidden">
+            <div class="p-2.5 bg-rose-50/70 border border-rose-200 rounded-xl space-y-1.5">
+              <div class="font-bold text-slate-900 flex items-center justify-between">
+                <span id="modal-support-phone-disp">📞 Helpline: +91 044 4560 9696</span>
+                <a id="modal-support-chat-disp" href="https://flattrade.in" target="_blank" class="text-sky-700 underline font-bold">Live Chat ↗</a>
+              </div>
+              <div class="text-[10.5px] text-slate-600">Tell the agent: <em id="modal-support-script-disp" class="font-mono">"I need help enabling API Keys and TOTP on my account."</em></div>
+            </div>
           </div>
         </div>
 
@@ -3791,11 +3993,11 @@
 
       <!-- Action Buttons -->
       <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-100">
-        <button type="button" onclick="testBrokerHandshakeInModal()" id="btn-modal-test" class="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl transition shadow-xs">
+        <button type="button" onclick="testBrokerHandshakeInModal()" id="btn-modal-test" class="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl transition shadow-xs cursor-pointer">
           🔌 Verify Handshake
         </button>
-        <button type="button" onclick="submitCredentialsAndProceedToPayment()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
-          <span>Confirm & Proceed to Server Deployment →</span>
+        <button type="button" onclick="submitCredentialsAndProceedToPayment()" id="btn-modal-save-creds" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5 cursor-pointer">
+          <span id="btn-modal-save-text">Confirm & Proceed to Server Deployment →</span>
         </button>
       </div>
     </div>
@@ -4542,64 +4744,145 @@
     };
 
     // Broker Developer Portals & Credential Guides
+    // Broker Developer Portals, API Steps, 2FA TOTP Guides & Helpdesk Contacts
     const BROKER_GUIDES = {
       flattrade: {
+        name: "Flattrade",
         title: "Flattrade API Key & Secret",
-        clientLabel: "Flattrade Client Code",
+        clientLabel: "Flattrade Client Code (e.g. FT12345)",
         clientDefault: "",
         keyDefault: "",
         secretDefault: "",
         totpDefault: "",
         url: "https://wall.flattrade.in",
+        portalName: "wall.flattrade.in",
+        supportPhone: "+91 044 4560 9696 / 044 6132 9696",
+        supportEmail: "support@flattrade.in",
+        supportHours: "Mon - Fri, 08:30 AM – 06:00 PM IST",
+        supportChatUrl: "https://flattrade.in",
         steps: [
-          "1. Log in to wall.flattrade.in with your client code",
-          "2. Navigate to Profile > API Keys and generate free key",
-          "3. Copy your API Key & Secret and paste above"
-        ]
+          "1. Log in to <a href='https://wall.flattrade.in' target='_blank' class='text-sky-700 underline font-bold'>wall.flattrade.in</a> with your Client Code & Password",
+          "2. In the top navigation, click your <strong>Profile Icon</strong> and select <strong>API Keys</strong>",
+          "3. Click <strong>'Generate Free API Key'</strong>",
+          "4. App Name: enter <code>SkipTheChart</code>. Redirect URL: enter <code>https://skipthechart.com</code>",
+          "5. Allowed IP: paste your dedicated droplet IP shown above",
+          "6. Click Save & Generate — copy your generated <strong>API Key</strong> and <strong>API Secret</strong> and paste above"
+        ],
+        apiSteps: [
+          "1. Open <a href='https://wall.flattrade.in' target='_blank' class='text-sky-700 underline font-bold'>wall.flattrade.in</a> in your browser and log in with your Flattrade credentials.",
+          "2. Click your <strong>Profile Avatar</strong> in the top right header > select <strong>API Keys</strong> from the dropdown.",
+          "3. Click the green <strong>'Generate Free API Key'</strong> button.",
+          "4. In <strong>App Name</strong>, enter <code>SkipTheChart</code>.",
+          "5. In <strong>Redirect URL</strong>, enter <code>https://skipthechart.com</code>.",
+          "6. In <strong>Allowed IP / Static IP</strong>, paste your Dedicated Cloud Node IP (click 'Copy Allowed IP' above). This is required for exchange order routing.",
+          "7. Click <strong>Generate Key</strong>. Copy your <strong>API Key</strong> and <strong>API Secret</strong>."
+        ],
+        totpSteps: [
+          "1. In your Flattrade Wall portal (<a href='https://wall.flattrade.in' target='_blank' class='text-sky-700 underline font-bold'>wall.flattrade.in</a>), go to <strong>Profile > Security & Password > 2FA / TOTP</strong>.",
+          "2. Click <strong>'Enable External Authenticator (TOTP)'</strong>.",
+          "3. When the QR code popup appears, click <strong>'Can't scan QR? / View Key'</strong> to reveal the alphanumeric <strong>Secret TOTP Key</strong> (e.g. 16 or 32 characters).",
+          "4. Copy this Secret Key and paste it into the <strong>TOTP Secret Key</strong> box in SkipTheChart (and add it to Google Authenticator or Microsoft Authenticator).",
+          "5. <em>Why SkipTheChart needs this:</em> Enables your dedicated cloud node to automatically authenticate at 08:45 AM before markets open without needing manual SMS OTPs on your phone."
+        ],
+        supportScript: "Hello, I am setting up automated trading on SkipTheChart using a dedicated cloud server. Please help me generate my Flattrade API Key, Secret, and enable TOTP authentication for my account."
       },
       zerodha: {
-        title: "Zerodha Kite API Key & Secret",
+        name: "Zerodha",
+        title: "Zerodha Kite Connect API Key & Secret",
         clientLabel: "Kite Client ID (User ID)",
         clientDefault: "",
         keyDefault: "",
         secretDefault: "",
         totpDefault: "",
         url: "https://developers.kite.trade",
+        portalName: "developers.kite.trade",
+        supportPhone: "+91 080 4718 1888 / 080 4040 2020",
+        supportEmail: "talk@zerodha.com",
+        supportHours: "Mon - Fri, 08:30 AM – 05:00 PM IST",
+        supportChatUrl: "https://support.zerodha.com",
         steps: [
-          "1. Log into developers.kite.trade",
-          "2. Create an App named 'SkipTheChart'",
+          "1. Log into developers.kite.trade and click 'Create New App'",
+          "2. Set App Name: SkipTheChart, Redirect URL: https://skipthechart.com",
           "3. Copy your API Key & Secret and paste above"
-        ]
+        ],
+        apiSteps: [
+          "1. Open <a href='https://developers.kite.trade' target='_blank' class='text-sky-700 underline font-bold'>developers.kite.trade</a> and log in (or create a developer account).",
+          "2. Click <strong>'Create New App'</strong>.",
+          "3. Set App Name: <code>SkipTheChart</code>. Redirect URL: <code>https://skipthechart.com</code>.",
+          "4. Copy your generated <strong>API Key</strong> and <strong>API Secret</strong>."
+        ],
+        totpSteps: [
+          "1. Log into <a href='https://kite.zerodha.com' target='_blank' class='text-sky-700 underline font-bold'>kite.zerodha.com</a> > Profile > Password & Security.",
+          "2. Click <strong>'Enable External 2FA (TOTP)'</strong>.",
+          "3. Copy the TOTP Secret Key or scan with Google Authenticator.",
+          "4. Paste the Secret Key into SkipTheChart for automatic daily morning authentication."
+        ],
+        supportScript: "Hello, I need help creating a Kite Connect app and enabling external TOTP authentication on my Zerodha account for API trading."
       },
       angelone: {
+        name: "Angel One",
         title: "Angel One SmartAPI Key & Secret",
-        clientLabel: "Angel One Client ID",
+        clientLabel: "Angel One Client ID (e.g. A123456)",
         clientDefault: "",
         keyDefault: "",
         secretDefault: "",
         totpDefault: "",
         url: "https://smartapi.angelone.in",
+        portalName: "smartapi.angelone.in",
+        supportPhone: "+91 080 4748 0048",
+        supportEmail: "smartapi@angelbroking.com",
+        supportHours: "Mon - Fri, 09:00 AM – 06:00 PM IST",
+        supportChatUrl: "https://www.angelone.in/support",
         steps: [
           "1. Log into smartapi.angelone.in",
-          "2. Create an App with Trading API enabled",
-          "3. Copy SmartAPI Key and enter your MPIN"
-        ]
+          "2. Click 'Create An App' > Trading API",
+          "3. Copy SmartAPI Key and API Secret"
+        ],
+        apiSteps: [
+          "1. Log into <a href='https://smartapi.angelone.in' target='_blank' class='text-sky-700 underline font-bold'>smartapi.angelone.in</a>.",
+          "2. Click <strong>'Create An App'</strong> and select <strong>Trading API</strong>.",
+          "3. Set App Name: <code>SkipTheChart</code>, Redirect URL: <code>https://skipthechart.com</code>.",
+          "4. Copy your <strong>SmartAPI Key</strong> and <strong>API Secret</strong>."
+        ],
+        totpSteps: [
+          "1. Open Angel One mobile app > Account > Profile > Security > Enable TOTP.",
+          "2. Copy the TOTP Secret Key shown below the QR code.",
+          "3. Paste the Secret Key into SkipTheChart so your dedicated droplet can generate morning session tokens."
+        ],
+        supportScript: "Hello, please assist me with creating a SmartAPI Trading app and enabling external TOTP authentication on my Angel One account."
       },
       dhan: {
-        title: "Dhan HQ Access Token & Secret",
-        clientLabel: "Dhan Client ID",
+        name: "Dhan",
+        title: "DhanHQ Access Token & Secret",
+        clientLabel: "Dhan Client ID (10-digit ID)",
         clientDefault: "",
         keyDefault: "",
         secretDefault: "",
         totpDefault: "",
         url: "https://web.dhan.co",
+        portalName: "web.dhan.co",
+        supportPhone: "+91 022 4890 6273",
+        supportEmail: "help@dhan.co",
+        supportHours: "Mon - Fri, 09:00 AM – 06:00 PM IST",
+        supportChatUrl: "https://dhan.co",
         steps: [
-          "1. Log into web.dhan.co",
-          "2. Profile > DhanHQ Trading APIs",
-          "3. Generate Access Token and paste here"
-        ]
+          "1. Log into web.dhan.co > Profile > DhanHQ Trading APIs",
+          "2. Generate Access Token and copy Client ID"
+        ],
+        apiSteps: [
+          "1. Open <a href='https://web.dhan.co' target='_blank' class='text-sky-700 underline font-bold'>web.dhan.co</a> and log in.",
+          "2. Go to <strong>Profile > DhanHQ Trading APIs</strong>.",
+          "3. Click <strong>Access Tokens</strong> > <strong>Generate Free Token</strong> (valid for 30 days).",
+          "4. Copy your <strong>Client ID</strong> and <strong>Access Token</strong>."
+        ],
+        totpSteps: [
+          "1. Dhan provides direct 30-day API tokens. Paste your Access Token in both the API Key and API Secret fields.",
+          "2. Enable 2FA in Dhan settings using your preferred authenticator app."
+        ],
+        supportScript: "Hello Dhan Support, I need help generating my DhanHQ API Access Token for algorithmic trading integration."
       },
       upstox: {
+        name: "Upstox",
         title: "Upstox API Key & Secret",
         clientLabel: "Upstox User ID",
         clientDefault: "",
@@ -4607,13 +4890,30 @@
         secretDefault: "",
         totpDefault: "",
         url: "https://developer.upstox.com",
+        portalName: "developer.upstox.com",
+        supportPhone: "+91 022 4179 2999",
+        supportEmail: "support@upstox.com",
+        supportHours: "Mon - Fri, 09:00 AM – 06:00 PM IST",
+        supportChatUrl: "https://upstox.com",
         steps: [
-          "1. Log into developer.upstox.com",
-          "2. Create App with redirect URL",
+          "1. Log into developer.upstox.com and click 'New App'",
+          "2. Set redirect URL: https://skipthechart.com",
           "3. Copy API Key & Secret and paste above"
-        ]
+        ],
+        apiSteps: [
+          "1. Log into <a href='https://developer.upstox.com' target='_blank' class='text-sky-700 underline font-bold'>developer.upstox.com</a>.",
+          "2. Click <strong>'New App'</strong>. Name: <code>SkipTheChart</code>.",
+          "3. Redirect URL: <code>https://skipthechart.com</code>.",
+          "4. Copy your <strong>API Key</strong> and <strong>API Secret</strong>."
+        ],
+        totpSteps: [
+          "1. In Upstox web portal, navigate to Account > Settings > Two-Factor Authentication.",
+          "2. Enable TOTP using Google Authenticator and copy the backup key."
+        ],
+        supportScript: "Hello, please help me generate Upstox API credentials and setup TOTP for automated order execution."
       },
       fivepaisa: {
+        name: "5paisa",
         title: "5paisa Developer Key & Secret",
         clientLabel: "5paisa Client Code",
         clientDefault: "",
@@ -4621,13 +4921,26 @@
         secretDefault: "",
         totpDefault: "",
         url: "https://www.5paisa.com/developer-apis",
+        portalName: "5paisa.com/developer-apis",
+        supportPhone: "+91 022 3998 2727",
+        supportEmail: "support@5paisa.com",
+        supportHours: "Mon - Fri, 09:00 AM – 06:00 PM IST",
+        supportChatUrl: "https://www.5paisa.com",
         steps: [
-          "1. Go to 5paisa Developer API portal",
-          "2. Generate User Key & Encryption Secret",
-          "3. Paste credentials to authorize execution"
-        ]
+          "1. Go to 5paisa Developer API portal and generate User Key & Encryption Secret",
+          "2. Copy and paste credentials above"
+        ],
+        apiSteps: [
+          "1. Visit <a href='https://www.5paisa.com/developer-apis' target='_blank' class='text-sky-700 underline font-bold'>5paisa.com/developer-apis</a>.",
+          "2. Generate your <strong>User Key</strong> and <strong>Encryption Secret</strong>."
+        ],
+        totpSteps: [
+          "1. Open 5paisa app > Profile > Security Settings > Enable TOTP."
+        ],
+        supportScript: "Hello, I need help obtaining my 5paisa developer API keys and setting up TOTP authentication."
       },
       shoonya: {
+        name: "Shoonya (Finvasia)",
         title: "Shoonya Prism API Key & Secret",
         clientLabel: "Shoonya User ID",
         clientDefault: "",
@@ -4635,13 +4948,28 @@
         secretDefault: "",
         totpDefault: "",
         url: "https://prism.shoonya.com",
+        portalName: "prism.shoonya.com",
+        supportPhone: "+91 0172 666 4500",
+        supportEmail: "support@shoonya.com",
+        supportHours: "Mon - Fri, 08:30 AM – 06:00 PM IST",
+        supportChatUrl: "https://shoonya.com",
         steps: [
-          "1. Log into prism.shoonya.com",
-          "2. Request API Key from Services menu",
-          "3. Copy API Key & Vendor Code"
-        ]
+          "1. Log into prism.shoonya.com > Services > Request API Key",
+          "2. Copy API Key & Vendor Code"
+        ],
+        apiSteps: [
+          "1. Log into <a href='https://prism.shoonya.com' target='_blank' class='text-sky-700 underline font-bold'>prism.shoonya.com</a>.",
+          "2. Go to <strong>Services > API Key Request</strong>.",
+          "3. Copy your <strong>API Key</strong> and <strong>Vendor Code</strong>."
+        ],
+        totpSteps: [
+          "1. Open Shoonya app/portal > Profile > Security > TOTP.",
+          "2. Copy the TOTP Secret Key."
+        ],
+        supportScript: "Hello Shoonya support, please enable API key access for my account and provide instructions for TOTP setup."
       },
       fyers: {
+        name: "Fyers",
         title: "Fyers API v3 App ID & Secret Key",
         clientLabel: "Fyers Client ID",
         clientDefault: "",
@@ -4649,13 +4977,30 @@
         secretDefault: "",
         totpDefault: "",
         url: "https://myapi.fyers.in",
+        portalName: "myapi.fyers.in",
+        supportPhone: "+91 080 6000 1111",
+        supportEmail: "support@fyers.in",
+        supportHours: "Mon - Fri, 09:00 AM – 06:00 PM IST",
+        supportChatUrl: "https://fyers.in",
         steps: [
-          "1. Log into myapi.fyers.in with your Fyers credentials",
-          "2. Click 'Create App' and set Redirect URI",
+          "1. Log into myapi.fyers.in > Create App",
+          "2. Set Redirect URI: https://skipthechart.com",
           "3. Copy App ID and Secret Key"
-        ]
+        ],
+        apiSteps: [
+          "1. Log into <a href='https://myapi.fyers.in' target='_blank' class='text-sky-700 underline font-bold'>myapi.fyers.in</a>.",
+          "2. Click <strong>Create App</strong>. App Name: <code>SkipTheChart</code>.",
+          "3. Redirect URI: <code>https://skipthechart.com</code>.",
+          "4. Copy your <strong>App ID</strong> and <strong>Secret Key</strong>."
+        ],
+        totpSteps: [
+          "1. Open Fyers account settings > Security > Manage 2FA / TOTP.",
+          "2. Copy the alphanumeric TOTP key."
+        ],
+        supportScript: "Hello Fyers team, please guide me on creating an API v3 application and enabling external TOTP for automated execution."
       },
       kotakneo: {
+        name: "Kotak Neo",
         title: "Kotak Neo Trade API Consumer Key & Secret",
         clientLabel: "Neo Mobile Number / UCC",
         clientDefault: "",
@@ -4663,69 +5008,28 @@
         secretDefault: "",
         totpDefault: "",
         url: "https://neo.kotaksecurities.com",
+        portalName: "neo.kotaksecurities.com",
+        supportPhone: "1800 209 9191 / +91 022 6825 8100",
+        supportEmail: "service.securities@kotak.com",
+        supportHours: "Mon - Fri, 08:30 AM – 06:00 PM IST",
+        supportChatUrl: "https://www.kotaksecurities.com",
         steps: [
           "1. Log in to Kotak Neo Developer Portal",
           "2. Create an Application in your Neo Workspace",
           "3. Copy Consumer Key & Consumer Secret"
-        ]
-      },
-      groww: {
-        title: "Groww API Access Token & Secret",
-        clientLabel: "Groww Client ID",
-        clientDefault: "",
-        keyDefault: "",
-        secretDefault: "",
-        totpDefault: "",
-        url: "https://groww.in/developer",
-        steps: [
-          "1. Go to Groww Developer / Partner API console",
-          "2. Generate Sandbox / Production API Key",
-          "3. Paste credentials to bind dedicated droplet"
-        ]
-      },
-      hdfcsky: {
-        title: "HDFC Sky API Key & Secret Credentials",
-        clientLabel: "HDFC Sky Client Code / UCC",
-        clientDefault: "",
-        keyDefault: "",
-        secretDefault: "",
-        totpDefault: "",
-        url: "https://hdfcsky.com/developer",
-        steps: [
-          "1. Log in to HDFC Sky Developer Portal",
-          "2. Create an App under API Dashboard",
-          "3. Copy App Key & API Secret to connect"
-        ]
-      },
-      icicidirect: {
-        title: "ICICI Direct Breeze API Key & Session Token",
-        clientLabel: "ICICI Direct UCC Code",
-        clientDefault: "",
-        keyDefault: "",
-        secretDefault: "",
-        totpDefault: "",
-        url: "https://api.icicidirect.com/apiuser/home",
-        steps: [
-          "1. Register on api.icicidirect.com (Breeze API)",
-          "2. Generate Breeze App Key and Secret Key",
-          "3. Enter your active session token"
-        ]
-      },
-      motilal: {
-        title: "Motilal Oswal MOSL Open API Credentials",
-        clientLabel: "MOSL Client Code",
-        clientDefault: "",
-        keyDefault: "",
-        secretDefault: "",
-        totpDefault: "",
-        url: "https://openapi.motilaloswal.com",
-        steps: [
-          "1. Log into Motilal Oswal Open API portal",
-          "2. Create Live Trading App",
-          "3. Copy API Key & Auth Secret"
-        ]
+        ],
+        apiSteps: [
+          "1. Log into <a href='https://neo.kotaksecurities.com' target='_blank' class='text-sky-700 underline font-bold'>neo.kotaksecurities.com</a>.",
+          "2. Navigate to Developer Portal / API Access.",
+          "3. Create an Application and copy your <strong>Consumer Key</strong> & <strong>Consumer Secret</strong>."
+        ],
+        totpSteps: [
+          "1. Enable Neo TOTP in your Kotak Neo profile security settings."
+        ],
+        supportScript: "Hello Kotak Securities support, I need help generating Neo Trade API credentials and setting up TOTP for my trading account."
       },
       aliceblue: {
+        name: "Alice Blue",
         title: "Alice Blue ANT API Key & Secret",
         clientLabel: "Alice Blue User ID",
         clientDefault: "",
@@ -4733,53 +5037,51 @@
         secretDefault: "",
         totpDefault: "",
         url: "https://ant.aliceblueonline.com",
+        portalName: "ant.aliceblueonline.com",
+        supportPhone: "+91 080 3521 5000",
+        supportEmail: "askus@aliceblueindia.com",
+        supportHours: "Mon - Fri, 08:30 AM – 06:00 PM IST",
+        supportChatUrl: "https://aliceblueonline.com",
         steps: [
-          "1. Log into ant.aliceblueonline.com",
-          "2. Go to Profile > Apps & API Keys",
-          "3. Copy ANT API Key and Encryption Secret"
-        ]
+          "1. Log into ant.aliceblueonline.com > Profile > Apps & API Keys",
+          "2. Copy ANT API Key and Encryption Secret"
+        ],
+        apiSteps: [
+          "1. Log into <a href='https://ant.aliceblueonline.com' target='_blank' class='text-sky-700 underline font-bold'>ant.aliceblueonline.com</a>.",
+          "2. Go to <strong>Profile > Apps & API Keys</strong>.",
+          "3. Generate your <strong>ANT API Key</strong> and <strong>Encryption Secret</strong>."
+        ],
+        totpSteps: [
+          "1. In ANT profile settings, enable External Authenticator (TOTP) and copy the Secret Key."
+        ],
+        supportScript: "Hello Alice Blue desk, please help me generate ANT API keys and configure TOTP on my account."
       },
-      iifl: {
-        title: "IIFL Blazr API Key & Secret",
-        clientLabel: "IIFL Client Code",
+      groww: {
+        name: "Groww",
+        title: "Groww API Access Token & Secret",
+        clientLabel: "Groww Client ID",
         clientDefault: "",
         keyDefault: "",
         secretDefault: "",
         totpDefault: "",
-        url: "https://ttblaze.iifl.com",
+        url: "https://groww.in/developer",
+        portalName: "groww.in/developer",
+        supportPhone: "+91 080 6824 9147",
+        supportEmail: "support@groww.in",
+        supportHours: "Mon - Fri, 09:00 AM – 06:00 PM IST",
+        supportChatUrl: "https://groww.in",
         steps: [
-          "1. Log into IIFL Blazr Developer Portal",
-          "2. Request Open Trading API Key",
-          "3. Copy API Key and Secret Token"
-        ]
-      },
-      espresso: {
-        title: "Sharekhan Espresso API Key & Secret",
-        clientLabel: "Espresso Login ID",
-        clientDefault: "",
-        keyDefault: "",
-        secretDefault: "",
-        totpDefault: "",
-        url: "https://developer.myespresso.com",
-        steps: [
-          "1. Go to developer.myespresso.com",
-          "2. Create New App with Execution Scope",
-          "3. Copy API Key & API Secret"
-        ]
-      },
-      paytmmoney: {
-        title: "Paytm Money Open API Key & Secret",
-        clientLabel: "Paytm Money User ID",
-        clientDefault: "",
-        keyDefault: "",
-        secretDefault: "",
-        totpDefault: "",
-        url: "https://developer.paytmmoney.com",
-        steps: [
-          "1. Log into developer.paytmmoney.com",
-          "2. Create New App and enable Order Execution",
-          "3. Copy API Key & API Secret Token"
-        ]
+          "1. Go to Groww Developer / Partner API console",
+          "2. Generate API Key & Secret"
+        ],
+        apiSteps: [
+          "1. Go to <a href='https://groww.in/developer' target='_blank' class='text-sky-700 underline font-bold'>groww.in/developer</a>.",
+          "2. Generate your API Key & Secret."
+        ],
+        totpSteps: [
+          "1. Open Groww app > Profile > Security > TOTP."
+        ],
+        supportScript: "Hello Groww support, I need assistance enabling developer API access on my account."
       }
     };
 
@@ -8271,11 +8573,208 @@
       const sec = customStrategyState.security || {}; showToast("Enforced " + (sec.kill_switch_pct || 6.0) + "% Daily Kill Switch guardrail!");
     }
 
+    // =========================================================================
+    // BROKER API & 2FA TOTP GUIDANCE PANEL CONTROLLERS
+    // =========================================================================
+    function renderBrokerGuide(brokerKey) {
+      brokerKey = (brokerKey || userState.selectedBroker || 'flattrade').toLowerCase();
+      const guide = BROKER_GUIDES[brokerKey] || BROKER_GUIDES.flattrade;
+      const bName = guide.name || userState.selectedBrokerName || 'Flattrade';
+      const nodeIp = window.SERVER_CONFIG_NODE_IP || '127.0.0.1';
+
+      // 1. Update Dropdown
+      const bSelect = document.getElementById('guide-broker-select');
+      if (bSelect) bSelect.value = brokerKey;
+
+      // 2. Update Titles & Direct Portal Link
+      const mainTitle = document.getElementById('guide-panel-main-title');
+      if (mainTitle) mainTitle.innerText = `${bName}: API Key & 2FA TOTP Step-by-Step Guide`;
+
+      const apiStepTitle = document.getElementById('guide-api-step-title');
+      if (apiStepTitle) apiStepTitle.innerText = `Steps to generate ${bName} API Keys:`;
+
+      const directLink = document.getElementById('guide-portal-direct-link');
+      if (directLink) {
+        directLink.href = guide.url || 'https://wall.flattrade.in';
+        directLink.innerHTML = `<span>Open ${guide.portalName || bName + ' Portal'}</span> ↗`;
+      }
+
+      // 3. Render API Steps in Dashboard Panel
+      const apiList = document.getElementById('guide-api-steps-list');
+      if (apiList) {
+        const rawSteps = guide.apiSteps || guide.steps || [];
+        apiList.innerHTML = rawSteps.map(s => {
+          return `<div class="p-2 bg-slate-50/70 border border-slate-100 rounded-lg flex items-start gap-2"><span>•</span><div>${s}</div></div>`;
+        }).join('');
+      }
+
+      // 4. Render TOTP Steps in Dashboard Panel
+      const totpStepTitle = document.getElementById('guide-totp-step-title');
+      if (totpStepTitle) totpStepTitle.innerText = `How to Setup 2FA TOTP in ${bName}:`;
+
+      const totpList = document.getElementById('guide-totp-steps-list');
+      if (totpList) {
+        const rawTotp = guide.totpSteps || [
+          "1. Open your broker profile/settings and navigate to Security > 2FA / TOTP.",
+          "2. Click 'Enable External Authenticator (TOTP)'.",
+          "3. Copy the alphanumeric Secret Key and paste it into the TOTP box in SkipTheChart."
+        ];
+        totpList.innerHTML = rawTotp.map(s => `<div class="p-2 bg-slate-50/70 border border-slate-100 rounded-lg flex items-start gap-2"><span>•</span><div>${s}</div></div>`).join('');
+      }
+
+      // 5. Render Support Contacts & Script in Dashboard Panel
+      const supBrokerName = document.getElementById('guide-support-broker-name');
+      if (supBrokerName) supBrokerName.innerText = `Can't generate on your own? Call or chat with ${bName} support!`;
+
+      const supPhone = document.getElementById('guide-support-phone');
+      if (supPhone) supPhone.innerText = guide.supportPhone || 'Contact your broker';
+
+      const supEmail = document.getElementById('guide-support-email');
+      if (supEmail) supEmail.innerText = guide.supportEmail || 'support@broker.com';
+
+      const supChatLink = document.getElementById('guide-support-chat-link');
+      if (supChatLink) {
+        supChatLink.href = guide.supportChatUrl || guide.url || '#';
+        supChatLink.innerHTML = `<span>Open ${bName} Chat</span> ↗`;
+      }
+
+      const supScriptText = document.getElementById('guide-support-script-text');
+      if (supScriptText) {
+        supScriptText.innerText = `"${guide.supportScript || 'Hello, I need help generating API credentials and enabling TOTP authentication for my account.'}"`;
+      }
+
+      const nodeIpEl = document.getElementById('guide-node-ip-display');
+      if (nodeIpEl) nodeIpEl.innerText = nodeIp;
+
+      // 6. Also sync Modal elements if present
+      const mHeader = document.getElementById('modal-guide-header');
+      if (mHeader) mHeader.innerText = `Where to get ${bName} API Keys & TOTP:`;
+
+      const mUrl = document.getElementById('modal-guide-url');
+      if (mUrl) {
+        mUrl.href = guide.url || 'https://wall.flattrade.in';
+        mUrl.innerText = `Open ${guide.portalName || bName + ' Portal'} ↗`;
+      }
+
+      const mSteps = document.getElementById('modal-guide-steps');
+      if (mSteps) {
+        const steps = guide.apiSteps || guide.steps || [];
+        mSteps.innerHTML = steps.map(s => `<div class="p-1.5 bg-white border border-slate-200 rounded-lg">${s}</div>`).join('');
+      }
+
+      const mTotp = document.getElementById('modal-totp-steps');
+      if (mTotp) {
+        const totp = guide.totpSteps || [];
+        mTotp.innerHTML = totp.map(s => `<div class="p-1.5 bg-white border border-slate-200 rounded-lg">${s}</div>`).join('');
+      }
+
+      const mPhone = document.getElementById('modal-support-phone-disp');
+      if (mPhone) mPhone.innerText = `📞 Helpline: ${guide.supportPhone || 'Contact Broker'}`;
+
+      const mChat = document.getElementById('modal-support-chat-disp');
+      if (mChat) mChat.href = guide.supportChatUrl || guide.url || '#';
+
+      const mScript = document.getElementById('modal-support-script-disp');
+      if (mScript) mScript.innerText = `"${guide.supportScript || 'I need help enabling API Keys and TOTP.'}"`;
+    }
+
+    function toggleBrokerApiGuidePanel() {
+      const panel = document.getElementById('panel-broker-api-guide');
+      const label = document.getElementById('btn-guide-toggle-label');
+      if (!panel) return;
+      if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+        renderBrokerGuide(userState.selectedBroker || 'flattrade');
+        if (label) label.innerText = "Hide Guide";
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        panel.classList.add('hidden');
+        if (label) label.innerText = "How to Setup API & 2FA (Guide)";
+      }
+    }
+
+    function openBrokerApiGuidePanel() {
+      const panel = document.getElementById('panel-broker-api-guide');
+      const label = document.getElementById('btn-guide-toggle-label');
+      if (panel) {
+        panel.classList.remove('hidden');
+        renderBrokerGuide(userState.selectedBroker || 'flattrade');
+        if (label) label.innerText = "Hide Guide";
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function closeBrokerApiGuidePanel() {
+      const panel = document.getElementById('panel-broker-api-guide');
+      const label = document.getElementById('btn-guide-toggle-label');
+      if (panel) panel.classList.add('hidden');
+      if (label) label.innerText = "How to Setup API & 2FA (Guide)";
+    }
+
+    function switchBrokerGuideTab(brokerKey) {
+      renderBrokerGuide(brokerKey);
+    }
+
+    function setGuideSubTab(tabId) {
+      const tabs = ['tab-guide-api', 'tab-guide-totp', 'tab-guide-support'];
+      const btns = {
+        'tab-guide-api': 'btn-tab-guide-api',
+        'tab-guide-totp': 'btn-tab-guide-totp',
+        'tab-guide-support': 'btn-tab-guide-support'
+      };
+      tabs.forEach(t => {
+        const el = document.getElementById(t);
+        const btn = document.getElementById(btns[t]);
+        if (el) el.classList.toggle('hidden', t !== tabId);
+        if (btn) {
+          if (t === tabId) {
+            btn.className = "pb-2.5 px-3 border-b-2 border-sky-600 text-sky-800 flex items-center gap-1.5 cursor-pointer font-bold";
+          } else {
+            btn.className = "pb-2.5 px-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5 cursor-pointer";
+          }
+        }
+      });
+    }
+
+    function setModalGuideSubTab(tabId) {
+      const tabs = ['m-tab-api', 'm-tab-totp', 'm-tab-support'];
+      const btns = {
+        'm-tab-api': 'm-btn-tab-api',
+        'm-tab-totp': 'm-btn-tab-totp',
+        'm-tab-support': 'm-btn-tab-support'
+      };
+      tabs.forEach(t => {
+        const el = document.getElementById(t);
+        const btn = document.getElementById(btns[t]);
+        if (el) el.classList.toggle('hidden', t !== tabId);
+        if (btn) {
+          if (t === tabId) {
+            btn.className = "px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 transition cursor-pointer font-bold";
+          } else {
+            btn.className = "px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 transition cursor-pointer";
+          }
+        }
+      });
+    }
+
+    function copySupportScript() {
+      const scriptEl = document.getElementById('guide-support-script-text');
+      const text = scriptEl ? scriptEl.innerText.replace(/^"|"$/g, '') : "Hello, I need help generating API credentials and setting up TOTP on my account.";
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btn-copy-script-label');
+        if (btn) btn.innerText = "✓ Copied!";
+        showToast("📋 Support message copied! Paste it into your broker's live chat or read it to support.");
+        setTimeout(() => { if (btn) btn.innerText = "Copy Script"; }, 2500);
+      }).catch(() => {
+        showToast("Message: " + text);
+      });
+    }
+
     // Step 5: Late-Stage API Key & Secret Modal
     function openApiCredentialsModal() {
       const brokerKey = userState.selectedBroker || 'flattrade';
       const guide = BROKER_GUIDES[brokerKey] || BROKER_GUIDES.flattrade;
-      const bName = userState.selectedBrokerName || 'Flattrade';
+      const bName = userState.selectedBrokerName || guide.name || 'Flattrade';
 
       document.getElementById('modal-api-title').innerText = `Enter ${bName} API Key & Secret`;
       document.getElementById('modal-lbl-client').innerText = guide.clientLabel || 'Client Code / User ID';
@@ -8283,12 +8782,6 @@
       document.getElementById('modal-api-key').value = userState.brokerApiKey || guide.keyDefault || '';
       document.getElementById('modal-api-secret').value = userState.brokerApiSecret || guide.secretDefault || '';
       document.getElementById('modal-api-totp').value = userState.brokerTotp || guide.totpDefault || '';
-
-      document.getElementById('modal-guide-header').innerText = `Where to get ${bName} API Keys:`;
-      document.getElementById('modal-guide-url').href = guide.url || 'https://wall.flattrade.in';
-
-      const stepsHtml = (guide.steps || []).map(s => `<div>${s}</div>`).join('');
-      document.getElementById('modal-guide-steps').innerHTML = stepsHtml;
 
       const ipEl = document.getElementById('modal-node-ip-display');
       if (ipEl) ipEl.innerText = window.SERVER_CONFIG_NODE_IP || '';
@@ -8301,6 +8794,9 @@
           btnSaveText.innerText = "Confirm & Proceed to Server Deployment →";
         }
       }
+
+      // Synchronize guide contents inside the modal
+      renderBrokerGuide(brokerKey);
 
       document.getElementById('modal-api-credentials').classList.remove('hidden');
     }
@@ -8477,6 +8973,10 @@
           step1Status.innerText = "⚠️ Required";
         }
         if (step1BtnText) step1BtnText.innerText = "Add API Keys";
+      }
+
+      if (typeof renderBrokerGuide === 'function') {
+        renderBrokerGuide(userState.selectedBroker || 'flattrade');
       }
     }
 
