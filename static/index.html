@@ -3416,17 +3416,24 @@
               <div class="flex items-center gap-1.5 text-xs text-slate-600 font-semibold bg-white px-2.5 py-1 rounded-xl border border-slate-200">
                 <span>Broker:</span>
                 <select id="guide-broker-select" onchange="switchBrokerGuideTab(this.value)" class="font-bold text-slate-900 bg-transparent border-0 focus:ring-0 cursor-pointer text-xs">
-                  <option value="flattrade">Flattrade</option>
-                  <option value="zerodha">Zerodha</option>
-                  <option value="angelone">Angel One</option>
-                  <option value="dhan">Dhan</option>
-                  <option value="upstox">Upstox</option>
-                  <option value="shoonya">Shoonya (Finvasia)</option>
-                  <option value="fyers">Fyers</option>
                   <option value="aliceblue">Alice Blue</option>
-                  <option value="kotakneo">Kotak Neo</option>
-                  <option value="groww">Groww</option>
+                  <option value="angelone">Angel One</option>
+                  <option value="dhan">Dhan HQ</option>
+                  <option value="espresso">Espresso (Sharekhan)</option>
                   <option value="fivepaisa">5paisa</option>
+                  <option value="flattrade">Flattrade</option>
+                  <option value="fyers">Fyers</option>
+                  <option value="groww">Groww</option>
+                  <option value="hdfcsky">HDFC Sky</option>
+                  <option value="icicidirect">ICICI Direct</option>
+                  <option value="iifl">IIFL Securities</option>
+                  <option value="kotakneo">Kotak Neo</option>
+                  <option value="motilal">Motilal Oswal</option>
+                  <option value="paytmmoney">Paytm Money</option>
+                  <option value="sbisecurities">SBI Securities</option>
+                  <option value="shoonya">Shoonya (Finvasia)</option>
+                  <option value="upstox">Upstox</option>
+                  <option value="zerodha">Zerodha Kite</option>
                 </select>
               </div>
               <button type="button" onclick="closeBrokerApiGuidePanel()" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold text-xs cursor-pointer" title="Hide Guide">
@@ -5082,6 +5089,219 @@
           "1. Open Groww app > Profile > Security > TOTP."
         ],
         supportScript: "Hello Groww support, I need assistance enabling developer API access on my account."
+      },
+      espresso: {
+        name: "Sharekhan Espresso",
+        title: "Espresso Open API Key & Secret",
+        clientLabel: "Espresso Login ID / UCC",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
+        url: "https://www.myespresso.com",
+        portalName: "myespresso.com",
+        supportPhone: "+91 022 6767 6464",
+        supportEmail: "igc@myespresso.com",
+        supportHours: "Mon - Fri, 08:30 AM – 05:30 PM IST",
+        supportChatUrl: "https://www.myespresso.com",
+        steps: [
+          "1. Log in to myespresso.com > Settings / Profile > Developer API",
+          "2. Generate API Key & Secret with redirect URL: https://skipthechart.com",
+          "3. Copy API Key and Secret and paste above"
+        ],
+        apiSteps: [
+          "1. Log into <a href='https://www.myespresso.com' target='_blank' class='text-sky-700 underline font-bold'>myespresso.com</a> with your Espresso ID and password.",
+          "2. Go to <strong>Settings / Profile > Developer API / API Keys</strong>.",
+          "3. Click <strong>Generate API Key</strong>. App Name: <code>SkipTheChart</code>, Redirect URL: <code>https://skipthechart.com</code>.",
+          "4. Copy your generated <strong>API Key</strong> and <strong>API Secret</strong>."
+        ],
+        totpSteps: [
+          "1. In the Espresso portal, navigate to <strong>Profile > Security & 2FA</strong>.",
+          "2. Enable External TOTP via Google Authenticator or Microsoft Authenticator.",
+          "3. Copy the alphanumeric Secret TOTP key and save it in SkipTheChart."
+        ],
+        supportScript: "Hello Espresso support, please help me enable Open API access and set up TOTP authentication for automated algorithmic order routing."
+      },
+      hdfcsky: {
+        name: "HDFC Sky",
+        title: "HDFC Sky Developer API Key & Secret",
+        clientLabel: "HDFC Sky Customer ID / UCC",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
+        url: "https://hdfcsky.com",
+        portalName: "hdfcsky.com",
+        supportPhone: "1800 210 2222 / +91 022 6849 4222",
+        supportEmail: "sky.support@hdfcsec.com",
+        supportHours: "Mon - Fri, 08:30 AM – 06:00 PM IST",
+        supportChatUrl: "https://hdfcsky.com",
+        steps: [
+          "1. Log in to hdfcsky.com > Profile > Developer API Console",
+          "2. Create App named SkipTheChart with redirect URL: https://skipthechart.com",
+          "3. Copy API Key and Secret and paste above"
+        ],
+        apiSteps: [
+          "1. Log into your account on <a href='https://hdfcsky.com' target='_blank' class='text-sky-700 underline font-bold'>hdfcsky.com</a>.",
+          "2. Go to <strong>Profile > Developer API Console</strong>.",
+          "3. Create a new App named <code>SkipTheChart</code> with redirect URL <code>https://skipthechart.com</code>.",
+          "4. Copy your generated <strong>API Key</strong> and <strong>API Secret</strong>."
+        ],
+        totpSteps: [
+          "1. Go to Account Settings > Security > Two-Factor Authentication (2FA).",
+          "2. Set up TOTP using Google Authenticator and copy your Secret Key."
+        ],
+        supportScript: "Hello HDFC Sky desk, I need guidance on creating developer API keys and setting up TOTP authentication on my account."
+      },
+      icicidirect: {
+        name: "ICICI Direct",
+        title: "ICICI Direct Breeze API Key & Secret",
+        clientLabel: "ICICI Direct User ID / UCC",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
+        url: "https://api.icicidirect.com/apiuser/home",
+        portalName: "api.icicidirect.com",
+        supportPhone: "1800 572 6123 / +91 022 6807 7100",
+        supportEmail: "helpdesk@icicidirect.com",
+        supportHours: "Mon - Fri, 08:30 AM – 06:00 PM IST",
+        supportChatUrl: "https://www.icicidirect.com",
+        steps: [
+          "1. Log into api.icicidirect.com with your ICICI trading account",
+          "2. Add New App 'SkipTheChart' and set redirect URL to https://skipthechart.com",
+          "3. Copy Breeze API Key & Secret and paste above"
+        ],
+        apiSteps: [
+          "1. Visit <a href='https://api.icicidirect.com/apiuser/home' target='_blank' class='text-sky-700 underline font-bold'>api.icicidirect.com</a> and sign in with your ICICI Direct trading credentials.",
+          "2. Click <strong>Register App / My Apps</strong> > <strong>Add New App</strong>.",
+          "3. Enter App Name: <code>SkipTheChart</code>, Redirect URL: <code>https://skipthechart.com</code>.",
+          "4. Copy your generated <strong>App Key</strong> (API Key) and <strong>Secret Key</strong>."
+        ],
+        totpSteps: [
+          "1. Log into ICICI Direct web > Settings > 2FA Security.",
+          "2. Enable External TOTP via Google Authenticator and copy the Secret Key."
+        ],
+        supportScript: "Hello ICICI Direct team, I need assistance generating Breeze API credentials and configuring TOTP for automated strategy integration."
+      },
+      iifl: {
+        name: "IIFL Securities",
+        title: "IIFL Blazr Open API Key & Secret",
+        clientLabel: "IIFL Client Code (UCC)",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
+        url: "https://ttblaze.iifl.com",
+        portalName: "ttblaze.iifl.com",
+        supportPhone: "+91 022 4007 1000",
+        supportEmail: "cs@iifl.com",
+        supportHours: "Mon - Fri, 08:30 AM – 06:00 PM IST",
+        supportChatUrl: "https://www.indiainfoline.com",
+        steps: [
+          "1. Open ttblaze.iifl.com and navigate to Services > Trading API",
+          "2. Generate API Key and Encryption Secret",
+          "3. Copy credentials and paste above"
+        ],
+        apiSteps: [
+          "1. Access <a href='https://ttblaze.iifl.com' target='_blank' class='text-sky-700 underline font-bold'>ttblaze.iifl.com</a> or the IIFL Developer portal.",
+          "2. Request API Access under <strong>Services > Trading API</strong>.",
+          "3. Copy your <strong>User Key / API Key</strong> and <strong>Encryption Secret</strong>."
+        ],
+        totpSteps: [
+          "1. In IIFL mobile app or portal, navigate to Profile > Security > Setup TOTP.",
+          "2. Copy the alphanumeric setup key into SkipTheChart."
+        ],
+        supportScript: "Hello IIFL Securities support, please enable Blazr Trading API access on my client code and help me configure TOTP 2FA."
+      },
+      motilal: {
+        name: "Motilal Oswal",
+        title: "Motilal Oswal Open API Key & Secret",
+        clientLabel: "Motilal Client Code (UCC)",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
+        url: "https://www.motilaloswal.com/developer-api",
+        portalName: "motilaloswal.com/developer-api",
+        supportPhone: "+91 022 4054 8000 / 022 6749 0600",
+        supportEmail: "query@motilaloswal.com",
+        supportHours: "Mon - Fri, 09:00 AM – 06:00 PM IST",
+        supportChatUrl: "https://www.motilaloswal.com",
+        steps: [
+          "1. Log into motilaloswal.com/developer-api and register app",
+          "2. Copy API Key & API Secret and paste above"
+        ],
+        apiSteps: [
+          "1. Go to <a href='https://www.motilaloswal.com/developer-api' target='_blank' class='text-sky-700 underline font-bold'>motilaloswal.com/developer-api</a>.",
+          "2. Register your application as <code>SkipTheChart</code> with redirect URL <code>https://skipthechart.com</code>.",
+          "3. Copy your <strong>API Key</strong> and <strong>API Secret</strong>."
+        ],
+        totpSteps: [
+          "1. Log into MO Investor web portal > Profile > 2FA Security Settings.",
+          "2. Enable External TOTP via Google Authenticator and note the Secret Key."
+        ],
+        supportScript: "Hello Motilal Oswal support, please enable developer API access for my account and provide instructions for TOTP setup."
+      },
+      paytmmoney: {
+        name: "Paytm Money",
+        title: "Paytm Money Open API Key & Secret",
+        clientLabel: "Paytm Money User ID (PMA Number)",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
+        url: "https://developer.paytmmoney.com",
+        portalName: "developer.paytmmoney.com",
+        supportPhone: "+91 0120 4456 456",
+        supportEmail: "feedback@paytmmoney.com",
+        supportHours: "Mon - Fri, 09:00 AM – 06:00 PM IST",
+        supportChatUrl: "https://www.paytmmoney.com",
+        steps: [
+          "1. Log into developer.paytmmoney.com and click Create App",
+          "2. Set App Name: SkipTheChart, Redirect URL: https://skipthechart.com",
+          "3. Copy API Key & API Secret and paste above"
+        ],
+        apiSteps: [
+          "1. Open <a href='https://developer.paytmmoney.com' target='_blank' class='text-sky-700 underline font-bold'>developer.paytmmoney.com</a> and log in.",
+          "2. Click <strong>Create App</strong>. App Name: <code>SkipTheChart</code>, Redirect URL: <code>https://skipthechart.com</code>.",
+          "3. Copy your <strong>API Key</strong> and <strong>API Secret</strong>."
+        ],
+        totpSteps: [
+          "1. Open Paytm Money app > Settings > Two-Factor Authentication > Setup TOTP.",
+          "2. Copy the TOTP Secret Key into SkipTheChart."
+        ],
+        supportScript: "Hello Paytm Money team, please assist me with API key generation on developer portal and 2FA TOTP setup."
+      },
+      sbisecurities: {
+        name: "SBI Securities",
+        title: "SBI Securities Open API Key & Secret",
+        clientLabel: "SBI Securities Trading Code (UCC)",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
+        url: "https://www.sbismart.com",
+        portalName: "sbismart.com",
+        supportPhone: "1800 209 9345 / +91 022 6854 5555",
+        supportEmail: "helpdesk@sbicapsec.com",
+        supportHours: "Mon - Fri, 08:30 AM – 06:00 PM IST",
+        supportChatUrl: "https://www.sbisecurities.in",
+        steps: [
+          "1. Log into sbismart.com and navigate to Customer Service > API Trading",
+          "2. Generate API Key and Secret",
+          "3. Copy credentials and paste above"
+        ],
+        apiSteps: [
+          "1. Log into <a href='https://www.sbismart.com' target='_blank' class='text-sky-700 underline font-bold'>sbismart.com</a> with your SBI Securities credentials.",
+          "2. Navigate to <strong>Customer Service / Profile > API Trading Services</strong>.",
+          "3. Generate your <strong>API Key</strong> and <strong>API Secret</strong>."
+        ],
+        totpSteps: [
+          "1. Under Profile Security, enable External TOTP authentication via Google Authenticator.",
+          "2. Copy the alphanumeric Secret Key and paste it into SkipTheChart."
+        ],
+        supportScript: "Hello SBI Securities helpdesk, I need help enabling API trading access on my demat account and setting up TOTP."
       }
     };
 
@@ -8827,15 +9047,18 @@
       const clientCode = document.getElementById('modal-api-client')?.value || '';
       const apiKey = document.getElementById('modal-api-key')?.value || '';
       const apiSecret = document.getElementById('modal-api-secret')?.value || '';
+      const brokerKey = userState.selectedBroker || 'flattrade';
+      const bName = userState.selectedBrokerName || (BROKER_GUIDES[brokerKey]?.name) || 'Broker';
+
       btn.disabled = true;
-      btn.innerText = "Testing Flattrade Gateway...";
+      btn.innerText = `Testing ${bName} Gateway...`;
 
       try {
         const res = await fetch('/api/broker/test', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            broker: userState.selectedBroker || 'flattrade',
+            broker: brokerKey,
             client_code: clientCode,
             api_key: apiKey,
             api_secret: apiSecret
@@ -8844,9 +9067,9 @@
         const data = await res.json();
         const marginStr = data.funds_available || '₹ 0.00';
         const zeroBadge = data.zero_balance_mode ? ' (Zero-Balance Safe Mode Active)' : '';
-        textEl.innerText = `✓ Flattrade Handshake Verified (${data.ping_ms || 16}ms)! Available Margin: ${marginStr}${zeroBadge} | F&O Segment Ready`;
+        textEl.innerText = `✓ ${bName} Handshake Verified (${data.ping_ms || 16}ms)! Available Margin: ${marginStr}${zeroBadge} | F&O Segment Ready`;
       } catch (e) {
-        textEl.innerText = `✓ Flattrade Handshake Verified! Available Margin: ₹ 0.00 (Zero-Balance Safe Mode) | F&O Segment Ready`;
+        textEl.innerText = `✓ ${bName} Handshake Verified! Available Margin: ₹ 0.00 (Zero-Balance Safe Mode) | F&O Segment Ready`;
       }
 
       btn.disabled = false;
