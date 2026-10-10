@@ -5116,13 +5116,13 @@
 
     // Google Sign-In & Modal Handlers
     function openGoogleSignInModal() {
-      // If native Google Identity Services is available and configured, trigger prompt
-      if (window.google && window.google.accounts && window.GOOGLE_CLIENT_ID_CONFIGURED) {
-        window.google.accounts.id.prompt();
-        return;
-      }
       const modal = document.getElementById('modal-google-auth');
       if (modal) modal.classList.remove('hidden');
+      if (window.google && window.google.accounts && window.GOOGLE_CLIENT_ID_CONFIGURED) {
+        try {
+          window.google.accounts.id.prompt();
+        } catch(e) {}
+      }
     }
 
     function closeGoogleSignInModal() {
