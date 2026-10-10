@@ -4601,6 +4601,20 @@
         </div>
       </div>
 
+      <!-- Engine Status & API Key Config -->
+      <div class="w-full flex items-center justify-between text-[11px] bg-slate-950/70 border border-slate-800/90 rounded-xl px-3 py-1.5 -mt-1">
+        <div class="flex items-center gap-1.5">
+          <span class="text-slate-400">AI Engine:</span>
+          <span id="call-engine-badge" class="font-semibold text-emerald-400 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="call-engine-text">Checking Core...</span>
+          </span>
+        </div>
+        <button type="button" onclick="promptGeminiApiKey()" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1 hover:underline">
+          <span>🔑 Set Gemini Key</span>
+        </button>
+      </div>
+
       <!-- Caller Profile Display -->
       <div class="space-y-2.5 flex flex-col items-center">
         <div class="relative">
@@ -9984,16 +9998,137 @@
       } catch (e) {}
     }
 
+    function findBestVoiceForLanguage(langCode) {
+      if (!('speechSynthesis' in window)) return null;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return null;
+
+      const target = (langCode || 'en-IN').toLowerCase();
+      const prefix = target.split('-')[0];
+
+      // 1. Exact match on full tag (e.g., 'hi-in', 'ta-in', 'te-in', 'en-in')
+      let match = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === target);
+      if (match) return match;
+
+      // 2. Strict prefix match (e.g. 'hi', 'ta', 'te')
+      match = voices.find(v => v.lang && v.lang.toLowerCase().split(/[-_]/)[0] === prefix);
+      if (match) return match;
+
+      // 3. Name-based match for Indian native languages
+      if (prefix === 'hi') {
+        match = voices.find(v => v.name && /hindi|devanagari|lekha|neerja|kalpana/i.test(v.name));
+        if (match) return match;
+      } else if (prefix === 'ta') {
+        match = voices.find(v => v.name && /tamil|valluvar/i.test(v.name));
+        if (match) return match;
+      } else if (prefix === 'te') {
+        match = voices.find(v => v.name && /telugu|chitra/i.test(v.name));
+        if (match) return match;
+      } else if (prefix === 'en') {
+        match = voices.find(v => v.lang && /en-in/i.test(v.lang)) || voices.find(v => /india|rishi|veena/i.test(v.name));
+        if (match) return match;
+      }
+
+      // If user requested Hindi, Tamil, or Telugu, NEVER force an English voice!
+      // Return null so browser engine synthesizes natively with utterance.lang
+      if (prefix !== 'en') {
+        return null;
+      }
+
+      return voices.find(v => v.default) || voices[0] || null;
+    }
+
+    async function checkAiEngineStatus() {
+      const badge = document.getElementById('call-engine-badge');
+      const text = document.getElementById('call-engine-text');
+      const localKey = localStorage.getItem('user_gemini_api_key') || '';
+      try {
+        const res = await fetch('/api/auth/config');
+        const data = await res.json();
+        const hasKey = data.has_gemini_key || Boolean(localKey);
+        if (hasKey) {
+          if (text) text.innerText = "Gemini 2.0 Live ✨";
+          if (badge) badge.className = "font-semibold text-emerald-400 flex items-center gap-1.5";
+        } else {
+          if (text) text.innerText = "Smart Copilot ⚡";
+          if (badge) badge.className = "font-semibold text-amber-300 flex items-center gap-1.5";
+        }
+      } catch (e) {
+        if (text) text.innerText = localKey ? "Gemini 2.0 Live ✨" : "Smart Copilot ⚡";
+      }
+    }
+
+    async function promptGeminiApiKey() {
+      const currentKey = localStorage.getItem('user_gemini_api_key') || '';
+      const key = prompt(
+        "Enter your Google Gemini API Key from Google AI Studio (aistudio.google.com):\n\n" +
+        "• With Gemini key: Live conversational Gemini 2.0 Flash reasoning in Hindi, Tamil, Telugu & English\n" +
+        "• Without key: Instant offline Smart Copilot engine\n\n" +
+        "Paste key here:",
+        currentKey
+      );
+      if (key === null) return;
+      const trimmed = key.trim();
+      if (!trimmed) {
+        showToast("Key cleared. Using Smart Copilot.");
+        localStorage.removeItem('user_gemini_api_key');
+        const text = document.getElementById('call-engine-text');
+        if (text) text.innerText = "Smart Copilot ⚡";
+        return;
+      }
+      try {
+        showToast("Saving and activating Gemini key...");
+        const res = await fetch('/api/auth/save-gemini-key', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ gemini_key: trimmed })
+        });
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem('user_gemini_api_key', trimmed);
+          showToast("Gemini 2.0 Live Engine activated successfully!");
+          const text = document.getElementById('call-engine-text');
+          if (text) text.innerText = "Gemini 2.0 Live ✨";
+        } else {
+          alert("Error saving key: " + (data.error || "Unknown"));
+        }
+      } catch (err) {
+        localStorage.setItem('user_gemini_api_key', trimmed);
+        showToast("Gemini Key saved locally in browser session!");
+        const text = document.getElementById('call-engine-text');
+        if (text) text.innerText = "Gemini 2.0 Live ✨";
+      }
+    }
+
     function switchCallLanguage(lang) {
       selectedCallLanguage = lang || 'auto';
+      const langMap = { 'hi': 'hi-IN', 'ta': 'ta-IN', 'te': 'te-IN', 'en': 'en-IN', 'auto': 'en-IN' };
+      const targetLocale = langMap[lang] || 'en-IN';
+
       if (voiceRecognition) {
-        if (lang === 'hi') voiceRecognition.lang = 'hi-IN';
-        else if (lang === 'ta') voiceRecognition.lang = 'ta-IN';
-        else if (lang === 'te') voiceRecognition.lang = 'te-IN';
-        else if (lang === 'en') voiceRecognition.lang = 'en-IN';
-        else voiceRecognition.lang = 'en-IN';
+        try { voiceRecognition.stop(); } catch(e) {}
+        voiceRecognition.lang = targetLocale;
+        setTimeout(() => {
+          if (voiceCallActive && !voiceCallMuted) {
+            try { voiceRecognition.start(); } catch(e) {}
+          }
+        }, 250);
       }
-      showToast(`Voice language set to ${lang.toUpperCase()}`);
+
+      const switchGreetings = {
+        'hi': { text: "Namaste! Main ab aapse Hindi me baat karunga. Aapka broker setup kaisa chal raha hai?", lang: 'hi-IN' },
+        'ta': { text: "Vanakkam! Ini naan ungaludan Tamilil pesugiren. Ungal broker setup epdi pogudhu?", lang: 'ta-IN' },
+        'te': { text: "Namaskaram! Ika nenu mee tho Telugu lo matladatanu. Mee broker setup ela undi?", lang: 'te-IN' },
+        'en': { text: "Sure! Switching to English. How can I assist you with your broker setup today?", lang: 'en-IN' }
+      };
+
+      const greet = switchGreetings[lang];
+      if (voiceCallActive && greet) {
+        const aiTr = document.getElementById('call-transcript-ai');
+        if (aiTr) aiTr.innerText = greet.text;
+        speakVoiceText(greet.text, greet.lang);
+      }
+      showToast(`Voice language switched to ${lang.toUpperCase()}`);
     }
 
     async function startAiVoiceCall() {
@@ -10005,6 +10140,9 @@
       voiceCallMuted = false;
       voiceCallSpeaker = true;
       voiceCallSeconds = 0;
+
+      // Check Gemini status
+      checkAiEngineStatus();
 
       // Update broker context on call screen
       const bName = userState.selectedBrokerName || "Flattrade";
@@ -10124,12 +10262,15 @@
       if (aiTr) aiTr.innerText = "Thinking...";
       setWaveformActive(true);
 
+      const localGeminiKey = localStorage.getItem('user_gemini_api_key') || '';
+
       try {
         const res = await fetch('/api/ai/voice-call', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             message: query,
+            gemini_key: localGeminiKey,
             context: {
               broker: userState.selectedBrokerName || 'Flattrade',
               strategy: userState.selectedStrategyName || 'Pairs Arbitrage',
@@ -10142,6 +10283,16 @@
         const data = await res.json();
         const replyText = data.reply || "I am listening. How can I help you with your setup?";
         const langCode = data.lang || 'en-IN';
+
+        // Update engine indicator
+        const text = document.getElementById('call-engine-text');
+        if (text && data.source) {
+          if (data.source.includes('gemini')) {
+            text.innerText = "Gemini 2.0 Live ✨";
+          } else {
+            text.innerText = "Smart Copilot ⚡";
+          }
+        }
 
         if (aiTr) {
           aiTr.innerText = replyText;
@@ -10170,11 +10321,10 @@
       utterance.pitch = 1.0;
       utterance.lang = langCode || 'en-IN';
 
-      // Pick high quality Indian voice if available
-      const voices = window.speechSynthesis.getVoices();
-      if (voices && voices.length > 0) {
-        const indVoice = voices.find(v => v.lang.includes(langCode) || v.lang.includes('IN') || v.name.includes('India'));
-        if (indVoice) utterance.voice = indVoice;
+      // Pick accurate language-matched voice
+      const bestVoice = findBestVoiceForLanguage(langCode);
+      if (bestVoice) {
+        utterance.voice = bestVoice;
       }
 
       utterance.onstart = () => {

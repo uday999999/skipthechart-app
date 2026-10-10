@@ -985,6 +985,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             resp_data = {
                 "success": True,
                 "google_client_id": client_id,
+                "has_gemini_key": bool(os.environ.get("GEMINI_API_KEY", "").strip()),
                 "app_domain": "skipthechart.com"
             }
             if is_authenticated:
@@ -1186,6 +1187,28 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 })
             else:
                 self.send_json_response(400, {"success": False, "error": "Client ID cannot be empty"})
+        elif parsed.path == "/api/auth/save-gemini-key":
+            gemini_key = payload.get("gemini_key", "").strip()
+            if gemini_key:
+                os.environ["GEMINI_API_KEY"] = gemini_key
+                env_path = os.path.join(BASE_DIR, ".env")
+                try:
+                    lines = []
+                    if os.path.exists(env_path):
+                        with open(env_path, "r", encoding="utf-8") as f:
+                            lines = [l for l in f.readlines() if not l.startswith("GEMINI_API_KEY=")]
+                    lines.append(f"GEMINI_API_KEY={gemini_key}\n")
+                    with open(env_path, "w", encoding="utf-8") as f:
+                        f.writelines(lines)
+                except Exception as ex:
+                    print("Error saving GEMINI_API_KEY to .env:", ex)
+                self.send_json_response(200, {
+                    "success": True,
+                    "message": "Gemini API key saved and activated successfully!",
+                    "has_gemini_key": True
+                })
+            else:
+                self.send_json_response(400, {"success": False, "error": "Gemini API Key cannot be empty"})
         elif parsed.path == "/api/auth/logout":
             ACTIVE_SESSION["user_email"] = ""
             ACTIVE_SESSION["user_name"] = ""
@@ -1710,13 +1733,23 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             capital = user_context.get("capital", 25000)
             lang = user_context.get("language", "auto")
             
-            gemini_key = os.environ.get("GEMINI_API_KEY", "").strip()
+            gemini_key = os.environ.get("GEMINI_API_KEY", "").strip() or payload.get("gemini_key", "").strip()
             reply = None
             detected_lang = "en-IN"
             source = "gemini_live"
 
+            # Normalize language tag
+            lang_code_map = {
+                "hi": "hi-IN",
+                "ta": "ta-IN",
+                "te": "te-IN",
+                "en": "en-IN"
+            }
+            if lang in lang_code_map:
+                detected_lang = lang_code_map[lang]
+
             # Check for initial greeting or call connect
-            if not user_msg or user_msg.lower() in ["hello", "hi", "namaste", "vanakkam", "namaskara", "call_connected"]:
+            if not user_msg or user_msg.lower() in ["hello", "hi", "namaste", "vanakkam", "namaskaram", "call_connected"]:
                 if lang == "hi" or any(w in (user_msg or "").lower() for w in ["namaste", "hindi"]):
                     reply = f"Namaste! Main SkipTheChart AI Copilot hoon. Aap abhi Step {step} par hain. {broker} API ya strategy setup me main aapki kya madad kar sakta hoon?"
                     detected_lang = "hi-IN"
@@ -1730,107 +1763,123 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     reply = f"Hello! I am your SkipTheChart AI Voice Copilot. You are on Step {step}. How can I guide you with your {broker} setup or trading strategy today?"
                     detected_lang = "en-IN"
             elif gemini_key:
-                try:
-                    sys_instruction = (
-                        "You are the SkipTheChart AI Voice Concierge speaking live with an Indian retail trader on a voice telephone call. "
-                        f"Current State: Trader selected Broker '{broker}', Strategy '{strat}', Step {step}, Capital ₹{capital:,}, Server IP '127.0.0.1'. "
-                        "RULES FOR VOICE OUTPUT: "
-                        "1. Keep answers conversational, friendly, and brief (2 to 3 sentences maximum) suitable for speech. "
-                        "2. NEVER use markdown symbols, hashtags, asterisks, bullet points, or code blocks. "
-                        "3. NATIVE LANGUAGE MATCHING: If user speaks in Hindi or Hinglish, answer warmly in spoken Hindi/Hinglish. "
-                        "If in Tamil, answer in Tamil. If in Telugu, answer in Telugu. If in English, answer in polite Indian English. "
-                        "4. Always guide them clearly based on their active broker and step."
-                    )
-                    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
-                    req_payload = {
-                        "contents": [
-                            {"role": "user", "parts": [{"text": f"{sys_instruction}\n\nUser Spoke: {user_msg}"}]}
-                        ],
-                        "generationConfig": {
-                            "temperature": 0.4,
-                            "maxOutputTokens": 200
+                lang_names = {
+                    "hi": "conversational Hindi / Hinglish",
+                    "ta": "conversational Tamil",
+                    "te": "conversational Telugu",
+                    "en": "polite Indian English"
+                }
+                target_lang_desc = lang_names.get(lang, "polite Indian English or Hindi as appropriate")
+                sys_instruction = (
+                    "You are the SkipTheChart AI Voice Concierge speaking live with an Indian retail trader on a voice telephone call. "
+                    f"Current State: Trader selected Broker '{broker}', Strategy '{strat}', Step {step}, Capital ₹{capital:,}, Server IP '127.0.0.1'. "
+                    f"CRITICAL LANGUAGE RULE: The user selected language: {target_lang_desc}. "
+                    f"You MUST respond directly in {target_lang_desc}. If Hindi, speak in natural Hindi/Hinglish. If Tamil, speak in natural Tamil. If Telugu, speak in natural Telugu. Never reply in plain English if Hindi, Tamil, or Telugu is requested. "
+                    "RULES FOR VOICE OUTPUT: "
+                    "1. Keep answers conversational, friendly, and brief (2 to 3 sentences maximum) suitable for speech. "
+                    "2. NEVER use markdown symbols, asterisks, hashtags, bullet points, emojis, or code blocks. "
+                    "3. Always guide them clearly based on their active broker and step."
+                )
+                for model_candidate in ["gemini-2.0-flash", "gemini-1.5-flash"]:
+                    try:
+                        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_candidate}:generateContent?key={gemini_key}"
+                        req_payload = {
+                            "contents": [
+                                {"role": "user", "parts": [{"text": f"{sys_instruction}\n\nUser Spoke: {user_msg}"}]}
+                            ],
+                            "generationConfig": {
+                                "temperature": 0.4,
+                                "maxOutputTokens": 200
+                            }
                         }
-                    }
-                    req = urllib.request.Request(
-                        url,
-                        data=json.dumps(req_payload).encode("utf-8"),
-                        headers={"Content-Type": "application/json"}
-                    )
-                    with urllib.request.urlopen(req, timeout=7) as resp:
-                        res_data = json.loads(resp.read().decode("utf-8"))
-                        reply = res_data["candidates"][0]["content"]["parts"][0]["text"].strip()
-                        reply = re.sub(r'[*#_`~>\[\]]', '', reply)
-                except Exception as ex:
-                    print("Voice Gemini Live call error:", ex)
-                    reply = None
+                        req = urllib.request.Request(
+                            url,
+                            data=json.dumps(req_payload).encode("utf-8"),
+                            headers={"Content-Type": "application/json"}
+                        )
+                        with urllib.request.urlopen(req, timeout=7) as resp:
+                            res_data = json.loads(resp.read().decode("utf-8"))
+                            reply = res_data["candidates"][0]["content"]["parts"][0]["text"].strip()
+                            reply = re.sub(r'[*#_`~>\[\]]', '', reply)
+                            source = f"gemini_{model_candidate}"
+                            break
+                    except Exception as ex:
+                        print(f"Voice {model_candidate} call error:", ex)
+                        reply = None
 
             if not reply:
-                source = "hybrid_voice_engine"
+                source = "smart_copilot"
                 lower = user_msg.lower()
-                is_hindi = any(w in lower for w in ["kaise", "kya", "bhai", "namaste", "batao", "kaha", "karna", "hai", "mujhe", "mera", "paise", "rupaye"])
-                is_tamil = any(w in lower for w in ["epdi", "enna", "pannanum", "vanakkam", "solunga", "therila"])
-                is_telugu = any(w in lower for w in ["ela", "cheyyali", "enti", "namaskaram", "sahayam", "cheppandi"])
+                if lang == "hi":
+                    is_hindi, is_tamil, is_telugu = True, False, False
+                elif lang == "ta":
+                    is_hindi, is_tamil, is_telugu = False, True, False
+                elif lang == "te":
+                    is_hindi, is_tamil, is_telugu = False, False, True
+                else:
+                    is_hindi = any(w in lower for w in ["kaise", "kya", "bhai", "namaste", "batao", "kaha", "karna", "hai", "mujhe", "mera", "paise", "rupaye"])
+                    is_tamil = any(w in lower for w in ["epdi", "enna", "pannanum", "vanakkam", "solunga", "therila"])
+                    is_telugu = any(w in lower for w in ["ela", "cheyyali", "enti", "namaskaram", "sahayam", "cheppandi"])
+
+                if is_hindi: detected_lang = "hi-IN"
+                elif is_tamil: detected_lang = "ta-IN"
+                elif is_telugu: detected_lang = "te-IN"
+                else: detected_lang = "en-IN"
 
                 if "api" in lower or "key" in lower or "secret" in lower:
                     if is_hindi:
                         reply = f"{broker} me API key generate karne ke liye, unke developer portal par login karein. Naya app create karke Allowed IP me 127.0.0.1 daalein, aur API key aur Secret yahan paste karein."
-                        detected_lang = "hi-IN"
                     elif is_tamil:
                         reply = f"{broker} developer portal la login panni new app create pannunga. Allowed IP la 127.0.0.1 enter panni, API key matrum Secret inge paste pannunga."
-                        detected_lang = "ta-IN"
                     elif is_telugu:
                         reply = f"{broker} developer portal lo login ayyi new app create cheyyandi. Allowed IP lo 127.0.0.1 enter chesi, API key mariyu Secret ikkada paste cheyyandi."
-                        detected_lang = "te-IN"
                     else:
                         reply = f"To generate your {broker} API key, log into their developer portal, create an app, set Allowed IP to 127.0.0.1, and copy your API key and secret into SkipTheChart."
-                        detected_lang = "en-IN"
                 elif "totp" in lower or "authenticator" in lower or "2fa" in lower:
                     if is_hindi:
                         reply = f"TOTP setup ke liye apne {broker} profile me jaakar Security & 2FA open karein. Enable External TOTP par click karein aur Secret Key ko copy karke SkipTheChart me paste karein."
-                        detected_lang = "hi-IN"
                     elif is_tamil:
                         reply = f"TOTP setup ku ungal {broker} settings la Security & 2FA ponga. External TOTP enable panni, Secret Key ah copy panni SkipTheChart la paste pannunga."
-                        detected_lang = "ta-IN"
                     elif is_telugu:
                         reply = f"TOTP setup kosam mee {broker} settings lo Security & 2FA vellandi. External TOTP enable chesi, Secret Key ni copy chesi ikkada paste cheyyandi."
-                        detected_lang = "te-IN"
                     else:
                         reply = f"For TOTP setup, open {broker} security settings, enable external authenticator, and copy the secret alphanumeric key into SkipTheChart so your bot can authenticate automatically each morning."
-                        detected_lang = "en-IN"
                 elif "ip" in lower or "whitelist" in lower or "droplet" in lower:
                     if is_hindi:
                         reply = f"Aapka dedicated server IP 127.0.0.1 hai. Ise apne {broker} developer portal ke Allowed IP box me enter karna zaroori hai taaki exchange order reject na kare."
-                        detected_lang = "hi-IN"
+                    elif is_tamil:
+                        reply = f"Ungal dedicated server IP 127.0.0.1. Idhai {broker} developer portal la Allowed IP box la enter pannunga, appo dhaan live order reject aagadhu."
+                    elif is_telugu:
+                        reply = f"Mee dedicated cloud server IP 127.0.0.1. Dheenni mee {broker} developer portal Allowed IP lo enter cheyyandi, appudu orders reject avvavu."
                     else:
                         reply = f"Your dedicated cloud server IP is 127.0.0.1. You must paste this into your {broker} developer portal's Allowed IP field so the exchange permits live orders."
-                        detected_lang = "en-IN"
                 elif "strategy" in lower or "capital" in lower or "margin" in lower or "risk" in lower:
                     if is_hindi:
                         reply = f"Aapka capital safe rakhne ke liye SkipTheChart sirf 70 percent equity utilize karta hai, aur baki 30 percent buffer SEBI margin spikes aur slippage se bachata hai."
-                        detected_lang = "hi-IN"
+                    elif is_tamil:
+                        reply = f"Ungal capital safe ah irukka, SkipTheChart 70 percent equity mattume use pannum. Matha 30 percent margin buffer ah vekkum."
+                    elif is_telugu:
+                        reply = f"Mee capital safe ga undadaniki, SkipTheChart kevalam 70 percent equity matrame vaduthundi. Migilina 30 percent buffer ga untundi."
                     else:
                         reply = f"For safety, SkipTheChart utilizes only 70 percent of your capital, keeping a 30 percent buffer for exchange margin spikes and peak volatility."
-                        detected_lang = "en-IN"
                 elif "help" in lower or "support" in lower or "call" in lower:
                     if is_hindi:
                         reply = f"Agar aap khud API generate nahi kar pa rahe hain, toh aap seedhe apne {broker} customer care ko call ya chat kar sakte hain. Screen par unka number aur helpline script diya gaya hai."
-                        detected_lang = "hi-IN"
+                    elif is_tamil:
+                        reply = f"Ungalukku help venumna, direct ah {broker} customer care ku call pannalam. Screen la helpline number matrum script irukku."
+                    elif is_telugu:
+                        reply = f"Meeru direct ga mee {broker} customer care ki call cheyyoppachu. Screen pai vaari phone number mariyu support script unnayi."
                     else:
                         reply = f"If you need manual assistance, you can also directly call or chat with {broker} helpline. Their direct phone number and copyable script are shown on your screen."
-                        detected_lang = "en-IN"
                 else:
                     if is_hindi:
                         reply = f"Main aapki puri madad karunga. Aap mujhse {broker} API, 2FA TOTP setup, ya strategy risk ke baare me kuch bhi pooch sakte hain."
-                        detected_lang = "hi-IN"
                     elif is_tamil:
                         reply = f"Naan ungalukku help panren. Ungal {broker} API, TOTP setup, illana strategy pathi enna venalum kelunga."
-                        detected_lang = "ta-IN"
                     elif is_telugu:
                         reply = f"Nenu meeku sahayam chestanu. Mee {broker} API, TOTP setup, leda strategy gurinchi emaina adagandi."
-                        detected_lang = "te-IN"
                     else:
                         reply = f"I am listening. Feel free to ask me anything about your {broker} connection, 2FA authenticator, droplet IP whitelisting, or trading strategies."
-                        detected_lang = "en-IN"
 
             self.send_json_response(200, {
                 "success": True,
