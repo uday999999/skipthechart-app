@@ -843,6 +843,28 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "is_live": False,
                 "message": "No active live Flattrade session"
             })
+        elif parsed.path == "/api/broker/credentials":
+            creds_file = os.path.join(os.path.dirname(__file__), "broker_credentials.json")
+            if os.path.exists(creds_file):
+                try:
+                    with open(creds_file, "r") as cf:
+                        creds = json.load(cf)
+                    self.send_json_response(200, {
+                        "success": True,
+                        "broker": creds.get("broker", "flattrade"),
+                        "client_code": creds.get("client_code", ""),
+                        "has_api_key": bool(creds.get("api_key")),
+                        "api_key": creds.get("api_key", ""),
+                        "has_api_secret": bool(creds.get("api_secret")),
+                        "has_totp": bool(creds.get("totp_secret", ""))
+                    })
+                    return
+                except Exception:
+                    pass
+            self.send_json_response(200, {
+                "success": False,
+                "message": "No credentials stored"
+            })
         elif parsed.path == "/api/data/status":
             summary = {}
             for k, v in HISTORICAL_DATASETS.items():
@@ -1303,6 +1325,37 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "message": f"Session transferred to {new_name}. {old_device} has been disconnected.",
                 "active_session": ACTIVE_SESSION
             })
+        elif parsed.path == "/api/broker/credentials/save":
+            broker = payload.get("broker", "flattrade").lower()
+            client_code = payload.get("client_code", "").strip()
+            api_key = payload.get("api_key", "").strip()
+            api_secret = payload.get("api_secret", "").strip()
+            totp_secret = payload.get("totp_secret", "").strip()
+
+            creds = {
+                "broker": broker,
+                "client_code": client_code,
+                "api_key": api_key,
+                "api_secret": api_secret,
+                "totp_secret": totp_secret,
+                "updated_at": time.time()
+            }
+            creds_file = os.path.join(os.path.dirname(__file__), "broker_credentials.json")
+            try:
+                with open(creds_file, "w") as cf:
+                    json.dump(creds, cf, indent=2)
+            except Exception as e:
+                print(f"Error saving broker credentials: {e}")
+
+            self.send_json_response(200, {
+                "success": True,
+                "broker": broker,
+                "client_code": client_code,
+                "has_api_key": bool(api_key),
+                "has_api_secret": bool(api_secret),
+                "has_totp": bool(totp_secret),
+                "message": f"Broker credentials for {broker.upper()} ({client_code}) saved securely on your dedicated cloud droplet."
+            })
         elif parsed.path == "/api/broker/test":
             broker = payload.get("broker", "flattrade").lower()
             client_code = payload.get("client_code", "").strip()
@@ -1332,7 +1385,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     pass
 
             is_live_active = bool(live_session and live_session.get("session_token"))
-            active_client = live_session.get("client_id", client_code) if live_session else (client_code or "FZ59015")
+            active_client = live_session.get("client_id", client_code) if live_session else (client_code or "Client Code Ready")
             funds_display = live_session.get("funds_available", "₹ 0.00") if live_session else "₹ 0.00"
 
             self.send_json_response(200, {
@@ -1353,6 +1406,18 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             api_key = payload.get("api_key", "").strip()
             api_secret = payload.get("api_secret", "").strip()
             client_id = payload.get("client_id", "").strip()
+
+            if not api_key or not api_secret or not client_id:
+                creds_file = os.path.join(os.path.dirname(__file__), "broker_credentials.json")
+                if os.path.exists(creds_file):
+                    try:
+                        with open(creds_file, "r") as cf:
+                            saved_c = json.load(cf)
+                            if not api_key: api_key = saved_c.get("api_key", "").strip()
+                            if not api_secret: api_secret = saved_c.get("api_secret", "").strip()
+                            if not client_id: client_id = saved_c.get("client_code", "").strip()
+                    except Exception:
+                        pass
 
             if not req_code:
                 self.send_json_response(400, {"success": False, "error": "Missing request_code or code in payload"})

@@ -3242,6 +3242,25 @@
           </div>
         </div>
 
+        <!-- Broker API Status Card in Step 5 -->
+        <div class="p-3.5 bg-slate-50 border border-slate-200/90 rounded-2xl flex flex-wrap items-center justify-between gap-2.5 text-xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center font-bold text-sm">
+              🔑
+            </div>
+            <div>
+              <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                <span>Broker API Integration:</span>
+                <span id="pay-broker-tag" class="font-mono text-emerald-800 font-bold bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded text-[11px]">FLATTRADE</span>
+              </div>
+              <div class="text-[11px] text-slate-500" id="pay-creds-hint">Connect API Key, Secret & Client Code for live order routing.</div>
+            </div>
+          </div>
+          <button type="button" onclick="openApiCredentialsModal()" class="px-3.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-bold rounded-xl text-xs transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+            <span>⚙️</span> <span id="pay-creds-btn-text">Enter / Verify API Keys</span>
+          </button>
+        </div>
+
         <!-- Pay Button -->
         <button type="button" onclick="completeServerSubscriptionPayment()" id="btn-pay-subscription" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base rounded-2xl shadow-xl shadow-emerald-600/20 transition flex items-center justify-center gap-2">
           <span>🚀</span>
@@ -3308,29 +3327,88 @@
         </div>
       </div>
 
-      <!-- API Connection & Access Token Bar (Matching Reference) -->
-      <div class="bg-white border border-slate-200/90 rounded-2xl p-4 space-y-3 shadow-sm ms-glass-card">
-        <div class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center justify-between">
-          <span id="dash-broker-conn-title">API CONNECTION (FLATTRADE)</span>
-          <span class="text-[10px] text-emerald-700 font-mono font-bold">✓ Cloud Worker: ONLINE (SAMPLE / DEMO)</span>
+      <!-- API Connection & Access Token Bar -->
+      <div class="bg-white border border-slate-200/90 rounded-2xl p-4 space-y-3.5 shadow-sm ms-glass-card">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🔌</span>
+            <div>
+              <span id="dash-broker-conn-title" class="text-xs font-black text-slate-900 uppercase tracking-wider">API CONNECTION (FLATTRADE)</span>
+              <span id="dash-broker-conn-subtitle" class="text-[11px] text-slate-500 block font-normal">Dedicated Cloud OMS Node Integration</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="openApiCredentialsModal()" id="dash-btn-open-creds" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+              <span>🔑</span> <span id="dash-btn-creds-text">Configure API Keys</span>
+            </button>
+            <span id="dash-cloud-worker-badge" class="text-[10px] text-emerald-700 font-mono font-bold bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">✓ Cloud Node: ONLINE</span>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center text-xs">
-          <!-- Step 1: Generate Access Token Button -->
-          <div class="lg:col-span-3">
-            <div class="text-[10px] text-slate-500 mb-1 font-medium">Step 1: Daily Auth Token</div>
-            <button type="button" onclick="generateDailyToken()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-xs">
-              <span>🔑</span> GET TODAY'S TOKEN
+        <!-- Attention Banner if Keys Missing -->
+        <div id="dash-creds-missing-banner" class="p-3 bg-amber-50 border border-amber-300 rounded-xl flex flex-wrap items-center justify-between gap-2.5 text-xs">
+          <div class="flex items-center gap-2 text-amber-900">
+            <span class="text-lg">⚠️</span>
+            <div>
+              <div class="font-bold">Broker API Keys Not Configured Yet</div>
+              <div class="text-[11px] text-amber-800">Your dedicated cloud node requires your Flattrade Client Code, API Key & Secret to place trades.</div>
+            </div>
+          </div>
+          <button type="button" onclick="openApiCredentialsModal()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-black rounded-xl text-xs shadow-xs transition cursor-pointer flex items-center gap-1.5">
+            <span>🔑</span> Add Flattrade API Keys Now →
+          </button>
+        </div>
+
+        <!-- Success Banner if Keys Active -->
+        <div id="dash-creds-active-banner" class="p-3 bg-emerald-50/80 border border-emerald-300 rounded-xl flex flex-wrap items-center justify-between gap-2.5 text-xs hidden">
+          <div class="flex items-center gap-2 text-emerald-950">
+            <span class="text-base text-emerald-600">✓</span>
+            <div>
+              <div class="font-bold flex items-center gap-2">
+                <span>Broker Credentials Linked:</span>
+                <span id="dash-creds-client-badge" class="font-mono bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">Client: FT...</span>
+              </div>
+              <div class="text-[11px] text-emerald-800">
+                Dedicated Node Static IP: <span class="font-mono font-bold" id="dash-creds-ip-display">Loading...</span> (Whitelist in Flattrade portal)
+              </div>
+            </div>
+          </div>
+          <button type="button" onclick="openApiCredentialsModal()" class="px-3 py-1.5 bg-white hover:bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold rounded-xl text-xs transition cursor-pointer flex items-center gap-1">
+            <span>✎</span> Edit Keys
+          </button>
+        </div>
+
+        <!-- Step-by-Step Connection Row -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center text-xs">
+          <!-- Step 1: Credentials Setup -->
+          <div class="md:col-span-3">
+            <div class="text-[10px] text-slate-500 mb-1 font-semibold flex items-center justify-between">
+              <span>Step 1: Broker API Keys</span>
+              <span id="dash-step1-status" class="text-amber-700 font-mono font-bold">⚠️ Required</span>
+            </div>
+            <button type="button" onclick="openApiCredentialsModal()" class="w-full py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-xs cursor-pointer">
+              <span>🔑</span> <span id="dash-step1-btn-text">Add API Keys</span>
             </button>
           </div>
 
-          <!-- Step 2: Access Token Display & Save -->
-          <div class="lg:col-span-9 flex items-center gap-2">
+          <!-- Step 2: Daily Auth Token -->
+          <div class="md:col-span-3">
+            <div class="text-[10px] text-slate-500 mb-1 font-semibold flex items-center justify-between">
+              <span>Step 2: Daily Session</span>
+              <span class="text-slate-400 font-mono">08:45 AM</span>
+            </div>
+            <button type="button" onclick="generateDailyToken()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-xs cursor-pointer">
+              <span>⚡</span> GET TODAY'S TOKEN
+            </button>
+          </div>
+
+          <!-- Step 3: Active Session Token -->
+          <div class="md:col-span-6 flex items-center gap-2">
             <div class="flex-1">
-              <div class="text-[10px] text-slate-500 mb-1 font-medium">Step 2: Active Session Token (Daily Handshake at 08:45 AM)</div>
+              <div class="text-[10px] text-slate-500 mb-1 font-semibold">Step 3: Active Session Token (Daily Handshake)</div>
               <input type="text" id="dash-access-token" value="No session token active" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono text-xs">
             </div>
-            <button type="button" onclick="restartBotWorker()" class="mt-4 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition flex items-center gap-1.5 shrink-0 text-xs shadow-xs">
+            <button type="button" onclick="restartBotWorker()" class="mt-4 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition flex items-center gap-1.5 shrink-0 text-xs shadow-xs cursor-pointer">
               Save & Restart Bot
             </button>
           </div>
@@ -4377,7 +4455,12 @@
         hasBacktested: false,
         subscriptionActive: false,
         botRunning: false,
-        dailySwitchesRemaining: 3
+        dailySwitchesRemaining: 3,
+        brokerApiKey: '',
+        brokerApiSecret: '',
+        brokerClientCode: '',
+        brokerTotp: '',
+        brokerSessionToken: ''
       };
     }
 
@@ -4477,10 +4560,10 @@
       zerodha: {
         title: "Zerodha Kite API Key & Secret",
         clientLabel: "Kite Client ID (User ID)",
-        clientDefault: "ZR9821",
-        keyDefault: "kite_api_key_z98124",
-        secretDefault: "demo_secret_token_x991",
-        totpDefault: "JBSWY3DPEHPK3PXP",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://developers.kite.trade",
         steps: [
           "1. Log into developers.kite.trade",
@@ -4491,10 +4574,10 @@
       angelone: {
         title: "Angel One SmartAPI Key & Secret",
         clientLabel: "Angel One Client ID",
-        clientDefault: "A918234",
-        keyDefault: "smart_api_key_88201a",
-        secretDefault: "smart_secret_7729bc",
-        totpDefault: "982134",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://smartapi.angelone.in",
         steps: [
           "1. Log into smartapi.angelone.in",
@@ -4505,10 +4588,10 @@
       dhan: {
         title: "Dhan HQ Access Token & Secret",
         clientLabel: "Dhan Client ID",
-        clientDefault: "1100982341",
-        keyDefault: "dhan_token_eyJhbGciOi...",
-        secretDefault: "dhan_secret_9982aa",
-        totpDefault: "123456",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://web.dhan.co",
         steps: [
           "1. Log into web.dhan.co",
@@ -4519,10 +4602,10 @@
       upstox: {
         title: "Upstox API Key & Secret",
         clientLabel: "Upstox User ID",
-        clientDefault: "UP654321",
-        keyDefault: "upstox_api_key_88912",
-        secretDefault: "upstox_secret_9918ff",
-        totpDefault: "654321",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://developer.upstox.com",
         steps: [
           "1. Log into developer.upstox.com",
@@ -4533,10 +4616,10 @@
       fivepaisa: {
         title: "5paisa Developer Key & Secret",
         clientLabel: "5paisa Client Code",
-        clientDefault: "5P982341",
-        keyDefault: "5p_user_key_99214a",
-        secretDefault: "5p_enc_secret_8810c",
-        totpDefault: "5P_APP_SOURCE_PIN",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://www.5paisa.com/developer-apis",
         steps: [
           "1. Go to 5paisa Developer API portal",
@@ -4547,10 +4630,10 @@
       shoonya: {
         title: "Shoonya Prism API Key & Secret",
         clientLabel: "Shoonya User ID",
-        clientDefault: "FA98124",
-        keyDefault: "shoonya_api_key_7712",
-        secretDefault: "shoonya_vendor_code_88",
-        totpDefault: "SHOONYATOTP7712",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://prism.shoonya.com",
         steps: [
           "1. Log into prism.shoonya.com",
@@ -4561,10 +4644,10 @@
       fyers: {
         title: "Fyers API v3 App ID & Secret Key",
         clientLabel: "Fyers Client ID",
-        clientDefault: "FY01824",
-        keyDefault: "FYERS_APP_ID_992144",
-        secretDefault: "fyers_secret_token_8812a",
-        totpDefault: "123456",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://myapi.fyers.in",
         steps: [
           "1. Log into myapi.fyers.in with your Fyers credentials",
@@ -4575,10 +4658,10 @@
       kotakneo: {
         title: "Kotak Neo Trade API Consumer Key & Secret",
         clientLabel: "Neo Mobile Number / UCC",
-        clientDefault: "9876543210",
-        keyDefault: "neo_consumer_key_88192a",
-        secretDefault: "neo_consumer_secret_991b",
-        totpDefault: "982134",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://neo.kotaksecurities.com",
         steps: [
           "1. Log in to Kotak Neo Developer Portal",
@@ -4589,10 +4672,10 @@
       groww: {
         title: "Groww API Access Token & Secret",
         clientLabel: "Groww Client ID",
-        clientDefault: "GRW981245",
-        keyDefault: "grw_api_key_live_88120",
-        secretDefault: "grw_secret_token_99182",
-        totpDefault: "456123",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://groww.in/developer",
         steps: [
           "1. Go to Groww Developer / Partner API console",
@@ -4603,10 +4686,10 @@
       hdfcsky: {
         title: "HDFC Sky API Key & Secret Credentials",
         clientLabel: "HDFC Sky Client Code / UCC",
-        clientDefault: "HDFC771092",
-        keyDefault: "hdfc_sky_app_key_8820",
-        secretDefault: "hdfc_sky_secret_99182x",
-        totpDefault: "123456",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://hdfcsky.com/developer",
         steps: [
           "1. Log in to HDFC Sky Developer Portal",
@@ -4617,10 +4700,10 @@
       icicidirect: {
         title: "ICICI Direct Breeze API Key & Session Token",
         clientLabel: "ICICI Direct UCC Code",
-        clientDefault: "ICICI88214",
-        keyDefault: "breeze_api_key_88912x",
-        secretDefault: "breeze_secret_key_7718c",
-        totpDefault: "BREEZE_AUTH_KEY",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://api.icicidirect.com/apiuser/home",
         steps: [
           "1. Register on api.icicidirect.com (Breeze API)",
@@ -4631,10 +4714,10 @@
       motilal: {
         title: "Motilal Oswal MOSL Open API Credentials",
         clientLabel: "MOSL Client Code",
-        clientDefault: "MOSL91823",
-        keyDefault: "mosl_api_key_77102a",
-        secretDefault: "mosl_secret_key_8819b",
-        totpDefault: "123456",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://openapi.motilaloswal.com",
         steps: [
           "1. Log into Motilal Oswal Open API portal",
@@ -4645,10 +4728,10 @@
       aliceblue: {
         title: "Alice Blue ANT API Key & Secret",
         clientLabel: "Alice Blue User ID",
-        clientDefault: "AB081924",
-        keyDefault: "ant_api_key_881249",
-        secretDefault: "ant_secret_enc_99182",
-        totpDefault: "ALICETOTP123",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://ant.aliceblueonline.com",
         steps: [
           "1. Log into ant.aliceblueonline.com",
@@ -4659,10 +4742,10 @@
       iifl: {
         title: "IIFL Blazr API Key & Secret",
         clientLabel: "IIFL Client Code",
-        clientDefault: "IIFL09124",
-        keyDefault: "blazr_api_key_88102a",
-        secretDefault: "blazr_secret_key_9921b",
-        totpDefault: "IIFLTOTP8821",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://ttblaze.iifl.com",
         steps: [
           "1. Log into IIFL Blazr Developer Portal",
@@ -4673,10 +4756,10 @@
       espresso: {
         title: "Sharekhan Espresso API Key & Secret",
         clientLabel: "Espresso Login ID",
-        clientDefault: "ESP981245",
-        keyDefault: "espresso_key_77192a",
-        secretDefault: "espresso_secret_8810c",
-        totpDefault: "982134",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://developer.myespresso.com",
         steps: [
           "1. Go to developer.myespresso.com",
@@ -4687,10 +4770,10 @@
       paytmmoney: {
         title: "Paytm Money Open API Key & Secret",
         clientLabel: "Paytm Money User ID",
-        clientDefault: "PM8819245",
-        keyDefault: "pm_api_key_881299a",
-        secretDefault: "pm_secret_key_99182c",
-        totpDefault: "PMONEY_TOTP",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://developer.paytmmoney.com",
         steps: [
           "1. Log into developer.paytmmoney.com",
@@ -4949,6 +5032,17 @@
         runSimpleBacktestSimulation();
       } else if (stepNum === 5) {
         showScreen('screen-payment');
+        const payTag = document.getElementById('pay-broker-tag');
+        if (payTag) payTag.innerText = (userState.selectedBrokerName || 'FLATTRADE').toUpperCase();
+        const payHint = document.getElementById('pay-creds-hint');
+        const payBtnText = document.getElementById('pay-creds-btn-text');
+        if (userState.brokerApiKey && userState.brokerClientCode) {
+          if (payHint) payHint.innerHTML = `<span class="text-emerald-700 font-bold">✓ Credentials configured for ${userState.brokerClientCode}</span> (API Key active)`;
+          if (payBtnText) payBtnText.innerText = "Edit API Keys";
+        } else {
+          if (payHint) payHint.innerText = "Connect API Key, Secret & Client Code for live order routing.";
+          if (payBtnText) payBtnText.innerText = "Enter / Verify API Keys";
+        }
       }
 
       if (typeof updateOnboardingGuideUI === 'function') {
@@ -6404,9 +6498,15 @@
     function proceedFromBacktestToPaymentOrLive() {
       if (userState.subscriptionActive) {
         showScreen('screen-live-dashboard');
+        updateLiveDashboardUI();
         showNotification('Strategy deployed and bot running live on your droplet!', 'success');
       } else {
-        goToStep(5);
+        // If broker API keys are not entered yet, prompt with the API modal before payment
+        if (!userState.brokerApiKey) {
+          openApiCredentialsModal();
+        } else {
+          goToStep(5);
+        }
       }
     }
 
@@ -8175,25 +8275,38 @@
     function openApiCredentialsModal() {
       const brokerKey = userState.selectedBroker || 'flattrade';
       const guide = BROKER_GUIDES[brokerKey] || BROKER_GUIDES.flattrade;
+      const bName = userState.selectedBrokerName || 'Flattrade';
 
-      document.getElementById('modal-api-title').innerText = `Enter ${userState.selectedBrokerName} API Key & Secret`;
-      document.getElementById('modal-lbl-client').innerText = guide.clientLabel;
-      document.getElementById('modal-api-client').value = guide.clientDefault;
-      document.getElementById('modal-api-key').value = guide.keyDefault;
-      document.getElementById('modal-api-secret').value = guide.secretDefault;
-      document.getElementById('modal-api-totp').value = guide.totpDefault;
+      document.getElementById('modal-api-title').innerText = `Enter ${bName} API Key & Secret`;
+      document.getElementById('modal-lbl-client').innerText = guide.clientLabel || 'Client Code / User ID';
+      document.getElementById('modal-api-client').value = userState.brokerClientCode || guide.clientDefault || '';
+      document.getElementById('modal-api-key').value = userState.brokerApiKey || guide.keyDefault || '';
+      document.getElementById('modal-api-secret').value = userState.brokerApiSecret || guide.secretDefault || '';
+      document.getElementById('modal-api-totp').value = userState.brokerTotp || guide.totpDefault || '';
 
-      document.getElementById('modal-guide-header').innerText = `Where to get ${userState.selectedBrokerName} API Keys:`;
-      document.getElementById('modal-guide-url').href = guide.url;
+      document.getElementById('modal-guide-header').innerText = `Where to get ${bName} API Keys:`;
+      document.getElementById('modal-guide-url').href = guide.url || 'https://wall.flattrade.in';
 
-      const stepsHtml = guide.steps.map(s => `<div>${s}</div>`).join('');
+      const stepsHtml = (guide.steps || []).map(s => `<div>${s}</div>`).join('');
       document.getElementById('modal-guide-steps').innerHTML = stepsHtml;
 
       const ipEl = document.getElementById('modal-node-ip-display');
       if (ipEl) ipEl.innerText = window.SERVER_CONFIG_NODE_IP || '';
 
+      const btnSaveText = document.getElementById('btn-modal-save-text');
+      if (btnSaveText) {
+        if (userState.subscriptionActive) {
+          btnSaveText.innerText = "Save & Update API Credentials";
+        } else {
+          btnSaveText.innerText = "Confirm & Proceed to Server Deployment →";
+        }
+      }
+
       document.getElementById('modal-api-credentials').classList.remove('hidden');
     }
+
+    // Backwards-compatibility alias
+    window.openBrokerApiSetupModal = openApiCredentialsModal;
 
     function closeApiCredentialsModal() {
       document.getElementById('modal-api-credentials').classList.add('hidden');
@@ -8236,9 +8349,49 @@
       btn.innerText = "🔌 Verify Handshake";
     }
 
-    function submitCredentialsAndProceedToPayment() {
+    async function submitCredentialsAndProceedToPayment() {
+      const client = (document.getElementById('modal-api-client')?.value || '').trim();
+      const apiKey = (document.getElementById('modal-api-key')?.value || '').trim();
+      const apiSecret = (document.getElementById('modal-api-secret')?.value || '').trim();
+      const totp = (document.getElementById('modal-api-totp')?.value || '').trim();
+
+      if (!client || !apiKey) {
+        showToast('⚠️ Please enter at least your Client Code and API Key.');
+        return;
+      }
+
+      userState.brokerClientCode = client;
+      userState.brokerApiKey = apiKey;
+      userState.brokerApiSecret = apiSecret;
+      userState.brokerTotp = totp;
+      saveState();
+
+      try {
+        await fetch('/api/broker/credentials/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            broker: userState.selectedBroker || 'flattrade',
+            client_code: client,
+            api_key: apiKey,
+            api_secret: apiSecret,
+            totp_secret: totp
+          })
+        });
+      } catch (e) {
+        console.error('Error saving credentials to server:', e);
+      }
+
       closeApiCredentialsModal();
-      goToStep(5); // Advance to Server Payment screen
+
+      if (userState.subscriptionActive) {
+        updateLiveDashboardUI();
+        showToast(`✓ Flattrade credentials saved for ${client}! Bot is configured.`);
+        showScreen('screen-live-dashboard');
+      } else {
+        showToast('✓ API credentials saved! Proceeding to server deployment.');
+        goToStep(5);
+      }
     }
 
     // Step 6: Server Subscription Payment (₹1,599/mo)
@@ -8267,16 +8420,64 @@
           showScreen('screen-live-dashboard');
           updateLiveDashboardUI();
           startLiveMarketTickSimulation();
+
+          // If user hasn't configured API keys yet, prompt them immediately!
+          if (!userState.brokerApiKey) {
+            setTimeout(() => {
+              openApiCredentialsModal();
+              showToast("🔑 Step 1: Please enter your Flattrade API Key & Secret to connect your bot.");
+            }, 500);
+          }
         }, 600);
       }, 900);
     }
 
     // Step 7: Live Bot Dashboard Updates & Live Simulation
     function updateLiveDashboardUI() {
-      document.getElementById('dash-active-strat-name').innerText = userState.selectedStrategyName;
-      document.getElementById('dash-switches-left').innerText = userState.dailySwitchesRemaining;
-      document.getElementById('dash-broker-conn-title').innerText = `API CONNECTION (${userState.selectedBrokerName.toUpperCase()})`;
-      document.getElementById('nav-server-status').innerText = "Dedicated Server Active (₹1,599/mo)";
+      const stratName = userState.selectedStrategyName || 'Statistical Arbitrage';
+      const stratEl = document.getElementById('dash-active-strat-name');
+      if (stratEl) stratEl.innerText = stratName;
+
+      const swEl = document.getElementById('dash-switches-left');
+      if (swEl) swEl.innerText = userState.dailySwitchesRemaining !== undefined ? userState.dailySwitchesRemaining : 3;
+
+      const brokerName = (userState.selectedBrokerName || 'Flattrade').toUpperCase();
+      const connTitle = document.getElementById('dash-broker-conn-title');
+      if (connTitle) connTitle.innerText = `API CONNECTION (${brokerName})`;
+
+      const srvStatus = document.getElementById('nav-server-status');
+      if (srvStatus) srvStatus.innerText = "Dedicated Server Active (₹1,599/mo)";
+
+      const missingBanner = document.getElementById('dash-creds-missing-banner');
+      const activeBanner = document.getElementById('dash-creds-active-banner');
+      const credsBtnText = document.getElementById('dash-btn-creds-text');
+      const clientBadge = document.getElementById('dash-creds-client-badge');
+      const ipDisp = document.getElementById('dash-creds-ip-display');
+      const step1Status = document.getElementById('dash-step1-status');
+      const step1BtnText = document.getElementById('dash-step1-btn-text');
+
+      if (ipDisp) ipDisp.innerText = window.SERVER_CONFIG_NODE_IP || '127.0.0.1';
+
+      if (userState.brokerApiKey && userState.brokerClientCode) {
+        if (missingBanner) missingBanner.classList.add('hidden');
+        if (activeBanner) activeBanner.classList.remove('hidden');
+        if (credsBtnText) credsBtnText.innerText = `Edit API Keys (${userState.brokerClientCode})`;
+        if (clientBadge) clientBadge.innerText = `Client: ${userState.brokerClientCode}`;
+        if (step1Status) {
+          step1Status.className = "text-[10px] text-emerald-700 font-mono font-bold";
+          step1Status.innerText = `✓ Linked (${userState.brokerClientCode})`;
+        }
+        if (step1BtnText) step1BtnText.innerText = "Edit API Keys";
+      } else {
+        if (missingBanner) missingBanner.classList.remove('hidden');
+        if (activeBanner) activeBanner.classList.add('hidden');
+        if (credsBtnText) credsBtnText.innerText = "Enter API Keys";
+        if (step1Status) {
+          step1Status.className = "text-[10px] text-amber-700 font-mono font-bold";
+          step1Status.innerText = "⚠️ Required";
+        }
+        if (step1BtnText) step1BtnText.innerText = "Add API Keys";
+      }
     }
 
     function setExecutionMode(mode) {
@@ -8297,8 +8498,8 @@
 
       if (broker === 'flattrade') {
         if (!apiKey) {
-          openBrokerApiSetupModal();
-          showToast('Please enter and save your Flattrade API Key first.');
+          openApiCredentialsModal();
+          showToast('👉 Please enter and save your Flattrade API Key first.');
           return;
         }
         const authUrl = "https://auth.flattrade.in/?app_key=" + encodeURIComponent(apiKey);
@@ -8307,7 +8508,7 @@
           window.location.href = authUrl;
         }
       } else {
-        openBrokerApiSetupModal();
+        openApiCredentialsModal();
       }
     }
 
@@ -8320,9 +8521,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             code: code,
-            client_id: document.getElementById('modal-api-client')?.value?.trim() || '',
-            api_key: document.getElementById('modal-api-key')?.value?.trim() || '',
-            api_secret: document.getElementById('modal-api-secret')?.value?.trim() || ''
+            client_id: userState.brokerClientCode || document.getElementById('modal-api-client')?.value?.trim() || '',
+            api_key: userState.brokerApiKey || document.getElementById('modal-api-key')?.value?.trim() || '',
+            api_secret: userState.brokerApiSecret || document.getElementById('modal-api-secret')?.value?.trim() || ''
           })
         });
         const data = await res.json();
@@ -9166,6 +9367,23 @@
       if (typeof checkUrlForBrokerAuthCode === 'function') {
         checkUrlForBrokerAuthCode();
       }
+
+      // Check server for saved broker credentials to keep in sync
+      fetch('/api/broker/credentials')
+        .then(r => r.json())
+        .then(d => {
+          if (d && d.success && d.api_key) {
+            if (!userState.brokerApiKey || !userState.brokerClientCode) {
+              userState.brokerApiKey = d.api_key;
+              if (d.client_code) userState.brokerClientCode = d.client_code;
+              saveState();
+              if (typeof updateLiveDashboardUI === 'function') {
+                updateLiveDashboardUI();
+              }
+            }
+          }
+        })
+        .catch(() => {});
     });
   </script>
 </body>
