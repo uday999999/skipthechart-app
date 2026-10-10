@@ -8270,10 +8270,22 @@
     }
 
     function generateDailyToken() {
-      const authUrl = "https://auth.flattrade.in/?app_key=47b52b557fd349809bae6f0ad775156f";
-      const w = window.open(authUrl, "_blank");
-      if (!w) {
-        window.location.href = authUrl;
+      const broker = (userState.selectedBroker || 'flattrade').toLowerCase();
+      const apiKey = (userState.brokerApiKey || document.getElementById('modal-api-key')?.value || '').trim();
+
+      if (broker === 'flattrade') {
+        if (!apiKey) {
+          openBrokerApiSetupModal();
+          showToast('Please enter and save your Flattrade API Key first.');
+          return;
+        }
+        const authUrl = ;
+        const w = window.open(authUrl, "_blank");
+        if (!w) {
+          window.location.href = authUrl;
+        }
+      } else {
+        openBrokerApiSetupModal();
       }
     }
 
