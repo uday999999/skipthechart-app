@@ -6076,7 +6076,7 @@
         customStrategyState.dataset = "nifty_banknifty_pairs";
         customStrategyState.indicators = [];
         saveState();
-        goToStep(4);
+        goToStep(3);
       } else {
         showStratWizard('payoff');
       }
@@ -6398,7 +6398,7 @@
       const btCap = document.getElementById('bt-summary-capital');
       if (btCap) btCap.innerText = `₹ ${(userState.totalCapital || 25000).toLocaleString('en-IN')}`;
       
-      goToStep(4);
+      goToStep(3);
     }
 
     function proceedFromBacktestToPaymentOrLive() {

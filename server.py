@@ -879,18 +879,27 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "subscription": USER_SUBSCRIPTION
             })
         elif parsed.path == "/api/market/live-feed":
+            # Check if Indian market is open: Mon-Fri, 09:15 to 15:30 IST
+            now_gmt = time.gmtime()
+            # IST is GMT + 5:30
+            ist_sec = time.time() + (5.5 * 3600)
+            ist_time = time.gmtime(ist_sec)
+            weekday = ist_time.tm_wday # 0=Mon, 4=Fri, 5=Sat, 6=Sun
+            hr = ist_time.tm_hour
+            mn = ist_time.tm_min
+            market_open = (weekday < 5) and ((hr == 9 and mn >= 15) or (9 < hr < 15) or (hr == 15 and mn <= 30))
+
             nifty_base = 23063.10
             banknifty_base = 55438.50
-            # Small jitter for live feel
-            jitter = (random.random() - 0.49) * 4.0
+            jitter = (random.random() - 0.49) * 4.0 if market_open else 0.0
             n_curr = round(nifty_base + jitter, 2)
             bn_curr = round(banknifty_base + (jitter * 2.4), 2)
             ratio = round(n_curr / bn_curr, 5)
-            # Simulated rolling z-score around -1.000 to +1.800 with occasional excursions
-            z_curr = round(-1.000 + (jitter * 0.45), 3)
+            z_curr = round(-1.000 + (jitter * 0.45), 3) if market_open else -0.987
             BOT_RUNTIME_STATE["current_z_score"] = z_curr
 
             self.send_json_response(200, {
+                "market_status": "OPEN" if market_open else "MARKET CLOSED (Weekend / Off-Hours)",
                 "nifty_mark": n_curr,
                 "banknifty_mark": bn_curr,
                 "z_score": z_curr,
