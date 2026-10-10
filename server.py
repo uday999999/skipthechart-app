@@ -1748,48 +1748,44 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             if lang in lang_code_map:
                 detected_lang = lang_code_map[lang]
 
-            # Check for initial greeting or call connect
-            if not user_msg or user_msg.lower() in ["hello", "hi", "namaste", "vanakkam", "namaskaram", "call_connected"]:
-                if lang == "hi" or any(w in (user_msg or "").lower() for w in ["namaste", "hindi"]):
-                    reply = f"Namaste! Main SkipTheChart AI Copilot hoon. Aap abhi Step {step} par hain. {broker} API ya strategy setup me main aapki kya madad kar sakta hoon?"
-                    detected_lang = "hi-IN"
-                elif lang == "ta" or "vanakkam" in (user_msg or "").lower():
-                    reply = f"Vanakkam! Naan SkipTheChart AI Copilot. Ungalukku {broker} API key setup la enna help venum?"
-                    detected_lang = "ta-IN"
-                elif lang == "te" or "namaskaram" in (user_msg or "").lower():
-                    reply = f"Namaskaram! Nenu SkipTheChart AI Copilot. Meeku {broker} API key setup lo ela sahayam cheyyagalanu?"
-                    detected_lang = "te-IN"
-                else:
-                    reply = f"Hello! I am your SkipTheChart AI Voice Copilot. You are on Step {step}. How can I guide you with your {broker} setup or trading strategy today?"
-                    detected_lang = "en-IN"
-            elif gemini_key:
-                lang_names = {
-                    "hi": "conversational Hindi / Hinglish",
-                    "ta": "conversational Tamil",
-                    "te": "conversational Telugu",
-                    "en": "polite Indian English"
+            # -------------------------------------------------------------------------
+            # PRIORITY 1: GEMINI 2.0 LIVE / 1.5 FLASH CALLING BOT (PRIMARY AI ENGINE)
+            # -------------------------------------------------------------------------
+            if gemini_key:
+                lang_specs = {
+                    "hi": ("Hindi", "natural spoken Hindi in Devanagari script so text-to-speech engine speaks with authentic native Indian pronunciation (e.g. 'नमस्ते! SkipTheChart में आपका स्वागत है...')"),
+                    "te": ("Telugu", "natural spoken Telugu in Telugu script so text-to-speech engine speaks with authentic Telugu pronunciation (e.g. 'నమస్కారం! SkipTheChart కి స్వాగతం...')"),
+                    "ta": ("Tamil", "natural spoken Tamil in Tamil script so text-to-speech engine speaks with authentic Tamil pronunciation (e.g. 'வணக்கம்! SkipTheChart-க்கு உங்களை வரவேற்கிறோம்...')"),
+                    "en": ("English", "polite, friendly Indian English")
                 }
-                target_lang_desc = lang_names.get(lang, "polite Indian English or Hindi as appropriate")
+                lang_name, lang_guide = lang_specs.get(lang, ("Indian English / Hindi", "natural conversational spoken language"))
+
                 sys_instruction = (
-                    "You are the SkipTheChart AI Voice Concierge speaking live with an Indian retail trader on a voice telephone call. "
+                    "You are the SkipTheChart AI Voice Concierge speaking live with an Indian retail stock trader on a voice telephone call. "
                     f"Current State: Trader selected Broker '{broker}', Strategy '{strat}', Step {step}, Capital ₹{capital:,}, Server IP '127.0.0.1'. "
-                    f"CRITICAL LANGUAGE RULE: The user selected language: {target_lang_desc}. "
-                    f"You MUST respond directly in {target_lang_desc}. If Hindi, speak in natural Hindi/Hinglish. If Tamil, speak in natural Tamil. If Telugu, speak in natural Telugu. Never reply in plain English if Hindi, Tamil, or Telugu is requested. "
+                    f"CRITICAL LANGUAGE RULE: The trader selected language: {lang_name}. "
+                    f"You MUST respond directly in {lang_guide}. If Hindi, speak in natural Hindi in Devanagari. If Telugu, speak in natural Telugu script. If Tamil, speak in natural Tamil script. "
                     "RULES FOR VOICE OUTPUT: "
-                    "1. Keep answers conversational, friendly, and brief (2 to 3 sentences maximum) suitable for speech. "
-                    "2. NEVER use markdown symbols, asterisks, hashtags, bullet points, emojis, or code blocks. "
-                    "3. Always guide them clearly based on their active broker and step."
+                    "1. Keep answers brief (1 to 2 sentences maximum) suitable for fast, natural telephone speech. "
+                    "2. NEVER use markdown symbols (*, #, _, `, >, []), bullet points, numbers, or emojis. "
+                    "3. Speak warmly and helpfully like a professional Indian personal quant assistant. "
+                    "4. Guide clearly on broker API keys, 2FA TOTP secret, droplet 127.0.0.1 IP whitelist, and 70% risk buffer."
                 )
+
+                call_input = user_msg
+                if not call_input or call_input.lower() in ["call_connected", "hello", "hi", "namaste", "vanakkam", "namaskaram"]:
+                    call_input = f"The trader just connected the live voice call. Greet them warmly in {lang_name}, welcome them to SkipTheChart, and ask how you can guide them with their {broker} setup or strategy today."
+
                 for model_candidate in ["gemini-2.0-flash", "gemini-1.5-flash"]:
                     try:
                         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_candidate}:generateContent?key={gemini_key}"
                         req_payload = {
                             "contents": [
-                                {"role": "user", "parts": [{"text": f"{sys_instruction}\n\nUser Spoke: {user_msg}"}]}
+                                {"role": "user", "parts": [{"text": f"{sys_instruction}\n\nUser Spoke: {call_input}"}]}
                             ],
                             "generationConfig": {
                                 "temperature": 0.4,
-                                "maxOutputTokens": 200
+                                "maxOutputTokens": 150
                             }
                         }
                         req = urllib.request.Request(
@@ -1807,9 +1803,14 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         print(f"Voice {model_candidate} call error:", ex)
                         reply = None
 
+            # -------------------------------------------------------------------------
+            # PRIORITY 2: HYBRID NATURAL COPILOT (FALLBACK ENGINE)
+            # -------------------------------------------------------------------------
             if not reply:
-                source = "smart_copilot"
-                lower = user_msg.lower()
+                source = "smart_copilot_fallback"
+                lower = (user_msg or "").lower()
+                is_connect = not user_msg or lower in ["call_connected", "hello", "hi", "namaste", "vanakkam", "namaskaram"]
+
                 if lang == "hi":
                     is_hindi, is_tamil, is_telugu = True, False, False
                 elif lang == "ta":
@@ -1826,58 +1827,67 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 elif is_telugu: detected_lang = "te-IN"
                 else: detected_lang = "en-IN"
 
-                if "api" in lower or "key" in lower or "secret" in lower:
+                if is_connect:
                     if is_hindi:
-                        reply = f"{broker} me API key generate karne ke liye, unke developer portal par login karein. Naya app create karke Allowed IP me 127.0.0.1 daalein, aur API key aur Secret yahan paste karein."
+                        reply = f"नमस्ते! SkipTheChart में आपका स्वागत है। मैं आपका AI ट्रेडिंग असिस्टेंट हूँ। बताइए, आपके {broker} सेटअप में मैं क्या सहायता करूँ?"
                     elif is_tamil:
-                        reply = f"{broker} developer portal la login panni new app create pannunga. Allowed IP la 127.0.0.1 enter panni, API key matrum Secret inge paste pannunga."
+                        reply = f"வணக்கம்! SkipTheChart-க்கு உங்களை வரவேற்கிறோம். நான் உங்கள் AI வாய்ஸ் அசிஸ்டன்ட். உங்கள் {broker} செட்டப்பில் என்ன உதவி வேண்டும்?"
                     elif is_telugu:
-                        reply = f"{broker} developer portal lo login ayyi new app create cheyyandi. Allowed IP lo 127.0.0.1 enter chesi, API key mariyu Secret ikkada paste cheyyandi."
+                        reply = f"నమస్కారం! SkipTheChart కి స్వాగతం. నేను మీ AI ట్రేడింగ్ అసిస్టెంట్ ని. మీ {broker} సెటప్ లో మీకు ఎలా సహాయపడగలను?"
+                    else:
+                        reply = f"Hello! Welcome to SkipTheChart. I am your AI Voice Assistant. How can I guide you with your {broker} setup or trading strategy today?"
+                elif "api" in lower or "key" in lower or "secret" in lower:
+                    if is_hindi:
+                        reply = f"{broker} में API की generate करने के लिए उनके डेवलपर पोर्टल पर लॉगिन करें। New App बनाकर Allowed IP में 127.0.0.1 डालें, और API Key और Secret यहाँ पेस्ट करें।"
+                    elif is_tamil:
+                        reply = f"{broker} டெவலப்பர் போர்ட்டலில் லாகின் செய்து புதிய ஆப் உருவாக்குங்கள். Allowed IP-யில் 127.0.0.1 கொடுத்து, API key-யை இங்கே பேஸ்ட் செய்யுங்கள்."
+                    elif is_telugu:
+                        reply = f"{broker} లో API కీ తయారు చేయడానికి వారి డెవలపర్ పోర్టల్ లో లాగిన్ అవ్వండి. Allowed IP లో 127.0.0.1 ఎంటర్ చేసి, API కీ ఇక్కడ పేస్ట్ చేయండి."
                     else:
                         reply = f"To generate your {broker} API key, log into their developer portal, create an app, set Allowed IP to 127.0.0.1, and copy your API key and secret into SkipTheChart."
                 elif "totp" in lower or "authenticator" in lower or "2fa" in lower:
                     if is_hindi:
-                        reply = f"TOTP setup ke liye apne {broker} profile me jaakar Security & 2FA open karein. Enable External TOTP par click karein aur Secret Key ko copy karke SkipTheChart me paste karein."
+                        reply = f"TOTP सेटअप के लिए अपने {broker} सेटिंग्स में Security & 2FA खोलें। External TOTP चालू करके Secret Key को SkipTheChart में पेस्ट करें।"
                     elif is_tamil:
-                        reply = f"TOTP setup ku ungal {broker} settings la Security & 2FA ponga. External TOTP enable panni, Secret Key ah copy panni SkipTheChart la paste pannunga."
+                        reply = f"TOTP செட்டப்பிற்கு {broker} செட்டிங்ஸில் Security & 2FA சென்று, Secret Key-யை காப்பி செய்து இங்கே பேஸ்ட் செய்யுங்கள்."
                     elif is_telugu:
-                        reply = f"TOTP setup kosam mee {broker} settings lo Security & 2FA vellandi. External TOTP enable chesi, Secret Key ni copy chesi ikkada paste cheyyandi."
+                        reply = f"TOTP కోసం మీ {broker} సెట్టింగ్స్ లో Security & 2FA ఓపెన్ చేసి, Secret కీ ని కాపీ చేసి ఇక్కడ పేస్ట్ చేయండి."
                     else:
                         reply = f"For TOTP setup, open {broker} security settings, enable external authenticator, and copy the secret alphanumeric key into SkipTheChart so your bot can authenticate automatically each morning."
                 elif "ip" in lower or "whitelist" in lower or "droplet" in lower:
                     if is_hindi:
-                        reply = f"Aapka dedicated server IP 127.0.0.1 hai. Ise apne {broker} developer portal ke Allowed IP box me enter karna zaroori hai taaki exchange order reject na kare."
+                        reply = f"आपका dedicated सर्वर IP 127.0.0.1 है। इसे अपने {broker} पोर्टल के Allowed IP में डालें ताकि ऑर्डर्स रिजेक्ट न हों।"
                     elif is_tamil:
-                        reply = f"Ungal dedicated server IP 127.0.0.1. Idhai {broker} developer portal la Allowed IP box la enter pannunga, appo dhaan live order reject aagadhu."
+                        reply = f"உங்கள் சர்வர் IP 127.0.0.1. இதை {broker} Allowed IP கட்டத்தில் உள்ளிடவும்."
                     elif is_telugu:
-                        reply = f"Mee dedicated cloud server IP 127.0.0.1. Dheenni mee {broker} developer portal Allowed IP lo enter cheyyandi, appudu orders reject avvavu."
+                        reply = f"మీ డెడికేటెడ్ సర్వర్ IP 127.0.0.1. దీన్ని {broker} డెవలపర్ పోర్టల్ Allowed IP లో నమోదు చేయండి."
                     else:
                         reply = f"Your dedicated cloud server IP is 127.0.0.1. You must paste this into your {broker} developer portal's Allowed IP field so the exchange permits live orders."
                 elif "strategy" in lower or "capital" in lower or "margin" in lower or "risk" in lower:
                     if is_hindi:
-                        reply = f"Aapka capital safe rakhne ke liye SkipTheChart sirf 70 percent equity utilize karta hai, aur baki 30 percent buffer SEBI margin spikes aur slippage se bachata hai."
+                        reply = f"सुरक्षा के लिए SkipTheChart आपके कैपिटल का केवल 70 प्रतिशत उपयोग करता है, और 30 प्रतिशत बफर रखता है।"
                     elif is_tamil:
-                        reply = f"Ungal capital safe ah irukka, SkipTheChart 70 percent equity mattume use pannum. Matha 30 percent margin buffer ah vekkum."
+                        reply = f"பாதுகாப்பிற்காக SkipTheChart உங்கள் மூலதனத்தில் 70 சதவீதத்தை மட்டுமே பயன்படுத்துகிறது."
                     elif is_telugu:
-                        reply = f"Mee capital safe ga undadaniki, SkipTheChart kevalam 70 percent equity matrame vaduthundi. Migilina 30 percent buffer ga untundi."
+                        reply = f"రిస్క్ రక్షణ కోసం SkipTheChart మీ మూలధనంలో 70 శాతం మాత్రమే వాడుతుంది, 30 శాతం బఫర్ గా ఉంచుతుంది."
                     else:
                         reply = f"For safety, SkipTheChart utilizes only 70 percent of your capital, keeping a 30 percent buffer for exchange margin spikes and peak volatility."
                 elif "help" in lower or "support" in lower or "call" in lower:
                     if is_hindi:
-                        reply = f"Agar aap khud API generate nahi kar pa rahe hain, toh aap seedhe apne {broker} customer care ko call ya chat kar sakte hain. Screen par unka number aur helpline script diya gaya hai."
+                        reply = f"अगर आप खुद API नहीं बना पा रहे हैं, तो आप स्क्रीन पर दिए गए नंबर पर अपने {broker} सपोर्ट को कॉल कर सकते हैं।"
                     elif is_tamil:
-                        reply = f"Ungalukku help venumna, direct ah {broker} customer care ku call pannalam. Screen la helpline number matrum script irukku."
+                        reply = f"உங்களால் API உருவாக்க முடியாவிட்டால், திரையில் உள்ள எண்ணிற்கு {broker} வாடிக்கையாளர் சேவைக்கு அழைக்கலாம்."
                     elif is_telugu:
-                        reply = f"Meeru direct ga mee {broker} customer care ki call cheyyoppachu. Screen pai vaari phone number mariyu support script unnayi."
+                        reply = f"మీరు స్వయంగా API చేయలేకపోతే, స్క్రీన్ పై ఉన్న నంబర్ ద్వారా {broker} కస్టమర్ కేర్ కి కాల్ చేయవచ్చు."
                     else:
                         reply = f"If you need manual assistance, you can also directly call or chat with {broker} helpline. Their direct phone number and copyable script are shown on your screen."
                 else:
                     if is_hindi:
-                        reply = f"Main aapki puri madad karunga. Aap mujhse {broker} API, 2FA TOTP setup, ya strategy risk ke baare me kuch bhi pooch sakte hain."
+                        reply = f"मैं आपकी पूरी मदद करूँगा। आप मुझसे {broker} API, TOTP सेटअप, या स्ट्रैटेजी रिस्क के बारे में कुछ भी पूछ सकते हैं।"
                     elif is_tamil:
-                        reply = f"Naan ungalukku help panren. Ungal {broker} API, TOTP setup, illana strategy pathi enna venalum kelunga."
+                        reply = f"நான் உங்களுக்கு முழுமையாக உதவுவேன். {broker} API, TOTP செட்டப் அல்லது ஸ்ட்ராடஜி பற்றி என்ன வேண்டுமானாலும் கேட்கலாம்."
                     elif is_telugu:
-                        reply = f"Nenu meeku sahayam chestanu. Mee {broker} API, TOTP setup, leda strategy gurinchi emaina adagandi."
+                        reply = f"నేను మీకు సహాయం చేస్తాను. {broker} API, TOTP సెటప్ లేదా స్ట్రాటజీ గురించి ఏదైనా అడగవచ్చు."
                     else:
                         reply = f"I am listening. Feel free to ask me anything about your {broker} connection, 2FA authenticator, droplet IP whitelisting, or trading strategies."
 

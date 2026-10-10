@@ -4573,6 +4573,51 @@
   </div>
 
   <!-- ========================================================================= -->
+  <!-- MODAL: GEMINI 2.0 LIVE CALLING BOT SETUP                                  -->
+  <!-- ========================================================================= -->
+  <div id="modal-gemini-key-setup" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border border-indigo-500/40 text-white w-full max-w-md rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center text-lg shadow-md shadow-indigo-500/30">✨</span>
+          <div>
+            <h3 class="font-bold text-white text-base">Gemini 2.0 Live Voice Bot</h3>
+            <p class="text-[11px] text-slate-400">Natural Indian AI Voice in Hindi, Telugu, Tamil & English</p>
+          </div>
+        </div>
+        <button onclick="closeGeminiKeyModal()" class="text-slate-400 hover:text-white text-lg p-1">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-300">
+        <p class="leading-relaxed">
+          To speak naturally with human-like emotional cadence and authentic native accent in <strong class="text-emerald-400">Hindi, Telugu, Tamil, or English</strong>, activate your free Google Gemini API Key.
+        </p>
+
+        <div class="p-3 bg-indigo-950/40 border border-indigo-500/30 rounded-xl space-y-1.5 text-[11px] text-indigo-300">
+          <div class="font-bold flex items-center gap-1.5 text-indigo-200">
+            <span>💡 100% Free Gemini API Key:</span>
+          </div>
+          <p>Get your free key in 30 seconds from Google AI Studio: <a href="https://aistudio.google.com/app/apikey" target="_blank" class="underline font-bold text-cyan-300 hover:text-cyan-200">aistudio.google.com/app/apikey</a></p>
+        </div>
+
+        <div class="space-y-1.5 pt-1">
+          <label class="text-[11px] font-bold text-slate-300">Paste Google Gemini API Key:</label>
+          <input type="password" id="input-gemini-key" placeholder="AIzaSy..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-emerald-300 focus:outline-none focus:border-indigo-400 font-mono tracking-wider" />
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5 pt-2">
+        <button onclick="saveAndStartGeminiKey()" class="flex-1 bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:opacity-90 font-bold py-2.5 rounded-xl text-xs text-white shadow-lg shadow-indigo-500/20 transition-all">
+          🚀 Activate Gemini 2.0 Live
+        </button>
+        <button onclick="startCopilotFallbackCall()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 font-medium rounded-xl text-xs text-slate-300 border border-slate-700 transition-all">
+          Use Offline
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- MODAL: HYBRID AI LIVE VOICE CALL SCREEN (MULTILINGUAL)                    -->
   <!-- ========================================================================= -->
   <div id="modal-ai-voice-call" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 hidden">
@@ -10058,46 +10103,53 @@
       }
     }
 
-    async function promptGeminiApiKey() {
-      const currentKey = localStorage.getItem('user_gemini_api_key') || '';
-      const key = prompt(
-        "Enter your Google Gemini API Key from Google AI Studio (aistudio.google.com):\n\n" +
-        "• With Gemini key: Live conversational Gemini 2.0 Flash reasoning in Hindi, Tamil, Telugu & English\n" +
-        "• Without key: Instant offline Smart Copilot engine\n\n" +
-        "Paste key here:",
-        currentKey
-      );
-      if (key === null) return;
-      const trimmed = key.trim();
-      if (!trimmed) {
-        showToast("Key cleared. Using Smart Copilot.");
-        localStorage.removeItem('user_gemini_api_key');
-        const text = document.getElementById('call-engine-text');
-        if (text) text.innerText = "Smart Copilot ⚡";
+    function openGeminiKeyModal() {
+      const modal = document.getElementById('modal-gemini-key-setup');
+      const input = document.getElementById('input-gemini-key');
+      if (input) input.value = localStorage.getItem('user_gemini_api_key') || '';
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeGeminiKeyModal() {
+      const modal = document.getElementById('modal-gemini-key-setup');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function saveAndStartGeminiKey() {
+      const input = document.getElementById('input-gemini-key');
+      const keyVal = input ? input.value.trim() : '';
+      if (!keyVal) {
+        showToast("Please paste your Gemini API key or click 'Use Offline'");
         return;
       }
       try {
-        showToast("Saving and activating Gemini key...");
+        showToast("Activating Gemini 2.0 Live Engine...");
         const res = await fetch('/api/auth/save-gemini-key', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ gemini_key: trimmed })
+          body: JSON.stringify({ gemini_key: keyVal })
         });
         const data = await res.json();
         if (data.success) {
-          localStorage.setItem('user_gemini_api_key', trimmed);
-          showToast("Gemini 2.0 Live Engine activated successfully!");
-          const text = document.getElementById('call-engine-text');
-          if (text) text.innerText = "Gemini 2.0 Live ✨";
+          localStorage.setItem('user_gemini_api_key', keyVal);
+          showToast("Gemini 2.0 Live Activated!");
         } else {
-          alert("Error saving key: " + (data.error || "Unknown"));
+          localStorage.setItem('user_gemini_api_key', keyVal);
         }
-      } catch (err) {
-        localStorage.setItem('user_gemini_api_key', trimmed);
-        showToast("Gemini Key saved locally in browser session!");
-        const text = document.getElementById('call-engine-text');
-        if (text) text.innerText = "Gemini 2.0 Live ✨";
+      } catch (e) {
+        localStorage.setItem('user_gemini_api_key', keyVal);
       }
+      closeGeminiKeyModal();
+      launchVoiceCallScreen();
+    }
+
+    function startCopilotFallbackCall() {
+      closeGeminiKeyModal();
+      launchVoiceCallScreen();
+    }
+
+    function promptGeminiApiKey() {
+      openGeminiKeyModal();
     }
 
     function switchCallLanguage(lang) {
@@ -10116,10 +10168,10 @@
       }
 
       const switchGreetings = {
-        'hi': { text: "Namaste! Main ab aapse Hindi me baat karunga. Aapka broker setup kaisa chal raha hai?", lang: 'hi-IN' },
-        'ta': { text: "Vanakkam! Ini naan ungaludan Tamilil pesugiren. Ungal broker setup epdi pogudhu?", lang: 'ta-IN' },
-        'te': { text: "Namaskaram! Ika nenu mee tho Telugu lo matladatanu. Mee broker setup ela undi?", lang: 'te-IN' },
-        'en': { text: "Sure! Switching to English. How can I assist you with your broker setup today?", lang: 'en-IN' }
+        'hi': { text: "नमस्ते! अब मैं आपसे हिंदी में बात करूँगा। बताइए, आपका ब्रोकर सेटअप कैसा चल रहा है?", lang: 'hi-IN' },
+        'ta': { text: "வணக்கம்! இனி நான் உங்களுடன் தமிழில் பேசுகிறேன். உங்கள் புரோக்கர் செட்டப் எப்படி போகிறது?", lang: 'ta-IN' },
+        'te': { text: "నమస్కారం! ఇక నేను మీతో తెలుగులో మాట్లాడతాను. మీ బ్రోకర్ సెటప్ ఎలా సాగుతోంది?", lang: 'te-IN' },
+        'en': { text: "Sure! Switching to English. How can I guide you with your broker setup today?", lang: 'en-IN' }
       };
 
       const greet = switchGreetings[lang];
@@ -10132,6 +10184,25 @@
     }
 
     async function startAiVoiceCall() {
+      // Check if Gemini key is available on server or local storage
+      const localKey = localStorage.getItem('user_gemini_api_key') || '';
+      let hasServerKey = false;
+      try {
+        const res = await fetch('/api/auth/config');
+        const data = await res.json();
+        hasServerKey = Boolean(data.has_gemini_key);
+      } catch (e) {}
+
+      // Prompt key modal first if neither is present so user can get natural Gemini
+      if (!hasServerKey && !localKey) {
+        openGeminiKeyModal();
+        return;
+      }
+
+      launchVoiceCallScreen();
+    }
+
+    async function launchVoiceCallScreen() {
       const modal = document.getElementById('modal-ai-voice-call');
       if (!modal) return;
 
@@ -10150,7 +10221,7 @@
       if (bDisp) bDisp.innerText = `Active Broker: ${bName} • Step ${userState.currentStep || 1} • 24/7 Voice Guide`;
 
       const statusEl = document.getElementById('call-status-badge');
-      if (statusEl) statusEl.innerText = "Dialing Copilot...";
+      if (statusEl) statusEl.innerText = "Connecting Gemini Live...";
 
       playPhoneConnectSound();
 
@@ -10175,7 +10246,7 @@
         if (statusEl) statusEl.innerText = "Connected 🟢";
         startVoiceCallTimer();
         initSpeechRecognition();
-        // Send initial greeting prompt
+        // Send initial greeting prompt (handled by Gemini 2.0 Live)
         sendVoiceCallPrompt("call_connected");
       }, 700);
     }
