@@ -1341,9 +1341,9 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             })
         elif parsed.path == "/api/broker/flattrade/exchange-token":
             req_code = payload.get("request_code") or payload.get("code", "")
-            api_key = payload.get("api_key", "47b52b557fd349809bae6f0ad775156f").strip()
-            api_secret = payload.get("api_secret", "2026.25fb2fc3f6e2472b805a250acaac0f4e4dec27c572bf8ac2").strip()
-            client_id = payload.get("client_id", "FZ59015").strip()
+            api_key = payload.get("api_key", "").strip()
+            api_secret = payload.get("api_secret", "").strip()
+            client_id = payload.get("client_id", "").strip()
 
             if not req_code:
                 self.send_json_response(400, {"success": False, "error": "Missing request_code or code in payload"})

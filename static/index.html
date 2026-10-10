@@ -3658,11 +3658,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="text-slate-700 block mb-1 font-semibold" id="modal-lbl-client">Client Code / User ID</label>
-            <input type="text" id="modal-api-client" value="FT082914" class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-xl p-2.5 text-slate-900 font-mono shadow-xs">
+            <input type="text" id="modal-api-client" value="" placeholder="e.g. FT12345" class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-xl p-2.5 text-slate-900 font-mono shadow-xs">
           </div>
           <div>
             <label class="text-slate-700 block mb-1 font-semibold" id="modal-lbl-key">API Key</label>
-            <input type="text" id="modal-api-key" value="ft_api_key_98124x09" class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-xl p-2.5 text-slate-900 font-mono shadow-xs">
+            <input type="text" id="modal-api-key" value="" placeholder="Paste API Key" class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-xl p-2.5 text-slate-900 font-mono shadow-xs">
           </div>
         </div>
 
@@ -3672,14 +3672,14 @@
               <span>API Secret</span>
               <button type="button" onclick="toggleSecretVisibility('modal-api-secret')" class="text-emerald-700 hover:underline text-[10px]">Show/Hide</button>
             </label>
-            <input type="password" id="modal-api-secret" value="ft_secret_key_8821bb" class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-xl p-2.5 text-slate-900 font-mono shadow-xs">
+            <input type="password" id="modal-api-secret" value="" placeholder="Paste API Secret" class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-xl p-2.5 text-slate-900 font-mono shadow-xs">
           </div>
           <div>
             <label class="text-slate-700 block mb-1 font-semibold flex justify-between">
               <span id="modal-lbl-totp">TOTP Secret / Auth PIN</span>
               <button type="button" onclick="toggleSecretVisibility('modal-api-totp')" class="text-emerald-700 hover:underline text-[10px]">Show/Hide</button>
             </label>
-            <input type="password" id="modal-api-totp" value="FTTOTPSECRET7712" class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-xl p-2.5 text-slate-900 font-mono shadow-xs">
+            <input type="password" id="modal-api-totp" value="" placeholder="Paste TOTP Secret Key" class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-xl p-2.5 text-slate-900 font-mono shadow-xs">
           </div>
         </div>
 
@@ -4463,10 +4463,10 @@
       flattrade: {
         title: "Flattrade API Key & Secret",
         clientLabel: "Flattrade Client Code",
-        clientDefault: "FT082914",
-        keyDefault: "ft_api_key_98124x09",
-        secretDefault: "ft_secret_key_8821bb",
-        totpDefault: "FTTOTPSECRET7712",
+        clientDefault: "",
+        keyDefault: "",
+        secretDefault: "",
+        totpDefault: "",
         url: "https://wall.flattrade.in",
         steps: [
           "1. Log in to wall.flattrade.in with your client code",
@@ -8286,9 +8286,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             code: code,
-            client_id: 'FZ59015',
-            api_key: '47b52b557fd349809bae6f0ad775156f',
-            api_secret: '2026.25fb2fc3f6e2472b805a250acaac0f4e4dec27c572bf8ac2'
+            client_id: document.getElementById('modal-api-client')?.value?.trim() || '',
+            api_key: document.getElementById('modal-api-key')?.value?.trim() || '',
+            api_secret: document.getElementById('modal-api-secret')?.value?.trim() || ''
           })
         });
         const data = await res.json();
