@@ -8301,7 +8301,7 @@
           showToast('Please enter and save your Flattrade API Key first.');
           return;
         }
-        const authUrl = ;
+        const authUrl = "https://auth.flattrade.in/?app_key=" + encodeURIComponent(apiKey);
         const w = window.open(authUrl, "_blank");
         if (!w) {
           window.location.href = authUrl;
