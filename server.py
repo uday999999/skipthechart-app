@@ -1737,6 +1737,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             reply = None
             detected_lang = "en-IN"
             source = "gemini_live"
+            gemini_error = None
 
             # Normalize language tag
             lang_code_map = {
@@ -1800,7 +1801,15 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                             source = f"gemini_{model_candidate}"
                             break
                     except Exception as ex:
-                        print(f"Voice {model_candidate} call error:", ex)
+                        err_detail = str(ex)
+                        try:
+                            if hasattr(ex, "read"):
+                                err_json = json.loads(ex.read().decode("utf-8"))
+                                err_detail = err_json.get("error", {}).get("message", err_detail)
+                        except:
+                            pass
+                        print(f"Voice {model_candidate} call error:", err_detail)
+                        gemini_error = err_detail
                         reply = None
 
             # -------------------------------------------------------------------------
@@ -1895,7 +1904,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "success": True,
                 "reply": reply,
                 "lang": detected_lang,
-                "source": source
+                "source": source,
+                "gemini_error": gemini_error
             })
         elif parsed.path == "/api/subscription/create":
             USER_SUBSCRIPTION["is_active"] = True
