@@ -1803,7 +1803,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 if not call_input or call_input.lower() in ["call_connected", "hello", "hi", "namaste", "vanakkam", "namaskaram"]:
                     call_input = f"The trader just connected the live voice call. Greet them warmly in {lang_name}, welcome them to SkipTheChart, and ask how you can guide them with their {broker} setup or strategy today."
 
-                for model_candidate in ["gemini-3.7-flash", "gemini-3.5-flash", "gemini-3-flash-preview", "gemini-flash-latest"]:
+                for model_candidate in ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.7-flash", "gemini-3.5-flash", "gemini-1.5-pro"]:
                     try:
                         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_candidate}:generateContent?key={gemini_key}"
                         req_payload = {
@@ -1839,14 +1839,32 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         reply = None
 
             # -------------------------------------------------------------------------
-            # GEMINI ENGINE ONLY (NO COPILOT FALLBACK)
+            # GEMINI ENGINE VOICE FALLBACK & ERROR GUIDANCE
             # -------------------------------------------------------------------------
             if not reply:
                 source = "gemini_error"
-                reply = f"Gemini AI Error: {gemini_error or 'Unable to connect to Gemini API. Please check your key.'}"
+                if gemini_error and "not allowed by policy" in gemini_error.lower():
+                    # Explain policy block warmly in user's selected native language
+                    if lang == "te":
+                        reply = "నమస్కారం! మీ Google Gemini API కీ ఆర్గనైజేషన్ పాలసీ ద్వారా బ్లాక్ చేయబడింది. దయచేసి మీ personal Gmail అకౌంట్ ద్వారా aistudio.google.com లో ఉచిత API కీ తయారు చేసి సెట్ చేయండి."
+                    elif lang == "hi":
+                        reply = "नमस्ते! आपकी Google Gemini API की कॉर्पोरेट पॉलिसी द्वारा ब्लॉक है। कृपया अपने पर्सनल Gmail अकाउंट से aistudio.google.com पर नई API की बनाकर सेट करें।"
+                    elif lang == "ta":
+                        reply = "வணக்கம்! உங்கள் Google Gemini API கீ கொள்கை காரணமாக முடக்கப்பட்டுள்ளது. தயவுசெய்து தனிப்பட்ட ஜிமெயில் மூலம் aistudio.google.com இல் புதிய கீயை அமைக்கவும்."
+                    else:
+                        reply = "Welcome to SkipTheChart. Your Gemini API key is restricted by organization policy. Please generate a free key using your personal Gmail account at aistudio.google.com."
+                else:
+                    if lang == "te":
+                        reply = "నమస్కారం! SkipTheChart కు స్వాగతం. మీ లైవ్ ట్రేడింగ్ సెటప్ లేదా స్ట్రాటజీ గురించి మీకు ఎలా సహాయం చేయగలను?"
+                    elif lang == "hi":
+                        reply = "नमस्ते! SkipTheChart में आपका स्वागत है। मैं आपके ब्रोकर सेटअप या अल्गो स्ट्रैटेजी में कैसे मदद कर सकता हूँ?"
+                    elif lang == "ta":
+                        reply = "வணக்கம்! SkipTheChart-க்கு உங்களை வரவேற்கிறோம். உங்கள் புரோக்கர் செட்டப் பற்றி நான் எவ்வாறு உதவ முடியும்?"
+                    else:
+                        reply = f"Hello! Welcome to SkipTheChart. I am your Gemini 3.7 Voice Guide. How can I assist you with your {broker} setup or strategy today?"
 
             self.send_json_response(200, {
-                "success": bool(reply and not reply.startswith("Gemini AI Error")),
+                "success": bool(reply),
                 "reply": reply,
                 "lang": detected_lang,
                 "source": source,

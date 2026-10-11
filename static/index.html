@@ -4581,7 +4581,7 @@
         <div class="flex items-center gap-2.5">
           <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center text-lg shadow-md shadow-indigo-500/30">✨</span>
           <div>
-            <h3 class="font-bold text-white text-base">Platform Admin: Gemini 2.0 Engine</h3>
+            <h3 class="font-bold text-white text-base">Platform Admin: Gemini 3.7 Flash Beta Engine</h3>
             <p class="text-[11px] text-slate-400">One-time setup for all subscribers on SkipTheChart</p>
           </div>
         </div>
@@ -4597,11 +4597,12 @@
           <div class="font-bold flex items-center gap-1.5 text-emerald-200">
             <span>🛡️ One-Time Platform Activation:</span>
           </div>
-          <p>Once you save your key here, it is stored on your cloud server. <strong>Your subscribers will NEVER be asked for a key</strong>—they will automatically speak with Gemini 2.0 Live.</p>
+          <p>Once you save your key here, it is stored on your cloud server. <strong>Your subscribers will NEVER be asked for a key</strong>—they will automatically speak with Gemini 3.7 Flash Beta ⚡.</p>
         </div>
 
-        <div class="p-2.5 bg-indigo-950/40 border border-indigo-500/30 rounded-xl space-y-1 text-[11px] text-indigo-300">
+        <div class="p-2.5 bg-indigo-950/40 border border-indigo-500/30 rounded-xl space-y-1.5 text-[11px] text-indigo-300">
           <p>Get your free key in 30 seconds from Google AI Studio: <a href="https://aistudio.google.com/app/apikey" target="_blank" class="underline font-bold text-cyan-300 hover:text-cyan-200">aistudio.google.com/app/apikey</a></p>
+          <p class="text-[10.5px] text-amber-300/90 font-medium bg-amber-950/40 p-2 rounded-lg border border-amber-500/20">💡 Important: Please generate the key using your <strong>personal Gmail account</strong> (starts with <code class="font-mono text-emerald-300">AIzaSy...</code>). Corporate Workspace accounts block Generative AI keys by organization policy.</p>
         </div>
 
         <div class="space-y-1.5 pt-1">
@@ -4673,7 +4674,7 @@
           <span class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center text-[10px]">🎙️</span>
         </div>
         <div>
-          <h3 class="text-lg font-black text-white tracking-tight">SkipTheChart Gemini 2.0 Live</h3>
+          <h3 id="call-main-heading" class="text-lg font-black text-white tracking-tight">SkipTheChart Gemini 3.7 Flash (Beta)</h3>
           <p class="text-xs text-slate-400 font-mono" id="call-active-broker-display">Active Broker: Flattrade • 24/7 Setup Guide</p>
         </div>
       </div>
@@ -10081,45 +10082,53 @@
 
     function findBestVoiceForLanguage(langCode) {
       if (!('speechSynthesis' in window)) return null;
-      let voices = availableSystemVoices.length > 0 ? availableSystemVoices : window.speechSynthesis.getVoices();
+      let voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) {
+        voices = availableSystemVoices;
+      }
       if (!voices || voices.length === 0) return null;
 
-      const target = (langCode || 'en-IN').toLowerCase();
+      const target = (langCode || 'en-IN').toLowerCase().replace('_', '-');
       const prefix = target.split('-')[0];
 
-      // 1. Prioritize Google Cloud / High-Quality voices for native language
-      const googleMatch = voices.find(v => {
-        const vLang = (v.lang || '').toLowerCase().replace('_', '-');
-        const vName = (v.name || '').toLowerCase();
-        const isLang = vLang === target || vLang.startsWith(prefix);
-        const isGoogleOrNatural = vName.includes('google') || vName.includes('natural') || vName.includes('enhanced') || vName.includes('online');
-        return isLang && isGoogleOrNatural;
-      });
-      if (googleMatch) return googleMatch;
-
-      // 2. Exact match on full language tag (e.g., 'hi-in', 'ta-in', 'te-in', 'en-in')
-      let match = voices.find(v => (v.lang || '').toLowerCase().replace('_', '-') === target);
-      if (match) return match;
-
-      // 3. Name-based match for Indian native languages
-      if (prefix === 'hi') {
-        match = voices.find(v => v.name && /hindi|हिन्दी|devanagari|swara|lekha|neerja|kalpana|madhur/i.test(v.name));
+      // 1. Direct match on native Indian voices by name & language tag
+      if (prefix === 'te') {
+        const match = voices.find(v => {
+          const n = (v.name || '').toLowerCase();
+          const l = (v.lang || '').toLowerCase().replace('_', '-');
+          return l.startsWith('te') || /geeta|telugu|తెలుగు|chitra|mohan|kavya/i.test(n);
+        });
+        if (match) return match;
+      } else if (prefix === 'hi') {
+        const match = voices.find(v => {
+          const n = (v.name || '').toLowerCase();
+          const l = (v.lang || '').toLowerCase().replace('_', '-');
+          return l.startsWith('hi') || /lekha|hindi|हिन्दी|devanagari|swara|neerja|kalpana|madhur/i.test(n);
+        });
         if (match) return match;
       } else if (prefix === 'ta') {
-        match = voices.find(v => v.name && /tamil|தமிழ்|valluvar|vani/i.test(v.name));
-        if (match) return match;
-      } else if (prefix === 'te') {
-        match = voices.find(v => v.name && /telugu|తెలుగు|chitra|mohan|kavya/i.test(v.name));
+        const match = voices.find(v => {
+          const n = (v.name || '').toLowerCase();
+          const l = (v.lang || '').toLowerCase().replace('_', '-');
+          return l.startsWith('ta') || /vani|tamil|தமிழ்|valluvar/i.test(n);
+        });
         if (match) return match;
       } else if (prefix === 'en') {
-        match = voices.find(v => v.name && /india|rishi|veena|pradeep|neerja|kavya/i.test(v.name)) ||
-                voices.find(v => (v.lang || '').toLowerCase().replace('_', '-') === 'en-in');
+        const match = voices.find(v => {
+          const n = (v.name || '').toLowerCase();
+          const l = (v.lang || '').toLowerCase().replace('_', '-');
+          return l === 'en-in' || /aman|rishi|tara|india|veena|pradeep/i.test(n);
+        });
         if (match) return match;
       }
 
-      // 4. Strict prefix match on language code
-      match = voices.find(v => (v.lang || '').toLowerCase().split(/[-_]/)[0] === prefix);
-      if (match) return match;
+      // 2. Exact match on language code
+      let langMatch = voices.find(v => (v.lang || '').toLowerCase().replace('_', '-') === target);
+      if (langMatch) return langMatch;
+
+      // 3. Prefix match on language code
+      langMatch = voices.find(v => (v.lang || '').toLowerCase().split(/[-_]/)[0] === prefix);
+      if (langMatch) return langMatch;
 
       // If user requested Hindi, Tamil, or Telugu, NEVER force an English voice!
       if (prefix !== 'en') {
@@ -10139,16 +10148,16 @@
         const data = await res.json();
         const hasKey = data.has_gemini_key || Boolean(localKey);
         if (hasKey) {
-          if (text) text.innerText = "Gemini 2.0 Live ✨";
+          if (text) text.innerText = "Gemini 3.7 Flash Beta ⚡";
           if (badge) badge.className = "font-semibold text-emerald-400 flex items-center gap-1.5";
           if (btnText) btnText.innerText = "⚙️ Key Active";
         } else {
-          if (text) text.innerText = "Gemini 2.0 Live ✨";
+          if (text) text.innerText = "Gemini 3.7 Flash Beta ⚡";
           if (badge) badge.className = "font-semibold text-emerald-400 flex items-center gap-1.5";
           if (btnText) btnText.innerText = "🔑 Set Gemini Key";
         }
       } catch (e) {
-        if (text) text.innerText = "Gemini 2.0 Live ✨";
+        if (text) text.innerText = "Gemini 3.7 Flash Beta ⚡";
       }
     }
 
@@ -10172,7 +10181,7 @@
         return;
       }
       try {
-        showToast("Activating Gemini 2.0 Live Engine...");
+        showToast("Activating Gemini 3.7 Flash Beta Engine...");
         const res = await fetch('/api/auth/save-gemini-key', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -10181,7 +10190,7 @@
         const data = await res.json();
         if (data.success) {
           localStorage.setItem('user_gemini_api_key', keyVal);
-          showToast("Gemini 2.0 Live Activated!");
+          showToast("Gemini 3.7 Flash Beta Activated!");
         } else {
           localStorage.setItem('user_gemini_api_key', keyVal);
         }
@@ -10247,6 +10256,12 @@
       voiceCallSpeaker = true;
       voiceCallSeconds = 0;
 
+      // Sync user's preselected language from dropdown
+      const langSel = document.getElementById('call-lang-select');
+      if (langSel && langSel.value) {
+        selectedCallLanguage = langSel.value;
+      }
+
       // Check Gemini status
       checkAiEngineStatus();
 
@@ -10256,7 +10271,7 @@
       if (bDisp) bDisp.innerText = `Active Broker: ${bName} • Step ${userState.currentStep || 1} • 24/7 Voice Guide`;
 
       const statusEl = document.getElementById('call-status-badge');
-      if (statusEl) statusEl.innerText = "Connecting Gemini Live...";
+      if (statusEl) statusEl.innerText = "Connecting Gemini 3.7 Flash Beta...";
 
       playPhoneConnectSound();
 
@@ -10394,14 +10409,18 @@
         const text = document.getElementById('call-engine-text');
         if (text) {
           if (data.source && data.source.includes('gemini') && !data.source.includes('error')) {
-            text.innerText = "Gemini 2.0 Live ✨";
+            text.innerText = "Gemini 3.7 Flash Beta ⚡";
           } else {
-            text.innerText = "Gemini Live (Connecting...)";
+            text.innerText = "Gemini 3.7 Flash Beta";
           }
         }
         if (data.gemini_error) {
           console.warn("Gemini Error:", data.gemini_error);
-          showToast("⚠️ Gemini API Issue: " + data.gemini_error);
+          if (data.gemini_error.includes('not allowed by policy')) {
+            showToast("💡 Note: Corporate key restricted by policy. Use personal Gmail key.");
+          } else {
+            showToast("⚠️ Gemini API Issue: " + data.gemini_error);
+          }
         }
 
         if (aiTr) {
@@ -10427,7 +10446,8 @@
       setWaveformActive(true);
 
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.94; // Calm, clear conversational pace
+      const isIndianNative = ['te', 'hi', 'ta'].some(l => (langCode || '').toLowerCase().startsWith(l));
+      utterance.rate = isIndianNative ? 0.90 : 0.94; // Authentic, human conversational cadence
       utterance.pitch = 1.0;
       utterance.lang = langCode || 'en-IN';
 
