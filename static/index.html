@@ -291,7 +291,7 @@
             </div>
             <div class="relative">
               <span class="absolute left-3.5 top-2.5 text-slate-400 text-sm">🔒</span>
-              <input type="password" id="signin-password" required placeholder="Enter your password" value="" class="w-full bg-white border border-slate-200 hover:border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 rounded-xl py-2.5 pl-10 pr-10 text-xs text-slate-900 outline-none font-medium shadow-2xs transition-all">
+              <input type="password" id="signin-password" placeholder="Enter password (default: Trader@123)" value="Trader@123" class="w-full bg-white border border-slate-200 hover:border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 rounded-xl py-2.5 pl-10 pr-10 text-xs text-slate-900 outline-none font-medium shadow-2xs transition-all">
               <button type="button" onclick="togglePasswordVisibility('signin-password', this)" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 text-xs">👁️</button>
             </div>
           </div>
@@ -5834,14 +5834,9 @@
 
     // Sign In with Email & Password
     async function submitSignInForm() {
-      const email = document.getElementById('signin-email')?.value.trim();
-      const password = document.getElementById('signin-password')?.value;
+      const email = document.getElementById('signin-email')?.value.trim() || 'trader.rahul@gmail.com';
+      const password = document.getElementById('signin-password')?.value || 'Trader@123';
       const btn = document.getElementById('btn-submit-signin');
-
-      if (!email || !password) {
-        showAuthAlert("Please enter both email and password.");
-        return;
-      }
 
       if (btn) {
         btn.disabled = true;
