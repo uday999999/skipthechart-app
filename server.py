@@ -16,11 +16,18 @@ from urllib.parse import urlparse
 import urllib.request
 import urllib.error
 import re
+import secrets
 
 import hashlib
 import base64
 import hmac
 import struct
+
+try:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    HAS_AESGCM = True
+except ImportError:
+    HAS_AESGCM = False
 
 try:
     from broker_agent import BrokerSentinelAgent
@@ -29,8 +36,12 @@ except ImportError:
 
 PORT = 8888
 SERVER_START_TIME = time.time()
+LAST_MARKET_TICK_TIME = time.time()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
+
+# Server-Side In-Memory Session Storage
+AUTH_SESSIONS = {}
 
 def load_env():
     env_path = os.path.join(BASE_DIR, ".env")
@@ -46,6 +57,90 @@ def load_env():
             print("Notice: could not parse .env file:", e)
 
 load_env()
+
+# Server master encryption key for AES-256-GCM encryption at rest
+SERVER_MASTER_SECRET = os.environ.get("SERVER_ENCRYPTION_KEY", "stc_sec_master_2026_aes256_gcm_salt99")
+
+def get_aes_key() -> bytes:
+    return hashlib.sha256(SERVER_MASTER_SECRET.encode("utf-8")).digest()
+
+def encrypt_credentials(data: dict) -> dict:
+    key = get_aes_key()
+    plaintext = json.dumps(data).encode("utf-8")
+    if HAS_AESGCM:
+        aesgcm = AESGCM(key)
+        nonce = os.urandom(12)
+        ct = aesgcm.encrypt(nonce, plaintext, None)
+        return {
+            "version": "aes-256-gcm-v1",
+            "nonce": base64.b64encode(nonce).decode("utf-8"),
+            "ciphertext": base64.b64encode(ct).decode("utf-8"),
+            "updated_at": time.time()
+        }
+    else:
+        nonce = os.urandom(16)
+        stream_key = hashlib.sha256(key + nonce).digest()
+        ct = bytes(b ^ stream_key[i % len(stream_key)] for i, b in enumerate(plaintext))
+        tag = hmac.new(key, nonce + ct, hashlib.sha256).hexdigest()
+        return {
+            "version": "hmac-sha256-v1",
+            "nonce": base64.b64encode(nonce).decode("utf-8"),
+            "ciphertext": base64.b64encode(ct).decode("utf-8"),
+            "tag": tag,
+            "updated_at": time.time()
+        }
+
+def decrypt_credentials(encrypted_data: dict) -> dict:
+    if not isinstance(encrypted_data, dict):
+        return {}
+    if "ciphertext" not in encrypted_data or "nonce" not in encrypted_data:
+        return encrypted_data
+    key = get_aes_key()
+    version = encrypted_data.get("version", "")
+    nonce = base64.b64decode(encrypted_data["nonce"])
+    ct = base64.b64decode(encrypted_data["ciphertext"])
+    if version == "aes-256-gcm-v1" and HAS_AESGCM:
+        aesgcm = AESGCM(key)
+        plaintext = aesgcm.decrypt(nonce, ct, None)
+        return json.loads(plaintext.decode("utf-8"))
+    elif "tag" in encrypted_data:
+        expected_tag = hmac.new(key, nonce + ct, hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(expected_tag, encrypted_data["tag"]):
+            raise ValueError("Integrity check failed: corrupted credentials ciphertext")
+        stream_key = hashlib.sha256(key + nonce).digest()
+        plaintext = bytes(b ^ stream_key[i % len(stream_key)] for i, b in enumerate(ct))
+        return json.loads(plaintext.decode("utf-8"))
+    elif HAS_AESGCM:
+        aesgcm = AESGCM(key)
+        plaintext = aesgcm.decrypt(nonce, ct, None)
+        return json.loads(plaintext.decode("utf-8"))
+    else:
+        return {}
+
+DROPLET_STATIC_IP = os.environ.get("DROPLET_STATIC_IP", "139.59.8.234")
+
+def get_saved_broker_credentials():
+    """Retrieves and decrypts stored broker credentials from AES-256-GCM encrypted storage."""
+    creds_enc_file = os.path.join(os.path.dirname(__file__), "broker_credentials.enc.json")
+    creds_file = os.path.join(os.path.dirname(__file__), "broker_credentials.json")
+    if os.path.exists(creds_enc_file):
+        try:
+            with open(creds_enc_file, "r") as cf:
+                data = json.load(cf)
+                return decrypt_credentials(data)
+        except Exception as e:
+            print(f"Error decrypting broker credentials from {creds_enc_file}: {e}")
+    if os.path.exists(creds_file):
+        try:
+            with open(creds_file, "r") as cf:
+                data = json.load(cf)
+                if isinstance(data, dict):
+                    if "ciphertext" in data:
+                        return decrypt_credentials(data)
+                    return data
+        except Exception:
+            pass
+    return {}
 
 # Default Google OAuth Client ID if not set in environment
 if not os.environ.get("GOOGLE_CLIENT_ID"):
@@ -94,14 +189,14 @@ USERS_DB = {
 }
 
 ACTIVE_SESSION = {
-    "user_email": "trader.rahul@gmail.com",
-    "user_name": "Rahul Sharma",
-    "active_hwid": "HWID-MAC-M3-9821",
-    "device_name": "Rahul's MacBook Pro M3",
-    "assigned_droplet_ip": "127.0.0.1",
+    "user_email": "",
+    "user_name": "",
+    "active_hwid": "",
+    "device_name": "",
+    "assigned_droplet_ip": os.environ.get("DROPLET_STATIC_IP", "139.59.8.234"),
     "droplet_region": "blr1 (Bangalore)",
-    "status": "ONLINE",
-    "last_heartbeat": time.time(),
+    "status": "OFFLINE",
+    "last_heartbeat": 0,
     "max_allowed_systems": 1
 }
 
@@ -836,8 +931,82 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Expires", "0")
         super().end_headers()
 
+    def get_authenticated_session(self):
+        """Extracts and verifies active session from Cookie or Authorization / X-Session-Token header."""
+        token = None
+        cookie_header = self.headers.get("Cookie", "")
+        if "session_token=" in cookie_header:
+            for part in cookie_header.split(";"):
+                part = part.strip()
+                if part.startswith("session_token="):
+                    token = part.split("=", 1)[1].strip()
+                    break
+        if not token:
+            token = self.headers.get("X-Session-Token", "").strip()
+        if not token:
+            auth_h = self.headers.get("Authorization", "").strip()
+            if auth_h.startswith("Bearer "):
+                token = auth_h[7:].strip()
+
+        if token and token in AUTH_SESSIONS:
+            sess = AUTH_SESSIONS[token]
+            # Valid for 7 days
+            if time.time() - sess.get("created_at", 0) < 86400 * 7:
+                return sess
+        return None
+
+    def require_auth(self, parsed_path, payload=None):
+        """Enforces session authentication and admin access control across all /api/* routes.
+        Returns True if authorized, False if response has been sent."""
+        if not parsed_path.startswith("/api/") and parsed_path != "/health":
+            return True
+
+        PUBLIC_ENDPOINTS = {
+            "/health",
+            "/api/auth/config",
+            "/api/auth/login",
+            "/api/auth/signup",
+            "/api/auth/google",
+            "/api/auth/totp/verify",
+            "/api/auth/totp/setup"
+        }
+
+        ADMIN_ENDPOINTS = {
+            "/api/auth/save-google-client-id",
+            "/api/auth/save-gemini-key"
+        }
+
+        if parsed_path in ADMIN_ENDPOINTS:
+            token_in_body = (payload.get("admin_token", "") if isinstance(payload, dict) else "")
+            admin_token = token_in_body or self.headers.get("X-Admin-Token", "").strip()
+            configured_token = os.environ.get("ADMIN_TOKEN", "qNzwsx@29")
+            if not admin_token or admin_token != configured_token:
+                self.send_json_response(403, {
+                    "success": False,
+                    "error": "Forbidden: Admin privileges required."
+                })
+                return False
+            return True
+
+        if parsed_path in PUBLIC_ENDPOINTS:
+            return True
+
+        session = self.get_authenticated_session()
+        if not session:
+            self.send_json_response(401, {
+                "success": False,
+                "error": "Unauthorized: Active authentication session required. Please sign in."
+            })
+            return False
+
+        self.session = session
+        return True
+
     def do_GET(self):
         parsed = urlparse(self.path)
+        if not self.require_auth(parsed.path):
+            return
+
         if parsed.path == "/api/session/status":
             self.send_json_response(200, ACTIVE_SESSION)
         elif parsed.path == "/api/broker/flattrade/status":
@@ -860,27 +1029,28 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "message": "No active live Flattrade session"
             })
         elif parsed.path == "/api/broker/credentials":
-            creds_file = os.path.join(os.path.dirname(__file__), "broker_credentials.json")
-            if os.path.exists(creds_file):
-                try:
-                    with open(creds_file, "r") as cf:
-                        creds = json.load(cf)
-                    self.send_json_response(200, {
-                        "success": True,
-                        "broker": creds.get("broker", "flattrade"),
-                        "client_code": creds.get("client_code", ""),
-                        "has_api_key": bool(creds.get("api_key")),
-                        "api_key": creds.get("api_key", ""),
-                        "has_api_secret": bool(creds.get("api_secret")),
-                        "has_totp": bool(creds.get("totp_secret", ""))
-                    })
-                    return
-                except Exception:
-                    pass
-            self.send_json_response(200, {
-                "success": False,
-                "message": "No credentials stored"
-            })
+            creds = get_saved_broker_credentials()
+
+            if creds:
+                client_code = creds.get("client_code", "")
+                masked_client = (client_code[:2] + "***") if len(client_code) >= 2 else "***"
+                # STRICT COMPLIANCE: NEVER return raw secrets to the browser
+                self.send_json_response(200, {
+                    "success": True,
+                    "broker": creds.get("broker", "flattrade"),
+                    "client_code": masked_client,
+                    "has_api_key": bool(creds.get("api_key")),
+                    "has_api_secret": bool(creds.get("api_secret")),
+                    "has_totp": bool(creds.get("totp_secret", ""))
+                })
+            else:
+                self.send_json_response(200, {
+                    "success": False,
+                    "has_api_key": False,
+                    "has_api_secret": False,
+                    "has_totp": False,
+                    "message": "No credentials stored"
+                })
         elif parsed.path == "/api/data/status":
             summary = {}
             for k, v in HISTORICAL_DATASETS.items():
@@ -935,6 +1105,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             ratio = round(n_curr / bn_curr, 5)
             z_curr = round(-1.000 + (jitter * 0.45), 3) if market_open else -0.987
             BOT_RUNTIME_STATE["current_z_score"] = z_curr
+            global LAST_MARKET_TICK_TIME
+            LAST_MARKET_TICK_TIME = time.time()
 
             self.send_json_response(200, {
                 "market_status": "OPEN" if market_open else "MARKET CLOSED (Weekend / Off-Hours)",
@@ -973,38 +1145,38 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             })
         elif parsed.path == "/health":
             flattrade_session_file = "/var/www/skipthechart/flattrade_session.json"
+            if not os.path.exists(flattrade_session_file):
+                flattrade_session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
             broker_token_fresh = False
-            token_age_sec = 0
             if os.path.exists(flattrade_session_file):
                 try:
                     with open(flattrade_session_file, "r") as f:
                         sdata = json.load(f)
                         broker_token_fresh = bool(sdata.get("token"))
-                        mtime = os.path.getmtime(flattrade_session_file)
-                        token_age_sec = int(time.time() - mtime)
                 except Exception:
                     pass
             
             # Determine health: server & worker process operational
             worker_running = (BOT_RUNTIME_STATE.get("bot_status") in ["RUNNING", "STOPPED", "PAUSED"])
             is_healthy = worker_running
+            last_tick_age = int(time.time() - LAST_MARKET_TICK_TIME) if LAST_MARKET_TICK_TIME > 0 else 0
             status_code = 200 if is_healthy else 503
             self.send_json_response(status_code, {
                 "status": "healthy" if is_healthy else "unhealthy",
                 "worker": "running" if worker_running else "stopped",
                 "broker_token_fresh": broker_token_fresh,
-                "uptime_sec": int(time.time() - SERVER_START_TIME)
+                "last_tick_age_sec": last_tick_age
             })
         elif parsed.path == "/api/auth/config":
             client_id = os.environ.get("GOOGLE_CLIENT_ID", "659688440036-kl32fpdig9j46rqbl03om4vvhv2s204n.apps.googleusercontent.com")
-            is_authenticated = bool(ACTIVE_SESSION.get("user_email"))
+            sess = self.get_authenticated_session()
             resp_data = {
                 "success": True,
                 "google_client_id": client_id,
                 "app_domain": "skipthechart.com"
             }
-            if is_authenticated:
-                resp_data["assigned_droplet_ip"] = ACTIVE_SESSION.get("assigned_droplet_ip", "127.0.0.1")
+            if sess:
+                resp_data["assigned_droplet_ip"] = ACTIVE_SESSION.get("assigned_droplet_ip", DROPLET_STATIC_IP)
             self.send_json_response(200, resp_data)
         elif parsed.path == "/api/auth/totp/setup":
             email = ACTIVE_SESSION.get("user_email") or "trader.rahul@gmail.com"
@@ -1052,6 +1224,9 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         except Exception:
             payload = {}
 
+        if not self.require_auth(parsed.path, payload):
+            return
+
         if parsed.path == "/api/strategy/parse-youtube":
             url = payload.get("url", "")
             description = payload.get("description", "")
@@ -1095,6 +1270,12 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "password_hash": hash_pw(password),
                 "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
             }
+            session_token = secrets.token_hex(24)
+            AUTH_SESSIONS[session_token] = {
+                "user_email": email,
+                "user_name": name,
+                "created_at": time.time()
+            }
             ACTIVE_SESSION["user_email"] = email
             ACTIVE_SESSION["user_name"] = name
             ACTIVE_SESSION["device_name"] = f"{name}'s Authorized System"
@@ -1103,9 +1284,10 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "success": True,
                 "email": email,
                 "name": name,
+                "session_token": session_token,
                 "message": "Account created successfully! Welcome to SkipTheChart.",
-                "assigned_droplet_ip": ACTIVE_SESSION["assigned_droplet_ip"]
-            })
+                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", DROPLET_STATIC_IP)
+            }, extra_headers={"Set-Cookie": f"session_token={session_token}; Path=/; HttpOnly; SameSite=Lax"})
         elif parsed.path == "/api/auth/login":
             email = payload.get("email", "").strip().lower()
             password = payload.get("password", "")
@@ -1113,22 +1295,31 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             if not email:
                 self.send_json_response(400, {"success": False, "error": "Email is required"})
                 return
+            if not password:
+                self.send_json_response(400, {"success": False, "error": "Password is required"})
+                return
 
             user = USERS_DB.get(email)
             if not user:
-                # Seamless onboarding: auto-create account if signing in for first time
+                # Auto-register new trader account
                 user = {
                     "name": email.split("@")[0].capitalize(),
                     "email": email,
                     "phone": "",
-                    "password_hash": hash_pw(password or "Trader@123"),
+                    "password_hash": hash_pw(password),
                     "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
                 }
                 USERS_DB[email] = user
-            elif password and user.get("password_hash") and user["password_hash"] != hash_pw(password):
-                # Update password or accept
-                user["password_hash"] = hash_pw(password)
+            elif user.get("password_hash") and user["password_hash"] != hash_pw(password):
+                self.send_json_response(401, {"success": False, "error": "Incorrect password. Please verify your credentials."})
+                return
 
+            session_token = secrets.token_hex(24)
+            AUTH_SESSIONS[session_token] = {
+                "user_email": email,
+                "user_name": user["name"],
+                "created_at": time.time()
+            }
             ACTIVE_SESSION["user_email"] = email
             ACTIVE_SESSION["user_name"] = user["name"]
             ACTIVE_SESSION["device_name"] = f"{user['name']}'s Authorized System"
@@ -1137,9 +1328,10 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "success": True,
                 "email": email,
                 "name": user["name"],
+                "session_token": session_token,
                 "message": "Signed in successfully!",
-                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "127.0.0.1")
-            })
+                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", DROPLET_STATIC_IP)
+            }, extra_headers={"Set-Cookie": f"session_token={session_token}; Path=/; HttpOnly; SameSite=Lax"})
         elif parsed.path == "/api/auth/google":
             credential = payload.get("credential", "")
             email = payload.get("email", "").strip().lower()
@@ -1161,7 +1353,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     print(f"Error decoding Google credential: {e}")
 
             if not email:
-                email = "trader.rahul@gmail.com"
+                self.send_json_response(400, {"success": False, "error": "Unable to extract email from Google identity token."})
+                return
             if not name:
                 name = email.split("@")[0].capitalize()
 
@@ -1174,18 +1367,27 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     "password_hash": "",
                     "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
                 }
+            session_token = secrets.token_hex(24)
+            AUTH_SESSIONS[session_token] = {
+                "user_email": email,
+                "user_name": name,
+                "created_at": time.time()
+            }
             ACTIVE_SESSION["user_email"] = email
             ACTIVE_SESSION["user_name"] = name
             ACTIVE_SESSION["device_name"] = f"{name}'s Authorized System"
+
             self.send_json_response(200, {
                 "success": True,
                 "email": email,
                 "name": name,
                 "picture": picture,
+                "session_token": session_token,
                 "message": "Authenticated successfully with Google.",
-                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", "127.0.0.1")
-            })
+                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", DROPLET_STATIC_IP)
+            }, extra_headers={"Set-Cookie": f"session_token={session_token}; Path=/; HttpOnly; SameSite=Lax"})
         elif parsed.path == "/api/auth/save-google-client-id":
+            # Admin protected via require_auth
             client_id = payload.get("google_client_id", "").strip()
             if client_id:
                 os.environ["GOOGLE_CLIENT_ID"] = client_id
@@ -1208,11 +1410,6 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 self.send_json_response(400, {"success": False, "error": "Client ID cannot be empty"})
         elif parsed.path == "/api/auth/save-gemini-key":
-            admin_token = payload.get("admin_token", "").strip() or self.headers.get("X-Admin-Token", "").strip()
-            configured_token = os.environ.get("ADMIN_TOKEN", "qNzwsx@29")
-            if not admin_token or admin_token != configured_token:
-                self.send_json_response(403, {"success": False, "error": "Unauthorized: Admin Access Only"})
-                return
             gemini_key = payload.get("gemini_key", "").strip()
             if gemini_key:
                 os.environ["GEMINI_API_KEY"] = gemini_key
@@ -1234,6 +1431,16 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 self.send_json_response(400, {"success": False, "error": "Gemini API Key cannot be empty"})
         elif parsed.path == "/api/auth/logout":
+            cookie_header = self.headers.get("Cookie", "")
+            if "session_token=" in cookie_header:
+                for part in cookie_header.split(";"):
+                    part = part.strip()
+                    if part.startswith("session_token="):
+                        t = part.split("=", 1)[1].strip()
+                        AUTH_SESSIONS.pop(t, None)
+            token_h = self.headers.get("X-Session-Token", "").strip()
+            if token_h:
+                AUTH_SESSIONS.pop(token_h, None)
             ACTIVE_SESSION["user_email"] = ""
             ACTIVE_SESSION["user_name"] = ""
             ACTIVE_SESSION["totp_verified"] = False
@@ -1242,7 +1449,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json_response(200, {
                 "success": True,
                 "message": "Logged out successfully."
-            })
+            }, extra_headers={"Set-Cookie": "session_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"})
         elif parsed.path == "/api/auth/totp/verify":
             email = ACTIVE_SESSION.get("user_email") or payload.get("email", "").strip().lower() or "trader.rahul@gmail.com"
             user = USERS_DB.get(email)
@@ -1379,6 +1586,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             api_secret = payload.get("api_secret", "").strip()
             totp_secret = payload.get("totp_secret", "").strip()
 
+            if not client_code or not api_key:
+                self.send_json_response(400, {
+                    "success": False,
+                    "error": "Client Code and API Key are required to connect your broker."
+                })
+                return
+
             creds = {
                 "broker": broker,
                 "client_code": client_code,
@@ -1387,21 +1601,32 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "totp_secret": totp_secret,
                 "updated_at": time.time()
             }
+            creds_enc_file = os.path.join(os.path.dirname(__file__), "broker_credentials.enc.json")
             creds_file = os.path.join(os.path.dirname(__file__), "broker_credentials.json")
             try:
-                with open(creds_file, "w") as cf:
-                    json.dump(creds, cf, indent=2)
+                encrypted_payload = encrypt_credentials(creds)
+                with open(creds_enc_file, "w") as cf:
+                    json.dump(encrypted_payload, cf, indent=2)
+                # Purge any unencrypted credentials file on disk
+                if os.path.exists(creds_file):
+                    os.remove(creds_file)
             except Exception as e:
-                print(f"Error saving broker credentials: {e}")
+                print(f"Error encrypting/saving broker credentials: {e}")
+                self.send_json_response(500, {
+                    "success": False,
+                    "error": "Failed to encrypt credentials at rest on server."
+                })
+                return
 
+            masked_code = (client_code[:2] + "***") if len(client_code) >= 2 else "***"
             self.send_json_response(200, {
                 "success": True,
                 "broker": broker,
-                "client_code": client_code,
+                "client_code": masked_code,
                 "has_api_key": bool(api_key),
                 "has_api_secret": bool(api_secret),
                 "has_totp": bool(totp_secret),
-                "message": f"Broker credentials for {broker.upper()} ({client_code}) saved securely on your dedicated cloud droplet."
+                "message": f"Broker credentials for {broker.upper()} ({masked_code}) encrypted with AES-256-GCM and saved securely."
             })
         elif parsed.path == "/api/broker/test":
             broker = payload.get("broker", "flattrade").lower()
@@ -1475,16 +1700,10 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             client_id = payload.get("client_id", "").strip()
 
             if not api_key or not api_secret or not client_id:
-                creds_file = os.path.join(os.path.dirname(__file__), "broker_credentials.json")
-                if os.path.exists(creds_file):
-                    try:
-                        with open(creds_file, "r") as cf:
-                            saved_c = json.load(cf)
-                            if not api_key: api_key = saved_c.get("api_key", "").strip()
-                            if not api_secret: api_secret = saved_c.get("api_secret", "").strip()
-                            if not client_id: client_id = saved_c.get("client_code", "").strip()
-                    except Exception:
-                        pass
+                saved_c = get_saved_broker_credentials()
+                if not api_key: api_key = saved_c.get("api_key", "").strip()
+                if not api_secret: api_secret = saved_c.get("api_secret", "").strip()
+                if not client_id: client_id = saved_c.get("client_code", "").strip()
 
             if not req_code:
                 self.send_json_response(400, {"success": False, "error": "Missing request_code or code in payload"})
@@ -1603,7 +1822,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_json_response(500, {"success": False, "error": "BrokerSentinelAgent not loaded"})
         elif parsed.path == "/api/gemini/chat":
             client_ip = self.client_address[0] if self.client_address else "client"
-            if not check_ai_rate_limit(f"chat_{client_ip}", limit_per_minute=30):
+            user_ident = (self.session.get("user_email") if hasattr(self, "session") and self.session else "") or client_ip
+            if not check_ai_rate_limit(f"chat_{user_ident}", limit_per_minute=30):
                 self.send_json_response(429, {"success": False, "reply": "Rate limit exceeded. Please wait a moment before sending another prompt."})
                 return
             user_msg = payload.get("message", "").strip()
@@ -1635,13 +1855,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     f"You are the SkipTheChart AI Quant Advisor powered by Google Gemini. "
                     f"You help Indian retail traders succeed with automated algorithmic trading and broker API setup. "
                     f"User Profile: Active Broker: {broker}, Deployed Strategy: {strat}, "
-                    f"Assigned Droplet Static IP: 127.0.0.1, Dashboard URL: https://skipthechart.com, "
+                    f"Assigned Droplet Static IP: {DROPLET_STATIC_IP}, Dashboard URL: https://skipthechart.com, "
                     f"Total Account Capital: ₹{capital:,}, Equity Utilization: {equity_util}% "
                     f"(maintaining a {100-equity_util}% SkipTheChart mandatory transaction & RMS buffer). "
                     f"CRITICAL KNOWLEDGE FOR SUBSCRIBERS:\n"
-                    f"1. DASHBOARD ADDRESS: Always https://skipthechart.com. Subscribers log in with email. It is NEVER an IP extension like skipthechart.com/127.0.0.1.\n"
-                    f"2. DROPLET IP WHITELISTING: The static IP is 127.0.0.1. It is strictly for entering in the broker's 'Allowed IPs' or 'Whitelist IP' field.\n"
-                    f"3. EXISTING VS NEW API: If subscriber already has a broker API key, they only need to EDIT the app, change Allowed IP to 127.0.0.1, and save. If new, they create a new app named 'SkipTheChart' with Allowed IP 127.0.0.1.\n"
+                    f"1. DASHBOARD ADDRESS: Always https://skipthechart.com. Subscribers log in with email. It is NEVER an IP extension like skipthechart.com/{DROPLET_STATIC_IP}.\n"
+                    f"2. DROPLET IP WHITELISTING: The static IP is {DROPLET_STATIC_IP}. It is strictly for entering in the broker's 'Allowed IPs' or 'Whitelist IP' field.\n"
+                    f"3. EXISTING VS NEW API: If subscriber already has a broker API key, they only need to EDIT the app, change Allowed IP to {DROPLET_STATIC_IP}, and save. If new, they create a new app named 'SkipTheChart' with Allowed IP {DROPLET_STATIC_IP}.\n"
                     f"4. BROKER PORTALS:\n"
                     f"   - Flattrade: https://wall.flattrade.in (Pi Connect Open API)\n"
                     f"   - Angel One: https://smartapi.angelbroking.com (SmartAPI Trading)\n"
@@ -1686,8 +1906,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         f"Your private dashboard is always accessed at:\n"
                         f"👉 **`https://skipthechart.com`** (or `https://skipthechart.com/dashboard`)\n\n"
                         f"- **How to Log In**: Simply open the website on your phone, Mac, or PC and sign in with your registered email.\n"
-                        f"- **Is it an IP Extension?**: **No!** You never need to type `skipthechart.com/127.0.0.1`. All subscribers use the clean, bank-grade encrypted domain `https://skipthechart.com`.\n"
-                        f"- **What is the Droplet IP for?**: Your assigned server IP (`127.0.0.1`) is **strictly for broker whitelisting** in your {broker} developer portal so {broker} knows your cloud trading bot is authorized."
+                        f"- **Is it an IP Extension?**: **No!** You never need to type `skipthechart.com/{DROPLET_STATIC_IP}`. All subscribers use the clean, bank-grade encrypted domain `https://skipthechart.com`.\n"
+                        f"- **What is the Droplet IP for?**: Your assigned server IP (`{DROPLET_STATIC_IP}`) is **strictly for broker whitelisting** in your {broker} developer portal so {broker} knows your cloud trading bot is authorized."
                     )
                 elif any(w in lower_msg for w in ["broker", "api", "key", "secret", "totp", "whitelist", "droplet", "ip", "connect", "existing"]):
                     broker_portals = {
@@ -1701,19 +1921,19 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     reply = (
                         f"### 🔌 Step-by-Step API & IP Whitelist Guide for {broker}\n\n"
                         f"Your dedicated cloud worker has been assigned static IP:\n"
-                        f"```text\nAllowed IP: 127.0.0.1\n```\n\n"
+                        f"```text\nAllowed IP: {DROPLET_STATIC_IP}\n```\n\n"
                         f"#### Do You Have an Existing API Key or Creating a New One?\n\n"
                         f"**Option A: If You Already Have an Existing API Key (Takes 30 seconds)**:\n"
                         f"1. Open [{b_info[0]}]({b_info[1]}).\n"
                         f"2. Click on your existing App and choose **Edit**.\n"
-                        f"3. In the **Allowed IPs / Whitelist IP** field, replace any old IP with: `127.0.0.1`.\n"
+                        f"3. In the **Allowed IPs / Whitelist IP** field, replace any old IP with: `{DROPLET_STATIC_IP}`.\n"
                         f"4. Click **Save Changes**. Your existing API Key & Secret will now authorize your SkipTheChart bot!\n\n"
                         f"**Option B: If You Are Creating a New API Key from Scratch (Takes 2 minutes)**:\n"
                         f"1. Log in to [{b_info[0]}]({b_info[1]}).\n"
                         f"2. Click **Create New App / API**.\n"
                         f"3. Enter App Name: `SkipTheChart`.\n"
                         f"4. Set Redirect URL: `https://skipthechart.com`.\n"
-                        f"5. In **Allowed IP / Whitelist IP**, paste: `127.0.0.1`.\n"
+                        f"5. In **Allowed IP / Whitelist IP**, paste: `{DROPLET_STATIC_IP}`.\n"
                         f"6. Copy your generated **API Key** and **API Secret** and paste them into SkipTheChart.\n\n"
                         f"#### 🔒 What About TOTP?\n"
                         f"Enable TOTP in your broker profile using Google Authenticator or copy the Secret TOTP Key. SkipTheChart uses this to auto-authenticate your session every morning at **09:15 AM** without requiring manual SMS OTPs.\n\n"
@@ -1751,7 +1971,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         f"### 🤖 SkipTheChart Quant Copilot\n\n"
                         f"Hello! I am your AI assistant for **SkipTheChart**. I see you are configured with **{broker}** and strategy **{strat}**.\n\n"
                         f"I can guide you through:\n"
-                        f"- 🔌 **Step-by-step Broker API setup & IP whitelisting** (Allowed IP: `127.0.0.1`)\n"
+                        f"- 🔌 **Step-by-step Broker API setup & IP whitelisting** (Allowed IP: `{DROPLET_STATIC_IP}`)\n"
                         f"- 🏢 **Dashboard Access**: Always at `https://skipthechart.com`\n"
                         f"- ⚡ **Nifty ↔ BankNifty Pairs Arbitrage**: How the Z-score & 4-leg hedged spreads work\n"
                         f"- 🛡️ **Risk Guardrails**: Why 70% equity utilization and SEBI kill switches protect your capital\n\n"
@@ -1766,7 +1986,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             })
         elif parsed.path == "/api/ai/voice-call":
             client_ip = self.client_address[0] if self.client_address else "client"
-            if not check_ai_rate_limit(f"voice_{client_ip}", limit_per_minute=30):
+            user_ident = (self.session.get("user_email") if hasattr(self, "session") and self.session else "") or client_ip
+            if not check_ai_rate_limit(f"voice_{user_ident}", limit_per_minute=30):
                 self.send_json_response(429, {
                     "success": False,
                     "reply": "Please pause a moment before speaking again.",
@@ -1826,11 +2047,11 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
 
             sys_instruction = (
                 "You are the SkipTheChart AI Voice Concierge speaking live with an Indian retail stock trader on a two-way telephone call. "
-                f"Current State: Trader selected Broker '{broker}', Strategy '{strat}', Step {step}, Capital ₹{capital:,}, Server IP '127.0.0.1'. "
+                f"Current State: Trader selected Broker '{broker}', Strategy '{strat}', Step {step}, Capital ₹{capital:,}, Server IP '{DROPLET_STATIC_IP}'. "
                 f"CRITICAL LANGUAGE RULE: Respond directly in {lang_guide}. If Hindi, speak in natural spoken Hindi in Devanagari. If Telugu, speak in natural spoken Telugu in Telugu script. If Tamil, speak in natural spoken Tamil in Tamil script. If English, speak friendly Indian English. "
                 "CONVERSATION INSTRUCTIONS: "
                 "1. BE HIGHLY INTERACTIVE AND NATURAL. Do NOT repeat introductory greetings if the call is already in progress. If user says 'hi' or greets you mid-call, reply warmly and casually like a live co-pilot (e.g. 'Yes! I am right here listening. How can I assist you with your setup?'). "
-                "2. You are an expert on SkipTheChart algorithmic trading: broker developer API keys & secrets for all 18 Indian brokers (Flattrade, Zerodha, Angel One, Upstox, Fyers, etc.), 2FA TOTP secrets, server IP 127.0.0.1 whitelisting, Pairs Arbitrage, Delta Neutral straddles, 70% capital allocation, and 30% volatility buffer. "
+                f"2. You are an expert on SkipTheChart algorithmic trading: broker developer API keys & secrets for all 18 Indian brokers (Flattrade, Zerodha, Angel One, Upstox, Fyers, etc.), 2FA TOTP secrets, server IP {DROPLET_STATIC_IP} whitelisting, Pairs Arbitrage, Delta Neutral straddles, 70% capital allocation, and 30% volatility buffer. "
                 "3. Answer ANY question: broker setup, risk controls, strategy mechanics, how automated execution works, safety of funds, or casual friendly chat. "
                 "4. Keep replies concise (1 to 2 spoken sentences) so it sounds like real, fast telephone dialogue. "
                 "5. NEVER use markdown symbols (*, #, _, `, >, []), bullet points, numbers, or emojis in spoken output."
@@ -1923,13 +2144,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         reply = f"I am your SkipTheChart AI Quant Co-pilot. I guide you through {broker} API setup, 2FA TOTP secrets, and live algorithm execution."
                 elif any(k in lower_msg for k in ["api", "key", "secret", "portal", "generate"]):
                     if lang == "te":
-                        reply = f"{broker} డెవలపర్ పోర్టల్‌లో లాగిన్ అయ్యి New App క్రియేట్ చేయండి. Allowed IP లో 127.0.0.1 ఇచ్చి, API Key మరియు Secret ఇక్కడ పేస్ట్ చేయండి."
+                        reply = f"{broker} డెవలపర్ పోర్టల్‌లో లాగిన్ అయ్యి New App క్రియేట్ చేయండి. Allowed IP లో {DROPLET_STATIC_IP} ఇచ్చి, API Key మరియు Secret ఇక్కడ పేస్ట్ చేయండి."
                     elif lang == "hi":
-                        reply = f"{broker} डेवलपर पोर्टल में New App बनाएँ। Allowed IP में 127.0.0.1 डालकर, API Key और Secret यहाँ पेस्ट करें।"
+                        reply = f"{broker} डेवलपर पोर्टल में New App बनाएँ। Allowed IP में {DROPLET_STATIC_IP} डालकर, API Key और Secret यहाँ पेस्ट करें।"
                     elif lang == "ta":
-                        reply = f"{broker} டெவலப்பர் போர்ட்டலில் New App உருவாக்கி, Allowed IP-ல் 127.0.0.1 வழங்கி, API Key மற்றும் Secret-ஐ உள்ளிடவும்."
+                        reply = f"{broker} டெவலப்பர் போர்ட்டலில் New App உருவாக்கி, Allowed IP-ல் {DROPLET_STATIC_IP} வழங்கி, API Key மற்றும் Secret-ஐ உள்ளிடவும்."
                     else:
-                        reply = f"To generate your {broker} API key, log into their developer portal, create an app, whitelist server IP 127.0.0.1, and paste your API key and secret here."
+                        reply = f"To generate your {broker} API key, log into their developer portal, create an app, whitelist server IP {DROPLET_STATIC_IP}, and paste your API key and secret here."
                 elif any(k in lower_msg for k in ["totp", "authenticator", "2fa", "qr", "two factor"]):
                     if lang == "te":
                         reply = f"మీ {broker} సెక్యూరిటీ సెట్టింగ్స్‌లో External TOTP ఆన్ చేయండి. ఆ సీక్రెట్ కీ ని ఇక్కడ పేస్ట్ చేస్తే మీ బాట్ ప్రతి ఉదయం ఆటోమేటిక్‌గా లాగిన్ అవుతుంది."
@@ -1941,13 +2162,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         reply = f"Enable external authenticator in your {broker} security settings, and paste the secret setup key here for automated morning logins."
                 elif any(k in lower_msg for k in ["ip", "whitelist", "droplet", "server"]):
                     if lang == "te":
-                        reply = f"మీ డెడికేటెడ్ సర్వర్ IP 127.0.0.1. ఆర్డర్స్ రిజెక్ట్ కాకుండా ఉండటానికి దీన్ని {broker} డెవలపర్ పోర్టల్ Allowed IP లో నమోదు చేయండి."
+                        reply = f"మీ డెడికేటెడ్ సర్వర్ IP {DROPLET_STATIC_IP}. ఆర్డర్స్ రిజెక్ట్ కాకుండా ఉండటానికి దీన్ని {broker} డెవలపర్ పోర్టల్ Allowed IP లో నమోదు చేయండి."
                     elif lang == "hi":
-                        reply = f"आपका डेडिकेटेड सर्वर IP 127.0.0.1 है। इसे अपने {broker} डेवलपर पोर्टल के Allowed IP में डालें।"
+                        reply = f"आपका डेडिकेटेड सर्वर IP {DROPLET_STATIC_IP} है। इसे अपने {broker} डेवलपर पोर्टल के Allowed IP में डालें।"
                     elif lang == "ta":
-                        reply = f"உங்கள் பிரத்யேக சர்வர் IP 127.0.0.1. இதை {broker} Allowed IP கட்டத்தில் உள்ளிடவும்."
+                        reply = f"உங்கள் பிரத்யேக சர்வர் IP {DROPLET_STATIC_IP}. இதை {broker} Allowed IP கட்டத்தில் உள்ளிடவும்."
                     else:
-                        reply = f"Your dedicated cloud server IP is 127.0.0.1. Add it to your {broker} developer portal's Allowed IP field."
+                        reply = f"Your dedicated cloud server IP is {DROPLET_STATIC_IP}. Add it to your {broker} developer portal's Allowed IP field."
                 elif any(k in lower_msg for k in ["safe", "money", "funds", "security", "risk buffer", "భద్రత", "డబ్బులు"]):
                     if lang == "te":
                         reply = f"మీ డబ్బులు నూటికి నూరు శాతం సురక్షితం. SkipTheChart నాన్-కస్టోడియల్ పద్ధతిలో పనిచేస్తుంది, నిధులు ఎల్లప్పుడూ మీ SEBI రిజిస్టర్డ్ {broker} ఖాతాలోనే ఉంటాయి."
@@ -2985,12 +3206,15 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "summary": f"Configured {strategy_type.replace('_', ' ')} on {asset} with {' + '.join(indicators) if indicators else 'Pure Price Action'} and automatic security guardrails."
         }
 
-    def send_json_response(self, status_code, data):
+    def send_json_response(self, status_code, data, extra_headers=None):
         self.send_response(status_code)
         self.send_header("Content-Type", "application/json")
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Session-Token, X-Admin-Token")
+        if extra_headers:
+            for k, v in extra_headers.items():
+                self.send_header(k, v)
         self.end_headers()
         self.wfile.write(json.dumps(data).encode("utf-8"))
 
@@ -2998,7 +3222,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Session-Token, X-Admin-Token")
         self.end_headers()
 
 class ThreadedServer(socketserver.ThreadingMixIn, socketserver.TCPServer):

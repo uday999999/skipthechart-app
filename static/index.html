@@ -281,7 +281,7 @@
             <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">Email Address</label>
             <div class="relative">
               <span class="absolute left-3.5 top-2.5 text-slate-400 text-sm">✉️</span>
-              <input type="email" id="signin-email" required placeholder="trader.rahul@gmail.com" value="trader.rahul@gmail.com" class="w-full bg-white border border-slate-200 hover:border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 rounded-xl py-2.5 pl-10 pr-3 text-xs text-slate-900 outline-none font-medium shadow-2xs transition-all">
+              <input type="email" id="signin-email" required placeholder="you@example.com" value="" class="w-full bg-white border border-slate-200 hover:border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 rounded-xl py-2.5 pl-10 pr-3 text-xs text-slate-900 outline-none font-medium shadow-2xs transition-all">
             </div>
           </div>
 
@@ -291,7 +291,7 @@
             </div>
             <div class="relative">
               <span class="absolute left-3.5 top-2.5 text-slate-400 text-sm">🔒</span>
-              <input type="password" id="signin-password" placeholder="Enter password (default: Trader@123)" value="Trader@123" class="w-full bg-white border border-slate-200 hover:border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 rounded-xl py-2.5 pl-10 pr-10 text-xs text-slate-900 outline-none font-medium shadow-2xs transition-all">
+              <input type="password" id="signin-password" placeholder="Enter your account password" value="" class="w-full bg-white border border-slate-200 hover:border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 rounded-xl py-2.5 pl-10 pr-10 text-xs text-slate-900 outline-none font-medium shadow-2xs transition-all">
               <button type="button" onclick="togglePasswordVisibility('signin-password', this)" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 text-xs">👁️</button>
             </div>
           </div>
@@ -1225,46 +1225,46 @@
             <!-- 5 Asset Cards Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
               <!-- 1. NIFTY 50 -->
-              <div onclick="selectWizardAsset('NIFTY 50', 65, 17500, 25000)" ondblclick="selectWizardAsset('NIFTY 50', 65, 17500, 25000, true)" id="asset-card-nifty" class="p-4 bg-emerald-50/70 border-2 border-emerald-500 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
+              <div onclick="selectWizardAsset('NIFTY 50', 65, 25000, 35000)" ondblclick="selectWizardAsset('NIFTY 50', 65, 25000, 35000, true)" id="asset-card-nifty" class="p-4 bg-emerald-50/70 border-2 border-emerald-500 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-emerald-600 text-white">NSE</span>
-                  <span class="text-xs text-emerald-700 font-mono font-bold">Margin ₹17,500</span>
+                  <span class="text-xs text-emerald-700 font-mono font-bold" title="Options Buying: ₹25,000 | Hedged Spread: ₹38,000 | Iron Butterfly: ₹48,000">Margin ₹25,000 (Buying) / ₹48,000 (Hedged)</span>
                 </div>
                 <div>
                   <h4 class="text-base font-black text-slate-900">NIFTY 50</h4>
-                  <div class="text-[11px] text-slate-500">Benchmark Index • Lot Size: 65</div>
+                  <div class="text-[11px] text-slate-500">Benchmark Index • Lot Size: 65 • Options Buying & Spreads</div>
                 </div>
                 <div class="text-[10px] text-slate-600 font-mono bg-white p-2 rounded-lg border border-slate-200 flex justify-between shadow-xs">
                   <span>Min Capital (+30% Buffer):</span>
-                  <strong class="text-emerald-700">₹ 25,000</strong>
+                  <strong class="text-emerald-700">₹ 35,000</strong>
                 </div>
               </div>
 
               <!-- 2. BANKNIFTY -->
-              <div onclick="selectWizardAsset('BANKNIFTY', 30, 35000, 50000)" ondblclick="selectWizardAsset('BANKNIFTY', 30, 35000, 50000, true)" id="asset-card-banknifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
+              <div onclick="selectWizardAsset('BANKNIFTY', 30, 30000, 45000)" ondblclick="selectWizardAsset('BANKNIFTY', 30, 30000, 45000, true)" id="asset-card-banknifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">NSE</span>
-                  <span class="text-xs text-amber-700 font-mono font-bold">Margin ₹35,000</span>
+                  <span class="text-xs text-amber-700 font-mono font-bold" title="Options Buying: ₹30,000 | Hedged Spread: ₹45,000 | Iron Butterfly: ₹58,000">Margin ₹30,000 (Buying) / ₹58,000 (Hedged)</span>
                 </div>
                 <div>
                   <h4 class="text-base font-black text-slate-900">BANKNIFTY</h4>
-                  <div class="text-[11px] text-slate-500">High Volatility Banking • Lot Size: 30</div>
+                  <div class="text-[11px] text-slate-500">High Volatility Banking • Lot Size: 30 • Options Buying & Spreads</div>
                 </div>
                 <div class="text-[10px] text-slate-600 font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 flex justify-between">
                   <span>Min Capital (+30% Buffer):</span>
-                  <strong class="text-amber-700">₹ 50,000</strong>
+                  <strong class="text-amber-700">₹ 45,000</strong>
                 </div>
               </div>
 
               <!-- 3. FINNIFTY -->
-              <div onclick="selectWizardAsset('FINNIFTY', 60, 20000, 28600)" ondblclick="selectWizardAsset('FINNIFTY', 60, 20000, 26000, true)" id="asset-card-finnifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
+              <div onclick="selectWizardAsset('FINNIFTY', 60, 20000, 28600)" ondblclick="selectWizardAsset('FINNIFTY', 60, 20000, 28600, true)" id="asset-card-finnifty" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">NSE</span>
-                  <span class="text-xs text-emerald-700 font-mono font-bold">Margin ₹20,000</span>
+                  <span class="text-xs text-emerald-700 font-mono font-bold" title="Options Buying: ₹20,000 | Hedged Spread: ₹32,000 | Iron Butterfly: ₹42,000">Margin ₹20,000 (Buying) / ₹42,000 (Hedged)</span>
                 </div>
                 <div>
                   <h4 class="text-base font-black text-slate-900">FINNIFTY</h4>
-                  <div class="text-[11px] text-slate-500">Financial Services • Lot Size: 60</div>
+                  <div class="text-[11px] text-slate-500">Financial Services • Lot Size: 60 • Options Buying & Spreads</div>
                 </div>
                 <div class="text-[10px] text-slate-600 font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 flex justify-between">
                   <span>Min Capital (+30% Buffer):</span>
@@ -1273,18 +1273,18 @@
               </div>
 
               <!-- 4. SENSEX -->
-              <div onclick="selectWizardAsset('SENSEX', 20, 40000, 57100)" ondblclick="selectWizardAsset('SENSEX', 20, 40000, 52000, true)" id="asset-card-sensex" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
+              <div onclick="selectWizardAsset('SENSEX', 20, 25000, 35000)" ondblclick="selectWizardAsset('SENSEX', 20, 25000, 35000, true)" id="asset-card-sensex" class="p-4 bg-white border-2 border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs" title="Double-click to select and move to next step">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">BSE</span>
-                  <span class="text-xs text-purple-700 font-mono font-bold">Margin ₹40,000</span>
+                  <span class="text-xs text-purple-700 font-mono font-bold" title="Options Buying: ₹25,000 | Hedged Spread: ₹40,000 | Iron Butterfly: ₹52,000">Margin ₹25,000 (Buying) / ₹52,000 (Hedged)</span>
                 </div>
                 <div>
                   <h4 class="text-base font-black text-slate-900">SENSEX</h4>
-                  <div class="text-[11px] text-slate-500">BSE 30 Benchmark • Lot Size: 20</div>
+                  <div class="text-[11px] text-slate-500">BSE 30 Benchmark • Lot Size: 20 • Options Buying & Spreads</div>
                 </div>
                 <div class="text-[10px] text-slate-600 font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 flex justify-between">
                   <span>Min Capital (+30% Buffer):</span>
-                  <strong class="text-purple-700">₹ 57,100</strong>
+                  <strong class="text-purple-700">₹ 35,000</strong>
                 </div>
               </div>
 
@@ -4495,9 +4495,9 @@
       <strong>SkipTheChart</strong> is a Technology Service Provider (TSP) offering non-custodial algorithmic order execution software. We do not provide financial advice, tips, recommendations, or guaranteed returns. All investments and derivatives trades are subject to market risk.
     </p>
     <div class="text-[10px] text-slate-500 pt-1 space-y-1">
-      <div><strong>Legal Entity:</strong> SkipTheChart Enterprise &bull; <strong>MSME Registration:</strong> UDYAM-TS-20-0219018</div>
-      <div><strong>Registered Office:</strong> Plot No. 42, Silicon Valley Tech Corridor, Madhapur, Hyderabad, Telangana 500081, India</div>
-      <div><strong>Support Helpline:</strong> +91 044 4560 9696 &bull; <strong>Email:</strong> <a href="mailto:support@skipthechart.com" class="text-emerald-700 underline font-semibold">support@skipthechart.com</a> &bull; <strong>Compliance:</strong> <a href="mailto:legal@skipthechart.com" class="text-emerald-700 underline font-semibold">legal@skipthechart.com</a></div>
+      <div><strong>Legal Entity:</strong> [Placeholder pending user confirmation - SkipTheChart Enterprise] &bull; <strong>MSME Registration:</strong> UDYAM-TS-20-0219018 &bull; <strong>GSTIN:</strong> [Pending Confirmation]</div>
+      <div><strong>Registered Office:</strong> [Placeholder pending user confirmation - Plot No. 42, Silicon Valley Tech Corridor, Madhapur, Hyderabad, Telangana 500081, India]</div>
+      <div><strong>Grievance / Contact Officer:</strong> [Pending Confirmation] &bull; <strong>Support Helpline:</strong> +91 044 4560 9696 &bull; <strong>Email:</strong> <a href="mailto:support@skipthechart.com" class="text-emerald-700 underline font-semibold">support@skipthechart.com</a> &bull; <strong>Compliance:</strong> <a href="mailto:legal@skipthechart.com" class="text-emerald-700 underline font-semibold">legal@skipthechart.com</a></div>
       <div class="text-slate-400">© 2026 SkipTheChart. All rights reserved. Non-Custodial Algorithmic Trading Software.</div>
     </div>
   </footer>
@@ -4858,50 +4858,119 @@
         subscriptionActive: false,
         botRunning: false,
         dailySwitchesRemaining: 3,
-        brokerApiKey: '',
-        brokerApiSecret: '',
-        brokerClientCode: '',
-        brokerTotp: '',
-        brokerSessionToken: ''
+        hasBrokerCredentials: false,
+        brokerClientMasked: ''
       };
     }
+
+    function purgeClientBrokerSecrets() {
+      try {
+        localStorage.removeItem('user_gemini_api_key');
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && (k.startsWith('algoforge_') || k === 'user_gemini_api_key')) {
+            try {
+              const raw = localStorage.getItem(k);
+              const val = JSON.parse(raw);
+              if (val && typeof val === 'object') {
+                let modified = false;
+                ['brokerApiKey', 'brokerApiSecret', 'brokerTotp', 'brokerSessionToken', 'geminiKey'].forEach(field => {
+                  if (field in val) {
+                    delete val[field];
+                    modified = true;
+                  }
+                });
+                if (val.brokerClientCode && !val.brokerClientCode.includes('*')) {
+                  val.brokerClientMasked = val.brokerClientCode.slice(0, 2) + '***';
+                  val.hasBrokerCredentials = true;
+                  delete val.brokerClientCode;
+                  modified = true;
+                }
+                if (modified) {
+                  localStorage.setItem(k, JSON.stringify(val));
+                }
+              }
+            } catch (_) {}
+          }
+        }
+      } catch (_) {}
+    }
+    purgeClientBrokerSecrets();
 
     function getStorageKey(email) {
       if (!email) return 'algoforge_state_guest';
       return 'algoforge_user_' + email.toLowerCase().replace(/[^a-z0-9_]/g, '_');
     }
 
-    // Centralized Index Margin & Lot Size Configuration (SEBI Revised Lot Sizes)
+    // Centralized Unified Index Margin & Lot Size Configuration (SEBI Revised Lot Sizes)
+    // Structured and labelled by exact strategy execution model:
     const INDEX_MARGIN_CONFIG = {
       "NIFTY 50": {
         lot_size: 65,
+        strategy_labels: {
+          buying: "Options Buying (Intraday Momentum)",
+          intraday_spread: "Intraday Hedged Spread",
+          iron_butterfly: "Iron Butterfly (4-Leg Defined Risk)",
+          naked_selling: "Naked Selling (NRML Span + Exposure)"
+        },
         buying: { margin: 25000, min_capital: 35000 },
         intraday_spread: { margin: 38000, min_capital: 55000 },
         iron_butterfly: { margin: 48000, min_capital: 70000 },
         naked_selling: { margin: 125000, min_capital: 175000 },
-        default_margin: 48000,
-        default_min_capital: 70000
+        default_margin: 25000,
+        default_min_capital: 35000
       },
       "BANKNIFTY": {
         lot_size: 30,
+        strategy_labels: {
+          buying: "Options Buying (Intraday Momentum)",
+          intraday_spread: "Intraday Hedged Spread",
+          iron_butterfly: "Iron Butterfly (4-Leg Defined Risk)",
+          naked_selling: "Naked Selling (NRML Span + Exposure)"
+        },
         buying: { margin: 30000, min_capital: 45000 },
         intraday_spread: { margin: 45000, min_capital: 65000 },
         iron_butterfly: { margin: 58000, min_capital: 85000 },
         naked_selling: { margin: 145000, min_capital: 200000 },
-        default_margin: 58000,
-        default_min_capital: 85000
+        default_margin: 30000,
+        default_min_capital: 45000
+      },
+      "FINNIFTY": {
+        lot_size: 60,
+        strategy_labels: {
+          buying: "Options Buying (Intraday Momentum)",
+          intraday_spread: "Intraday Hedged Spread",
+          iron_butterfly: "Iron Butterfly (4-Leg Defined Risk)",
+          naked_selling: "Naked Selling (NRML Span + Exposure)"
+        },
+        buying: { margin: 20000, min_capital: 28600 },
+        intraday_spread: { margin: 32000, min_capital: 45000 },
+        iron_butterfly: { margin: 42000, min_capital: 60000 },
+        naked_selling: { margin: 115000, min_capital: 165000 },
+        default_margin: 20000,
+        default_min_capital: 28600
       },
       "SENSEX": {
         lot_size: 20,
+        strategy_labels: {
+          buying: "Options Buying (Intraday Momentum)",
+          intraday_spread: "Intraday Hedged Spread",
+          iron_butterfly: "Iron Butterfly (4-Leg Defined Risk)",
+          naked_selling: "Naked Selling (NRML Span + Exposure)"
+        },
         buying: { margin: 25000, min_capital: 35000 },
         intraday_spread: { margin: 40000, min_capital: 60000 },
         iron_butterfly: { margin: 52000, min_capital: 75000 },
         naked_selling: { margin: 135000, min_capital: 190000 },
-        default_margin: 52000,
-        default_min_capital: 75000
+        default_margin: 25000,
+        default_min_capital: 35000
       },
       "ARBITRAGE": {
+        // Historical Nifty lot size was 25 before SEBI contract rationalization. Pairs Arbitrage utilizes dynamic synthetic ratio legs.
         lot_size: 25,
+        strategy_labels: {
+          pairs_spread: "Statistical Co-Integration Pair Spread (Dynamic ratio weighting)"
+        },
         margin: 70000,
         min_capital: 100000,
         default_margin: 70000,
@@ -5823,8 +5892,9 @@
         if (payTag) payTag.innerText = (userState.selectedBrokerName || 'FLATTRADE').toUpperCase();
         const payHint = document.getElementById('pay-creds-hint');
         const payBtnText = document.getElementById('pay-creds-btn-text');
-        if (userState.brokerApiKey && userState.brokerClientCode) {
-          if (payHint) payHint.innerHTML = `<span class="text-emerald-700 font-bold">✓ Credentials configured for ${userState.brokerClientCode}</span> (API Key active)`;
+        if (userState.hasBrokerCredentials || userState.brokerClientMasked) {
+          const masked = userState.brokerClientMasked || 'Linked';
+          if (payHint) payHint.innerHTML = `<span class="text-emerald-700 font-bold">✓ Credentials configured for ${masked}</span> (Encrypted at rest)`;
           if (payBtnText) payBtnText.innerText = "Edit API Keys";
         } else {
           if (payHint) payHint.innerText = "Connect API Key, Secret & Client Code for live order routing.";
@@ -5899,9 +5969,18 @@
 
     // Sign In with Email & Password
     async function submitSignInForm() {
-      const email = document.getElementById('signin-email')?.value.trim() || 'trader.rahul@gmail.com';
-      const password = document.getElementById('signin-password')?.value || 'Trader@123';
+      const email = (document.getElementById('signin-email')?.value || '').trim();
+      const password = document.getElementById('signin-password')?.value || '';
       const btn = document.getElementById('btn-submit-signin');
+
+      if (!email) {
+        showAuthAlert("Please enter your email address.");
+        return;
+      }
+      if (!password) {
+        showAuthAlert("Please enter your account password.");
+        return;
+      }
 
       if (btn) {
         btn.disabled = true;
@@ -5920,12 +5999,10 @@
           applyLoggedInUser(data.email || email, data.name || email.split('@')[0]);
           showAuthAlert("✓ Signed in successfully! Loading terminal...", false);
         } else {
-          showAuthAlert(data.error || "Authentication failed. Please check your credentials.");
+          showAuthAlert(data.error || "Authentication failed. Please verify your email and password.");
         }
       } catch (e) {
-        // Fallback for offline/local simulation
-        applyLoggedInUser(email, email.split('@')[0]);
-        goToStep(1);
+        showAuthAlert("Unable to connect to server. Please check your network connection and try again.");
       } finally {
         if (btn) {
           btn.disabled = false;
@@ -6323,51 +6400,6 @@
           }
         }
       } catch (e) {}
-    }
-
-    // Google Client ID Configuration Modal Handlers
-    function openGoogleClientIdModal() {
-      const modal = document.getElementById('modal-google-client-id');
-      if (modal) modal.classList.remove('hidden');
-      initGoogleAuth();
-    }
-
-    function closeGoogleClientIdModal() {
-      const modal = document.getElementById('modal-google-client-id');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    async function saveGoogleClientId() {
-      const input = document.getElementById('input-google-client-id');
-      const val = (input?.value || '').trim();
-      const msg = document.getElementById('google-client-id-msg');
-      if (!val) {
-        alert('Please enter a valid Google OAuth Client ID');
-        return;
-      }
-
-      try {
-        const res = await fetch('/api/auth/save-google-client-id', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ google_client_id: val })
-        });
-        const data = await res.json();
-        if (data.success) {
-          if (msg) {
-            msg.className = "text-[11px] text-emerald-400 font-semibold block";
-            msg.innerText = "✓ Google Client ID saved & activated! Initializing Google Sign-In...";
-          }
-          await initGoogleAuth();
-          setTimeout(() => {
-            closeGoogleClientIdModal();
-          }, 1500);
-        } else {
-          alert(data.error || 'Failed to save Google Client ID');
-        }
-      } catch (err) {
-        alert('Network error saving Google Client ID: ' + err.message);
-      }
     }
 
     // Strategy Editor Modal Handlers
@@ -9098,7 +9130,7 @@
       brokerKey = (brokerKey || userState.selectedBroker || 'flattrade').toLowerCase();
       const guide = BROKER_GUIDES[brokerKey] || BROKER_GUIDES.flattrade;
       const bName = guide.name || userState.selectedBrokerName || 'Flattrade';
-      const nodeIp = window.SERVER_CONFIG_NODE_IP || '127.0.0.1';
+      const nodeIp = window.SERVER_CONFIG_NODE_IP || 'IP unavailable - contact support';
 
       // 1. Update Dropdown
       const bSelect = document.getElementById('guide-broker-select');
@@ -9296,13 +9328,13 @@
 
       document.getElementById('modal-api-title').innerText = `Enter ${bName} API Key & Secret`;
       document.getElementById('modal-lbl-client').innerText = guide.clientLabel || 'Client Code / User ID';
-      document.getElementById('modal-api-client').value = userState.brokerClientCode || guide.clientDefault || '';
-      document.getElementById('modal-api-key').value = userState.brokerApiKey || guide.keyDefault || '';
-      document.getElementById('modal-api-secret').value = userState.brokerApiSecret || guide.secretDefault || '';
-      document.getElementById('modal-api-totp').value = userState.brokerTotp || guide.totpDefault || '';
+      document.getElementById('modal-api-client').value = userState.brokerClientMasked || guide.clientDefault || '';
+      document.getElementById('modal-api-key').value = '';
+      document.getElementById('modal-api-secret').value = '';
+      document.getElementById('modal-api-totp').value = '';
 
       const ipEl = document.getElementById('modal-node-ip-display');
-      if (ipEl) ipEl.innerText = window.SERVER_CONFIG_NODE_IP || '';
+      if (ipEl) ipEl.innerText = window.SERVER_CONFIG_NODE_IP || 'IP unavailable - contact support';
 
       const btnSaveText = document.getElementById('btn-modal-save-text');
       if (btnSaveText) {
@@ -9377,14 +9409,12 @@
         return;
       }
 
-      userState.brokerClientCode = client;
-      userState.brokerApiKey = apiKey;
-      userState.brokerApiSecret = apiSecret;
-      userState.brokerTotp = totp;
-      saveState();
+      let saveSuccess = false;
+      let maskedClient = (client.length >= 2 ? client.slice(0, 2) + '***' : '***');
+      let errorMsg = 'Failed to save credentials.';
 
       try {
-        await fetch('/api/broker/credentials/save', {
+        const res = await fetch('/api/broker/credentials/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -9395,18 +9425,52 @@
             totp_secret: totp
           })
         });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          saveSuccess = true;
+          maskedClient = data.client_code || maskedClient;
+        } else {
+          errorMsg = data.error || 'Server rejected credentials.';
+        }
       } catch (e) {
-        console.error('Error saving credentials to server:', e);
+        errorMsg = 'Network failure: could not reach execution droplet.';
       }
+
+      // STRICT COMPLIANCE: Do not show 'credentials saved' unless server returned success
+      if (!saveSuccess) {
+        showToast(`❌ Error: ${errorMsg}`);
+        alert(`Failed to save broker credentials: ${errorMsg}`);
+        return;
+      }
+
+      // Immediately clear sensitive plaintext secrets from DOM inputs
+      const inpClient = document.getElementById('modal-api-client');
+      const inpKey = document.getElementById('modal-api-key');
+      const inpSec = document.getElementById('modal-api-secret');
+      const inpTotp = document.getElementById('modal-api-totp');
+      if (inpClient) inpClient.value = '';
+      if (inpKey) inpKey.value = '';
+      if (inpSec) inpSec.value = '';
+      if (inpTotp) inpTotp.value = '';
+
+      // Set masked metadata only - NEVER persist secrets in client state or localStorage
+      userState.hasBrokerCredentials = true;
+      userState.brokerClientMasked = maskedClient;
+      delete userState.brokerApiKey;
+      delete userState.brokerApiSecret;
+      delete userState.brokerClientCode;
+      delete userState.brokerTotp;
+      delete userState.brokerSessionToken;
+      saveState();
 
       closeApiCredentialsModal();
 
       if (userState.subscriptionActive) {
         updateLiveDashboardUI();
-        showToast(`✓ Flattrade credentials saved for ${client}! Bot is configured.`);
+        showToast(`✓ Credentials encrypted & saved for ${maskedClient}! Bot is configured.`);
         showScreen('screen-live-dashboard');
       } else {
-        showToast('✓ API credentials saved! Proceeding to server deployment.');
+        showToast(`✓ Credentials encrypted & saved for ${maskedClient}! Proceeding to server deployment.`);
         goToStep(5);
       }
     }
@@ -9439,7 +9503,7 @@
           startLiveMarketTickSimulation();
 
           // If user hasn't configured API keys yet, prompt them immediately!
-          if (!userState.brokerApiKey) {
+          if (!userState.hasBrokerCredentials) {
             setTimeout(() => {
               openApiCredentialsModal();
               showToast("🔑 Step 1: Please enter your Flattrade API Key & Secret to connect your bot.");
@@ -9473,16 +9537,17 @@
       const step1Status = document.getElementById('dash-step1-status');
       const step1BtnText = document.getElementById('dash-step1-btn-text');
 
-      if (ipDisp) ipDisp.innerText = window.SERVER_CONFIG_NODE_IP || '127.0.0.1';
+      if (ipDisp) ipDisp.innerText = window.SERVER_CONFIG_NODE_IP || 'IP unavailable - contact support';
 
-      if (userState.brokerApiKey && userState.brokerClientCode) {
+      if (userState.hasBrokerCredentials || userState.brokerClientMasked) {
+        const masked = userState.brokerClientMasked || 'Linked';
         if (missingBanner) missingBanner.classList.add('hidden');
         if (activeBanner) activeBanner.classList.remove('hidden');
-        if (credsBtnText) credsBtnText.innerText = `Edit API Keys (${userState.brokerClientCode})`;
-        if (clientBadge) clientBadge.innerText = `Client: ${userState.brokerClientCode}`;
+        if (credsBtnText) credsBtnText.innerText = `Edit API Keys (${masked})`;
+        if (clientBadge) clientBadge.innerText = `Client: ${masked}`;
         if (step1Status) {
           step1Status.className = "text-[10px] text-emerald-700 font-mono font-bold";
-          step1Status.innerText = `✓ Linked (${userState.brokerClientCode})`;
+          step1Status.innerText = `✓ Linked (${masked})`;
         }
         if (step1BtnText) step1BtnText.innerText = "Edit API Keys";
       } else {
@@ -9515,19 +9580,15 @@
 
     function generateDailyToken() {
       const broker = (userState.selectedBroker || 'flattrade').toLowerCase();
-      const apiKey = (userState.brokerApiKey || document.getElementById('modal-api-key')?.value || '').trim();
-
+      if (!userState.hasBrokerCredentials) {
+        openApiCredentialsModal();
+        showToast('👉 Please enter and save your broker credentials first.');
+        return;
+      }
       if (broker === 'flattrade') {
-        if (!apiKey) {
-          openApiCredentialsModal();
-          showToast('👉 Please enter and save your Flattrade API Key first.');
-          return;
-        }
-        const authUrl = "https://auth.flattrade.in/?app_key=" + encodeURIComponent(apiKey);
+        const authUrl = "https://auth.flattrade.in/";
         const w = window.open(authUrl, "_blank");
-        if (!w) {
-          window.location.href = authUrl;
-        }
+        if (!w) window.location.href = authUrl;
       } else {
         openApiCredentialsModal();
       }
@@ -9540,12 +9601,7 @@
         const res = await fetch('/api/broker/flattrade/exchange-token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            code: code,
-            client_id: userState.brokerClientCode || document.getElementById('modal-api-client')?.value?.trim() || '',
-            api_key: userState.brokerApiKey || document.getElementById('modal-api-key')?.value?.trim() || '',
-            api_secret: userState.brokerApiSecret || document.getElementById('modal-api-secret')?.value?.trim() || ''
-          })
+          body: JSON.stringify({ code: code })
         });
         const data = await res.json();
         if (data.success) {
@@ -10228,16 +10284,11 @@
     async function checkAiEngineStatus() {
       const badge = document.getElementById('call-engine-badge');
       const text = document.getElementById('call-engine-text');
-      const btn = document.getElementById('btn-config-gemini-key');
-      const localKey = localStorage.getItem('user_gemini_api_key') || '';
       try {
         const res = await fetch('/api/auth/config');
         const data = await res.json();
-        const hasKey = data.has_gemini_key || Boolean(localKey);
         if (text) text.innerText = "Gemini 3.7 Flash Beta ⚡";
         if (badge) badge.className = "font-semibold text-emerald-400 flex items-center gap-1.5 cursor-default select-none";
-        // Always hide admin key button from subscribers - platform key is managed centrally
-        if (btn) btn.classList.add('hidden');
       } catch (e) {
         if (text) text.innerText = "Gemini 3.7 Flash Beta ⚡";
       }
@@ -10426,8 +10477,6 @@
       if (aiTr) aiTr.innerText = "Thinking...";
       setWaveformActive(true);
 
-      const localGeminiKey = localStorage.getItem('user_gemini_api_key') || '';
-
       try {
         const res = await fetch('/api/ai/voice-call', {
           method: 'POST',
@@ -10435,7 +10484,6 @@
           body: JSON.stringify({
             message: query,
             history: voiceCallHistory.slice(-6),
-            gemini_key: localGeminiKey,
             context: {
               broker: userState.selectedBrokerName || 'Flattrade',
               strategy: userState.selectedStrategyName || 'Pairs Arbitrage',
@@ -10697,9 +10745,10 @@
           <div class="space-y-3 text-slate-700 text-xs leading-relaxed">
             <p>For technical support, API integration inquiries, or account questions, our team is available Monday through Friday during Indian capital market hours (8:30 AM to 5:30 PM IST):</p>
             <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5 font-mono text-xs text-slate-800">
-              <div><strong>Legal Entity:</strong> SkipTheChart Enterprise</div>
-              <div><strong>Registration:</strong> UDYAM-TS-20-0219018 (MSME Registered)</div>
-              <div><strong>Registered Office:</strong> Plot No. 42, Silicon Valley Tech Corridor, Madhapur, Hyderabad, Telangana 500081, India</div>
+              <div><strong>Legal Entity:</strong> [Placeholder pending user confirmation - SkipTheChart Enterprise]</div>
+              <div><strong>Registration:</strong> UDYAM-TS-20-0219018 (MSME Registered) &bull; <strong>GSTIN:</strong> [Pending Confirmation]</div>
+              <div><strong>Registered Office:</strong> [Placeholder pending user confirmation - Plot No. 42, Silicon Valley Tech Corridor, Madhapur, Hyderabad, Telangana 500081, India]</div>
+              <div><strong>Grievance / Nodal Officer:</strong> [Pending Confirmation]</div>
               <div><strong>Email Support:</strong> <a href="mailto:support@skipthechart.com" class="text-emerald-700 font-bold underline">support@skipthechart.com</a></div>
               <div><strong>Compliance Desk:</strong> <a href="mailto:legal@skipthechart.com" class="text-emerald-700 font-bold underline">legal@skipthechart.com</a></div>
               <div><strong>Support Helpline:</strong> +91 044 4560 9696 / +91 044 6132 9696</div>
@@ -10916,14 +10965,12 @@
       fetch('/api/broker/credentials')
         .then(r => r.json())
         .then(d => {
-          if (d && d.success && d.api_key) {
-            if (!userState.brokerApiKey || !userState.brokerClientCode) {
-              userState.brokerApiKey = d.api_key;
-              if (d.client_code) userState.brokerClientCode = d.client_code;
-              saveState();
-              if (typeof updateLiveDashboardUI === 'function') {
-                updateLiveDashboardUI();
-              }
+          if (d && d.success && (d.has_api_key || d.client_code)) {
+            userState.hasBrokerCredentials = true;
+            if (d.client_code) userState.brokerClientMasked = d.client_code;
+            saveState();
+            if (typeof updateLiveDashboardUI === 'function') {
+              updateLiveDashboardUI();
             }
           }
         })
