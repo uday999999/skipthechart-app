@@ -1024,12 +1024,14 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             if secret not in user["recent_secrets"]:
                 user["recent_secrets"].append(secret)
             otpauth_url = f"otpauth://totp/SkipTheChart:{email}?secret={secret}&issuer=SkipTheChart"
-            qr_url = f"https://api.qrserver.com/v1/create-qr-code/?size=240x240&data={urllib.parse.quote(otpauth_url)}"
+            qr_url = f"https://quickchart.io/qr?size=240&text={urllib.parse.quote(otpauth_url)}"
+            backup_qr_url = f"https://chart.googleapis.com/chart?chs=240x240&cht=qr&chl={urllib.parse.quote(otpauth_url)}"
             self.send_json_response(200, {
                 "success": True,
                 "secret": secret,
                 "otpauth_url": otpauth_url,
                 "qr_url": qr_url,
+                "backup_qr_url": backup_qr_url,
                 "totp_enabled": user.get("totp_enabled", False),
                 "email": email
             })

@@ -31,15 +31,15 @@ class AlgoForgeDropletRunner:
         print(f"[{time.strftime('%X')}] [STEP 1: HEDGE FIRST] BUY NIFTY PE Strike {hedge_strike} (OTM-400) | Margin Discount Activated")
         time.sleep(0.015)  # 15ms execution
         
-        # 2. Execute Main Alpha Selling Leg
+        # 2. Execute Main Primary Selling Leg
         main_strike = underlying_spot
-        print(f"[{time.strftime('%X')}] [STEP 2: ALPHA LEG]   SELL NIFTY PE Strike {main_strike} (ATM) | Premium Decay Captured")
+        print(f"[{time.strftime('%X')}] [STEP 2: PRIMARY LEG] SELL NIFTY PE Strike {main_strike} (ATM) | Premium Decay Captured")
         time.sleep(0.015)
         
         # 3. Position initialized with Trailing SL
         self.positions.append({
             "hedge": f"BUY {hedge_strike} PE",
-            "alpha": f"SELL {main_strike} PE",
+            "primary": f"SELL {main_strike} PE",
             "entry_time": time.strftime("%X"),
             "sl_pct": self.active_strategy.get("sl_pct", 2.0),
             "tsl_pct": self.active_strategy.get("tsl_pct", 1.0)
