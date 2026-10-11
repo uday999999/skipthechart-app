@@ -7272,12 +7272,7 @@
         updateLiveDashboardUI();
         showNotification('Strategy deployed and bot running live on your droplet!', 'success');
       } else {
-        // If broker API keys are not entered yet, prompt with the API modal before payment
-        if (!userState.brokerApiKey) {
-          openApiCredentialsModal();
-        } else {
-          goToStep(5);
-        }
+        goToStep(5);
       }
     }
 
