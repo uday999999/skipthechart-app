@@ -4642,7 +4642,7 @@
         <div class="flex items-center gap-1.5 bg-slate-800/90 px-2.5 py-1 rounded-full border border-slate-700/80 text-[11px]">
           <span class="text-slate-400">Language:</span>
           <select id="call-lang-select" onchange="switchCallLanguage(this.value)" class="bg-transparent text-emerald-300 font-bold border-0 outline-none cursor-pointer text-[11px] focus:ring-0">
-            <option value="en" selected class="bg-slate-900 text-white">🇬🇧 English</option>
+            <option value="en-GB" selected class="bg-slate-900 text-white">🇬🇧 English (British)</option>
             <option value="hi" class="bg-slate-900 text-white">🇮🇳 हिन्दी / Hinglish</option>
             <option value="te" class="bg-slate-900 text-white">🇮🇳 తెలుగు (Telugu)</option>
             <option value="ta" class="bg-slate-900 text-white">🇮🇳 தமிழ் (Tamil)</option>
@@ -10290,11 +10290,11 @@
       voiceCallSeconds = 0;
       voiceCallHistory = [];
 
-      // Sync user's preselected language from dropdown (English default)
-      selectedCallLanguage = 'en';
+      // Sync user's preselected language from dropdown (British English default)
+      selectedCallLanguage = 'en-GB';
       const langSel = document.getElementById('call-lang-select');
       if (langSel) {
-        if (!langSel.value || langSel.value === 'auto') langSel.value = 'en';
+        if (!langSel.value || langSel.value === 'auto' || langSel.value === 'en') langSel.value = 'en-GB';
         selectedCallLanguage = langSel.value;
       }
 
