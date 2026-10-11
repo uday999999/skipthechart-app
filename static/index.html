@@ -5918,28 +5918,31 @@
     }
 
     // Google Sign-In & Modal Handlers
-    
     function triggerGoogleLoginFlow() {
-      // 1. First attempt native Google One-Tap
+      // 1. If native Google button iframe/button exists, click it directly to trigger Google's account picker
+      const gsiBtn = document.querySelector('#google-gsi-btn-container iframe') ||
+                     document.querySelector('#google-gsi-btn-container [role="button"]') ||
+                     document.querySelector('#google-gsi-btn-container div');
+      if (gsiBtn && gsiBtn.click) {
+        gsiBtn.click();
+        return;
+      }
+
+      // 2. Try Google One-Tap prompt with status listener
       if (window.google && window.google.accounts && window.GOOGLE_CLIENT_ID_CONFIGURED) {
         try {
-          window.google.accounts.id.prompt();
+          window.google.accounts.id.prompt((notification) => {
+            // Only if Google suppressed or skipped the prompt do we show the safety fallback modal
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              openGoogleSignInModal();
+            }
+          });
+          return;
         } catch (e) {}
       }
-      // 2. Open fallback Google modal
-      const modal = document.getElementById('modal-google-auth');
-      if (modal) {
-        modal.classList.remove('hidden');
-        modal.style.display = 'flex';
-        const input = document.getElementById('custom-google-email');
-        if (input) setTimeout(() => input.focus(), 150);
-      } else {
-        const email = prompt('Enter your Google (Gmail) address to sign in:');
-        if (email && email.includes('@')) {
-          const name = email.split('@')[0];
-          performGoogleSignIn(email, name);
-        }
-      }
+
+      // 3. Fallback modal only if Google SDK isn't available
+      openGoogleSignInModal();
     }
 
     function openGoogleSignInModal() {
@@ -6189,7 +6192,8 @@
       }
     }
 
-    // Initialize Google Identity SDK on Startup
+    // Initialize Google Identity SDK on Startup (with auto-retry while script loads)
+    let googleAuthRetryCount = 0;
     async function initGoogleAuth() {
       try {
         const res = await fetch('/api/auth/config');
@@ -6204,22 +6208,44 @@
           if (statusEl) statusEl.innerHTML = `<span class="text-amber-700 font-bold">⚪ Not Configured</span> <span class="text-slate-500">(Using 1-Click Demo / Email)</span>`;
         }
 
-        if (config.google_client_id && window.google && window.google.accounts) {
-          window.GOOGLE_CLIENT_ID_CONFIGURED = true;
-          window.google.accounts.id.initialize({
-            client_id: config.google_client_id,
-            callback: handleGoogleCredentialResponse,
-            auto_select: false,
-            cancel_on_tap_outside: true
-          });
-          const container = document.getElementById('google-gsi-btn-container');
-          if (container) {
-            window.google.accounts.id.renderButton(container, {
-              theme: 'outline',
-              size: 'large',
-              width: 320,
-              text: 'continue_with'
+        if (config.google_client_id) {
+          // If google script is still downloading in background, wait & retry up to 25 times (2.5s)
+          if (!window.google || !window.google.accounts) {
+            if (googleAuthRetryCount < 25) {
+              googleAuthRetryCount++;
+              setTimeout(initGoogleAuth, 120);
+              return;
+            }
+          }
+
+          if (window.google && window.google.accounts) {
+            window.GOOGLE_CLIENT_ID_CONFIGURED = true;
+            window.google.accounts.id.initialize({
+              client_id: config.google_client_id,
+              callback: handleGoogleCredentialResponse,
+              auto_select: false,
+              cancel_on_tap_outside: true,
+              itp_support: true
             });
+            const container = document.getElementById('google-gsi-btn-container');
+            if (container) {
+              window.google.accounts.id.renderButton(container, {
+                theme: 'outline',
+                size: 'large',
+                width: 360,
+                text: 'continue_with',
+                shape: 'rectangular',
+                logo_alignment: 'left'
+              });
+              // Hide fallback custom button since official Google button is loaded and active!
+              const customBtn = document.getElementById('btn-google-signin');
+              if (customBtn) customBtn.classList.add('hidden');
+            }
+
+            // Also request prompt cleanly
+            try {
+              window.google.accounts.id.prompt();
+            } catch (e) {}
           }
         }
       } catch (e) {}
