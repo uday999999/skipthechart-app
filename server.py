@@ -1746,7 +1746,9 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             strat = user_context.get("strategy", "Pairs Arbitrage")
             step = user_context.get("step", 1)
             capital = user_context.get("capital", 25000)
-            lang = user_context.get("language", "auto")
+            lang = user_context.get("language", "en").lower()
+            if lang in ["auto", "", "default"]:
+                lang = "en"
             
             gemini_key = os.environ.get("GEMINI_API_KEY", "").strip() or payload.get("gemini_key", "").strip()
             if not gemini_key:
@@ -1767,13 +1769,12 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
 
             # Normalize language tag
             lang_code_map = {
+                "en": "en-IN",
                 "hi": "hi-IN",
                 "ta": "ta-IN",
-                "te": "te-IN",
-                "en": "en-IN"
+                "te": "te-IN"
             }
-            if lang in lang_code_map:
-                detected_lang = lang_code_map[lang]
+            detected_lang = lang_code_map.get(lang, "en-IN")
 
             # -------------------------------------------------------------------------
             # MULTI-TURN AI VOICE CALL HANDLER (INTERACTIVE & TOPIC-AWARE)
@@ -1782,12 +1783,12 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             is_initial_connect = (user_msg.lower() == "call_connected") or (not user_msg and len(history) == 0)
 
             lang_specs = {
+                "en": ("English", "polite, friendly, clear professional Indian English"),
                 "hi": ("Hindi", "natural spoken Hindi in Devanagari script so text-to-speech engine speaks with authentic native Indian pronunciation (e.g. 'नमस्ते! मैं सुन रहा हूँ...')"),
                 "te": ("Telugu", "natural spoken Telugu in Telugu script so text-to-speech engine speaks with authentic Telugu pronunciation (e.g. 'నమస్కారం! నేను వింటున్నాను...')"),
-                "ta": ("Tamil", "natural spoken Tamil in Tamil script so text-to-speech engine speaks with authentic Tamil pronunciation (e.g. 'வணக்கம்! நான் கேட்கிறேன்...')"),
-                "en": ("English", "polite, friendly Indian English")
+                "ta": ("Tamil", "natural spoken Tamil in Tamil script so text-to-speech engine speaks with authentic Tamil pronunciation (e.g. 'வணக்கம்! நான் கேட்கிறேன்...')")
             }
-            lang_name, lang_guide = lang_specs.get(lang, ("Indian English / Hindi", "natural conversational spoken language"))
+            lang_name, lang_guide = lang_specs.get(lang, ("English", "polite, friendly, clear professional Indian English"))
 
             sys_instruction = (
                 "You are the SkipTheChart AI Voice Concierge speaking live with an Indian retail stock trader on a two-way telephone call. "
