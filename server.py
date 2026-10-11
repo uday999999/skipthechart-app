@@ -1777,7 +1777,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 if not call_input or call_input.lower() in ["call_connected", "hello", "hi", "namaste", "vanakkam", "namaskaram"]:
                     call_input = f"The trader just connected the live voice call. Greet them warmly in {lang_name}, welcome them to SkipTheChart, and ask how you can guide them with their {broker} setup or strategy today."
 
-                for model_candidate in ["gemini-2.0-flash", "gemini-1.5-flash"]:
+                for model_candidate in ["gemini-3.8-flash", "gemini-flash-latest", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]:
                     try:
                         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_candidate}:generateContent?key={gemini_key}"
                         req_payload = {
