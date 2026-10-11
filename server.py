@@ -378,7 +378,7 @@ INDICATORS_CATALOG = {
         {"id": "ivp", "name": "IVP (Implied Volatility Percentile)", "periods": "252 Days", "desc": "Percentage of days in past year where IV was lower than current IV."},
         {"id": "ivr", "name": "IVR (Implied Volatility Rank)", "periods": "52-Week", "desc": "Current IV relative to 52-week high and low IV range."},
         {"id": "donchian_squeeze", "name": "Donchian Bandwidth Squeeze", "periods": "20", "desc": "Measures width of 20-period price extremes to detect volatility contraction."},
-        {"id": "zscore", "name": "Nifty & BankNifty Z-Score Spread (Pairs Hedge)", "periods": "20, 2.0σ", "desc": "Statistical arbitrage ratio spread between Nifty and BankNifty for mean-reverting market-neutral pairs hedging."}
+        {"id": "zscore", "name": "Nifty & BankNifty Z-Score Spread (Pairs Hedge)", "periods": "20, 2.0σ", "desc": "Statistical arbitrage ratio spread between Nifty and BankNifty designed to reduce directional exposure."}
     ],
     "volume": [
         {"id": "vwap", "name": "VWAP (Volume Weighted Average Price)", "periods": "Intraday Benchmark", "desc": "Institutional price weighted by true traded volume from 9:15 AM."},
@@ -783,7 +783,7 @@ def parse_youtube_strategy(url: str, description: str = "") -> dict:
             "min_capital": 100000,
             "buffer_amount": 30000,
             "synergy_score": 98,
-            "summary": "Market-neutral statistical arbitrage strategy exploiting pricing divergence between Nifty and BankNifty."
+            "summary": "Statistical arbitrage strategy designed to reduce directional exposure by exploiting pricing divergence between Nifty and BankNifty."
         }
 
     # 8. Bollinger Bands Squeeze & Volatility Breakout
@@ -966,9 +966,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "/api/auth/config",
             "/api/auth/login",
             "/api/auth/signup",
-            "/api/auth/google",
-            "/api/auth/totp/verify",
-            "/api/auth/totp/setup"
+            "/api/auth/google"
         }
 
         ADMIN_ENDPOINTS = {
@@ -2278,7 +2276,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "theta_harvester": {"name": "Intraday Theta Harvester", "default_dataset": "nifty50", "style": "Non-Directional Daily Straddle (Theta Decay)"},
             "banknifty_scalp": {"name": "BankNifty Fast Scalper", "default_dataset": "banknifty", "style": "High-Beta Momentum Scalp"},
             "expiry_hunter": {"name": "FinNifty & Midcap Expiry Hunter", "default_dataset": "nifty50", "style": "Weekly Expiry Gamma Spikes"},
-            "pairs_arbitrage": {"name": "Nifty ↔ BankNifty Statistical Arbitrage", "default_dataset": "banknifty", "style": "Market-Neutral Pairs Arbitrage (Z-Score)"}
+            "pairs_arbitrage": {"name": "Nifty ↔ BankNifty Statistical Arbitrage", "default_dataset": "banknifty", "style": "Pairs Arbitrage (designed to reduce directional exposure)"}
         }
         meta = strategy_meta.get(strat_key, strategy_meta["trend_rider"])
 
@@ -2870,7 +2868,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "name": "±3.000σ Entry (Quant Standard)",
                 "z_score": 3.0,
                 "indicators": [],
-                "indicator_names": ["Pure Z-Score (±3.000σ)", "Zero Indicators", "Market-Neutral"],
+                "indicator_names": ["Pure Z-Score (±3.000σ)", "Zero Indicators", "Directional Exposure Reduced"],
                 "count": 0,
                 "total_trades": 142,
                 "win_rate": 78.4,
@@ -2911,7 +2909,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         for item in sensitivity_results:
             if item == best:
                 item["name"] = f"±{item['z_score']:.3f}σ Entry (Active Calibrated Threshold)"
-                item["indicator_names"] = [f"Pure Z-Score (±{item['z_score']:.3f}σ)", "Zero Indicators", "Market-Neutral (Active)"]
+                item["indicator_names"] = [f"Pure Z-Score (±{item['z_score']:.3f}σ)", "Zero Indicators", "Directional Exposure Reduced (Active)"]
                 item["is_active"] = True
             else:
                 item["is_active"] = False
