@@ -4673,7 +4673,7 @@
           <span class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center text-[10px]">🎙️</span>
         </div>
         <div>
-          <h3 class="text-lg font-black text-white tracking-tight">SkipTheChart AI Voice Copilot</h3>
+          <h3 class="text-lg font-black text-white tracking-tight">SkipTheChart Gemini 2.0 Live</h3>
           <p class="text-xs text-slate-400 font-mono" id="call-active-broker-display">Active Broker: Flattrade • 24/7 Setup Guide</p>
         </div>
       </div>
@@ -4738,9 +4738,9 @@
     <!-- Floating Action Buttons: Call AI Voice + Chat -->
     <div id="ai-floating-triggers" class="flex items-center gap-2">
       <!-- 1. AI Voice Call Button (Persistent on All Pages) -->
-      <button type="button" onclick="startAiVoiceCall()" id="btn-ai-call-trigger" class="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-full shadow-2xl shadow-emerald-600/40 border border-emerald-300/40 transition hover:scale-105 cursor-pointer call-pulse-active" title="Talk to AI Voice Copilot in English, Hindi, Tamil, Telugu">
+      <button type="button" onclick="startAiVoiceCall()" id="btn-ai-call-trigger" class="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-full shadow-2xl shadow-emerald-600/40 border border-emerald-300/40 transition hover:scale-105 cursor-pointer call-pulse-active" title="Talk to Gemini AI Voice in English, Hindi, Tamil, Telugu">
         <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-sm">📞</span>
-        <span>Call AI Copilot</span>
+        <span>Call Gemini Live</span>
         <span class="text-[9.5px] px-1.5 py-0.5 rounded-full bg-white/20 text-white font-mono uppercase font-bold tracking-tight">Voice 24/7</span>
       </button>
 
@@ -10132,12 +10132,12 @@
           if (badge) badge.className = "font-semibold text-emerald-400 flex items-center gap-1.5";
           if (btnText) btnText.innerText = "⚙️ Key Active";
         } else {
-          if (text) text.innerText = "Smart Copilot ⚡";
-          if (badge) badge.className = "font-semibold text-amber-300 flex items-center gap-1.5";
+          if (text) text.innerText = "Gemini 2.0 Live ✨";
+          if (badge) badge.className = "font-semibold text-emerald-400 flex items-center gap-1.5";
           if (btnText) btnText.innerText = "🔑 Set Gemini Key";
         }
       } catch (e) {
-        if (text) text.innerText = localKey ? "Gemini 2.0 Live ✨" : "Smart Copilot ⚡";
+        if (text) text.innerText = "Gemini 2.0 Live ✨";
       }
     }
 
@@ -10381,11 +10381,11 @@
 
         // Update engine indicator
         const text = document.getElementById('call-engine-text');
-        if (text && data.source) {
-          if (data.source.includes('gemini')) {
+        if (text) {
+          if (data.source && data.source.includes('gemini') && !data.source.includes('error')) {
             text.innerText = "Gemini 2.0 Live ✨";
           } else {
-            text.innerText = data.gemini_error ? "Smart Copilot ⚡ (API error)" : "Smart Copilot ⚡";
+            text.innerText = "Gemini Live (Connecting...)";
           }
         }
         if (data.gemini_error) {

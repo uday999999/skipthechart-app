@@ -1593,48 +1593,62 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             source = "gemini_live"
 
             # Attempt live Google Gemini API if key is present
+            if not gemini_key:
+                env_file = os.path.join(BASE_DIR, ".env")
+                if os.path.exists(env_file):
+                    try:
+                        with open(env_file, "r", encoding="utf-8") as ef:
+                            for eline in ef:
+                                if eline.startswith("GEMINI_API_KEY="):
+                                    gemini_key = eline.strip().split("=", 1)[1].strip()
+                                    break
+                    except Exception:
+                        pass
+
             if gemini_key and user_msg:
-                try:
-                    sys_instruction = (
-                        f"You are the SkipTheChart AI Quant Advisor powered by Google Gemini. "
-                        f"You help Indian retail traders succeed with automated algorithmic trading and broker API setup. "
-                        f"User Profile: Active Broker: {broker}, Deployed Strategy: {strat}, "
-                        f"Assigned Droplet Static IP: 127.0.0.1, Dashboard URL: https://skipthechart.com, "
-                        f"Total Account Capital: ₹{capital:,}, Equity Utilization: {equity_util}% "
-                        f"(maintaining a {100-equity_util}% SkipTheChart mandatory transaction & RMS buffer). "
-                        f"CRITICAL KNOWLEDGE FOR SUBSCRIBERS:\n"
-                        f"1. DASHBOARD ADDRESS: Always https://skipthechart.com. Subscribers log in with email. It is NEVER an IP extension like skipthechart.com/127.0.0.1.\n"
-                        f"2. DROPLET IP WHITELISTING: The static IP is 127.0.0.1. It is strictly for entering in the broker's 'Allowed IPs' or 'Whitelist IP' field.\n"
-                        f"3. EXISTING VS NEW API: If subscriber already has a broker API key, they only need to EDIT the app, change Allowed IP to 127.0.0.1, and save. If new, they create a new app named 'SkipTheChart' with Allowed IP 127.0.0.1.\n"
-                        f"4. BROKER PORTALS:\n"
-                        f"   - Flattrade: https://wall.flattrade.in (Pi Connect Open API)\n"
-                        f"   - Angel One: https://smartapi.angelbroking.com (SmartAPI Trading)\n"
-                        f"   - Zerodha: https://kite.trade (Kite Connect v3)\n"
-                        f"   - Dhan: https://web.dhan.co (DhanHQ Direct API)\n"
-                        f"   - Alice Blue: https://develop-api.aliceblueonline.com\n"
-                        f"Keep answers clear, highly structured, friendly, and formatted in clean markdown with bullet points and copyable snippets."
-                    )
-                    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
-                    req_payload = {
-                        "contents": [
-                            {"role": "user", "parts": [{"text": f"{sys_instruction}\n\nUser Question: {user_msg}"}]}
-                        ],
-                        "generationConfig": {
-                            "temperature": 0.4,
-                            "maxOutputTokens": 800
+                sys_instruction = (
+                    f"You are the SkipTheChart AI Quant Advisor powered by Google Gemini. "
+                    f"You help Indian retail traders succeed with automated algorithmic trading and broker API setup. "
+                    f"User Profile: Active Broker: {broker}, Deployed Strategy: {strat}, "
+                    f"Assigned Droplet Static IP: 127.0.0.1, Dashboard URL: https://skipthechart.com, "
+                    f"Total Account Capital: ₹{capital:,}, Equity Utilization: {equity_util}% "
+                    f"(maintaining a {100-equity_util}% SkipTheChart mandatory transaction & RMS buffer). "
+                    f"CRITICAL KNOWLEDGE FOR SUBSCRIBERS:\n"
+                    f"1. DASHBOARD ADDRESS: Always https://skipthechart.com. Subscribers log in with email. It is NEVER an IP extension like skipthechart.com/127.0.0.1.\n"
+                    f"2. DROPLET IP WHITELISTING: The static IP is 127.0.0.1. It is strictly for entering in the broker's 'Allowed IPs' or 'Whitelist IP' field.\n"
+                    f"3. EXISTING VS NEW API: If subscriber already has a broker API key, they only need to EDIT the app, change Allowed IP to 127.0.0.1, and save. If new, they create a new app named 'SkipTheChart' with Allowed IP 127.0.0.1.\n"
+                    f"4. BROKER PORTALS:\n"
+                    f"   - Flattrade: https://wall.flattrade.in (Pi Connect Open API)\n"
+                    f"   - Angel One: https://smartapi.angelbroking.com (SmartAPI Trading)\n"
+                    f"   - Zerodha: https://kite.trade (Kite Connect v3)\n"
+                    f"   - Dhan: https://web.dhan.co (DhanHQ Direct API)\n"
+                    f"   - Alice Blue: https://develop-api.aliceblueonline.com\n"
+                    f"Keep answers clear, highly structured, friendly, and formatted in clean markdown with bullet points and copyable snippets."
+                )
+                for model_candidate in ["gemini-3.5-flash", "gemini-3.7-flash", "gemini-3.1-flash-lite", "gemini-flash-latest"]:
+                    try:
+                        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_candidate}:generateContent?key={gemini_key}"
+                        req_payload = {
+                            "contents": [
+                                {"role": "user", "parts": [{"text": f"{sys_instruction}\n\nUser Question: {user_msg}"}]}
+                            ],
+                            "generationConfig": {
+                                "temperature": 0.4,
+                                "maxOutputTokens": 800
+                            }
                         }
-                    }
-                    req = urllib.request.Request(
-                        url,
-                        data=json.dumps(req_payload).encode("utf-8"),
-                        headers={"Content-Type": "application/json"}
-                    )
-                    with urllib.request.urlopen(req, timeout=8) as resp:
-                        res_data = json.loads(resp.read().decode("utf-8"))
-                        reply = res_data["candidates"][0]["content"]["parts"][0]["text"]
-                except Exception as ex:
-                    print("Gemini API error, using intelligent fallback:", ex)
-                    reply = None
+                        req = urllib.request.Request(
+                            url,
+                            data=json.dumps(req_payload).encode("utf-8"),
+                            headers={"Content-Type": "application/json"}
+                        )
+                        with urllib.request.urlopen(req, timeout=8) as resp:
+                            res_data = json.loads(resp.read().decode("utf-8"))
+                            reply = res_data["candidates"][0]["content"]["parts"][0]["text"]
+                            source = f"gemini_{model_candidate}"
+                            break
+                    except Exception as ex:
+                        print(f"Chat Gemini {model_candidate} error:", ex)
 
             # Intelligent built-in Quant Advisor Fallback if no API key or network error
             if not reply:
@@ -1735,6 +1749,17 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             lang = user_context.get("language", "auto")
             
             gemini_key = os.environ.get("GEMINI_API_KEY", "").strip() or payload.get("gemini_key", "").strip()
+            if not gemini_key:
+                env_file = os.path.join(BASE_DIR, ".env")
+                if os.path.exists(env_file):
+                    try:
+                        with open(env_file, "r", encoding="utf-8") as ef:
+                            for eline in ef:
+                                if eline.startswith("GEMINI_API_KEY="):
+                                    gemini_key = eline.strip().split("=", 1)[1].strip()
+                                    break
+                    except Exception:
+                        pass
             reply = None
             detected_lang = "en-IN"
             source = "gemini_live"
@@ -1814,95 +1839,14 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         reply = None
 
             # -------------------------------------------------------------------------
-            # PRIORITY 2: HYBRID NATURAL COPILOT (FALLBACK ENGINE)
+            # GEMINI ENGINE ONLY (NO COPILOT FALLBACK)
             # -------------------------------------------------------------------------
             if not reply:
-                source = "smart_copilot_fallback"
-                lower = (user_msg or "").lower()
-                is_connect = not user_msg or lower in ["call_connected", "hello", "hi", "namaste", "vanakkam", "namaskaram"]
-
-                if lang == "hi":
-                    is_hindi, is_tamil, is_telugu = True, False, False
-                elif lang == "ta":
-                    is_hindi, is_tamil, is_telugu = False, True, False
-                elif lang == "te":
-                    is_hindi, is_tamil, is_telugu = False, False, True
-                else:
-                    is_hindi = any(w in lower for w in ["kaise", "kya", "bhai", "namaste", "batao", "kaha", "karna", "hai", "mujhe", "mera", "paise", "rupaye"])
-                    is_tamil = any(w in lower for w in ["epdi", "enna", "pannanum", "vanakkam", "solunga", "therila"])
-                    is_telugu = any(w in lower for w in ["ela", "cheyyali", "enti", "namaskaram", "sahayam", "cheppandi"])
-
-                if is_hindi: detected_lang = "hi-IN"
-                elif is_tamil: detected_lang = "ta-IN"
-                elif is_telugu: detected_lang = "te-IN"
-                else: detected_lang = "en-IN"
-
-                if is_connect:
-                    if is_hindi:
-                        reply = f"नमस्ते! SkipTheChart में आपका स्वागत है। मैं आपका AI ट्रेडिंग असिस्टेंट हूँ। बताइए, आपके {broker} सेटअप में मैं क्या सहायता करूँ?"
-                    elif is_tamil:
-                        reply = f"வணக்கம்! SkipTheChart-க்கு உங்களை வரவேற்கிறோம். நான் உங்கள் AI வாய்ஸ் அசிஸ்டன்ட். உங்கள் {broker} செட்டப்பில் என்ன உதவி வேண்டும்?"
-                    elif is_telugu:
-                        reply = f"నమస్కారం! SkipTheChart కి స్వాగతం. నేను మీ AI ట్రేడింగ్ అసిస్టెంట్ ని. మీ {broker} సెటప్ లో మీకు ఎలా సహాయపడగలను?"
-                    else:
-                        reply = f"Hello! Welcome to SkipTheChart. I am your AI Voice Assistant. How can I guide you with your {broker} setup or trading strategy today?"
-                elif "api" in lower or "key" in lower or "secret" in lower:
-                    if is_hindi:
-                        reply = f"{broker} में API की generate करने के लिए उनके डेवलपर पोर्टल पर लॉगिन करें। New App बनाकर Allowed IP में 127.0.0.1 डालें, और API Key और Secret यहाँ पेस्ट करें।"
-                    elif is_tamil:
-                        reply = f"{broker} டெவலப்பர் போர்ட்டலில் லாகின் செய்து புதிய ஆப் உருவாக்குங்கள். Allowed IP-யில் 127.0.0.1 கொடுத்து, API key-யை இங்கே பேஸ்ட் செய்யுங்கள்."
-                    elif is_telugu:
-                        reply = f"{broker} లో API కీ తయారు చేయడానికి వారి డెవలపర్ పోర్టల్ లో లాగిన్ అవ్వండి. Allowed IP లో 127.0.0.1 ఎంటర్ చేసి, API కీ ఇక్కడ పేస్ట్ చేయండి."
-                    else:
-                        reply = f"To generate your {broker} API key, log into their developer portal, create an app, set Allowed IP to 127.0.0.1, and copy your API key and secret into SkipTheChart."
-                elif "totp" in lower or "authenticator" in lower or "2fa" in lower:
-                    if is_hindi:
-                        reply = f"TOTP सेटअप के लिए अपने {broker} सेटिंग्स में Security & 2FA खोलें। External TOTP चालू करके Secret Key को SkipTheChart में पेस्ट करें।"
-                    elif is_tamil:
-                        reply = f"TOTP செட்டப்பிற்கு {broker} செட்டிங்ஸில் Security & 2FA சென்று, Secret Key-யை காப்பி செய்து இங்கே பேஸ்ட் செய்யுங்கள்."
-                    elif is_telugu:
-                        reply = f"TOTP కోసం మీ {broker} సెట్టింగ్స్ లో Security & 2FA ఓపెన్ చేసి, Secret కీ ని కాపీ చేసి ఇక్కడ పేస్ట్ చేయండి."
-                    else:
-                        reply = f"For TOTP setup, open {broker} security settings, enable external authenticator, and copy the secret alphanumeric key into SkipTheChart so your bot can authenticate automatically each morning."
-                elif "ip" in lower or "whitelist" in lower or "droplet" in lower:
-                    if is_hindi:
-                        reply = f"आपका dedicated सर्वर IP 127.0.0.1 है। इसे अपने {broker} पोर्टल के Allowed IP में डालें ताकि ऑर्डर्स रिजेक्ट न हों।"
-                    elif is_tamil:
-                        reply = f"உங்கள் சர்வர் IP 127.0.0.1. இதை {broker} Allowed IP கட்டத்தில் உள்ளிடவும்."
-                    elif is_telugu:
-                        reply = f"మీ డెడికేటెడ్ సర్వర్ IP 127.0.0.1. దీన్ని {broker} డెవలపర్ పోర్టల్ Allowed IP లో నమోదు చేయండి."
-                    else:
-                        reply = f"Your dedicated cloud server IP is 127.0.0.1. You must paste this into your {broker} developer portal's Allowed IP field so the exchange permits live orders."
-                elif "strategy" in lower or "capital" in lower or "margin" in lower or "risk" in lower:
-                    if is_hindi:
-                        reply = f"सुरक्षा के लिए SkipTheChart आपके कैपिटल का केवल 70 प्रतिशत उपयोग करता है, और 30 प्रतिशत बफर रखता है।"
-                    elif is_tamil:
-                        reply = f"பாதுகாப்பிற்காக SkipTheChart உங்கள் மூலதனத்தில் 70 சதவீதத்தை மட்டுமே பயன்படுத்துகிறது."
-                    elif is_telugu:
-                        reply = f"రిస్క్ రక్షణ కోసం SkipTheChart మీ మూలధనంలో 70 శాతం మాత్రమే వాడుతుంది, 30 శాతం బఫర్ గా ఉంచుతుంది."
-                    else:
-                        reply = f"For safety, SkipTheChart utilizes only 70 percent of your capital, keeping a 30 percent buffer for exchange margin spikes and peak volatility."
-                elif "help" in lower or "support" in lower or "call" in lower:
-                    if is_hindi:
-                        reply = f"अगर आप खुद API नहीं बना पा रहे हैं, तो आप स्क्रीन पर दिए गए नंबर पर अपने {broker} सपोर्ट को कॉल कर सकते हैं।"
-                    elif is_tamil:
-                        reply = f"உங்களால் API உருவாக்க முடியாவிட்டால், திரையில் உள்ள எண்ணிற்கு {broker} வாடிக்கையாளர் சேவைக்கு அழைக்கலாம்."
-                    elif is_telugu:
-                        reply = f"మీరు స్వయంగా API చేయలేకపోతే, స్క్రీన్ పై ఉన్న నంబర్ ద్వారా {broker} కస్టమర్ కేర్ కి కాల్ చేయవచ్చు."
-                    else:
-                        reply = f"If you need manual assistance, you can also directly call or chat with {broker} helpline. Their direct phone number and copyable script are shown on your screen."
-                else:
-                    if is_hindi:
-                        reply = f"मैं आपकी पूरी मदद करूँगा। आप मुझसे {broker} API, TOTP सेटअप, या स्ट्रैटेजी रिस्क के बारे में कुछ भी पूछ सकते हैं।"
-                    elif is_tamil:
-                        reply = f"நான் உங்களுக்கு முழுமையாக உதவுவேன். {broker} API, TOTP செட்டப் அல்லது ஸ்ட்ராடஜி பற்றி என்ன வேண்டுமானாலும் கேட்கலாம்."
-                    elif is_telugu:
-                        reply = f"నేను మీకు సహాయం చేస్తాను. {broker} API, TOTP సెటప్ లేదా స్ట్రాటజీ గురించి ఏదైనా అడగవచ్చు."
-                    else:
-                        reply = f"I am listening. Feel free to ask me anything about your {broker} connection, 2FA authenticator, droplet IP whitelisting, or trading strategies."
+                source = "gemini_error"
+                reply = f"Gemini AI Error: {gemini_error or 'Unable to connect to Gemini API. Please check your key.'}"
 
             self.send_json_response(200, {
-                "success": True,
+                "success": bool(reply and not reply.startswith("Gemini AI Error")),
                 "reply": reply,
                 "lang": detected_lang,
                 "source": source,
