@@ -4581,8 +4581,8 @@
         <div class="flex items-center gap-2.5">
           <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center text-lg shadow-md shadow-indigo-500/30">✨</span>
           <div>
-            <h3 class="font-bold text-white text-base">Gemini 2.0 Live Voice Bot</h3>
-            <p class="text-[11px] text-slate-400">Natural Indian AI Voice in Hindi, Telugu, Tamil & English</p>
+            <h3 class="font-bold text-white text-base">Platform Admin: Gemini 2.0 Engine</h3>
+            <p class="text-[11px] text-slate-400">One-time setup for all subscribers on SkipTheChart</p>
           </div>
         </div>
         <button onclick="closeGeminiKeyModal()" class="text-slate-400 hover:text-white text-lg p-1">✕</button>
@@ -4590,13 +4590,17 @@
 
       <div class="space-y-3 text-xs text-slate-300">
         <p class="leading-relaxed">
-          To speak naturally with human-like emotional cadence and authentic native accent in <strong class="text-emerald-400">Hindi, Telugu, Tamil, or English</strong>, activate your free Google Gemini API Key.
+          Paste your Google Gemini API Key below to activate human-like conversational voice in <strong class="text-emerald-400">Hindi, Telugu, Tamil & English</strong>.
         </p>
 
-        <div class="p-3 bg-indigo-950/40 border border-indigo-500/30 rounded-xl space-y-1.5 text-[11px] text-indigo-300">
-          <div class="font-bold flex items-center gap-1.5 text-indigo-200">
-            <span>💡 100% Free Gemini API Key:</span>
+        <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-xl space-y-1 text-[11px] text-emerald-300">
+          <div class="font-bold flex items-center gap-1.5 text-emerald-200">
+            <span>🛡️ One-Time Platform Activation:</span>
           </div>
+          <p>Once you save your key here, it is stored on your cloud server. <strong>Your subscribers will NEVER be asked for a key</strong>—they will automatically speak with Gemini 2.0 Live.</p>
+        </div>
+
+        <div class="p-2.5 bg-indigo-950/40 border border-indigo-500/30 rounded-xl space-y-1 text-[11px] text-indigo-300">
           <p>Get your free key in 30 seconds from Google AI Studio: <a href="https://aistudio.google.com/app/apikey" target="_blank" class="underline font-bold text-cyan-300 hover:text-cyan-200">aistudio.google.com/app/apikey</a></p>
         </div>
 
@@ -4608,10 +4612,10 @@
 
       <div class="flex items-center gap-2.5 pt-2">
         <button onclick="saveAndStartGeminiKey()" class="flex-1 bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:opacity-90 font-bold py-2.5 rounded-xl text-xs text-white shadow-lg shadow-indigo-500/20 transition-all">
-          🚀 Activate Gemini 2.0 Live
+          🚀 Save & Activate for All Subscribers
         </button>
         <button onclick="startCopilotFallbackCall()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 font-medium rounded-xl text-xs text-slate-300 border border-slate-700 transition-all">
-          Use Offline
+          Cancel
         </button>
       </div>
     </div>
@@ -4655,8 +4659,8 @@
             <span id="call-engine-text">Checking Core...</span>
           </span>
         </div>
-        <button type="button" onclick="promptGeminiApiKey()" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1 hover:underline">
-          <span>🔑 Set Gemini Key</span>
+        <button id="btn-config-gemini-key" type="button" onclick="promptGeminiApiKey()" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1 hover:underline">
+          <span id="btn-config-gemini-key-text">🔑 Set Gemini Key</span>
         </button>
       </div>
 
@@ -10086,6 +10090,7 @@
     async function checkAiEngineStatus() {
       const badge = document.getElementById('call-engine-badge');
       const text = document.getElementById('call-engine-text');
+      const btnText = document.getElementById('btn-config-gemini-key-text');
       const localKey = localStorage.getItem('user_gemini_api_key') || '';
       try {
         const res = await fetch('/api/auth/config');
@@ -10094,9 +10099,11 @@
         if (hasKey) {
           if (text) text.innerText = "Gemini 2.0 Live ✨";
           if (badge) badge.className = "font-semibold text-emerald-400 flex items-center gap-1.5";
+          if (btnText) btnText.innerText = "⚙️ Key Active";
         } else {
           if (text) text.innerText = "Smart Copilot ⚡";
           if (badge) badge.className = "font-semibold text-amber-300 flex items-center gap-1.5";
+          if (btnText) btnText.innerText = "🔑 Set Gemini Key";
         }
       } catch (e) {
         if (text) text.innerText = localKey ? "Gemini 2.0 Live ✨" : "Smart Copilot ⚡";
@@ -10184,21 +10191,7 @@
     }
 
     async function startAiVoiceCall() {
-      // Check if Gemini key is available on server or local storage
-      const localKey = localStorage.getItem('user_gemini_api_key') || '';
-      let hasServerKey = false;
-      try {
-        const res = await fetch('/api/auth/config');
-        const data = await res.json();
-        hasServerKey = Boolean(data.has_gemini_key);
-      } catch (e) {}
-
-      // Prompt key modal first if neither is present so user can get natural Gemini
-      if (!hasServerKey && !localKey) {
-        openGeminiKeyModal();
-        return;
-      }
-
+      // Direct connection so subscribers are never interrupted
       launchVoiceCallScreen();
     }
 
