@@ -28,6 +28,7 @@ except ImportError:
     BrokerSentinelAgent = None
 
 PORT = 8888
+SERVER_START_TIME = time.time()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
@@ -116,6 +117,21 @@ BOT_RUNTIME_STATE = {
     "execution_mode": "paper",
     "bot_status": "STOPPED"
 }
+
+# Rate limiting for AI endpoints (Chat and Voice Call)
+AI_RATE_LIMITS = {}
+
+def check_ai_rate_limit(client_id: str, limit_per_minute: int = 30) -> bool:
+    """Returns True if request allowed, False if rate limited."""
+    now = time.time()
+    history = AI_RATE_LIMITS.get(client_id, [])
+    history = [t for t in history if now - t < 60]
+    if len(history) >= limit_per_minute:
+        AI_RATE_LIMITS[client_id] = history
+        return False
+    history.append(now)
+    AI_RATE_LIMITS[client_id] = history
+    return True
 
 USER_SUBSCRIPTION = {
     "is_active": False,
@@ -969,7 +985,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 except Exception:
                     pass
             
-            # Determine health: worker operational
+            # Determine health: server & worker process operational
             worker_running = (BOT_RUNTIME_STATE.get("bot_status") in ["RUNNING", "STOPPED", "PAUSED"])
             is_healthy = worker_running
             status_code = 200 if is_healthy else 503
@@ -977,7 +993,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "status": "healthy" if is_healthy else "unhealthy",
                 "worker": "running" if worker_running else "stopped",
                 "broker_token_fresh": broker_token_fresh,
-                "last_tick_age_sec": 1 if worker_running else 9999
+                "uptime_sec": int(time.time() - SERVER_START_TIME)
             })
         elif parsed.path == "/api/auth/config":
             client_id = os.environ.get("GOOGLE_CLIENT_ID", "659688440036-kl32fpdig9j46rqbl03om4vvhv2s204n.apps.googleusercontent.com")
@@ -985,7 +1001,6 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             resp_data = {
                 "success": True,
                 "google_client_id": client_id,
-                "has_gemini_key": bool(os.environ.get("GEMINI_API_KEY", "").strip()),
                 "app_domain": "skipthechart.com"
             }
             if is_authenticated:
@@ -1191,6 +1206,11 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 self.send_json_response(400, {"success": False, "error": "Client ID cannot be empty"})
         elif parsed.path == "/api/auth/save-gemini-key":
+            admin_token = payload.get("admin_token", "").strip() or self.headers.get("X-Admin-Token", "").strip()
+            configured_token = os.environ.get("ADMIN_TOKEN", "qNzwsx@29")
+            if not admin_token or admin_token != configured_token:
+                self.send_json_response(403, {"success": False, "error": "Unauthorized: Admin Access Only"})
+                return
             gemini_key = payload.get("gemini_key", "").strip()
             if gemini_key:
                 os.environ["GEMINI_API_KEY"] = gemini_key
@@ -1207,8 +1227,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     print("Error saving GEMINI_API_KEY to .env:", ex)
                 self.send_json_response(200, {
                     "success": True,
-                    "message": "Gemini API key saved and activated successfully!",
-                    "has_gemini_key": True
+                    "message": "Platform Gemini API key updated securely on server."
                 })
             else:
                 self.send_json_response(400, {"success": False, "error": "Gemini API Key cannot be empty"})
@@ -1581,6 +1600,10 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 self.send_json_response(500, {"success": False, "error": "BrokerSentinelAgent not loaded"})
         elif parsed.path == "/api/gemini/chat":
+            client_ip = self.client_address[0] if self.client_address else "client"
+            if not check_ai_rate_limit(f"chat_{client_ip}", limit_per_minute=30):
+                self.send_json_response(429, {"success": False, "reply": "Rate limit exceeded. Please wait a moment before sending another prompt."})
+                return
             user_msg = payload.get("message", "").strip()
             user_context = payload.get("context", {})
             broker = user_context.get("broker", "Zerodha Kite")
@@ -1716,7 +1739,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 elif any(w in lower_msg for w in ["z-score", "ratio", "sigma", "math", "arbitrage"]):
                     reply = (
                         f"### ⚡ Understanding the Nifty ↔ BankNifty Arbitrage Engine\n\n"
-                        f"- **Co-integration Alpha**: Nifty and BankNifty historically exhibit high statistical co-movement. When their ratio stretches beyond **±3.000σ**, an anomaly has occurred.\n"
+                        f"- **Co-integration Model**: Nifty and BankNifty historically exhibit high statistical co-movement. When their ratio stretches beyond **±3.000σ**, a divergence has occurred.\n"
                         f"- **Mean Reversion**: The bot buys the undervalued index spread and shorts the overvalued index spread, profiting when the ratio snaps back to 0.00.\n"
                         f"- **Morning Volatility Filter**: The engine sleeps until **09:30 AM IST** to ignore erratic opening spread widening.\n"
                         f"- **Strict Limit Orders**: Orders are placed with limit orders only (LMT) on {broker}, preventing retail market order slippage."
@@ -1740,6 +1763,15 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "timestamp": time.strftime("%H:%M:%S IST")
             })
         elif parsed.path == "/api/ai/voice-call":
+            client_ip = self.client_address[0] if self.client_address else "client"
+            if not check_ai_rate_limit(f"voice_{client_ip}", limit_per_minute=30):
+                self.send_json_response(429, {
+                    "success": False,
+                    "reply": "Please pause a moment before speaking again.",
+                    "lang": "en-IN",
+                    "source": "rate_limited"
+                })
+                return
             user_msg = payload.get("message", "").strip()
             user_context = payload.get("context", {})
             broker = user_context.get("broker", "Flattrade")
@@ -1750,7 +1782,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             if lang in ["auto", "", "default"]:
                 lang = "en"
             
-            gemini_key = os.environ.get("GEMINI_API_KEY", "").strip() or payload.get("gemini_key", "").strip()
+            gemini_key = os.environ.get("GEMINI_API_KEY", "").strip()
             if not gemini_key:
                 env_file = os.path.join(BASE_DIR, ".env")
                 if os.path.exists(env_file):
@@ -1904,7 +1936,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     elif lang == "ta":
                         reply = f"{broker} செக்யூரிட்டி அமைப்புகளில் External TOTP-ஐ இயக்கி, Secret Key-யை இங்கே பேஸ்ட் செய்யுங்கள்."
                     else:
-                        reply = f"Enable external authenticator in your {broker} security settings, and paste the alphanumeric secret key here for automated morning logins."
+                        reply = f"Enable external authenticator in your {broker} security settings, and paste the secret setup key here for automated morning logins."
                 elif any(k in lower_msg for k in ["ip", "whitelist", "droplet", "server"]):
                     if lang == "te":
                         reply = f"మీ డెడికేటెడ్ సర్వర్ IP 127.0.0.1. ఆర్డర్స్ రిజెక్ట్ కాకుండా ఉండటానికి దీన్ని {broker} డెవలపర్ పోర్టల్ Allowed IP లో నమోదు చేయండి."
@@ -2784,13 +2816,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         cur_sl = float(current_strategy.get("sl_pct", 1.8))
         cur_tp = float(current_strategy.get("tp_pct", 4.5))
         
-        # 1. Champion Permutation Alpha Comparison
+        # 1. Champion Permutation Confluence Comparison
         if best_combo:
             diff_pnl = round(best_combo.get("net_pnl", 0) - cur_pnl, 2)
             pnl_text = f"+₹{diff_pnl:,.0f} higher simulated return" if diff_pnl > 0 else "higher risk-adjusted return"
             improvements.append({
                 "category": "Confluence Optimization",
-                "tag": "Mathematical Alpha",
+                "tag": "Mathematical Model",
                 "priority": "High",
                 "icon": "🏆",
                 "title": f"Upgrade to Best Permutation (#{best_combo.get('rank', 1)}: {best_combo.get('name')})",
