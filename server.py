@@ -1024,6 +1024,9 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             super().do_GET()
 
     def do_POST(self):
+        import urllib.request
+        import urllib.parse
+        import urllib.error
         parsed = urlparse(self.path)
         content_length = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
@@ -1410,7 +1413,6 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             ping_ms = 14
 
             try:
-                import urllib.request
                 t0 = time.time()
                 req = urllib.request.Request(gateway_url, headers={"User-Agent": "SkipTheChart-Sentinel/2.0"})
                 with urllib.request.urlopen(req, timeout=3) as resp:
@@ -1478,7 +1480,6 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "api_secret": hashed_secret
             }
             try:
-                import urllib.request
                 req = urllib.request.Request(
                     token_url,
                     data=json.dumps(token_payload).encode("utf-8"),
