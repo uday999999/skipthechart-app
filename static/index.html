@@ -10068,49 +10068,60 @@
       } catch (e) {}
     }
 
+    let availableSystemVoices = [];
+    function preloadVoices() {
+      if ('speechSynthesis' in window) {
+        availableSystemVoices = window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => {
+          availableSystemVoices = window.speechSynthesis.getVoices();
+        };
+      }
+    }
+    preloadVoices();
+
     function findBestVoiceForLanguage(langCode) {
       if (!('speechSynthesis' in window)) return null;
-      const voices = window.speechSynthesis.getVoices();
+      let voices = availableSystemVoices.length > 0 ? availableSystemVoices : window.speechSynthesis.getVoices();
       if (!voices || voices.length === 0) return null;
 
       const target = (langCode || 'en-IN').toLowerCase();
       const prefix = target.split('-')[0];
 
-      // Prioritize enhanced / natural / Siri quality voices
-      const qualityMatch = voices.find(v => {
+      // 1. Prioritize Google Cloud / High-Quality voices for native language
+      const googleMatch = voices.find(v => {
         const vLang = (v.lang || '').toLowerCase().replace('_', '-');
         const vName = (v.name || '').toLowerCase();
-        const isTarget = vLang === target || vLang.startsWith(prefix);
-        const isHighQuality = vName.includes('enhanced') || vName.includes('natural') || vName.includes('siri') || vName.includes('premium');
-        return isTarget && isHighQuality;
+        const isLang = vLang === target || vLang.startsWith(prefix);
+        const isGoogleOrNatural = vName.includes('google') || vName.includes('natural') || vName.includes('enhanced') || vName.includes('online');
+        return isLang && isGoogleOrNatural;
       });
-      if (qualityMatch) return qualityMatch;
+      if (googleMatch) return googleMatch;
 
-      // 1. Exact match on full tag (e.g., 'hi-in', 'ta-in', 'te-in', 'en-in')
-      let match = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === target);
-      if (match) return match;
-
-      // 2. Strict prefix match (e.g. 'hi', 'ta', 'te')
-      match = voices.find(v => v.lang && v.lang.toLowerCase().split(/[-_]/)[0] === prefix);
+      // 2. Exact match on full language tag (e.g., 'hi-in', 'ta-in', 'te-in', 'en-in')
+      let match = voices.find(v => (v.lang || '').toLowerCase().replace('_', '-') === target);
       if (match) return match;
 
       // 3. Name-based match for Indian native languages
       if (prefix === 'hi') {
-        match = voices.find(v => v.name && /hindi|devanagari|lekha|neerja|kalpana|swara/i.test(v.name));
+        match = voices.find(v => v.name && /hindi|हिन्दी|devanagari|swara|lekha|neerja|kalpana|madhur/i.test(v.name));
         if (match) return match;
       } else if (prefix === 'ta') {
-        match = voices.find(v => v.name && /tamil|valluvar/i.test(v.name));
+        match = voices.find(v => v.name && /tamil|தமிழ்|valluvar|vani/i.test(v.name));
         if (match) return match;
       } else if (prefix === 'te') {
-        match = voices.find(v => v.name && /telugu|chitra|mohan/i.test(v.name));
+        match = voices.find(v => v.name && /telugu|తెలుగు|chitra|mohan|kavya/i.test(v.name));
         if (match) return match;
       } else if (prefix === 'en') {
-        match = voices.find(v => v.lang && /en-in/i.test(v.lang)) || voices.find(v => /india|rishi|veena/i.test(v.name));
+        match = voices.find(v => v.name && /india|rishi|veena|pradeep|neerja|kavya/i.test(v.name)) ||
+                voices.find(v => (v.lang || '').toLowerCase().replace('_', '-') === 'en-in');
         if (match) return match;
       }
 
+      // 4. Strict prefix match on language code
+      match = voices.find(v => (v.lang || '').toLowerCase().split(/[-_]/)[0] === prefix);
+      if (match) return match;
+
       // If user requested Hindi, Tamil, or Telugu, NEVER force an English voice!
-      // Return null so browser engine synthesizes natively with utterance.lang
       if (prefix !== 'en') {
         return null;
       }
