@@ -4655,12 +4655,12 @@
       <div class="w-full flex items-center justify-between text-[11px] bg-slate-950/70 border border-slate-800/90 rounded-xl px-3 py-1.5 -mt-1">
         <div class="flex items-center gap-1.5">
           <span class="text-slate-400">AI Engine:</span>
-          <span id="call-engine-badge" class="font-semibold text-emerald-400 flex items-center gap-1.5">
+          <span id="call-engine-badge" ondblclick="promptGeminiApiKey()" title="Protected Platform Engine" class="font-semibold text-emerald-400 flex items-center gap-1.5 cursor-default select-none">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span id="call-engine-text">Checking Core...</span>
+            <span id="call-engine-text">Gemini 3.7 Flash Beta ⚡</span>
           </span>
         </div>
-        <button id="btn-config-gemini-key" type="button" onclick="promptGeminiApiKey()" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1 hover:underline">
+        <button id="btn-config-gemini-key" type="button" onclick="promptGeminiApiKey()" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1 hover:underline hidden">
           <span id="btn-config-gemini-key-text">🔑 Set Gemini Key</span>
         </button>
       </div>
@@ -10169,21 +10169,16 @@
     async function checkAiEngineStatus() {
       const badge = document.getElementById('call-engine-badge');
       const text = document.getElementById('call-engine-text');
-      const btnText = document.getElementById('btn-config-gemini-key-text');
+      const btn = document.getElementById('btn-config-gemini-key');
       const localKey = localStorage.getItem('user_gemini_api_key') || '';
       try {
         const res = await fetch('/api/auth/config');
         const data = await res.json();
         const hasKey = data.has_gemini_key || Boolean(localKey);
-        if (hasKey) {
-          if (text) text.innerText = "Gemini 3.7 Flash Beta ⚡";
-          if (badge) badge.className = "font-semibold text-emerald-400 flex items-center gap-1.5";
-          if (btnText) btnText.innerText = "⚙️ Key Active";
-        } else {
-          if (text) text.innerText = "Gemini 3.7 Flash Beta ⚡";
-          if (badge) badge.className = "font-semibold text-emerald-400 flex items-center gap-1.5";
-          if (btnText) btnText.innerText = "🔑 Set Gemini Key";
-        }
+        if (text) text.innerText = "Gemini 3.7 Flash Beta ⚡";
+        if (badge) badge.className = "font-semibold text-emerald-400 flex items-center gap-1.5 cursor-default select-none";
+        // Always hide admin key button from subscribers - platform key is managed centrally
+        if (btn) btn.classList.add('hidden');
       } catch (e) {
         if (text) text.innerText = "Gemini 3.7 Flash Beta ⚡";
       }
