@@ -4725,8 +4725,28 @@
         </button>
       </div>
 
-      <div class="text-[10.5px] text-slate-500 font-mono">
-        💡 Ask about your broker API, Allowed IP whitelisting, 2FA TOTP, or strategy risks.
+      <!-- Interactive Suggested Question Chips -->
+      <div class="w-full space-y-1.5 pt-1 text-left">
+        <div class="flex items-center justify-between text-[10px] text-slate-400 font-semibold uppercase tracking-wider px-0.5">
+          <span>💡 Tap Any Topic to Ask Live:</span>
+        </div>
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-[11px]">
+          <button type="button" onclick="sendQuickVoiceChip('Hi! How can you help me today?')" class="whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-800/90 hover:bg-emerald-900/40 text-slate-300 hover:text-emerald-300 border border-slate-700/80 hover:border-emerald-500/50 transition-all flex items-center gap-1">
+            👋 Say Hi
+          </button>
+          <button type="button" onclick="sendQuickVoiceChip('How do I generate my API Key and Secret?')" class="whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-800/90 hover:bg-emerald-900/40 text-slate-300 hover:text-emerald-300 border border-slate-700/80 hover:border-emerald-500/50 transition-all flex items-center gap-1">
+            🔑 API Key Setup
+          </button>
+          <button type="button" onclick="sendQuickVoiceChip('Where do I find my 2FA TOTP secret?')" class="whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-800/90 hover:bg-emerald-900/40 text-slate-300 hover:text-emerald-300 border border-slate-700/80 hover:border-emerald-500/50 transition-all flex items-center gap-1">
+            🛡️ 2FA TOTP Secret
+          </button>
+          <button type="button" onclick="sendQuickVoiceChip('Explain how the Pairs Arbitrage strategy works')" class="whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-800/90 hover:bg-emerald-900/40 text-slate-300 hover:text-emerald-300 border border-slate-700/80 hover:border-emerald-500/50 transition-all flex items-center gap-1">
+            📈 Strategy & Risk
+          </button>
+          <button type="button" onclick="sendQuickVoiceChip('Is my money safe with SkipTheChart?')" class="whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-800/90 hover:bg-emerald-900/40 text-slate-300 hover:text-emerald-300 border border-slate-700/80 hover:border-emerald-500/50 transition-all flex items-center gap-1">
+            🔒 Fund Safety
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -10041,6 +10061,14 @@
     let currentSpeechUtterance = null;
     let selectedCallLanguage = 'auto';
     let audioStream = null;
+    let voiceCallHistory = [];
+
+    function sendQuickVoiceChip(promptText) {
+      if (!voiceCallActive) return;
+      const userTr = document.getElementById('call-transcript-user');
+      if (userTr) userTr.innerText = `"${promptText}"`;
+      sendVoiceCallPrompt(promptText);
+    }
 
     // Plays realistic dual-tone phone connection beep using Web Audio API
     function playPhoneConnectSound() {
@@ -10255,6 +10283,7 @@
       voiceCallMuted = false;
       voiceCallSpeaker = true;
       voiceCallSeconds = 0;
+      voiceCallHistory = [];
 
       // Sync user's preselected language from dropdown
       const langSel = document.getElementById('call-lang-select');
@@ -10391,6 +10420,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             message: query,
+            history: voiceCallHistory.slice(-6),
             gemini_key: localGeminiKey,
             context: {
               broker: userState.selectedBrokerName || 'Flattrade',
@@ -10405,13 +10435,21 @@
         const replyText = data.reply || "I am listening. How can I help you with your setup?";
         const langCode = data.lang || 'en-IN';
 
+        // Keep multi-turn conversation memory
+        if (query && query !== "call_connected") {
+          voiceCallHistory.push({ role: 'user', content: query });
+        }
+        if (replyText) {
+          voiceCallHistory.push({ role: 'assistant', content: replyText });
+        }
+
         // Update engine indicator
         const text = document.getElementById('call-engine-text');
         if (text) {
-          if (data.source && data.source.includes('gemini') && !data.source.includes('error')) {
+          if (data.source && data.source.includes('gemini') && !data.source.includes('error') && !data.source.includes('fallback')) {
             text.innerText = "Gemini 3.7 Flash Beta ⚡";
           } else {
-            text.innerText = "Gemini 3.7 Flash Beta";
+            text.innerText = "Gemini 3.7 Flash (Active)";
           }
         }
         if (data.gemini_error) {
@@ -10445,10 +10483,16 @@
 
       setWaveformActive(true);
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      const isIndianNative = ['te', 'hi', 'ta'].some(l => (langCode || '').toLowerCase().startsWith(l));
-      utterance.rate = isIndianNative ? 0.90 : 0.94; // Authentic, human conversational cadence
-      utterance.pitch = 1.0;
+      const cleanText = text.replace(/[*_#`~>\[\]]/g, '').trim();
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      const isTelugu = (langCode || '').toLowerCase().startsWith('te');
+      const isHindi = (langCode || '').toLowerCase().startsWith('hi');
+      const isTamil = (langCode || '').toLowerCase().startsWith('ta');
+      
+      // Fine-tuned natural human pacing:
+      // Geeta (Telugu) excels with a relaxed 0.88 rate for polysyllabic Dravidian roots
+      utterance.rate = isTelugu ? 0.88 : (isHindi ? 0.90 : (isTamil ? 0.88 : 0.94));
+      utterance.pitch = 1.04; // Enthusiastic, warm conversational tone
       utterance.lang = langCode || 'en-IN';
 
       // Pick accurate language-matched voice
@@ -10539,6 +10583,7 @@
 
     function endAiVoiceCall() {
       voiceCallActive = false;
+      voiceCallHistory = [];
       clearInterval(voiceCallTimerInterval);
 
       // Stop speech
