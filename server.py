@@ -1808,7 +1808,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 user_turn_text = user_msg
 
             if gemini_key:
-                for model_candidate in ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.7-flash", "gemini-3.5-flash", "gemini-1.5-pro"]:
+                for model_candidate in ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-1.5-flash"]:
                     try:
                         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_candidate}:generateContent?key={gemini_key}"
                         

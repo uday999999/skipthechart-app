@@ -10141,6 +10141,17 @@
         });
         if (match) return match;
       } else if (prefix === 'en') {
+        // Prioritize British English (Daniel, Oliver, Google UK English, Serena)
+        const isGB = target.includes('gb') || target.includes('uk') || target === 'en';
+        if (isGB) {
+          const gbMatch = voices.find(v => {
+            const n = (v.name || '').toLowerCase();
+            const l = (v.lang || '').toLowerCase().replace('_', '-');
+            return l === 'en-gb' || /daniel|oliver|serena|stephanie|kate|uk english|great britain|british/i.test(n);
+          });
+          if (gbMatch) return gbMatch;
+        }
+
         const match = voices.find(v => {
           const n = (v.name || '').toLowerCase();
           const l = (v.lang || '').toLowerCase().replace('_', '-');
@@ -10449,12 +10460,7 @@
           }
         }
         if (data.gemini_error) {
-          console.warn("Gemini Error:", data.gemini_error);
-          if (data.gemini_error.includes('not allowed by policy')) {
-            showToast("💡 Note: Corporate key restricted by policy. Use personal Gmail key.");
-          } else {
-            showToast("⚠️ Gemini API Issue: " + data.gemini_error);
-          }
+          console.warn("Gemini Engine Notice:", data.gemini_error);
         }
 
         if (aiTr) {
