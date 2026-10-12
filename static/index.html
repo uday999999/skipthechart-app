@@ -375,9 +375,19 @@
           <span>Continue with Google (Gmail)</span>
         </button>
 
+        <!-- Quick 1-Click Trader Profiles -->
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="performGoogleSignIn('filmmakeruday@gmail.com', 'Uday (Filmmaker)')" class="py-2 px-2 bg-emerald-50 hover:bg-emerald-100/90 text-emerald-900 border border-emerald-300 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs truncate">
+            <span>👤 filmmakeruday</span>
+          </button>
+          <button type="button" onclick="performGoogleSignIn('invincibleuday@gmail.com', 'Uday (Invincible)')" class="py-2 px-2 bg-emerald-50 hover:bg-emerald-100/90 text-emerald-900 border border-emerald-300 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs truncate">
+            <span>👤 invincibleuday</span>
+          </button>
+        </div>
+
         <!-- Quick 1-Click Demo Bypass -->
-        <button type="button" onclick="performGoogleSignIn('trader.rahul@gmail.com', 'Rahul Sharma')" class="w-full py-2 px-3 bg-emerald-50 hover:bg-emerald-100/80 text-emerald-800 border border-emerald-300/80 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
-          <span>⚡ Instant 1-Click Demo Enter (Skip Sign-In)</span>
+        <button type="button" onclick="performGoogleSignIn('trader.rahul@gmail.com', 'Rahul Sharma')" class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
+          <span>⚡ 1-Click Demo Trader (Skip Sign-In)</span>
         </button>
 
         <!-- Compliance & Security Trust Badges -->
@@ -4337,16 +4347,40 @@
       <div class="space-y-3 text-xs">
         <p class="text-slate-600">Choose how you want to sign in with Google:</p>
 
-        <!-- Option 1: 1-Click Demo Profile -->
-        <button type="button" onclick="performGoogleSignIn('trader.rahul@gmail.com', 'Rahul Sharma')" class="w-full p-3 bg-slate-50 hover:bg-emerald-50/60 border border-slate-200 hover:border-emerald-500 rounded-2xl flex items-center gap-3 text-left transition group cursor-pointer">
-          <div class="w-9 h-9 rounded-full bg-emerald-600 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-xs">
+        <!-- User Profile 1: filmmakeruday -->
+        <button type="button" onclick="performGoogleSignIn('filmmakeruday@gmail.com', 'Uday (Filmmaker)')" class="w-full p-3 bg-emerald-50/70 hover:bg-emerald-100/80 border border-emerald-300 rounded-2xl flex items-center gap-3 text-left transition group cursor-pointer shadow-xs">
+          <div class="w-9 h-9 rounded-full bg-emerald-700 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-xs">
+            U
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-slate-900 text-xs group-hover:text-emerald-900 transition">Uday (Project Owner)</div>
+            <div class="text-[11px] text-emerald-800 font-mono truncate">filmmakeruday@gmail.com</div>
+          </div>
+          <span class="text-emerald-800 text-xs font-bold shrink-0">Sign In →</span>
+        </button>
+
+        <!-- User Profile 2: invincibleuday -->
+        <button type="button" onclick="performGoogleSignIn('invincibleuday@gmail.com', 'Uday (Invincible)')" class="w-full p-3 bg-slate-50 hover:bg-emerald-50/60 border border-slate-200 hover:border-emerald-400 rounded-2xl flex items-center gap-3 text-left transition group cursor-pointer shadow-xs">
+          <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-xs">
+            U
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-slate-900 text-xs group-hover:text-emerald-800 transition">Uday (Invincible)</div>
+            <div class="text-[11px] text-slate-500 font-mono truncate">invincibleuday@gmail.com</div>
+          </div>
+          <span class="text-indigo-700 text-xs font-bold shrink-0">Sign In →</span>
+        </button>
+
+        <!-- User Profile 3: Demo Trader -->
+        <button type="button" onclick="performGoogleSignIn('trader.rahul@gmail.com', 'Rahul Sharma')" class="w-full p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-2xl flex items-center gap-3 text-left transition group cursor-pointer">
+          <div class="w-8 h-8 rounded-full bg-slate-400 flex items-center justify-center text-white font-black text-xs shrink-0 shadow-xs">
             R
           </div>
           <div class="flex-1 min-w-0">
-            <div class="font-bold text-slate-900 text-xs group-hover:text-emerald-800 transition">Rahul Sharma (Demo Trader)</div>
-            <div class="text-[11px] text-slate-500 font-mono truncate">trader.rahul@gmail.com</div>
+            <div class="font-bold text-slate-700 text-xs">Rahul Sharma (Demo Trader)</div>
+            <div class="text-[10px] text-slate-400 font-mono truncate">trader.rahul@gmail.com</div>
           </div>
-          <span class="text-emerald-700 text-xs font-bold shrink-0">Select →</span>
+          <span class="text-slate-500 text-xs font-bold shrink-0">Select →</span>
         </button>
 
         <!-- Option 2: Enter Custom Gmail -->
@@ -6076,29 +6110,6 @@
 
     // Google Sign-In & Modal Handlers
     function triggerGoogleLoginFlow() {
-      // 1. If native Google button iframe/button exists, click it directly to trigger Google's account picker
-      const gsiBtn = document.querySelector('#google-gsi-btn-container iframe') ||
-                     document.querySelector('#google-gsi-btn-container [role="button"]') ||
-                     document.querySelector('#google-gsi-btn-container div');
-      if (gsiBtn && gsiBtn.click) {
-        gsiBtn.click();
-        return;
-      }
-
-      // 2. Try Google One-Tap prompt with status listener
-      if (window.google && window.google.accounts && window.GOOGLE_CLIENT_ID_CONFIGURED) {
-        try {
-          window.google.accounts.id.prompt((notification) => {
-            // Only if Google suppressed or skipped the prompt do we show the safety fallback modal
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-              openGoogleSignInModal();
-            }
-          });
-          return;
-        } catch (e) {}
-      }
-
-      // 3. Fallback modal only if Google SDK isn't available
       openGoogleSignInModal();
     }
 
