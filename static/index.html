@@ -2693,9 +2693,9 @@
               </div>
             </div>
 
-            <!-- Persistent Bottom Action Bar for Step B -->
-            <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-              <button type="button" onclick="showStratWizard('asset')" class="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-xs">
+            <!-- Persistent Sticky Bottom Action Bar for Step B -->
+            <div class="sticky bottom-0 z-30 bg-white/95 backdrop-blur-md pt-3.5 pb-3.5 px-4 -mx-6 -mb-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 shadow-lg rounded-b-2xl">
+              <button type="button" onclick="showStratWizard('asset')" class="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-xs cursor-pointer">
                 <span>←</span> Back to Assets
               </button>
               <div class="flex items-center gap-2">
@@ -2703,7 +2703,7 @@
                 <span id="btn-strat-current-badge" class="px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 font-mono font-bold text-xs rounded-lg">
                   Iron Butterfly (200pt)
                 </span>
-                <button type="button" onclick="wizardNextFromPayoff()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-2">
+                <button type="button" onclick="wizardNextFromPayoff()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-2 cursor-pointer">
                   <span>Apply Strategy & Move to Next</span>
                   <span>→</span>
                 </button>
@@ -2944,9 +2944,9 @@
               </div>
             </div>
 
-            <!-- Persistent Bottom Action Bar for Step C -->
-            <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-              <button type="button" onclick="showStratWizard('payoff')" class="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-xs">
+            <!-- Persistent Sticky Bottom Action Bar for Step C -->
+            <div class="sticky bottom-0 z-30 bg-white/95 backdrop-blur-md pt-3.5 pb-3.5 px-4 -mx-6 -mb-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 shadow-lg rounded-b-2xl">
+              <button type="button" onclick="showStratWizard('payoff')" class="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-xs cursor-pointer">
                 <span>←</span> Back to Payoff & Wings
               </button>
               <div class="flex items-center gap-2">
@@ -2954,7 +2954,7 @@
                 <span id="btn-ind-current-badge" class="px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 font-mono font-bold text-xs rounded-lg">
                   Pure Price Action
                 </span>
-                <button type="button" onclick="wizardNextFromIndicators()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-2">
+                <button type="button" onclick="wizardNextFromIndicators()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-2 cursor-pointer">
                   <span>Apply Strategy & Move to Next</span>
                   <span>→</span>
                 </button>
@@ -7540,11 +7540,6 @@
     let lastAssetClickedName = '';
 
     function selectWizardAsset(assetName, lotSize, margin, minCap, isFromDblClick = false) {
-      const now = Date.now();
-      const isDbl = isFromDblClick || (lastAssetClickedName === assetName && (now - lastAssetClickTime) < 450);
-      lastAssetClickTime = now;
-      lastAssetClickedName = assetName;
-
       wizardState.asset = assetName;
       wizardState.lotSize = lotSize;
       wizardState.baseMargin = margin;
@@ -7560,9 +7555,9 @@
                              (!isArbitrage && assetName.toLowerCase().replace(/\s+/g, '') === k);
           if (isSelected) {
             if (k === 'arbitrage') {
-              el.className = "p-4 bg-indigo-50/80 border-2 border-indigo-600 rounded-2xl cursor-pointer space-y-2 transition-all shadow-sm";
+              el.className = "p-4 bg-indigo-50/80 border-2 border-indigo-600 rounded-2xl cursor-pointer space-y-2 transition-all shadow-sm ring-2 ring-indigo-500/30";
             } else {
-              el.className = "p-4 bg-emerald-50/70 border-2 border-emerald-500 rounded-2xl cursor-pointer space-y-2 transition-all shadow-sm";
+              el.className = "p-4 bg-emerald-50/70 border-2 border-emerald-500 rounded-2xl cursor-pointer space-y-2 transition-all shadow-sm ring-2 ring-emerald-500/30";
             }
           } else {
             el.className = "p-4 bg-white border border-slate-200/90 hover:border-emerald-400 rounded-2xl cursor-pointer space-y-2 transition-all shadow-xs";
@@ -7599,9 +7594,10 @@
       
       updateDockedBrokerUI();
 
-      if (isDbl) {
+      showToast(`✓ Selected Asset: ${assetName}. Moving to Payoff & Wings...`);
+      setTimeout(() => {
         wizardNextFromAsset();
-      }
+      }, 350);
     }
 
     function wizardNextFromAsset() {
@@ -7625,11 +7621,6 @@
     let lastStratClickedKey = '';
 
     function selectWizardStrategy(stratKey, stratName, legsCount, margin, minCap, hasWings, isFromDblClick = false) {
-      const now = Date.now();
-      const isDbl = isFromDblClick || (lastStratClickedKey === stratKey && (now - lastStratClickTime) < 450);
-      lastStratClickTime = now;
-      lastStratClickedKey = stratKey;
-
       wizardState.strategyKey = stratKey;
       wizardState.strategyName = stratName;
       wizardState.legsCount = legsCount;
@@ -7653,10 +7644,10 @@
       const cards = document.querySelectorAll('.strat-card');
       cards.forEach(c => {
         if (c.id === 'card-strat-' + stratKey) {
-          c.classList.add('bg-emerald-50/70', 'border-emerald-500', 'shadow-sm');
+          c.classList.add('bg-emerald-50/70', 'border-emerald-500', 'shadow-sm', 'ring-2', 'ring-emerald-500/30');
           c.classList.remove('bg-white', 'border-slate-200/90');
         } else {
-          c.classList.remove('bg-emerald-50/70', 'border-emerald-500', 'shadow-sm');
+          c.classList.remove('bg-emerald-50/70', 'border-emerald-500', 'shadow-sm', 'ring-2', 'ring-emerald-500/30');
           c.classList.add('bg-white', 'border-slate-200/90');
         }
       });
@@ -7666,9 +7657,10 @@
       
       updateDockedBrokerUI();
 
-      if (isDbl) {
+      showToast(`✓ Selected Strategy: ${stratName}. Moving to next step...`);
+      setTimeout(() => {
         wizardNextFromPayoff();
-      }
+      }, 350);
     }
 
     function filterStrategyPayoffs(category) {
@@ -7759,7 +7751,21 @@
     }
 
     function wizardNextFromPayoff() {
-      showStratWizard('indicators');
+      if (wizardState.strategyKey === 'pairs_arbitrage' || userState.selectedStrategy === 'pairs_arbitrage') {
+        userState.selectedStrategy = 'pairs_arbitrage';
+        userState.selectedStrategyName = wizardState.strategyName || 'Nifty ↔ BankNifty Statistical Arbitrage';
+        userState.selectedAsset = 'NIFTY ↔ BANKNIFTY Arbitrage';
+        userState.totalCapital = wizardState.minCapital || 100000;
+        userState.baseMargin = wizardState.baseMargin || 70000;
+        customStrategyState.name = "Nifty ↔ BankNifty Statistical Arbitrage";
+        customStrategyState.dataset = "nifty_banknifty_pairs";
+        customStrategyState.indicators = [];
+        saveState();
+        showToast('✓ Pairs Arbitrage locked! Moving to Capital & 30% Buffer (Step 3)...');
+        goToStep(3);
+      } else {
+        showStratWizard('indicators');
+      }
     }
 
     function selectIndicatorMode(mode) {
@@ -7968,7 +7974,10 @@
       const inp = document.getElementById('words-prompt-input');
       if (inp) {
         inp.value = text;
-        showToast('✓ Example loaded. Click "Create Strategy" or "Apply & Move to Next"');
+        showToast('✓ Strategy selected! Synthesizing & moving to next step...');
+        setTimeout(() => {
+          parsePlainWordsStrategy('next');
+        }, 350);
       }
     }
 
@@ -8002,6 +8011,8 @@
       let minCapital = 50000;
       let hasWings = true;
       let wingPts = 200;
+      const parsedIndicators = [];
+      let withoutIndicators = false;
 
       if (p.includes("arbitrage") || p.includes("pair") || p.includes("pairs")) {
         asset = "NIFTY ↔ BANKNIFTY";
@@ -8058,7 +8069,6 @@
         }
       }
 
-      const parsedIndicators = [];
       const catalogue = [
         ["vwap", "VWAP"],
         ["supertrend", "Supertrend (7, 3)"],
@@ -8079,8 +8089,7 @@
         }
       }
 
-      let withoutIndicators = false;
-      if (p.includes("price action") || p.includes("no indicator") || p.includes("without indicator") || p.includes("0 indicator") || parsedIndicators.length === 0) {
+      if (strategyKey === "pairs_arbitrage" || p.includes("price action") || p.includes("no indicator") || p.includes("without indicator") || p.includes("0 indicator") || parsedIndicators.length === 0) {
         withoutIndicators = true;
       }
 
@@ -8163,9 +8172,17 @@
 
       userState.selectedAsset = asset;
       userState.selectedStrategyName = strategyName;
+      userState.selectedStrategy = strategyKey;
       userState.selectedStrategyKey = strategyKey;
       userState.totalCapital = minCapital;
       userState.baseMargin = baseMargin;
+      customStrategyState.name = strategyName;
+      if (strategyKey === 'pairs_arbitrage') {
+        customStrategyState.dataset = "nifty_banknifty_pairs";
+        customStrategyState.indicators = [];
+      } else {
+        customStrategyState.indicators = parsedIndicators.map(i => i.toLowerCase().replace(/[^a-z0-9]/g, ''));
+      }
       if (typeof saveState === 'function') saveState();
 
       if (typeof updateDockedBrokerUI === 'function') updateDockedBrokerUI();
@@ -8174,7 +8191,7 @@
       showNotification(`✓ Applied: ${strategyName} on ${asset} (${withoutIndicators ? 'Pure Price Action' : parsedIndicators.join(' + ') || 'Pure Price Action'})!`, 'success');
 
       // 4. Smoothly advance to destination
-      if (destination === 'next') {
+      if (destination === 'next' || strategyKey === 'pairs_arbitrage') {
         goToStep(3);
       } else {
         showStratWizard('payoff');
@@ -10575,7 +10592,7 @@
           startArbitrageBot('live');
         }
       } else {
-        goToStep(4);
+        goToStep(3);
       }
     }
 
