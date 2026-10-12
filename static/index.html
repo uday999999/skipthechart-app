@@ -1192,11 +1192,11 @@
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
                     <span class="text-slate-500 font-medium mr-1">💡 Quick Examples:</span>
-                    <button type="button" onclick="quickFillWords('Trade BankNifty 4-leg Iron Butterfly with 200pt wings and VWAP')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium">BankNifty Iron Butterfly 200pt</button>
-                    <button type="button" onclick="quickFillWords('Nifty Bull Call Spread with 9 EMA and 50 EMA')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium">Nifty Bull Call Spread + 9 EMA</button>
-                    <button type="button" onclick="quickFillWords('BankNifty pure price action momentum breakout with 0 indicators')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium">BankNifty Pure Price Action</button>
+                    <button type="button" onclick="quickFillWords('Trade BankNifty 4-leg Iron Butterfly with 200pt wings and VWAP')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium cursor-pointer">BankNifty Iron Butterfly 200pt</button>
+                    <button type="button" onclick="quickFillWords('Nifty Bull Call Spread with 9 EMA and 50 EMA')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium cursor-pointer">Nifty Bull Call Spread + 9 EMA</button>
+                    <button type="button" onclick="quickFillWords('BankNifty pure price action momentum breakout with 0 indicators')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium cursor-pointer">BankNifty Pure Price Action</button>
                   </div>
-                  <button type="button" onclick="parsePlainWordsStrategy()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
+                  <button type="button" onclick="parsePlainWordsStrategy('payoff')" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
                     <span>✨ Create Strategy from Words</span>
                     <span>→</span>
                   </button>
@@ -1212,7 +1212,7 @@
                   </span>
                 </div>
                 <div class="flex items-center gap-2">
-                  <button type="button" id="btn-words-next" onclick="parsePlainWordsStrategy()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-2 cursor-pointer">
+                  <button type="button" id="btn-words-next" onclick="parsePlainWordsStrategy('next')" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md shadow-emerald-600/20 transition flex items-center gap-2 cursor-pointer">
                     <span>Apply Strategy & Move to Next</span>
                     <span>→</span>
                   </button>
@@ -7495,8 +7495,8 @@
         if (panels[k]) {
           if (k === stage) {
             panels[k].classList.remove('hidden');
+            panels[k].scrollIntoView({ behavior: 'smooth', block: 'start' });
             if (stage === 'chart') {
-              panels[k].scrollIntoView({ behavior: 'smooth', block: 'start' });
               setTimeout(() => { if (typeof renderAlgoCandlestickChart === 'function') renderAlgoCandlestickChart(); }, 50);
               setTimeout(() => { if (typeof renderAlgoCandlestickChart === 'function') renderAlgoCandlestickChart(); }, 200);
             }
@@ -7965,60 +7965,177 @@
 
     function quickFillWords(text) {
       const inp = document.getElementById('words-prompt-input');
-      if (inp) inp.value = text;
+      if (inp) {
+        inp.value = text;
+        showToast('✓ Example loaded. Click "Create Strategy" or "Apply & Move to Next"');
+      }
     }
 
-    async function parsePlainWordsStrategy() {
+    async function parsePlainWordsStrategy(destination = 'payoff') {
       const inp = document.getElementById('words-prompt-input');
       const prompt = inp ? inp.value.trim() : "";
       if (!prompt) {
         showNotification('Please type your strategy words or pick a quick suggestion.', 'warning');
+        if (inp) inp.focus();
         return;
       }
-      
+
+      const nextBtn = document.getElementById('btn-words-next');
+      if (nextBtn) {
+        nextBtn.disabled = true;
+        nextBtn.innerHTML = `<span>⏳ Synthesizing Strategy...</span>`;
+      }
+
+      // 1. Robust client-side NLP parser (guarantees immediate success even if offline/network blip)
+      const p = prompt.toLowerCase();
+      let asset = "NIFTY 50";
+      if (p.includes("banknifty") || p.includes("bank nifty")) asset = "BANKNIFTY";
+      else if (p.includes("finnifty") || p.includes("fin nifty")) asset = "FINNIFTY";
+      else if (p.includes("sensex")) asset = "SENSEX";
+      else if (p.includes("midcpnifty") || p.includes("midcap")) asset = "MIDCPNIFTY";
+
+      let strategyKey = "iron_butterfly";
+      let strategyName = "Iron Butterfly (4 Legs)";
+      let legsCount = 4;
+      let baseMargin = 35000;
+      let minCapital = 50000;
+      let hasWings = true;
+      let wingPts = 200;
+
+      if (p.includes("breakout") || p.includes("momentum") || p.includes("price action") || p.includes("directional") || p.includes("buying")) {
+        strategyKey = "buying_only";
+        strategyName = "Directional Buying Only";
+        legsCount = 1;
+        baseMargin = 17500;
+        minCapital = 25000;
+        hasWings = false;
+      } else if (p.includes("spread") || p.includes("bull call") || p.includes("bear put")) {
+        strategyKey = "bull_call_spread";
+        strategyName = "Bull Call Spread (2 Legs)";
+        legsCount = 2;
+        baseMargin = 22000;
+        minCapital = 31500;
+        hasWings = true;
+      } else if (p.includes("straddle")) {
+        strategyKey = "short_straddle";
+        strategyName = "Short Straddle (2 Legs)";
+        legsCount = 2;
+        baseMargin = 60000;
+        minCapital = 85000;
+        hasWings = false;
+      }
+
+      for (const w of [100, 200, 300, 400]) {
+        if (p.includes(w + "pt") || p.includes(w + " pt") || p.includes(w + " points") || p.includes(w + "point")) {
+          wingPts = w;
+          break;
+        }
+      }
+
+      const parsedIndicators = [];
+      const catalogue = [
+        ["vwap", "VWAP"],
+        ["supertrend", "Supertrend (7, 3)"],
+        ["9 ema", "9 EMA"],
+        ["20 ema", "20 EMA"],
+        ["50 ema", "50 EMA"],
+        ["200 ema", "200 EMA"],
+        ["rsi", "RSI (14)"],
+        ["bollinger", "Bollinger Bands"],
+        ["ichimoku", "Ichimoku Cloud"],
+        ["macd", "MACD"],
+        ["atr", "ATR"]
+      ];
+      for (const [key, name] of catalogue) {
+        if (p.includes(key)) {
+          parsedIndicators.push(name);
+          if (parsedIndicators.length >= 5) break;
+        }
+      }
+
+      let withoutIndicators = false;
+      if (p.includes("price action") || p.includes("no indicator") || p.includes("without indicator") || p.includes("0 indicator") || parsedIndicators.length === 0) {
+        withoutIndicators = true;
+      }
+
+      // 2. Fetch server-enhanced parse if available
       try {
         const res = await fetch('/api/strategy/parse-prompt', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ prompt: prompt })
         });
-        const data = await res.json();
-        if (data.success && data.data) {
-          const d = data.data;
-          wizardState.asset = d.asset || "BANKNIFTY";
-          wizardState.wingPts = d.wing_pts || 200;
-          wizardState.indicators = d.indicators || [];
-          wizardState.withoutIndicators = !d.has_indicators;
-          if (d.strategy_type === "IRON_BUTTERFLY") {
-            wizardState.strategyKey = "iron_butterfly";
-            wizardState.strategyName = "Iron Butterfly (4 Legs)";
-            wizardState.legsCount = 4;
-            wizardState.baseMargin = 35000;
-            wizardState.minCapital = 50000;
-            wizardState.hasWings = true;
-          } else if (d.strategy_type.includes("SPREAD")) {
-            wizardState.strategyKey = "bull_call_spread";
-            wizardState.strategyName = "Bull Call Spread (2 Legs)";
-            wizardState.legsCount = 2;
-            wizardState.baseMargin = 22000;
-            wizardState.minCapital = 31500;
-            wizardState.hasWings = true;
-          } else {
-            wizardState.strategyKey = "buying_only";
-            wizardState.strategyName = "Directional Buying Only";
-            wizardState.legsCount = 1;
-            wizardState.baseMargin = 17500;
-            wizardState.minCapital = 25000;
-            wizardState.hasWings = false;
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.success && data.data) {
+            const d = data.data;
+            if (d.asset) asset = d.asset;
+            if (d.wing_pts) wingPts = d.wing_pts;
+            if (d.indicators && d.indicators.length > 0) {
+              parsedIndicators.splice(0, parsedIndicators.length, ...d.indicators);
+            }
+            if (d.has_indicators !== undefined) withoutIndicators = !d.has_indicators;
+            if (d.strategy_type === "IRON_BUTTERFLY") {
+              strategyKey = "iron_butterfly";
+              strategyName = "Iron Butterfly (4 Legs)";
+              legsCount = 4;
+              baseMargin = 35000;
+              minCapital = 50000;
+              hasWings = true;
+            } else if (d.strategy_type && d.strategy_type.includes("SPREAD")) {
+              strategyKey = "bull_call_spread";
+              strategyName = "Bull Call Spread (2 Legs)";
+              legsCount = 2;
+              baseMargin = 22000;
+              minCapital = 31500;
+              hasWings = true;
+            } else if (d.strategy_type === "BUYING_ONLY" || d.strategy_type === "BUY_CALL" || d.strategy_type === "SELL_PUT") {
+              strategyKey = "buying_only";
+              strategyName = "Directional Buying Only";
+              legsCount = 1;
+              baseMargin = 17500;
+              minCapital = 25000;
+              hasWings = false;
+            }
           }
-          updateDockedBrokerUI();
-          showNotification(d.summary || 'Parsed strategy successfully!', 'success');
-          showStratWizard('payoff');
-          setWizardWingPoints(wizardState.wingPts);
         }
-      } catch (e) {
-        console.error(e);
-        showNotification('Configured strategy from words.', 'info');
+      } catch (err) {
+        console.warn("Server parse-prompt fell back to client-side parsing:", err);
+      } finally {
+        if (nextBtn) {
+          nextBtn.disabled = false;
+          nextBtn.innerHTML = `<span>Apply Strategy & Move to Next</span> <span>→</span>`;
+        }
+      }
+
+      // 3. Update application and wizard state
+      wizardState.asset = asset;
+      wizardState.strategyKey = strategyKey;
+      wizardState.strategyName = strategyName;
+      wizardState.legsCount = legsCount;
+      wizardState.baseMargin = baseMargin;
+      wizardState.minCapital = minCapital;
+      wizardState.hasWings = hasWings;
+      wizardState.wingPts = wingPts;
+      wizardState.indicators = parsedIndicators;
+      wizardState.withoutIndicators = withoutIndicators;
+
+      userState.selectedAsset = asset;
+      userState.selectedStrategyName = strategyName;
+      userState.selectedStrategyKey = strategyKey;
+      userState.totalCapital = minCapital;
+      userState.baseMargin = baseMargin;
+      if (typeof saveState === 'function') saveState();
+
+      if (typeof updateDockedBrokerUI === 'function') updateDockedBrokerUI();
+      if (typeof setWizardWingPoints === 'function') setWizardWingPoints(wingPts);
+
+      showNotification(`✓ Applied: ${strategyName} on ${asset} (${withoutIndicators ? 'Pure Price Action' : parsedIndicators.join(' + ') || 'Pure Price Action'})!`, 'success');
+
+      // 4. Smoothly advance to destination
+      if (destination === 'next') {
+        goToStep(3);
+      } else {
         showStratWizard('payoff');
       }
     }

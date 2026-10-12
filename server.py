@@ -1022,7 +1022,16 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "/api/auth/config",
             "/api/auth/login",
             "/api/auth/signup",
-            "/api/auth/google"
+            "/api/auth/google",
+            "/api/strategy/parse-prompt",
+            "/api/strategy/parse-youtube",
+            "/api/strategy/test-combinations",
+            "/api/strategy/switch",
+            "/api/strategy/save-custom",
+            "/api/backtest/run",
+            "/api/market/live-feed",
+            "/api/ai/voice-call",
+            "/api/gemini/chat"
         }
 
         ADMIN_ENDPOINTS = {
@@ -3198,14 +3207,16 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         wing_pts = 200
         if "iron butterfly" in p or "butterfly" in p:
             strategy_type = "IRON_BUTTERFLY"
-        elif "straddle" in p:
-            strategy_type = "SHORT_STRADDLE"
-        elif "strangle" in p:
-            strategy_type = "SHORT_STRANGLE"
         elif "call spread" in p or "bull call" in p:
             strategy_type = "BULL_CALL_SPREAD"
         elif "put spread" in p or "bear put" in p:
             strategy_type = "BEAR_PUT_SPREAD"
+        elif "straddle" in p:
+            strategy_type = "SHORT_STRADDLE"
+        elif "strangle" in p:
+            strategy_type = "SHORT_STRANGLE"
+        elif "breakout" in p or "momentum" in p or "price action" in p or "directional" in p:
+            strategy_type = "BUYING_ONLY"
         elif "buy call" in p or "long call" in p:
             strategy_type = "BUY_CALL"
         elif "sell put" in p or "short put" in p:
