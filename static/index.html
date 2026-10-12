@@ -767,7 +767,7 @@
               <!-- 3 Interactive Creation Panels (Moved to Top) -->
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Option 1: Build Your Strategy by Your Own (100+ Indicators) -->
-                <div onclick="showStratWizard('asset')" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[400px]">
+                <div onclick="showStratWizard('chart')" id="card-option-candlestick-studio" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[400px]">
                   <div class="space-y-4">
                     <div class="flex items-center justify-between">
                       <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center justify-center text-2xl sm:text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
@@ -797,7 +797,7 @@
                       </div>
                     </div>
                   </div>
-                  <button type="button" class="w-full py-4 px-5 bg-emerald-600 group-hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md shadow-emerald-600/20 group-hover:shadow-lg group-hover:shadow-emerald-600/30 transition flex items-center justify-center gap-2">
+                  <button type="button" onclick="showStratWizard('chart'); event.stopPropagation();" class="w-full py-4 px-5 bg-emerald-600 group-hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md shadow-emerald-600/20 group-hover:shadow-lg group-hover:shadow-emerald-600/30 transition flex items-center justify-center gap-2 cursor-pointer">
                     <span>📈 Open Candlestick Chart & Build with Indicators</span>
                     <span class="group-hover:translate-x-1 transition-transform">→</span>
                   </button>
@@ -7491,7 +7491,9 @@
           if (k === stage) {
             panels[k].classList.remove('hidden');
             if (stage === 'chart') {
-              setTimeout(() => { if (typeof renderAlgoCandlestickChart === 'function') renderAlgoCandlestickChart(); }, 60);
+              panels[k].scrollIntoView({ behavior: 'smooth', block: 'start' });
+              setTimeout(() => { if (typeof renderAlgoCandlestickChart === 'function') renderAlgoCandlestickChart(); }, 50);
+              setTimeout(() => { if (typeof renderAlgoCandlestickChart === 'function') renderAlgoCandlestickChart(); }, 200);
             }
           }
           else panels[k].classList.add('hidden');
@@ -12380,14 +12382,17 @@
       }
 
       const rect = canvas.getBoundingClientRect();
+      const parentW = canvas.parentElement ? canvas.parentElement.clientWidth : 0;
+      const parentH = canvas.parentElement ? canvas.parentElement.clientHeight : 0;
+      const width = parentW || rect.width || 800;
+      const height = parentH || rect.height || 380;
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = (rect.width || 800) * dpr;
-      canvas.height = (rect.height || 360) * dpr;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
 
       const ctx = canvas.getContext('2d');
       ctx.scale(dpr, dpr);
-      const width = rect.width || 800;
-      const height = rect.height || 360;
 
       // Clear dark background
       ctx.fillStyle = '#090d16';
