@@ -3193,7 +3193,9 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         p = (prompt or "").lower()
         # 1. Asset detection
         asset = "NIFTY 50"
-        if "banknifty" in p or "bank nifty" in p:
+        if "arbitrage" in p or "pair" in p:
+            asset = "NIFTY ↔ BANKNIFTY"
+        elif "banknifty" in p or "bank nifty" in p:
             asset = "BANKNIFTY"
         elif "finnifty" in p or "fin nifty" in p:
             asset = "FINNIFTY"
@@ -3204,9 +3206,15 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
         
         # 2. Strategy Type / Payoff Archetype
         strategy_type = "IRON_BUTTERFLY"
-        wing_pts = 200
-        if "iron butterfly" in p or "butterfly" in p:
+        wing_pts = 300
+        if "arbitrage" in p or "pair" in p or "hedge" in p:
+            strategy_type = "PAIRS_HEDGE"
+            asset = "NIFTY ↔ BANKNIFTY"
+        elif "iron butterfly" in p or "butterfly" in p:
             strategy_type = "IRON_BUTTERFLY"
+            wing_pts = 300
+        elif "bull put" in p or "credit spread" in p:
+            strategy_type = "BULL_PUT_SPREAD"
         elif "call spread" in p or "bull call" in p:
             strategy_type = "BULL_CALL_SPREAD"
         elif "put spread" in p or "bear put" in p:
@@ -3215,14 +3223,12 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             strategy_type = "SHORT_STRADDLE"
         elif "strangle" in p:
             strategy_type = "SHORT_STRANGLE"
-        elif "breakout" in p or "momentum" in p or "price action" in p or "directional" in p:
+        elif "breakout" in p or "momentum" in p or "price action" in p or "directional" in p or "trend" in p:
             strategy_type = "BUYING_ONLY"
         elif "buy call" in p or "long call" in p:
             strategy_type = "BUY_CALL"
         elif "sell put" in p or "short put" in p:
             strategy_type = "SELL_PUT"
-        elif "pair" in p or "hedge" in p:
-            strategy_type = "PAIRS_HEDGE"
 
         # Wing width detection if butterfly / spread
         for w in [100, 200, 300, 400]:
