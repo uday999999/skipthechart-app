@@ -1325,14 +1325,14 @@
               </button>
             </div>
 
-            <!-- Candlestick Chart Canvas Container -->
-            <div class="relative bg-slate-950 rounded-2xl border-2 border-slate-800 overflow-hidden shadow-inner flex flex-col">
+            <!-- Candlestick Chart Canvas Container (SkipTheChart White Theme) -->
+            <div class="relative bg-white rounded-2xl border-2 border-slate-200 overflow-hidden shadow-xs flex flex-col">
               
               <!-- Chart Watermark / Symbol Header -->
               <div class="absolute top-3 left-4 z-10 pointer-events-none flex items-center gap-3">
-                <span id="canvas-symbol-label" class="text-sm font-black text-slate-200 font-mono tracking-wider">NIFTY 50 • 5m</span>
-                <span class="text-[11px] text-emerald-400 font-mono font-bold" id="canvas-live-price">22,458.10 (+142.30 +0.64%)</span>
-                <span class="text-[10px] text-slate-400 font-mono">Candles: OHLC (Bullish Green / Bearish Red)</span>
+                <span id="canvas-symbol-label" class="text-sm font-black text-slate-800 font-mono tracking-wider">NIFTY 50 • 5m</span>
+                <span class="text-[11px] text-emerald-700 font-mono font-bold" id="canvas-live-price">22,458.10 (+142.30 +0.64%)</span>
+                <span class="text-[10px] text-slate-500 font-mono bg-slate-100/90 px-2 py-0.5 rounded border border-slate-200">SkipTheChart Mode: Subdued Grey Candles</span>
               </div>
 
               <!-- Canvas element -->
@@ -1340,21 +1340,20 @@
                 <canvas id="algo-candlestick-canvas" class="w-full h-full block cursor-crosshair"></canvas>
               </div>
 
-              <!-- Interactive Chart Legend / Stats Footer -->
-              <div class="bg-slate-900/95 border-t border-slate-800 px-4 py-2.5 sm:px-5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-400">
+              <!-- Interactive Chart Legend / Stats Footer (Clean Theme) -->
+              <div class="bg-slate-50/95 border-t border-slate-200 px-4 py-2.5 sm:px-5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-600">
                 <div class="flex items-center gap-3 flex-wrap">
-                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Green Candle: Close &gt; Open</span>
-                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Red Candle: Close &lt; Open</span>
-                  <span id="canvas-crossover-status" class="text-emerald-400 font-bold">▲ Golden Cross Active (SMA 5 &gt; SMA 20)</span>
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-slate-300 border border-slate-600"></span> Grey Candles (Zero Emotional Bias)</span>
+                  <span id="canvas-crossover-status" class="text-emerald-700 font-bold">▲ Golden Cross Active (SMA 5 &gt; SMA 20)</span>
                 </div>
                 <div class="flex items-center gap-2.5">
                   <!-- Clear All Button -->
-                  <button type="button" onclick="clearAllChartIndicators()" class="py-2 px-3.5 sm:px-4 rounded-xl bg-slate-800/90 hover:bg-rose-950/40 text-slate-300 hover:text-rose-400 border border-slate-700/80 hover:border-rose-500/50 font-mono font-bold text-xs transition-all shadow-sm flex items-center gap-1.5 cursor-pointer active:scale-95" title="Clear all active indicators from chart">
+                  <button type="button" onclick="clearAllChartIndicators()" class="py-2 px-3.5 sm:px-4 rounded-xl bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 hover:border-rose-300 font-mono font-bold text-xs transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95" title="Clear all active indicators from chart">
                     <span>🗑️</span>
                     <span>Clear All</span>
                   </button>
                   <!-- Enriched Bigger Fine-Tune in Builder Button -->
-                  <button type="button" onclick="openConditionBuilderModal('entry')" class="py-2.5 px-5 sm:px-6 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-500 hover:via-teal-500 hover:to-emerald-500 text-white border border-emerald-400/40 font-mono font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-emerald-950/50 hover:shadow-emerald-500/25 transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer">
+                  <button type="button" onclick="openConditionBuilderModal('entry')" class="py-2.5 px-5 sm:px-6 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-700 hover:via-teal-700 hover:to-emerald-700 text-white border border-emerald-500 font-mono font-black text-xs sm:text-sm tracking-wide shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer">
                     <span class="text-base sm:text-lg">🛠️</span>
                     <span>Fine-Tune in Builder</span>
                   </button>
@@ -12642,8 +12641,8 @@
       const ctx = canvas.getContext('2d');
       ctx.scale(dpr, dpr);
 
-      // Clear dark background
-      ctx.fillStyle = '#090d16';
+      // Clear crisp white background (SkipTheChart White Theme)
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, width, height);
 
       const candles = chartStudioState.candles;
@@ -12680,8 +12679,8 @@
         return 20 + (maxP - p) / (maxP - minP) * (mainChartHeight - 35);
       }
 
-      // Horizontal Grid Lines
-      ctx.strokeStyle = '#1e293b';
+      // Horizontal Grid Lines (Subtle Light Grey on White)
+      ctx.strokeStyle = '#f1f5f9';
       ctx.lineWidth = 1;
       ctx.setLineDash([4, 4]);
       const gridSteps = 5;
@@ -12759,15 +12758,19 @@
         ctx.stroke();
       }
 
-      // Draw Candlesticks (OHLC)
+      // Draw Candlesticks in SkipTheChart Muted Grey Theme (Grey body with dark grey outlines)
       candles.forEach((c, i) => {
         const x = i * barWidth + barWidth / 2;
         const isBullish = c.close >= c.open;
-        const color = isBullish ? '#10b981' : '#f43f5e';
+        
+        // Muted grey tones: lighter soft grey for bullish, neutral slate grey for bearish
+        const bodyFillColor = isBullish ? '#f1f5f9' : '#cbd5e1';
+        const outlineColor = '#334155'; // Dark grey outline
+        const wickColor = '#475569';    // Dark grey wicks
 
         // Upper & Lower Shadows (Wicks)
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = wickColor;
+        ctx.lineWidth = 1.3;
         ctx.beginPath();
         ctx.moveTo(x, priceToY(c.high));
         ctx.lineTo(x, priceToY(c.low));
@@ -12776,10 +12779,17 @@
         // Candle Body
         const topY = priceToY(Math.max(c.open, c.close));
         const botY = priceToY(Math.min(c.open, c.close));
-        const bodyHeight = Math.max(1.8, botY - topY);
+        const bodyHeight = Math.max(2.2, botY - topY);
+        const bodyX = x - candleWidth / 2;
 
-        ctx.fillStyle = color;
-        ctx.fillRect(x - candleWidth / 2, topY, candleWidth, bodyHeight);
+        // 1. Fill candle body with grey
+        ctx.fillStyle = bodyFillColor;
+        ctx.fillRect(bodyX, topY, candleWidth, bodyHeight);
+
+        // 2. Stroke dark grey outline around the body
+        ctx.strokeStyle = outlineColor;
+        ctx.lineWidth = 1.2;
+        ctx.strokeRect(bodyX, topY, candleWidth, bodyHeight);
       });
 
       // Draw Bollinger Bands (if active)
@@ -12956,27 +12966,27 @@
 
             // Draw RSI Oscillator Panel (if active)
       if (hasRSI && rsiHeight > 20) {
-        // Divider
-        ctx.strokeStyle = '#334155';
+        // Divider (Clean Light Theme)
+        ctx.strokeStyle = '#e2e8f0';
         ctx.lineWidth = 1.2;
         ctx.beginPath();
         ctx.moveTo(0, rsiTop - 6);
         ctx.lineTo(width - 60, rsiTop - 6);
         ctx.stroke();
 
-        // Background panel tint
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.45)';
+        // Background panel tint (Subtle soft slate-white)
+        ctx.fillStyle = '#f8fafc';
         ctx.fillRect(0, rsiTop - 5, width - 60, rsiHeight + 10);
 
         // 70 & 30 Reference Bands with internal breathing room
         function rsiToY(v) { return (rsiTop + 14) + (100 - v) / 100 * (rsiHeight - 28); }
 
         // Shaded neutral channel (30 to 70)
-        ctx.fillStyle = 'rgba(168, 85, 247, 0.08)';
+        ctx.fillStyle = 'rgba(147, 51, 234, 0.05)';
         ctx.fillRect(0, rsiToY(70), width - 60, rsiToY(30) - rsiToY(70));
 
         // 70, 50, 30 Reference Lines
-        ctx.strokeStyle = '#475569';
+        ctx.strokeStyle = '#cbd5e1';
         ctx.setLineDash([3, 4]);
         ctx.beginPath();
         ctx.moveTo(0, rsiToY(70)); ctx.lineTo(width - 60, rsiToY(70));
@@ -12986,7 +12996,7 @@
         ctx.setLineDash([]);
 
         // Axis Labels
-        ctx.fillStyle = '#94a3b8';
+        ctx.fillStyle = '#64748b';
         ctx.font = '10px JetBrains Mono, monospace';
         ctx.textAlign = 'right';
         ctx.fillText('70 OB', width - 8, rsiToY(70) + 3);
@@ -12994,14 +13004,14 @@
         ctx.fillText('30 OS', width - 8, rsiToY(30) + 3);
 
         // Sub-panel indicator title
-        ctx.fillStyle = '#c084fc';
+        ctx.fillStyle = '#7c3aed';
         ctx.font = 'bold 10px JetBrains Mono, monospace';
         ctx.textAlign = 'left';
         ctx.fillText('RSI (14)', 12, rsiTop + 8);
 
-        // RSI Line
-        ctx.strokeStyle = '#c084fc'; // Violet
-        ctx.lineWidth = 2.2;
+        // RSI Line (Vibrant Purple)
+        ctx.strokeStyle = '#9333ea';
+        ctx.lineWidth = 2.4;
         ctx.beginPath();
         let rStarted = false;
         candles.forEach((_, i) => {
