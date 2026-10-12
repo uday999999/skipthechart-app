@@ -1336,7 +1336,7 @@
               </div>
 
               <!-- Canvas element -->
-              <div class="w-full h-80 sm:h-96 relative">
+              <div class="w-full h-[520px] sm:h-[580px] lg:h-[620px] relative">
                 <canvas id="algo-candlestick-canvas" class="w-full h-full block cursor-crosshair"></canvas>
               </div>
 
@@ -12383,7 +12383,7 @@
       const parentW = canvas.parentElement ? canvas.parentElement.clientWidth : 0;
       const parentH = canvas.parentElement ? canvas.parentElement.clientHeight : 0;
       const width = parentW || rect.width || 800;
-      const height = parentH || rect.height || 380;
+      const height = parentH || rect.height || 580;
       const dpr = window.devicePixelRatio || 1;
 
       canvas.width = width * dpr;
@@ -12399,11 +12399,12 @@
       const candles = chartStudioState.candles;
       const indicators = computeIndicators(candles);
 
-      // Check if RSI is active
+      // Check if RSI is active - generous panel height
       const hasRSI = chartStudioState.activeIndicators.some(i => i.type === 'rsi');
-      const mainChartHeight = hasRSI ? height * 0.72 : height - 26;
-      const rsiTop = mainChartHeight + 8;
-      const rsiHeight = hasRSI ? height - rsiTop - 18 : 0;
+      const rsiPanelHeight = hasRSI ? Math.min(160, Math.max(125, height * 0.28)) : 0;
+      const mainChartHeight = hasRSI ? height - rsiPanelHeight - 26 : height - 26;
+      const rsiTop = mainChartHeight + 14;
+      const rsiHeight = rsiPanelHeight;
 
       // Price Bounds
       let minP = Math.min(...candles.map(c => c.low));
@@ -12620,33 +12621,50 @@
       if (hasRSI && rsiHeight > 20) {
         // Divider
         ctx.strokeStyle = '#334155';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.moveTo(0, rsiTop - 4);
-        ctx.lineTo(width - 60, rsiTop - 4);
+        ctx.moveTo(0, rsiTop - 6);
+        ctx.lineTo(width - 60, rsiTop - 6);
         ctx.stroke();
 
-        // 70 & 30 Reference Bands
-        function rsiToY(v) { return rsiTop + (100 - v) / 100 * rsiHeight; }
+        // Background panel tint
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.45)';
+        ctx.fillRect(0, rsiTop - 5, width - 60, rsiHeight + 10);
 
+        // 70 & 30 Reference Bands with internal breathing room
+        function rsiToY(v) { return (rsiTop + 14) + (100 - v) / 100 * (rsiHeight - 28); }
+
+        // Shaded neutral channel (30 to 70)
+        ctx.fillStyle = 'rgba(168, 85, 247, 0.08)';
+        ctx.fillRect(0, rsiToY(70), width - 60, rsiToY(30) - rsiToY(70));
+
+        // 70, 50, 30 Reference Lines
         ctx.strokeStyle = '#475569';
-        ctx.setLineDash([2, 4]);
+        ctx.setLineDash([3, 4]);
         ctx.beginPath();
         ctx.moveTo(0, rsiToY(70)); ctx.lineTo(width - 60, rsiToY(70));
+        ctx.moveTo(0, rsiToY(50)); ctx.lineTo(width - 60, rsiToY(50));
         ctx.moveTo(0, rsiToY(30)); ctx.lineTo(width - 60, rsiToY(30));
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Label 70 / 30 / 50
+        // Axis Labels
         ctx.fillStyle = '#94a3b8';
-        ctx.font = '9px JetBrains Mono, monospace';
+        ctx.font = '10px JetBrains Mono, monospace';
         ctx.textAlign = 'right';
         ctx.fillText('70 OB', width - 8, rsiToY(70) + 3);
+        ctx.fillText('50 Mid', width - 8, rsiToY(50) + 3);
         ctx.fillText('30 OS', width - 8, rsiToY(30) + 3);
+
+        // Sub-panel indicator title
+        ctx.fillStyle = '#c084fc';
+        ctx.font = 'bold 10px JetBrains Mono, monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('RSI (14)', 12, rsiTop + 8);
 
         // RSI Line
         ctx.strokeStyle = '#c084fc'; // Violet
-        ctx.lineWidth = 1.8;
+        ctx.lineWidth = 2.2;
         ctx.beginPath();
         let rStarted = false;
         candles.forEach((_, i) => {
