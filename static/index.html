@@ -1347,8 +1347,12 @@
                   <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Red Candle: Close &lt; Open</span>
                   <span id="canvas-crossover-status" class="text-emerald-400 font-bold">▲ Golden Cross Active (SMA 5 &gt; SMA 20)</span>
                 </div>
-                <div class="text-[10px] text-slate-500">
-                  Interactive Live Renderer • Real-time Mathematical Plotting
+                <div class="flex items-center gap-2.5">
+                  <span class="hidden sm:inline text-[10px] text-slate-500">Live Plotting •</span>
+                  <button type="button" onclick="openConditionBuilderModal('entry')" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500 text-xs font-mono font-bold text-emerald-400 hover:text-emerald-300 transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+                    <span>🛠️</span>
+                    <span>Fine-Tune in Builder</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -1374,12 +1378,6 @@
                       Our quant engine analyzed the indicators you placed on the chart and constructed this execution strategy:
                     </p>
                   </div>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <button type="button" onclick="openConditionBuilderModal('entry')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono font-bold text-emerald-400 transition cursor-pointer">
-                    <span>🛠️ Fine-Tune in Builder</span>
-                  </button>
                 </div>
               </div>
 
