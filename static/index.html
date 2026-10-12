@@ -1192,10 +1192,10 @@
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
                     <span class="text-slate-500 font-medium mr-1">💡 Quick Examples:</span>
-                    <button type="button" onclick="quickFillWords('Trade Nifty ↔ BankNifty statistical pairs arbitrage with z-score mean reversion and 70% capital buffer')" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 hover:text-indigo-950 transition font-bold cursor-pointer">⚡ Nifty ↔ BankNifty Arbitrage</button>
-                    <button type="button" onclick="quickFillWords('Trade BankNifty 4-leg Iron Butterfly with defined-risk 300pt wings and VWAP filter')" class="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 hover:text-emerald-950 transition font-medium cursor-pointer">🛡️ BankNifty Iron Butterfly (300pt Wings)</button>
-                    <button type="button" onclick="quickFillWords('Nifty Bull Put Credit Spread with Supertrend and 20 EMA for steady high-probability returns')" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-800 hover:text-teal-950 transition font-medium cursor-pointer">🟢 Nifty Bull Put Credit Spread</button>
-                    <button type="button" onclick="quickFillWords('BankNifty trend following with Supertrend and VWAP with hard 1% stop-loss and trailing profit')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium cursor-pointer">🎯 BankNifty Trend Following (1% SL)</button>
+                    <button type="button" onclick="quickFillWords('Trade Nifty ↔ BankNifty statistical pairs arbitrage with z-score mean reversion targeting 112% annual gain and 70% capital buffer')" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 hover:text-indigo-950 transition font-bold cursor-pointer">⚡ Nifty ↔ BankNifty Arbitrage (112% / yr)</button>
+                    <button type="button" onclick="quickFillWords('Trade BankNifty 4-leg Iron Butterfly with 300pt wings and theta compounding targeting 108% annual gain with VWAP filter')" class="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 hover:text-emerald-950 transition font-medium cursor-pointer">🛡️ BankNifty Iron Butterfly (108% / yr)</button>
+                    <button type="button" onclick="quickFillWords('Nifty Bull Put Credit Spread with Supertrend and 20 EMA targeting 115% annual gain with strict stop-loss')" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-800 hover:text-teal-950 transition font-medium cursor-pointer">🟢 Nifty Bull Put Credit Spread (115% / yr)</button>
+                    <button type="button" onclick="quickFillWords('BankNifty trend following with Supertrend and VWAP targeting 135% annual gain with hard 1% stop-loss and trailing profit')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium cursor-pointer">🎯 BankNifty Trend Following (135% / yr)</button>
                   </div>
                   <button type="button" onclick="parsePlainWordsStrategy('payoff')" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
                     <span>✨ Create Strategy from Words</span>
@@ -5586,81 +5586,81 @@
     // Strategy Configurations & Exact Margin Requirements (with 30% cash buffer)
     const STRATEGY_DATA = {
       pairs_arbitrage: {
-        name: "Nifty ↔ BankNifty Statistical Arbitrage",
+        name: "Nifty ↔ BankNifty Statistical Arbitrage (112% Target)",
         icon: "⚡",
         baseMargin: 70000,
         minCapital: 100000,
         bufferAmount: 30000,
         dataset: "nifty_banknifty_pairs",
-        style: "Statistical Co-Integration Spread",
+        style: "Statistical Co-Integration Spread (112% Annual Target)",
         entry: "Calculates Z-score on Nifty/BankNifty ratio. Triggers at ±3.000σ anomaly after 09:30 AM filter.",
         sl: "Mean deviation exit at ±4.200σ or daily stop-loss.",
-        tp: "Target snap-back to 0.00 mean ratio.",
+        tp: "Target snap-back to 0.00 mean ratio (112% annualized return).",
         exit: "Mean reversion or 3:15 PM IST square-off."
       },
       iron_butterfly: {
-        name: "Iron Butterfly (4 Legs)",
+        name: "Iron Butterfly - 4 Legs (108% Target)",
         icon: "🦋",
         baseMargin: 45000,
         minCapital: 65000,
         bufferAmount: 20000,
         dataset: "nifty50",
-        style: "Delta Neutral 4-Legged Defined Risk",
+        style: "Delta Neutral Defined Risk (108% Annual Target)",
         entry: "Sell ATM Straddle, buy OTM wings at 200pt delta hedge.",
         sl: "Premium SL 25% on sold legs.",
-        tp: "Theta decay harvest up to 50% max profit.",
+        tp: "Theta decay harvest targeting 108% annualized gain.",
         exit: "Auto square-off at 3:15 PM IST."
       },
       trend_rider: {
-        name: "Nifty Trend Rider",
+        name: "Nifty Trend Rider (115% Target)",
         icon: "🚀",
         baseMargin: 17500,
         minCapital: 25000,
         bufferAmount: 7500,
         dataset: "nifty50",
-        style: "Automatic 2-Way (CE / PE)",
+        style: "Automatic 2-Way CE/PE (115% Annual Target)",
         entry: "Buys Nifty ATM Call (CE) when 7-EMA crosses above 50-EMA on 5-min chart. Buys Put (PE) on bear crossover.",
         sl: "Strict 2.0% stop-loss from entry premium price.",
-        tp: "5.0% profit target with trailing stop-loss activation at +2.0% gain.",
+        tp: "5.0% profit target with trailing stop-loss (115% annualized gain).",
         exit: "Intraday auto-square off at 3:15 PM IST."
       },
       theta_harvester: {
-        name: "Intraday Theta Harvester",
+        name: "Intraday Theta Harvester (170% Target)",
         icon: "💰",
         baseMargin: 70000,
         minCapital: 100000,
         bufferAmount: 30000,
         dataset: "nifty50",
-        style: "Non-Directional Hedged Straddle",
+        style: "Non-Directional Hedged Straddle (170% Annual Target)",
         entry: "Sells 1 OTM Call and 1 OTM Put at 9:20 AM with bought hedge wings, collecting daily theta decay.",
         sl: "Combined premium stop-loss of 25% on each leg.",
-        tp: "Pockets daily theta decay if index stays within range.",
+        tp: "Pockets daily theta decay if index stays within range (170% annualized gain).",
         exit: "Auto square-off at 3:15 PM IST or target hit."
       },
       banknifty_scalp: {
-        name: "BankNifty Fast Scalper",
+        name: "BankNifty Fast Scalper (180%+ Target)",
         icon: "⚡",
         baseMargin: 35000,
         minCapital: 50000,
         bufferAmount: 15000,
         dataset: "banknifty",
-        style: "Momentum Breakouts",
+        style: "Momentum Breakouts (180%+ Annual Target)",
         entry: "Fast 15-minute high/low breakout momentum trigger on BankNifty index.",
         sl: "Tight 1.5% trailing stop-loss to protect against reversals.",
-        tp: "Quick 3.5% momentum target strike.",
+        tp: "Quick 3.5% momentum target strike (180%+ annualized gain).",
         exit: "Square-off at 3:15 PM IST."
       },
       expiry_hunter: {
-        name: "FinNifty & Midcap Expiry Hunter",
+        name: "FinNifty & Midcap Expiry Hunter (200%+ Target)",
         icon: "🎯",
         baseMargin: 10500,
         minCapital: 15000,
         bufferAmount: 4500,
         dataset: "nifty50",
-        style: "Expiry Breakouts (CE/PE)",
+        style: "Expiry Breakouts CE/PE (200%+ Annual Target)",
         entry: "Explosive gamma breakout trades on Monday Midcap & Tuesday FinNifty expiries.",
         sl: "Risk capped at max 3.0% premium loss.",
-        tp: "Gamma spike target of 8.0%+ with trailing protection.",
+        tp: "Gamma spike target of 8.0%+ with trailing protection (200%+ annualized gain).",
         exit: "Expiry day square-off at 3:20 PM IST."
       },
       pairs_hedge: {
