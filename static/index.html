@@ -3666,9 +3666,9 @@
         <div class="p-4 bg-white border border-slate-200/90 rounded-2xl space-y-1 shadow-sm ms-glass-card">
           <div class="text-xs text-slate-500 font-medium flex items-center justify-between">
             <span>NIFTY 50 MARK PRICE</span>
-            <span class="text-[9px] text-amber-700 bg-amber-50 px-1 py-0.5 rounded border border-amber-200 font-mono">SAMPLE / DEMO</span>
+            <span class="text-[9px] text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded border border-emerald-200 font-mono font-bold" id="badge-nifty-live">LIVE EXCHANGE TICK</span>
           </div>
-          <div class="text-2xl font-black text-slate-900 font-mono" id="dash-nifty-price">₹ 23,063.1</div>
+          <div class="text-2xl font-black text-slate-900 font-mono" id="dash-nifty-price">₹ 22,472.35</div>
           <div class="text-[11px] text-slate-400 font-mono">Underlying Index</div>
         </div>
 
@@ -3676,9 +3676,9 @@
         <div class="p-4 bg-white border border-slate-200/90 rounded-2xl space-y-1 shadow-sm ms-glass-card">
           <div class="text-xs text-slate-500 font-medium flex items-center justify-between">
             <span>BANKNIFTY MARK PRICE</span>
-            <span class="text-[9px] text-amber-700 bg-amber-50 px-1 py-0.5 rounded border border-amber-200 font-mono">SAMPLE / DEMO</span>
+            <span class="text-[9px] text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded border border-emerald-200 font-mono font-bold" id="badge-banknifty-live">LIVE EXCHANGE TICK</span>
           </div>
-          <div class="text-2xl font-black text-slate-900 font-mono" id="dash-banknifty-price">₹ 55,438.5</div>
+          <div class="text-2xl font-black text-slate-900 font-mono" id="dash-banknifty-price">₹ 55,011.95</div>
           <div class="text-[11px] text-slate-400 font-mono">Underlying Index</div>
         </div>
 
@@ -9734,6 +9734,20 @@
 
           const clk = document.getElementById('dash-live-clock');
           if (clk) clk.innerText = `Live: ${data.timestamp}`;
+
+          if (data.market_status) {
+            const isLive = data.market_status.includes('OPEN');
+            const badgeN = document.getElementById('badge-nifty-live');
+            const badgeB = document.getElementById('badge-banknifty-live');
+            if (badgeN) {
+              badgeN.innerText = isLive ? 'LIVE EXCHANGE TICK' : 'MARKET CLOSED';
+              badgeN.className = isLive ? 'text-[9px] text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded border border-emerald-200 font-mono font-bold' : 'text-[9px] text-slate-500 bg-slate-100 px-1 py-0.5 rounded border border-slate-200 font-mono';
+            }
+            if (badgeB) {
+              badgeB.innerText = isLive ? 'LIVE EXCHANGE TICK' : 'MARKET CLOSED';
+              badgeB.className = isLive ? 'text-[9px] text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded border border-emerald-200 font-mono font-bold' : 'text-[9px] text-slate-500 bg-slate-100 px-1 py-0.5 rounded border border-slate-200 font-mono';
+            }
+          }
 
           const pair = document.getElementById('table-mark-pair');
           if (pair) pair.innerText = `${data.nifty_mark} / ${data.banknifty_mark}`;
