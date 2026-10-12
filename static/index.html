@@ -20,6 +20,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="/qrcode.min.js"></script>
   <style>
     * {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -4590,7 +4591,7 @@
         <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-center space-y-2.5">
           <div class="text-[11px] font-bold text-slate-600">Step 1: Scan this QR Code on your phone</div>
           <div class="w-48 h-48 mx-auto bg-white p-2 rounded-xl shadow-xs border border-slate-200 flex items-center justify-center overflow-hidden">
-            <img id="totp-qr-img" src="" alt="Google Authenticator QR Code" class="w-full h-full object-contain">
+            <div id="totp-qrcode-box" class="w-full h-full flex items-center justify-center"></div>
           </div>
           
           <div class="pt-1">
@@ -5084,7 +5085,7 @@
     <div class="text-[10px] text-slate-500 pt-1 space-y-1">
       <div><strong>Legal Entity:</strong> SkipTheChart &bull; <strong>MSME Registration:</strong> UDYAM-TS-20-0219018 &bull; <strong>GSTIN:</strong> [To be updated]</div>
       <div><strong>Registered Office:</strong> [Address to be updated]</div>
-      <div><strong>Grievance / Contact Officer:</strong> [To be updated] &bull; <strong>Support Helpline:</strong> +91 044 4560 9696 &bull; <strong>Email:</strong> <a href="mailto:support@skipthechart.com" class="text-emerald-700 underline font-semibold">support@skipthechart.com</a> &bull; <strong>Compliance:</strong> <a href="mailto:legal@skipthechart.com" class="text-emerald-700 underline font-semibold">legal@skipthechart.com</a></div>
+      <div><strong>Grievance / Contact Officer:</strong> [To be updated] &bull; <strong>Email:</strong> <a href="mailto:support@skipthechart.com" class="text-emerald-700 underline font-semibold">support@skipthechart.com</a> &bull; <strong>Compliance:</strong> <a href="mailto:legal@skipthechart.com" class="text-emerald-700 underline font-semibold">legal@skipthechart.com</a></div>
       <div class="text-slate-400">© 2026 SkipTheChart. All rights reserved. Non-Custodial Algorithmic Trading Software.</div>
     </div>
   </footer>
@@ -5568,10 +5569,11 @@
         default_min_capital: 21400
       },
       "ARBITRAGE": {
-        // Historical Nifty lot size was 25 before SEBI contract rationalization. Pairs Arbitrage utilizes dynamic synthetic ratio legs.
-        lot_size: 25,
+        // Pairs Arbitrage is executed as 1 Spread Unit (Beta-hedged Nifty 65 qty ↔ BankNifty 30 qty pairs ratio)
+        lot_size: 1, // 1 Pair Spread Unit
+        pair_ratio: "1 Lot BankNifty (30) ↔ 1 Lot Nifty (65)",
         strategy_labels: {
-          pairs_spread: "Statistical Co-Integration Pair Spread (Dynamic ratio weighting)"
+          pairs_spread: "Statistical Co-Integration Pair Spread (Beta-hedged Nifty 65 ↔ BankNifty 30)"
         },
         margin: 70000,
         min_capital: 100000,
@@ -6540,12 +6542,17 @@
     function showAuthAlert(msg, isError = true) {
       const el = document.getElementById('auth-alert-box');
       if (!el) return;
+      el.innerHTML = '';
+      const icon = document.createElement('span');
+      icon.textContent = isError ? '⚠️' : '✓';
+      const text = document.createElement('span');
+      text.textContent = String(msg || '');
+      el.appendChild(icon);
+      el.appendChild(text);
       if (isError) {
         el.className = "p-3 rounded-xl text-xs border border-rose-200 bg-rose-50 text-rose-800 flex items-center gap-2 font-medium";
-        el.innerHTML = `<span>⚠️</span> <span>${msg}</span>`;
       } else {
         el.className = "p-3 rounded-xl text-xs border border-emerald-200 bg-emerald-50 text-emerald-800 flex items-center gap-2 font-medium";
-        el.innerHTML = `<span>✓</span> <span>${msg}</span>`;
       }
       el.classList.remove('hidden');
     }
@@ -6563,10 +6570,9 @@
     }
 
     function promptForgotPassword() {
-      const email = document.getElementById('signin-email')?.value.trim() || prompt("Please enter your registered email address for password reset:");
-      if (email) {
-        showAuthAlert(`Password reset instructions have been dispatched to ${email}. Please check your inbox.`, false);
-      }
+      const email = document.getElementById('signin-email')?.value.trim();
+      const target = email ? ` for ${email}` : '';
+      showAuthAlert(`To reset your password${target}, please contact support at support@skipthechart.com or sign in directly with your registered Google Account.`, false);
     }
 
     // Sign In with Email & Password
@@ -6795,21 +6801,26 @@
       try {
         const res = await fetch('/api/auth/totp/setup');
         const data = await res.json();
-        if (data.success && data.secret && data.qr_url) {
+        if (data.success && data.secret && data.otpauth_url) {
           currentTotpSecret = data.secret;
-          const qrImg = document.getElementById('totp-qr-img');
+          const qrBox = document.getElementById('totp-qrcode-box');
           const secretCode = document.getElementById('totp-secret-code');
-          if (qrImg) {
-            qrImg.onerror = function() {
-              this.onerror = function() {
-                this.onerror = null;
-                this.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(data.otpauth_url)}`;
-              };
-              this.src = data.backup_qr_url || `https://chart.googleapis.com/chart?chs=240x240&cht=qr&chl=${encodeURIComponent(data.otpauth_url)}`;
-            };
-            qrImg.src = data.qr_url;
+          if (qrBox) {
+            qrBox.innerHTML = '';
+            if (typeof QRCode !== 'undefined') {
+              new QRCode(qrBox, {
+                text: data.otpauth_url,
+                width: 176,
+                height: 176,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+              });
+            } else {
+              qrBox.textContent = "Please use manual setup key below";
+            }
           }
-          if (secretCode) secretCode.innerText = data.secret;
+          if (secretCode) secretCode.textContent = data.secret;
           
           const codeInput = document.getElementById('totp-input-code');
           if (codeInput) {
@@ -7113,7 +7124,14 @@
         toast.className = 'fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border border-emerald-300 text-slate-900 text-xs font-mono font-bold rounded-xl shadow-xl transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2 pointer-events-none';
         document.body.appendChild(toast);
       }
-      toast.innerHTML = `<span class="text-emerald-600 font-black">✓</span> <span>${msg}</span>`;
+      toast.innerHTML = '';
+      const icon = document.createElement('span');
+      icon.className = 'text-emerald-600 font-black';
+      icon.textContent = '✓';
+      const text = document.createElement('span');
+      text.textContent = String(msg || '');
+      toast.appendChild(icon);
+      toast.appendChild(text);
       toast.classList.remove('translate-y-10', 'opacity-0');
       setTimeout(() => {
         toast.classList.add('translate-y-10', 'opacity-0');
@@ -10241,24 +10259,27 @@
     async function completeServerSubscriptionPayment() {
       const btn = document.getElementById('btn-pay-subscription');
       const text = document.getElementById('btn-pay-text');
-      btn.disabled = true;
-      text.innerText = "Provisioning Dedicated Cloud Server...";
+      if (btn) btn.disabled = true;
+      if (text) text.innerText = "Provisioning Dedicated Cloud Server...";
 
       try {
-        await fetch('/api/subscription/create', { method: 'POST' });
-      } catch (e) {}
+        const res = await fetch('/api/subscription/create', { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || data.message || "Server activation failed. Please sign in and try again.");
+        }
 
-      userState.subscriptionActive = true;
-      userState.botRunning = true;
-      userState.currentStep = 6;
-      saveState();
-      updateHeaderUserInfo();
-      if (typeof updateOnboardingGuideUI === 'function') {
-        updateOnboardingGuideUI(6);
-      }
+        userState.subscriptionActive = true;
+        userState.botRunning = true;
+        userState.currentStep = 6;
+        saveState();
+        updateHeaderUserInfo();
+        if (typeof updateOnboardingGuideUI === 'function') {
+          updateOnboardingGuideUI(6);
+        }
 
-      setTimeout(() => {
-        text.innerText = "✓ Server Deployed! Launching Live Command Center...";
+        if (text) text.innerText = "✓ Server Deployed! Launching Live Command Center...";
+        showToast("🚀 Cloud execution server provisioned successfully!");
         setTimeout(() => {
           showScreen('screen-live-dashboard');
           updateLiveDashboardUI();
@@ -10271,8 +10292,12 @@
               showToast("🔑 Step 1: Please enter your Flattrade API Key & Secret to connect your bot.");
             }, 500);
           }
-        }, 600);
-      }, 900);
+        }, 1200);
+      } catch (err) {
+        if (btn) btn.disabled = false;
+        if (text) text.innerText = "Activate Server (Early Access Sandbox)";
+        alert("Subscription Activation Failed: " + (err.message || "Network or session error. Please sign in and retry."));
+      }
     }
 
     // Step 7: Live Bot Dashboard Updates & Live Simulation
@@ -11443,7 +11468,13 @@
     }
 
     function escapeHtml(str) {
-      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      if (typeof str !== 'string') str = String(str || '');
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     function formatMarkdown(str) {
@@ -11451,8 +11482,8 @@
       let res = escapeHtml(str);
       // Code blocks ```text ... ```
       res = res.replace(/```(?:text)?\n([\s\S]*?)```/g, '<pre class="p-2.5 bg-slate-900 text-emerald-400 font-mono text-[11px] rounded-xl overflow-x-auto my-1.5 border border-slate-700 shadow-xs">$1</pre>');
-      // Links [text](url)
-      res = res.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-indigo-600 font-bold underline hover:text-indigo-800">$1 ↗</a>');
+      // Links [text](url) - strict URL matching preventing quotes and script injection
+      res = res.replace(/\[([^\]]+)\]\((https?:\/\/[^\s"'<>\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-indigo-600 font-bold underline hover:text-indigo-800">$1 ↗</a>');
       // Bold
       res = res.replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900 font-bold">$1</strong>');
       // Inline code
@@ -11527,7 +11558,7 @@
               <div><strong>Grievance / Nodal Officer:</strong> [To be updated]</div>
               <div><strong>Email Support:</strong> <a href="mailto:support@skipthechart.com" class="text-emerald-700 font-bold underline">support@skipthechart.com</a></div>
               <div><strong>Compliance Desk:</strong> <a href="mailto:legal@skipthechart.com" class="text-emerald-700 font-bold underline">legal@skipthechart.com</a></div>
-              <div><strong>Support Helpline:</strong> +91 044 4560 9696 / +91 044 6132 9696</div>
+              <div><strong>Support Helpline:</strong> [To be updated] &bull; <strong>Desk:</strong> Available Mon-Fri 8:30 AM - 5:30 PM IST</div>
               <div><strong>Website:</strong> <a href="https://skipthechart.com" target="_blank" class="text-emerald-700 font-bold underline">https://skipthechart.com</a></div>
             </div>
             <p class="text-slate-500 text-[11px]">Active subscribers receive prioritized 24/7 droplet monitoring via our automated Sentinel Agent.</p>

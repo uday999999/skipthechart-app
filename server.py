@@ -1022,34 +1022,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "/api/auth/config",
             "/api/auth/login",
             "/api/auth/signup",
-            "/api/auth/google",
-            "/api/strategy/parse-prompt",
-            "/api/strategy/parse-youtube",
-            "/api/strategy/test-combinations",
-            "/api/strategy/switch",
-            "/api/strategy/save-custom",
-            "/api/backtest/run",
-            "/api/market/live-feed",
-            "/api/ai/voice-call",
-            "/api/gemini/chat"
+            "/api/auth/google"
         }
-
-        ADMIN_ENDPOINTS = {
-            "/api/auth/save-google-client-id",
-            "/api/auth/save-gemini-key"
-        }
-
-        if parsed_path in ADMIN_ENDPOINTS:
-            token_in_body = (payload.get("admin_token", "") if isinstance(payload, dict) else "")
-            admin_token = token_in_body or self.headers.get("X-Admin-Token", "").strip()
-            configured_token = os.environ.get("ADMIN_TOKEN", "qNzwsx@29")
-            if not admin_token or admin_token != configured_token:
-                self.send_json_response(403, {
-                    "success": False,
-                    "error": "Forbidden: Admin privileges required."
-                })
-                return False
-            return True
 
         if parsed_path in PUBLIC_ENDPOINTS:
             return True
@@ -1264,14 +1238,10 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             if secret not in user["recent_secrets"]:
                 user["recent_secrets"].append(secret)
             otpauth_url = f"otpauth://totp/SkipTheChart:{email}?secret={secret}&issuer=SkipTheChart"
-            qr_url = f"https://quickchart.io/qr?size=240&text={urllib.parse.quote(otpauth_url)}"
-            backup_qr_url = f"https://chart.googleapis.com/chart?chs=240x240&cht=qr&chl={urllib.parse.quote(otpauth_url)}"
             self.send_json_response(200, {
                 "success": True,
                 "secret": secret,
                 "otpauth_url": otpauth_url,
-                "qr_url": qr_url,
-                "backup_qr_url": backup_qr_url,
                 "totp_enabled": user.get("totp_enabled", False),
                 "email": email
             })
@@ -1454,50 +1424,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "message": "Authenticated successfully with Google.",
                 "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip", DROPLET_STATIC_IP)
             }, extra_headers={"Set-Cookie": f"session_token={session_token}; Path=/; HttpOnly; SameSite=Lax"})
-        elif parsed.path == "/api/auth/save-google-client-id":
-            # Admin protected via require_auth
-            client_id = payload.get("google_client_id", "").strip()
-            if client_id:
-                os.environ["GOOGLE_CLIENT_ID"] = client_id
-                env_path = os.path.join(BASE_DIR, ".env")
-                try:
-                    lines = []
-                    if os.path.exists(env_path):
-                        with open(env_path, "r", encoding="utf-8") as f:
-                            lines = [l for l in f.readlines() if not l.startswith("GOOGLE_CLIENT_ID=")]
-                    lines.append(f"GOOGLE_CLIENT_ID={client_id}\n")
-                    with open(env_path, "w", encoding="utf-8") as f:
-                        f.writelines(lines)
-                except Exception as ex:
-                    print("Error saving GOOGLE_CLIENT_ID to .env:", ex)
-                self.send_json_response(200, {
-                    "success": True,
-                    "message": "Google Client ID saved and activated successfully!",
-                    "google_client_id": client_id
-                })
-            else:
-                self.send_json_response(400, {"success": False, "error": "Client ID cannot be empty"})
-        elif parsed.path == "/api/auth/save-gemini-key":
-            gemini_key = payload.get("gemini_key", "").strip()
-            if gemini_key:
-                os.environ["GEMINI_API_KEY"] = gemini_key
-                env_path = os.path.join(BASE_DIR, ".env")
-                try:
-                    lines = []
-                    if os.path.exists(env_path):
-                        with open(env_path, "r", encoding="utf-8") as f:
-                            lines = [l for l in f.readlines() if not l.startswith("GEMINI_API_KEY=")]
-                    lines.append(f"GEMINI_API_KEY={gemini_key}\n")
-                    with open(env_path, "w", encoding="utf-8") as f:
-                        f.writelines(lines)
-                except Exception as ex:
-                    print("Error saving GEMINI_API_KEY to .env:", ex)
-                self.send_json_response(200, {
-                    "success": True,
-                    "message": "Platform Gemini API key updated securely on server."
-                })
-            else:
-                self.send_json_response(400, {"success": False, "error": "Gemini API Key cannot be empty"})
+
         elif parsed.path == "/api/auth/logout":
             cookie_header = self.headers.get("Cookie", "")
             if "session_token=" in cookie_header:
@@ -2288,6 +2215,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "message": "Payment successful! Dedicated execution server active."
             })
         elif parsed.path == "/api/strategy/switch":
+            if not USER_SUBSCRIPTION.get("is_active", False) or time.time() > USER_SUBSCRIPTION.get("expires_at", 0):
+                self.send_json_response(402, {
+                    "success": False,
+                    "error": "Subscription Required",
+                    "message": "Entitlement check failed: An active Dedicated Cloud Server subscription is required to switch strategies."
+                })
+                return
             today = time.strftime("%Y-%m-%d")
             if USER_SUBSCRIPTION.get("last_switch_date") != today:
                 USER_SUBSCRIPTION["daily_strategy_switches_remaining"] = 3
@@ -2310,6 +2244,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     "message": f"Strategy switched to {new_strat}. {USER_SUBSCRIPTION['daily_strategy_switches_remaining']} switch(es) remaining today."
                 })
         elif parsed.path == "/api/strategy/deploy" or parsed.path == "/api/bot/quick-start":
+            if not USER_SUBSCRIPTION.get("is_active", False) or time.time() > USER_SUBSCRIPTION.get("expires_at", 0):
+                self.send_json_response(402, {
+                    "success": False,
+                    "error": "Subscription Required",
+                    "message": "Entitlement check failed: An active Dedicated Cloud Server subscription is required to deploy live trading bots."
+                })
+                return
             strategy_name = payload.get("strategy_name", "Nifty Trend Rider")
             capital = payload.get("capital", 25000)
             broker = payload.get("broker", "zerodha")
@@ -2324,6 +2265,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "message": f"Bot activated successfully on dedicated node ({ACTIVE_SESSION['assigned_droplet_ip']}). Watching market live."
             })
         elif parsed.path == "/api/bot/pause":
+            if not USER_SUBSCRIPTION.get("is_active", False) or time.time() > USER_SUBSCRIPTION.get("expires_at", 0):
+                self.send_json_response(402, {
+                    "success": False,
+                    "error": "Subscription Required",
+                    "message": "Entitlement check failed: An active Dedicated Cloud Server subscription is required to control trading bots."
+                })
+                return
             self.send_json_response(200, {
                 "success": True,
                 "bot_status": "PAUSED",
