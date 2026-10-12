@@ -1332,7 +1332,7 @@
               <div class="absolute top-3 left-4 z-10 pointer-events-none flex items-center gap-3">
                 <span id="canvas-symbol-label" class="text-sm font-black text-slate-800 font-mono tracking-wider">NIFTY 50 • 5m</span>
                 <span class="text-[11px] text-emerald-700 font-mono font-bold" id="canvas-live-price">22,458.10 (+142.30 +0.64%)</span>
-                <span class="text-[10px] text-slate-500 font-mono bg-slate-100/90 px-2 py-0.5 rounded border border-slate-200">SkipTheChart Mode: Subdued Grey Candles</span>
+                <span class="text-[10px] text-slate-500 font-mono bg-slate-100/90 px-2 py-0.5 rounded border border-slate-200">SkipTheChart Mode: White &amp; Light Grey</span>
               </div>
 
               <!-- Canvas element -->
@@ -1343,7 +1343,8 @@
               <!-- Interactive Chart Legend / Stats Footer (Clean Theme) -->
               <div class="bg-slate-50/95 border-t border-slate-200 px-4 py-2.5 sm:px-5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-600">
                 <div class="flex items-center gap-3 flex-wrap">
-                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-slate-300 border border-slate-600"></span> Grey Candles (Zero Emotional Bias)</span>
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-white border border-slate-400"></span> White: Bullish</span>
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-slate-200 border border-slate-400"></span> Light Grey: Bearish</span>
                   <span id="canvas-crossover-status" class="text-emerald-700 font-bold">▲ Golden Cross Active (SMA 5 &gt; SMA 20)</span>
                 </div>
                 <div class="flex items-center gap-2.5">
@@ -12758,19 +12759,19 @@
         ctx.stroke();
       }
 
-      // Draw Candlesticks in SkipTheChart Muted Grey Theme (Grey body with dark grey outlines)
+      // Draw Candlesticks in SkipTheChart Theme (White & Light Grey with lighter grey outlines)
       candles.forEach((c, i) => {
         const x = i * barWidth + barWidth / 2;
         const isBullish = c.close >= c.open;
         
-        // Muted grey tones: lighter soft grey for bullish, neutral slate grey for bearish
-        const bodyFillColor = isBullish ? '#f1f5f9' : '#cbd5e1';
-        const outlineColor = '#334155'; // Dark grey outline
-        const wickColor = '#475569';    // Dark grey wicks
+        // White for bullish (close >= open), light grey for bearish (close < open)
+        const bodyFillColor = isBullish ? '#ffffff' : '#e2e8f0';
+        const outlineColor = '#64748b'; // Lighter, refined slate-grey outline
+        const wickColor = '#64748b';    // Matching lighter grey wicks
 
         // Upper & Lower Shadows (Wicks)
         ctx.strokeStyle = wickColor;
-        ctx.lineWidth = 1.3;
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
         ctx.moveTo(x, priceToY(c.high));
         ctx.lineTo(x, priceToY(c.low));
@@ -12782,13 +12783,13 @@
         const bodyHeight = Math.max(2.2, botY - topY);
         const bodyX = x - candleWidth / 2;
 
-        // 1. Fill candle body with grey
+        // 1. Fill candle body (white or light grey)
         ctx.fillStyle = bodyFillColor;
         ctx.fillRect(bodyX, topY, candleWidth, bodyHeight);
 
-        // 2. Stroke dark grey outline around the body
+        // 2. Stroke lighter grey outline around the body
         ctx.strokeStyle = outlineColor;
-        ctx.lineWidth = 1.2;
+        ctx.lineWidth = 1.1;
         ctx.strokeRect(bodyX, topY, candleWidth, bodyHeight);
       });
 
