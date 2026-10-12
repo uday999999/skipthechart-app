@@ -11729,10 +11729,31 @@
           radios.forEach(r => { r.checked = (r.value === targetCond.type); });
         }
       } else {
-        // Defaults matching screenshot
-        builderWorkingState.left = { tab: 'indicator', id: 'accelerator', param: '', tf: 'Current', shift: 0 };
-        builderWorkingState.operator = { name: 'is above', symbol: '>' };
-        builderWorkingState.right = { tab: 'indicator', id: 'accelerator', param: '', tf: 'Current', shift: 0 };
+        // Pre-populate intelligently from Chart's active indicators
+        const activeInds = (typeof chartStudioState !== 'undefined' && chartStudioState.activeIndicators) ? chartStudioState.activeIndicators : [];
+        const mas = activeInds.filter(i => i.type === 'sma' || i.type === 'ema').sort((a, b) => (a.period || 0) - (b.period || 0));
+
+        if (mas.length >= 2) {
+          const fast = mas[0];
+          const slow = mas[1];
+          builderWorkingState.left = { tab: 'indicator', id: fast.type, param: String(fast.period), tf: chartStudioState.timeframe || '5m', shift: 0 };
+          builderWorkingState.operator = { name: 'crosses above', symbol: '↑' };
+          builderWorkingState.right = { tab: 'indicator', id: slow.type, param: String(slow.period), tf: chartStudioState.timeframe || '5m', shift: 0 };
+        } else if (activeInds.some(i => i.type === 'rsi')) {
+          const rsiInd = activeInds.find(i => i.type === 'rsi');
+          builderWorkingState.left = { tab: 'indicator', id: 'rsi', param: String(rsiInd.period || 14), tf: chartStudioState.timeframe || '5m', shift: 0 };
+          builderWorkingState.operator = { name: 'is above', symbol: '>' };
+          builderWorkingState.right = { tab: 'value', id: 'val_50', param: '50', tf: 'Current', shift: 0 };
+        } else if (activeInds.length > 0) {
+          const first = activeInds[0];
+          builderWorkingState.left = { tab: 'indicator', id: first.type === 'ichimoku' ? 'ichimoku' : first.type, param: String(first.period || ''), tf: chartStudioState.timeframe || '5m', shift: 0 };
+          builderWorkingState.operator = { name: 'is above', symbol: '>' };
+          builderWorkingState.right = { tab: 'price', id: 'close', param: '', tf: 'Current', shift: 0 };
+        } else {
+          builderWorkingState.left = { tab: 'indicator', id: 'sma', param: '20', tf: '5m', shift: 0 };
+          builderWorkingState.operator = { name: 'is above', symbol: '>' };
+          builderWorkingState.right = { tab: 'price', id: 'close', param: '', tf: '5m', shift: 0 };
+        }
       }
 
       // Sync tabs and lists
@@ -12009,6 +12030,141 @@
       if (rightChip) rightChip.innerText = rightText;
     }
 
+    // Synchronize Fine-Tuned Strategy Conditions into the Candlestick Chart
+    function syncConditionsToChartStudio() {
+      const allConditions = [
+        ...strategyConditionsState.entryConditions,
+        ...strategyConditionsState.exitConditions
+      ];
+
+      if (allConditions.length === 0) return;
+
+      const newIndicators = [];
+      const palette = ['#0284c7', '#ea580c', '#10b981', '#f59e0b', '#ec4899', '#06b6d4', '#8b5cf6', '#a855f7'];
+      let colorIdx = 0;
+
+      function extractIndicator(op) {
+        if (!op || op.tab !== 'indicator') return;
+        const id = op.id || '';
+        const param = op.param || '';
+
+        if (id.includes('sma') || id === 'sma') {
+          const p = parseInt(param) || 20;
+          const key = `sma_${p}`;
+          if (!newIndicators.some(i => i.id === key)) {
+            newIndicators.push({
+              id: key,
+              name: `SMA (${p})`,
+              type: 'sma',
+              period: p,
+              color: p <= 10 ? '#0284c7' : (p <= 25 ? '#ea580c' : (p <= 50 ? '#eab308' : '#ef4444')),
+              label: p <= 10 ? 'Fast Trend' : 'Baseline Trend'
+            });
+          }
+        } else if (id.includes('ema') || id === 'ema') {
+          const p = parseInt(param) || 9;
+          const key = `ema_${p}`;
+          if (!newIndicators.some(i => i.id === key)) {
+            newIndicators.push({
+              id: key,
+              name: `EMA (${p})`,
+              type: 'ema',
+              period: p,
+              color: p <= 10 ? '#38bdf8' : '#ec4899',
+              label: p <= 10 ? 'Fast EMA' : 'Slow EMA'
+            });
+          }
+        } else if (id.includes('rsi') || id === 'rsi') {
+          const p = parseInt(param) || 14;
+          if (!newIndicators.some(i => i.type === 'rsi')) {
+            newIndicators.push({
+              id: 'rsi_14',
+              name: `RSI (${p})`,
+              type: 'rsi',
+              period: p,
+              color: '#9333ea',
+              label: 'Momentum Filter'
+            });
+          }
+        } else if (id.includes('ichimoku') || id === 'ichimoku') {
+          if (!newIndicators.some(i => i.type === 'ichimoku')) {
+            newIndicators.push({
+              id: 'ichimoku',
+              name: 'Ichimoku Cloud',
+              type: 'ichimoku',
+              tenkan: 9,
+              kijun: 26,
+              span: 52,
+              color: '#0d9488',
+              label: 'Cloud Filter'
+            });
+          }
+        } else if (id.includes('supertrend') || id === 'supertrend') {
+          if (!newIndicators.some(i => i.type === 'supertrend')) {
+            newIndicators.push({
+              id: 'supertrend',
+              name: 'Supertrend (10, 3)',
+              type: 'supertrend',
+              color: '#10b981',
+              label: 'Trend Envelope'
+            });
+          }
+        } else if (id.includes('bollinger') || id === 'bollinger_upper' || id === 'bollinger_middle' || id === 'bollinger_lower') {
+          if (!newIndicators.some(i => i.type === 'bollinger')) {
+            newIndicators.push({
+              id: 'bollinger',
+              name: 'Bollinger Bands (20, 2)',
+              type: 'bollinger',
+              color: '#8b5cf6',
+              label: 'Volatility Channel'
+            });
+          }
+        } else if (id.includes('vwap') || id === 'vwap') {
+          if (!newIndicators.some(i => i.type === 'vwap')) {
+            newIndicators.push({
+              id: 'vwap',
+              name: 'VWAP',
+              type: 'vwap',
+              color: '#f59e0b',
+              label: 'Volume Benchmark'
+            });
+          }
+        } else {
+          const key = `ind_${id}`;
+          if (!newIndicators.some(i => i.id === key)) {
+            newIndicators.push({
+              id: key,
+              name: op.name || id.toUpperCase(),
+              type: 'sma',
+              period: 14,
+              color: palette[colorIdx++ % palette.length],
+              label: 'Strategy Indicator'
+            });
+          }
+        }
+      }
+
+      allConditions.forEach(cond => {
+        extractIndicator(cond.left);
+        extractIndicator(cond.right);
+      });
+
+      if (newIndicators.length > 0) {
+        chartStudioState.activeIndicators = newIndicators;
+      }
+
+      // Sync Timeframe from conditions if selected
+      const tfCond = allConditions.find(c => c.left && c.left.tf && c.left.tf !== 'Current');
+      if (tfCond) {
+        chartStudioState.timeframe = tfCond.left.tf;
+        const label = document.getElementById('canvas-symbol-label');
+        if (label) label.innerText = `${chartStudioState.asset} • ${chartStudioState.timeframe}`;
+      }
+
+      // Re-render Candlestick Chart with updated indicators & redraw canvas
+      renderAlgoCandlestickChart();
+    }
+
     function saveConditionFromBuilder() {
       updateBuilderFormulaPreview();
 
@@ -12049,7 +12205,10 @@
       closeConditionBuilderModal();
       renderConditionCards();
       syncConditionsToStrategyRules();
-      showToast(`Saved condition: ${formulaStr.substring(0, 45)}...`);
+      if (typeof syncConditionsToChartStudio === 'function') {
+        syncConditionsToChartStudio();
+      }
+      showToast(`Strategy fine-tuned: Plotted on Candlestick Chart!`);
     }
 
     function renderConditionCards() {
@@ -12156,7 +12315,10 @@
       strategyConditionsState.exitConditions = strategyConditionsState.exitConditions.filter(c => c.id !== id);
       renderConditionCards();
       syncConditionsToStrategyRules();
-      showToast('Condition removed from strategy.');
+      if (typeof syncConditionsToChartStudio === 'function') {
+        syncConditionsToChartStudio();
+      }
+      showToast('Condition removed & chart updated.');
     }
 
     function toggleConfluenceMode(mode) {
@@ -12278,19 +12440,90 @@
       return candles;
     }
 
-    // Calculate Indicators
+    // Calculate Indicators (Dynamic Multi-Indicator Engine)
     function computeIndicators(candles) {
       const closes = candles.map(c => c.close);
       const highs = candles.map(c => c.high);
       const lows = candles.map(c => c.low);
 
-      // SMAs
+      // Dynamic SMA for any period
       function calcSMA(period) {
         return closes.map((val, idx, arr) => {
           if (idx < period - 1) return null;
           const slice = arr.slice(idx - period + 1, idx + 1);
           const sum = slice.reduce((a, b) => a + b, 0);
           return parseFloat((sum / period).toFixed(2));
+        });
+      }
+
+      // Dynamic EMA for any period
+      function calcEMA(period) {
+        const k = 2 / (period + 1);
+        const ema = [];
+        let prev = null;
+        for (let i = 0; i < closes.length; i++) {
+          if (i < period - 1) {
+            ema.push(null);
+          } else if (prev === null) {
+            const sum = closes.slice(i - period + 1, i + 1).reduce((a, b) => a + b, 0);
+            prev = sum / period;
+            ema.push(parseFloat(prev.toFixed(2)));
+          } else {
+            prev = (closes[i] * k) + (prev * (1 - k));
+            ema.push(parseFloat(prev.toFixed(2)));
+          }
+        }
+        return ema;
+      }
+
+      // Bollinger Bands (20, 2)
+      function calcBollinger(period = 20, stdMult = 2) {
+        const middle = calcSMA(period);
+        const upper = [];
+        const lower = [];
+        for (let i = 0; i < closes.length; i++) {
+          if (middle[i] === null) {
+            upper.push(null);
+            lower.push(null);
+          } else {
+            const slice = closes.slice(i - period + 1, i + 1);
+            const mean = middle[i];
+            const variance = slice.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / period;
+            const sd = Math.sqrt(variance);
+            upper.push(parseFloat((mean + stdMult * sd).toFixed(2)));
+            lower.push(parseFloat((mean - stdMult * sd).toFixed(2)));
+          }
+        }
+        return { upper, middle, lower };
+      }
+
+      // Supertrend (10, 3)
+      function calcSupertrend(period = 10, mult = 3) {
+        const st = [];
+        let dir = 1;
+        for (let i = 0; i < candles.length; i++) {
+          const hl2 = (candles[i].high + candles[i].low) / 2;
+          const atrEst = (candles[i].high - candles[i].low) * 0.75;
+          const upperBand = hl2 + (mult * atrEst);
+          const lowerBand = hl2 - (mult * atrEst);
+          if (candles[i].close > hl2) dir = 1; else dir = -1;
+          st.push({
+            value: parseFloat((dir === 1 ? lowerBand : upperBand).toFixed(2)),
+            direction: dir
+          });
+        }
+        return st;
+      }
+
+      // VWAP
+      function calcVWAP() {
+        let cumVol = 0;
+        let cumPv = 0;
+        return candles.map(c => {
+          const typ = (c.high + c.low + c.close) / 3;
+          cumVol += c.volume;
+          cumPv += typ * c.volume;
+          return parseFloat((cumPv / (cumVol || 1)).toFixed(2));
         });
       }
 
@@ -12331,26 +12564,22 @@
         const spanB = [];
 
         for (let i = 0; i < candles.length; i++) {
-          // Tenkan (9)
           if (i >= tPeriod - 1) {
             const h = Math.max(...highs.slice(i - tPeriod + 1, i + 1));
             const l = Math.min(...lows.slice(i - tPeriod + 1, i + 1));
             tenkan.push(parseFloat(((h + l) / 2).toFixed(2)));
           } else { tenkan.push(null); }
 
-          // Kijun (26)
           if (i >= kPeriod - 1) {
             const h = Math.max(...highs.slice(i - kPeriod + 1, i + 1));
             const l = Math.min(...lows.slice(i - kPeriod + 1, i + 1));
             kijun.push(parseFloat(((h + l) / 2).toFixed(2)));
           } else { kijun.push(null); }
 
-          // Span A = (Tenkan + Kijun) / 2
           if (tenkan[i] !== null && kijun[i] !== null) {
             spanA.push(parseFloat(((tenkan[i] + kijun[i]) / 2).toFixed(2)));
           } else { spanA.push(null); }
 
-          // Span B = (Highest + Lowest) / 2 over 52
           const sSliceStart = Math.max(0, i - sPeriod + 1);
           const sH = Math.max(...highs.slice(sSliceStart, i + 1));
           const sL = Math.min(...lows.slice(sSliceStart, i + 1));
@@ -12360,17 +12589,33 @@
         return { tenkan, kijun, spanA, spanB };
       }
 
-      return {
-        sma5: calcSMA(5),
-        sma20: calcSMA(20),
-        sma50: calcSMA(50),
-        sma200: calcSMA(200),
+      // Collect results dynamically based on active indicators
+      const result = {
+        calcSMA,
+        calcEMA,
+        bollinger: calcBollinger(20, 2),
+        supertrend: calcSupertrend(10, 3),
+        vwap: calcVWAP(),
         rsi: calcRSI(14),
-        ichimoku: calcIchimoku(9, 26, 52)
+        ichimoku: calcIchimoku(9, 26, 52),
+        series: {}
       };
+
+      // Pre-compute series for each active indicator
+      chartStudioState.activeIndicators.forEach(ind => {
+        if (ind.type === 'sma') {
+          result.series[ind.id] = calcSMA(ind.period || 20);
+        } else if (ind.type === 'ema') {
+          result.series[ind.id] = calcEMA(ind.period || 9);
+        } else if (ind.type === 'rsi') {
+          result.series[ind.id] = calcRSI(ind.period || 14);
+        }
+      });
+
+      return result;
     }
 
-    // Render Canvas Candlestick Chart
+        // Render Canvas Candlestick Chart
     function renderAlgoCandlestickChart() {
       const canvas = document.getElementById('algo-candlestick-canvas');
       if (!canvas) return;
@@ -12532,73 +12777,160 @@
         ctx.fillRect(x - candleWidth / 2, topY, candleWidth, bodyHeight);
       });
 
-      // Draw Active SMAs
-      chartStudioState.activeIndicators.forEach(ind => {
-        if (ind.type === 'sma') {
-          const arr = indicators[`sma${ind.period}`];
-          if (!arr) return;
+      // Draw Bollinger Bands (if active)
+      const hasBollinger = chartStudioState.activeIndicators.some(i => i.type === 'bollinger');
+      if (hasBollinger && indicators.bollinger) {
+        const { upper, lower, middle } = indicators.bollinger;
+        // Channel shading
+        ctx.beginPath();
+        let bStart = -1;
+        for (let i = 0; i < candles.length; i++) {
+          if (upper[i] !== null && lower[i] !== null) {
+            const x = i * barWidth + barWidth / 2;
+            const yU = priceToY(upper[i]);
+            if (bStart === -1) { ctx.moveTo(x, yU); bStart = i; } else { ctx.lineTo(x, yU); }
+          }
+        }
+        for (let i = candles.length - 1; i >= 0; i--) {
+          if (upper[i] !== null && lower[i] !== null) {
+            const x = i * barWidth + barWidth / 2;
+            const yL = priceToY(lower[i]);
+            ctx.lineTo(x, yL);
+          }
+        }
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(139, 92, 246, 0.08)';
+        ctx.fill();
 
-          ctx.strokeStyle = ind.color || '#3b82f6';
-          ctx.lineWidth = ind.period === 5 ? 2.5 : 2;
+        // Upper & Lower band lines
+        [upper, lower].forEach((band, bIdx) => {
+          ctx.strokeStyle = '#a855f7';
+          ctx.lineWidth = 1.2;
+          ctx.setLineDash([2, 3]);
           ctx.beginPath();
           let started = false;
           candles.forEach((_, i) => {
-            if (arr[i] !== null) {
+            if (band[i] !== null) {
               const x = i * barWidth + barWidth / 2;
-              const y = priceToY(arr[i]);
+              const y = priceToY(band[i]);
               if (!started) { ctx.moveTo(x, y); started = true; } else { ctx.lineTo(x, y); }
             }
           });
           ctx.stroke();
+          ctx.setLineDash([]);
+        });
+      }
+
+      // Draw Supertrend (if active)
+      const hasSupertrend = chartStudioState.activeIndicators.some(i => i.type === 'supertrend');
+      if (hasSupertrend && indicators.supertrend) {
+        ctx.lineWidth = 2.2;
+        for (let i = 1; i < candles.length; i++) {
+          const pt = indicators.supertrend[i];
+          const prevPt = indicators.supertrend[i - 1];
+          if (pt && prevPt && pt.direction === prevPt.direction) {
+            const x1 = (i - 1) * barWidth + barWidth / 2;
+            const y1 = priceToY(prevPt.value);
+            const x2 = i * barWidth + barWidth / 2;
+            const y2 = priceToY(pt.value);
+            ctx.strokeStyle = pt.direction === 1 ? '#10b981' : '#f43f5e';
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+          }
         }
+      }
+
+      // Draw VWAP (if active)
+      const hasVWAP = chartStudioState.activeIndicators.some(i => i.type === 'vwap');
+      if (hasVWAP && indicators.vwap) {
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        let vStarted = false;
+        candles.forEach((_, i) => {
+          const val = indicators.vwap[i];
+          if (val) {
+            const x = i * barWidth + barWidth / 2;
+            const y = priceToY(val);
+            if (!vStarted) { ctx.moveTo(x, y); vStarted = true; } else { ctx.lineTo(x, y); }
+          }
+        });
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Draw Active Moving Averages (SMAs & EMAs)
+      const maList = chartStudioState.activeIndicators.filter(i => i.type === 'sma' || i.type === 'ema');
+      maList.forEach(ind => {
+        const arr = indicators.series[ind.id] || (ind.type === 'sma' ? indicators.calcSMA(ind.period) : indicators.calcEMA(ind.period));
+        if (!arr) return;
+
+        ctx.strokeStyle = ind.color || '#3b82f6';
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        let started = false;
+        candles.forEach((_, i) => {
+          if (arr[i] !== null && arr[i] !== undefined) {
+            const x = i * barWidth + barWidth / 2;
+            const y = priceToY(arr[i]);
+            if (!started) { ctx.moveTo(x, y); started = true; } else { ctx.lineTo(x, y); }
+          }
+        });
+        ctx.stroke();
       });
 
-      // Highlight Crossovers if SMA 5 and SMA 20 are both active
-      const hasSMA5 = chartStudioState.activeIndicators.some(i => i.id === 'sma_5');
-      const hasSMA20 = chartStudioState.activeIndicators.some(i => i.id === 'sma_20');
-      if (hasSMA5 && hasSMA20) {
-        const s5 = indicators.sma5;
-        const s20 = indicators.sma20;
+      // Highlight Moving Average Crossovers if at least two MAs are active
+      if (maList.length >= 2) {
+        const sortedMAs = [...maList].sort((a, b) => (a.period || 0) - (b.period || 0));
+        const fast = sortedMAs[0];
+        const slow = sortedMAs[1];
+        const fastArr = indicators.series[fast.id] || (fast.type === 'sma' ? indicators.calcSMA(fast.period) : indicators.calcEMA(fast.period));
+        const slowArr = indicators.series[slow.id] || (slow.type === 'sma' ? indicators.calcSMA(slow.period) : indicators.calcEMA(slow.period));
+
         let lastCross = 'none';
+        if (fastArr && slowArr) {
+          for (let i = 1; i < candles.length; i++) {
+            if (fastArr[i] && slowArr[i] && fastArr[i - 1] && slowArr[i - 1]) {
+              const prevDiff = fastArr[i - 1] - slowArr[i - 1];
+              const curDiff = fastArr[i] - slowArr[i];
 
-        for (let i = 1; i < candles.length; i++) {
-          if (s5[i] && s20[i] && s5[i - 1] && s20[i - 1]) {
-            const prevDiff = s5[i - 1] - s20[i - 1];
-            const curDiff = s5[i] - s20[i];
+              // Bullish Crossover
+              if (prevDiff <= 0 && curDiff > 0) {
+                lastCross = 'bullish';
+                const x = i * barWidth + barWidth / 2;
+                const y = priceToY(candles[i].low) + 16;
 
-            // Golden Cross (Fast crosses above Slow)
-            if (prevDiff <= 0 && curDiff > 0) {
-              lastCross = 'bullish';
-              const x = i * barWidth + barWidth / 2;
-              const y = priceToY(candles[i].low) + 14;
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath();
+                ctx.moveTo(x, y - 8);
+                ctx.lineTo(x - 6, y + 2);
+                ctx.lineTo(x + 6, y + 2);
+                ctx.fill();
 
-              ctx.fillStyle = '#10b981';
-              ctx.beginPath();
-              ctx.moveTo(x, y - 8);
-              ctx.lineTo(x - 5, y);
-              ctx.lineTo(x + 5, y);
-              ctx.fill();
+                ctx.font = 'bold 9px JetBrains Mono, monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText(`▲ BUY (${fast.name}>${slow.name})`, x, y + 14);
+              }
+              // Bearish Crossover
+              else if (prevDiff >= 0 && curDiff < 0) {
+                lastCross = 'bearish';
+                const x = i * barWidth + barWidth / 2;
+                const y = priceToY(candles[i].high) - 16;
 
-              ctx.font = 'bold 9px JetBrains Mono, monospace';
-              ctx.textAlign = 'center';
-              ctx.fillText('▲ BUY', x, y + 10);
-            }
-            // Death Cross (Fast crosses below Slow)
-            else if (prevDiff >= 0 && curDiff < 0) {
-              lastCross = 'bearish';
-              const x = i * barWidth + barWidth / 2;
-              const y = priceToY(candles[i].high) - 14;
+                ctx.fillStyle = '#f43f5e';
+                ctx.beginPath();
+                ctx.moveTo(x, y + 8);
+                ctx.lineTo(x - 6, y - 2);
+                ctx.lineTo(x + 6, y - 2);
+                ctx.fill();
 
-              ctx.fillStyle = '#f43f5e';
-              ctx.beginPath();
-              ctx.moveTo(x, y + 8);
-              ctx.lineTo(x - 5, y);
-              ctx.lineTo(x + 5, y);
-              ctx.fill();
-
-              ctx.font = 'bold 9px JetBrains Mono, monospace';
-              ctx.textAlign = 'center';
-              ctx.fillText('▼ SELL', x, y - 4);
+                ctx.font = 'bold 9px JetBrains Mono, monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText(`▼ SELL (${fast.name}<${slow.name})`, x, y - 6);
+              }
             }
           }
         }
@@ -12607,17 +12939,17 @@
         if (crossStatus) {
           if (lastCross === 'bullish') {
             crossStatus.className = 'text-emerald-400 font-bold';
-            crossStatus.innerText = '▲ Golden Cross Active (SMA 5 > SMA 20)';
+            crossStatus.innerText = `▲ Bullish Signal: ${fast.name} > ${slow.name}`;
           } else if (lastCross === 'bearish') {
             crossStatus.className = 'text-rose-400 font-bold';
-            crossStatus.innerText = '▼ Bearish Cross Active (SMA 5 < SMA 20)';
+            crossStatus.innerText = `▼ Bearish Signal: ${fast.name} < ${slow.name}`;
           } else {
-            crossStatus.innerText = 'Dual SMA Alignment Active';
+            crossStatus.innerText = `Alignment: ${fast.name} & ${slow.name}`;
           }
         }
       }
 
-      // Draw RSI Oscillator Panel (if active)
+            // Draw RSI Oscillator Panel (if active)
       if (hasRSI && rsiHeight > 20) {
         // Divider
         ctx.strokeStyle = '#334155';
