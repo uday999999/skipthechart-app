@@ -5310,26 +5310,26 @@
   <!-- ========================================================================= -->
   <!-- FLOATING AI ASSISTANT: VOICE CALL + CHAT (PERSISTENT ON ALL PAGES)         -->
   <!-- ========================================================================= -->
-  <div id="gemini-chat-widget" class="fixed bottom-4 sm:bottom-5 right-3 sm:right-5 z-50 font-sans">
+  <div id="gemini-chat-widget">
     
-    <!-- Floating Action Buttons: Call AI Voice + Chat -->
-    <div id="ai-floating-triggers" class="flex items-center gap-2">
-      <!-- 1. AI Voice Call Button (Persistent on All Pages) -->
-      <button type="button" onclick="startAiVoiceCall()" id="btn-ai-call-trigger" class="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-full shadow-2xl shadow-emerald-600/40 border border-emerald-300/40 transition hover:scale-105 cursor-pointer call-pulse-active" title="Talk to Gemini AI Voice in English, Hindi, Tamil, Telugu">
-        <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-sm">📞</span>
+    <!-- Floating Action Buttons: Call AI Voice + Chat (Centered, Compact & Sleek) -->
+    <div id="ai-floating-triggers" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 sm:gap-2 font-sans">
+      <!-- 1. AI Voice Call Button (Persistent, Centered, Lil Small) -->
+      <button type="button" onclick="startAiVoiceCall()" id="btn-ai-call-trigger" class="flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-[11px] sm:text-xs rounded-full shadow-lg shadow-emerald-600/30 border border-emerald-300/40 transition hover:scale-105 active:scale-95 cursor-pointer call-pulse-active whitespace-nowrap" title="Talk to Gemini AI Voice in English, Hindi, Tamil, Telugu">
+        <span class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs">📞</span>
         <span>Call Gemini Live</span>
-        <span class="text-[9.5px] px-1.5 py-0.5 rounded-full bg-white/20 text-white font-mono uppercase font-bold tracking-tight">Voice 24/7</span>
+        <span class="text-[8.5px] px-1.5 py-0.5 rounded-full bg-white/20 text-white font-mono uppercase font-bold tracking-tight">Voice 24/7</span>
       </button>
 
       <!-- 2. AI Chat Button -->
-      <button type="button" onclick="toggleGeminiChat()" id="gemini-toggle-btn" class="flex items-center gap-1.5 px-3 sm:px-3.5 py-2.5 sm:py-3 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-full shadow-xl border border-slate-200 transition hover:scale-105 cursor-pointer" title="Open Text Chat Copilot">
-        <span class="text-sm">💬</span>
-        <span class="hidden md:inline">Chat</span>
+      <button type="button" onclick="toggleGeminiChat()" id="gemini-toggle-btn" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-white hover:bg-slate-50 text-slate-800 font-bold text-[11px] sm:text-xs rounded-full shadow-md border border-slate-200 transition hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap" title="Open Text Chat Copilot">
+        <span class="text-xs">💬</span>
+        <span class="hidden sm:inline">Chat</span>
       </button>
     </div>
 
-    <!-- Expanded Chat Window (Hidden by default) -->
-    <div id="gemini-chat-window" class="hidden w-[380px] sm:w-[420px] h-[550px] bg-white border border-slate-200/90 rounded-3xl shadow-2xl flex flex-col overflow-hidden ms-glass-card">
+    <!-- Expanded Chat Window (Hidden by default, docked bottom-right) -->
+    <div id="gemini-chat-window" class="fixed bottom-4 sm:bottom-5 right-3 sm:right-5 z-50 hidden w-[380px] sm:w-[420px] h-[550px] bg-white border border-slate-200/90 rounded-3xl shadow-2xl flex flex-col overflow-hidden ms-glass-card font-sans">
       <!-- Header -->
       <div class="p-3.5 bg-slate-50/90 border-b border-slate-200 flex flex-col gap-2">
         <div class="flex items-center justify-between">
