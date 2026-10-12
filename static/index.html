@@ -2548,6 +2548,62 @@
                 </div>
               </div>
 
+              <!-- Visual Rule & Condition Builder Container (EA Builder style) -->
+              <div class="p-5 bg-white rounded-2xl border-2 border-emerald-500/80 shadow-md space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                  <div class="flex items-center gap-2.5">
+                    <span class="text-2xl p-2 bg-emerald-50 border border-emerald-200 rounded-xl">⚡</span>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h4 class="text-base font-black text-slate-900">Visual Strategy Condition Builder</h4>
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono font-bold uppercase">No-Code Algo Logic</span>
+                      </div>
+                      <p class="text-xs text-slate-500 mt-0.5">
+                        Build comparative mathematical rules (Indicator vs Indicator / Price / Level / Value) without writing code.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button type="button" onclick="openConditionBuilderModal('entry')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+                      <span>⚡ + Add Entry Condition</span>
+                    </button>
+                    <button type="button" onclick="openConditionBuilderModal('exit')" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs rounded-xl transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+                      <span>🛑 + Add Exit Condition</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Confluence Mode Toggle & Summary -->
+                <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="text-slate-600 font-bold">Rule Confluence:</span>
+                    <button type="button" onclick="toggleConfluenceMode('AND')" id="btn-confluence-and" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-600 text-white shadow-2xs">ALL Must Match (AND)</button>
+                    <button type="button" onclick="toggleConfluenceMode('OR')" id="btn-confluence-or" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100">ANY Can Trigger (OR)</button>
+                  </div>
+                  <span id="conditions-summary-count" class="text-slate-500 font-mono text-[11px]">2 Entry Rules • 1 Exit Rule active</span>
+                </div>
+
+                <!-- Entry Conditions Cards List -->
+                <div class="space-y-2">
+                  <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Entry Signal Rules (Buy / Long Trigger):
+                  </span>
+                  <div id="entry-conditions-list" class="space-y-2">
+                    <!-- Dynamically rendered condition blocks -->
+                  </div>
+                </div>
+
+                <!-- Exit Conditions Cards List -->
+                <div class="space-y-2 pt-2 border-t border-slate-100">
+                  <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span> Exit / Square-Off Rules (Take Profit / Trend Reversal):
+                  </span>
+                  <div id="exit-conditions-list" class="space-y-2">
+                    <!-- Dynamically rendered condition blocks -->
+                  </div>
+                </div>
+              </div>
+
               <!-- Autonomous Combinations Agent Card -->
               <div class="p-5 bg-slate-50/80 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs">
                 <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
@@ -4448,7 +4504,12 @@
         </div>
 
         <div>
-          <label class="block text-slate-700 font-bold mb-1">Entry & Exit Rules</label>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-slate-700 font-bold">Entry & Exit Rules</label>
+            <button type="button" onclick="openConditionBuilderModal('entry')" class="text-xs text-emerald-700 hover:text-emerald-900 font-bold underline flex items-center gap-1 cursor-pointer">
+              <span>⚡ Open Visual Condition Builder (EA Builder Style)</span>
+            </button>
+          </div>
           <textarea id="edit-strat-rules" rows="3" class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-xl p-2.5 text-slate-800 text-xs leading-relaxed shadow-xs"></textarea>
         </div>
 
@@ -4503,6 +4564,251 @@
       </div>
     </div>
   </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: VISUAL CONDITION BUILDER (INDICATOR BUFFER - EA BUILDER STYLE)     -->
+  <!-- ========================================================================= -->
+  <div id="modal-condition-builder" class="fixed inset-0 z-50 bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 hidden">
+    <div class="bg-white border-2 border-slate-300 rounded-3xl w-full max-w-5xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] text-slate-800">
+      
+      <!-- Top Title Bar (EA Builder Style) -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white px-5 py-3.5 flex items-center justify-between border-b border-slate-700">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 font-bold text-sm">
+            ⚡
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-black text-sm sm:text-base tracking-tight text-white">Indicator Buffer & Condition Builder</h3>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-mono font-bold uppercase">Quantitative Engine</span>
+            </div>
+            <p class="text-[11px] text-slate-400">Build exact mathematical comparative conditions between indicators, prices, candlesticks & levels.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-[11px] font-mono text-emerald-400">
+            <span>⇅</span>
+            <span>Live Tick Confluence</span>
+          </div>
+          <button type="button" onclick="closeConditionBuilderModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center font-bold text-sm cursor-pointer transition">✕</button>
+        </div>
+      </div>
+
+      <!-- Main Body: 3-Column Comparative Builder Grid -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-5 bg-slate-50/60">
+        <div class="grid grid-cols-1 lg:grid-cols-11 gap-3 sm:gap-4">
+          
+          <!-- LEFT OPERAND (Columns 1-5) -->
+          <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/90 shadow-xs flex flex-col overflow-hidden">
+            <div class="bg-slate-100/80 px-3.5 py-2 border-b border-slate-200 flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Left Operand
+              </span>
+              <span id="builder-left-preview-chip" class="text-[11px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-bold border border-emerald-200 truncate max-w-[180px]">Accelerator Oscillator</span>
+            </div>
+
+            <!-- Tab Navigation & Content Area -->
+            <div class="flex flex-1 min-h-[340px]">
+              <!-- Vertical Category Tabs (Left Edge) -->
+              <div class="w-24 sm:w-28 bg-slate-50 border-r border-slate-200 p-1.5 space-y-1 shrink-0 flex flex-col">
+                <button type="button" onclick="switchBuilderLeftTab('indicator')" id="btn-tab-left-indicator" class="w-full text-left px-2 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-white text-emerald-800 shadow-xs border border-emerald-300">
+                  <span>⚡</span> Indicator
+                </button>
+                <button type="button" onclick="switchBuilderLeftTab('price')" id="btn-tab-left-price" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                  <span>📈</span> Price
+                </button>
+                <button type="button" onclick="switchBuilderLeftTab('candlestick')" id="btn-tab-left-candlestick" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                  <span>🕯️</span> Candle
+                </button>
+                <button type="button" onclick="switchBuilderLeftTab('sr')" id="btn-tab-left-sr" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                  <span>🎯</span> S / R
+                </button>
+                <button type="button" onclick="switchBuilderLeftTab('value')" id="btn-tab-left-value" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                  <span>🔢</span> Value
+                </button>
+              </div>
+
+              <!-- Tab Content Pane -->
+              <div class="flex-1 p-3 flex flex-col justify-between overflow-hidden">
+                <!-- Search & List -->
+                <div class="space-y-2 flex-1 flex flex-col overflow-hidden">
+                  <div class="relative">
+                    <input type="text" id="builder-left-search" oninput="filterBuilderLeftList()" placeholder="Search left operand..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-emerald-500 outline-none">
+                  </div>
+                  <!-- Scrollable Select List -->
+                  <div id="builder-left-list-container" class="flex-1 overflow-y-auto max-h-48 border border-slate-200 rounded-xl divide-y divide-slate-100 bg-white">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+
+                <!-- Parameters & Timeframe Controls -->
+                <div class="pt-2.5 mt-2 border-t border-slate-100 space-y-2 text-xs">
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Time Frame</label>
+                      <select id="builder-left-tf" onchange="updateBuilderFormulaPreview()" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-medium">
+                        <option value="Current">Current (Chart)</option>
+                        <option value="1m">1 Minute</option>
+                        <option value="3m">3 Minutes</option>
+                        <option value="5m" selected>5 Minutes</option>
+                        <option value="15m">15 Minutes</option>
+                        <option value="1h">1 Hour</option>
+                        <option value="Daily">Daily</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Shift (Bars Ago)</label>
+                      <div class="flex items-center gap-1">
+                        <input type="number" id="builder-left-shift" value="0" min="0" max="50" oninput="updateBuilderFormulaPreview()" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-mono text-center">
+                        <span class="text-[10px] text-slate-400 font-mono" title="0 = current bar, 1 = previous closed bar">0=live</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="builder-left-custom-params" class="grid grid-cols-2 gap-2">
+                    <!-- Dynamically populated parameters (e.g. Period 9) -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CENTER COMPARATOR (Column 6) -->
+          <div class="lg:col-span-1 flex flex-col items-center justify-center p-2 bg-white rounded-2xl border border-slate-200/90 shadow-xs space-y-3">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">Operator</span>
+            
+            <!-- Big Visual Operator Display -->
+            <div id="builder-operator-symbol-badge" class="w-14 h-14 rounded-2xl bg-indigo-50 border-2 border-indigo-500 text-indigo-700 flex items-center justify-center text-2xl font-black shadow-inner">
+              &gt;
+            </div>
+
+            <!-- Operator Select List (EA Builder style) -->
+            <div id="builder-operator-list" class="w-full space-y-1 text-center font-medium">
+              <button type="button" onclick="selectBuilderOperator('is above', '>')" data-op="is above" class="builder-op-btn w-full py-1 px-1.5 text-[11px] rounded-lg transition font-mono bg-emerald-50 text-emerald-800 font-bold border border-emerald-300">is above</button>
+              <button type="button" onclick="selectBuilderOperator('is below', '<')" data-op="is below" class="builder-op-btn w-full py-1 px-1.5 text-[11px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">is below</button>
+              <button type="button" onclick="selectBuilderOperator('crosses above', '↑')" data-op="crosses above" class="builder-op-btn w-full py-1 px-1.5 text-[11px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">crosses above</button>
+              <button type="button" onclick="selectBuilderOperator('crosses below', '↓')" data-op="crosses below" class="builder-op-btn w-full py-1 px-1.5 text-[11px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">crosses below</button>
+              <button type="button" onclick="selectBuilderOperator('is equal to', '==')" data-op="is equal to" class="builder-op-btn w-full py-1 px-1.5 text-[11px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">is equal to</button>
+              <button type="button" onclick="selectBuilderOperator('is not equal to', '!=')" data-op="is not equal to" class="builder-op-btn w-full py-1 px-1.5 text-[11px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">not equal</button>
+              <button type="button" onclick="selectBuilderOperator('>=', '>=')" data-op=">=" class="builder-op-btn w-full py-1 px-1.5 text-[11px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">&gt;=</button>
+              <button type="button" onclick="selectBuilderOperator('<=', '<=')" data-op="<=" class="builder-op-btn w-full py-1 px-1.5 text-[11px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">&lt;=</button>
+            </div>
+          </div>
+
+          <!-- RIGHT OPERAND (Columns 7-11) -->
+          <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/90 shadow-xs flex flex-col overflow-hidden">
+            <div class="bg-slate-100/80 px-3.5 py-2 border-b border-slate-200 flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Right Operand
+              </span>
+              <span id="builder-right-preview-chip" class="text-[11px] font-mono text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded font-bold border border-indigo-200 truncate max-w-[180px]">Accelerator Oscillator</span>
+            </div>
+
+            <!-- Tab Navigation & Content Area -->
+            <div class="flex flex-1 min-h-[340px]">
+              <!-- Content Pane First or Left/Right -->
+              <div class="flex-1 p-3 flex flex-col justify-between overflow-hidden">
+                <!-- Search & List -->
+                <div class="space-y-2 flex-1 flex flex-col overflow-hidden">
+                  <div class="relative">
+                    <input type="text" id="builder-right-search" oninput="filterBuilderRightList()" placeholder="Search right operand..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-indigo-500 outline-none">
+                  </div>
+                  <!-- Scrollable Select List -->
+                  <div id="builder-right-list-container" class="flex-1 overflow-y-auto max-h-48 border border-slate-200 rounded-xl divide-y divide-slate-100 bg-white">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+
+                <!-- Parameters & Timeframe Controls -->
+                <div class="pt-2.5 mt-2 border-t border-slate-100 space-y-2 text-xs">
+                  <div class="grid grid-cols-2 gap-2" id="builder-right-time-controls">
+                    <div>
+                      <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Time Frame</label>
+                      <select id="builder-right-tf" onchange="updateBuilderFormulaPreview()" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-medium">
+                        <option value="Current">Current (Chart)</option>
+                        <option value="1m">1 Minute</option>
+                        <option value="3m">3 Minutes</option>
+                        <option value="5m" selected>5 Minutes</option>
+                        <option value="15m">15 Minutes</option>
+                        <option value="1h">1 Hour</option>
+                        <option value="Daily">Daily</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Shift (Bars Ago)</label>
+                      <div class="flex items-center gap-1">
+                        <input type="number" id="builder-right-shift" value="0" min="0" max="50" oninput="updateBuilderFormulaPreview()" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-mono text-center">
+                        <span class="text-[10px] text-slate-400 font-mono">0=live</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="builder-right-custom-params" class="grid grid-cols-2 gap-2">
+                    <!-- Dynamically populated parameters (e.g. Period 21 or Value inputs) -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vertical Category Tabs (Right Edge) -->
+              <div class="w-24 sm:w-28 bg-slate-50 border-l border-slate-200 p-1.5 space-y-1 shrink-0 flex flex-col">
+                <button type="button" onclick="switchBuilderRightTab('indicator')" id="btn-tab-right-indicator" class="w-full text-left px-2 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-white text-indigo-800 shadow-xs border border-indigo-300">
+                  <span>⚡</span> Indicator
+                </button>
+                <button type="button" onclick="switchBuilderRightTab('price')" id="btn-tab-right-price" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                  <span>📈</span> Price
+                </button>
+                <button type="button" onclick="switchBuilderRightTab('candlestick')" id="btn-tab-right-candlestick" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                  <span>🕯️</span> Candle
+                </button>
+                <button type="button" onclick="switchBuilderRightTab('sr')" id="btn-tab-right-sr" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                  <span>🎯</span> S / R
+                </button>
+                <button type="button" onclick="switchBuilderRightTab('value')" id="btn-tab-right-value" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                  <span>🔢</span> Value
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formula Banner -->
+        <div class="mt-4 p-3.5 bg-slate-900 rounded-2xl border border-slate-800 text-white space-y-2">
+          <div class="flex items-center justify-between text-[11px] text-slate-400 font-mono">
+            <span>MATHEMATICAL CONDITION PREVIEW:</span>
+            <div class="flex items-center gap-2">
+              <label class="flex items-center gap-1 text-slate-300 cursor-pointer">
+                <input type="radio" name="builder-target-rule-type" value="entry" checked onchange="updateBuilderFormulaPreview()" class="text-emerald-500">
+                <span class="text-emerald-400 font-bold">Entry Condition (Signal)</span>
+              </label>
+              <span class="text-slate-600">|</span>
+              <label class="flex items-center gap-1 text-slate-300 cursor-pointer">
+                <input type="radio" name="builder-target-rule-type" value="exit" onchange="updateBuilderFormulaPreview()" class="text-rose-500">
+                <span class="text-rose-400 font-bold">Exit Condition (Square-Off)</span>
+              </label>
+            </div>
+          </div>
+          <div id="builder-live-formula-text" class="text-sm sm:text-base font-mono font-bold text-emerald-400 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80 tracking-wide text-center">
+            [ Accelerator Oscillator (Current, Shift 0) ]  is above  [ Accelerator Oscillator (Current, Shift 0) ]
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Action Bar (Screenshot Style OK button) -->
+      <div class="bg-white px-5 py-3 border-t border-slate-200 flex items-center justify-between gap-3">
+        <div class="text-[11px] text-slate-500">
+          <span class="font-bold text-slate-700">Non-Advisory Algorithm:</span> Evaluated autonomously tick-by-tick upon order execution.
+        </div>
+        <div class="flex items-center gap-3">
+          <button type="button" onclick="closeConditionBuilderModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition cursor-pointer">
+            Cancel
+          </button>
+          <button type="button" id="btn-builder-save-ok" onclick="saveConditionFromBuilder()" class="px-8 py-2.5 bg-slate-900 hover:bg-emerald-600 text-white rounded-xl text-xs font-black tracking-wider uppercase transition shadow-md cursor-pointer flex items-center gap-1.5">
+            <span>OK</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 
   <!-- Mandatory SEBI Regulatory Risk Disclosure Footer (Microsoft 365 Clean Light Theme) -->
   <footer class="mt-8 p-5 bg-white/85 border border-slate-200/90 rounded-2xl text-[11px] text-slate-500 space-y-3 text-center leading-relaxed shadow-sm">
@@ -11017,5 +11323,639 @@
         .catch(() => {});
     });
   </script>
+
+  <!-- ========================================================================= -->
+  <!-- SCRIPT: VISUAL CONDITION BUILDER (EA BUILDER STYLE - QUANTITATIVE ENGINE) -->
+  <!-- ========================================================================= -->
+  <script>
+    // Catalogs for Indicator Buffer & Condition Builder
+    const BUILDER_CATALOG = {
+      indicators: [
+        { id: 'accelerator', name: 'Accelerator Oscillator', defaultParam: '', icon: '⚡' },
+        { id: 'accumulation_distribution', name: 'Accumulation / Distribution', defaultParam: '', icon: '⚡' },
+        { id: 'adaptive_ma', name: 'Adaptive Moving Average', defaultParam: '9', paramLabel: 'Period', icon: '⚡' },
+        { id: 'alligator', name: 'Alligator (Jaws 13, Teeth 8, Lips 5)', defaultParam: '', icon: '⚡' },
+        { id: 'adx', name: 'Average Directional Movement (ADX)', defaultParam: '14', paramLabel: 'Period', icon: '⚡' },
+        { id: 'atr', name: 'Average True Range (ATR)', defaultParam: '14', paramLabel: 'Period', icon: '⚡' },
+        { id: 'awesome_oscillator', name: 'Awesome Oscillator', defaultParam: '', icon: '⚡' },
+        { id: 'bollinger_upper', name: 'Bollinger Bands (Upper Band)', defaultParam: '20, 2.0', paramLabel: 'Period, StdDev', icon: '⚡' },
+        { id: 'bollinger_middle', name: 'Bollinger Bands (Middle / SMA)', defaultParam: '20', paramLabel: 'Period', icon: '⚡' },
+        { id: 'bollinger_lower', name: 'Bollinger Bands (Lower Band)', defaultParam: '20, 2.0', paramLabel: 'Period, StdDev', icon: '⚡' },
+        { id: 'cci', name: 'Commodity Channel Index (CCI)', defaultParam: '20', paramLabel: 'Period', icon: '⚡' },
+        { id: 'cmf', name: 'Chaikin Money Flow (CMF)', defaultParam: '20', paramLabel: 'Period', icon: '⚡' },
+        { id: 'demarker', name: 'DeMarker', defaultParam: '14', paramLabel: 'Period', icon: '⚡' },
+        { id: 'ema', name: 'Exponential Moving Average (EMA)', defaultParam: '9', paramLabel: 'Period', icon: '⚡' },
+        { id: 'sma', name: 'Simple Moving Average (SMA)', defaultParam: '20', paramLabel: 'Period', icon: '⚡' },
+        { id: 'wma', name: 'Weighted Moving Average (WMA)', defaultParam: '20', paramLabel: 'Period', icon: '⚡' },
+        { id: 'hma', name: 'Hull Moving Average (HMA)', defaultParam: '16', paramLabel: 'Period', icon: '⚡' },
+        { id: 'macd_line', name: 'MACD (MACD Line)', defaultParam: '12, 26', paramLabel: 'Fast, Slow', icon: '⚡' },
+        { id: 'macd_signal', name: 'MACD (Signal Line)', defaultParam: '9', paramLabel: 'Signal Period', icon: '⚡' },
+        { id: 'macd_hist', name: 'MACD (Histogram)', defaultParam: '', icon: '⚡' },
+        { id: 'momentum', name: 'Momentum', defaultParam: '14', paramLabel: 'Period', icon: '⚡' },
+        { id: 'mfi', name: 'Money Flow Index (MFI)', defaultParam: '14', paramLabel: 'Period', icon: '⚡' },
+        { id: 'parabolic_sar', name: 'Parabolic SAR', defaultParam: '0.02, 0.2', paramLabel: 'Step, Max', icon: '⚡' },
+        { id: 'rsi', name: 'Relative Strength Index (RSI)', defaultParam: '14', paramLabel: 'Period', icon: '⚡' },
+        { id: 'stoch_k', name: 'Stochastic (%K)', defaultParam: '14, 3', paramLabel: '%K, Slowing', icon: '⚡' },
+        { id: 'stoch_d', name: 'Stochastic (%D)', defaultParam: '3', paramLabel: '%D Period', icon: '⚡' },
+        { id: 'supertrend', name: 'Supertrend', defaultParam: '10, 3', paramLabel: 'Period, Multiplier', icon: '⚡' },
+        { id: 'vwap', name: 'Volume Weighted Average Price (VWAP)', defaultParam: '', icon: '⚡' },
+        { id: 'williams_r', name: 'Williams %R', defaultParam: '14', paramLabel: 'Period', icon: '⚡' }
+      ],
+      price: [
+        { id: 'close', name: 'Close Price', defaultParam: '', icon: '📈' },
+        { id: 'open', name: 'Open Price', defaultParam: '', icon: '📈' },
+        { id: 'high', name: 'High Price', defaultParam: '', icon: '📈' },
+        { id: 'low', name: 'Low Price', defaultParam: '', icon: '📈' },
+        { id: 'median', name: 'Median Price (H+L)/2', defaultParam: '', icon: '📈' },
+        { id: 'typical', name: 'Typical Price (H+L+C)/3', defaultParam: '', icon: '📈' },
+        { id: 'weighted', name: 'Weighted Price (H+L+2C)/4', defaultParam: '', icon: '📈' }
+      ],
+      candlestick: [
+        { id: 'bull_engulfing', name: 'Bullish Engulfing', defaultParam: '1', paramLabel: 'Min Bar Size (pt)', icon: '🕯️' },
+        { id: 'bear_engulfing', name: 'Bearish Engulfing', defaultParam: '1', paramLabel: 'Min Bar Size (pt)', icon: '🕯️' },
+        { id: 'hammer', name: 'Hammer (Bullish Pin Bar)', defaultParam: '2.0', paramLabel: 'Tail/Body Ratio', icon: '🕯️' },
+        { id: 'shooting_star', name: 'Shooting Star (Bearish Pin Bar)', defaultParam: '2.0', paramLabel: 'Tail/Body Ratio', icon: '🕯️' },
+        { id: 'doji', name: 'Doji (Market Indecision)', defaultParam: '0.1', paramLabel: 'Body/Range %', icon: '🕯️' },
+        { id: 'morning_star', name: 'Morning Star Pattern', defaultParam: '', icon: '🕯️' },
+        { id: 'evening_star', name: 'Evening Star Pattern', defaultParam: '', icon: '🕯️' },
+        { id: 'marubozu_green', name: 'Marubozu (Green Bullish)', defaultParam: '', icon: '🕯️' },
+        { id: 'marubozu_red', name: 'Marubozu (Red Bearish)', defaultParam: '', icon: '🕯️' }
+      ],
+      sr: [
+        { id: 'pivot_p', name: 'Classic Pivot Point (P)', defaultParam: '', icon: '🎯' },
+        { id: 'pivot_r1', name: 'Resistance 1 (R1)', defaultParam: '', icon: '🎯' },
+        { id: 'pivot_r2', name: 'Resistance 2 (R2)', defaultParam: '', icon: '🎯' },
+        { id: 'pivot_r3', name: 'Resistance 3 (R3)', defaultParam: '', icon: '🎯' },
+        { id: 'pivot_s1', name: 'Support 1 (S1)', defaultParam: '', icon: '🎯' },
+        { id: 'pivot_s2', name: 'Support 2 (S2)', defaultParam: '', icon: '🎯' },
+        { id: 'pivot_s3', name: 'Support 3 (S3)', defaultParam: '', icon: '🎯' },
+        { id: 'pdh', name: 'Previous Day High (PDH)', defaultParam: '', icon: '🎯' },
+        { id: 'pdl', name: 'Previous Day Low (PDL)', defaultParam: '', icon: '🎯' },
+        { id: 'camarilla_h3', name: 'Camarilla Breakout (H3)', defaultParam: '', icon: '🎯' },
+        { id: 'camarilla_l3', name: 'Camarilla Breakdown (L3)', defaultParam: '', icon: '🎯' }
+      ],
+      value: [
+        { id: 'val_0', name: 'Zero (0.0)', defaultParam: '0', icon: '🔢' },
+        { id: 'val_20', name: 'Oversold Band (20.0)', defaultParam: '20', icon: '🔢' },
+        { id: 'val_30', name: 'RSI Oversold (30.0)', defaultParam: '30', icon: '🔢' },
+        { id: 'val_50', name: 'Midline Neutral (50.0)', defaultParam: '50', icon: '🔢' },
+        { id: 'val_70', name: 'RSI Overbought (70.0)', defaultParam: '70', icon: '🔢' },
+        { id: 'val_80', name: 'Overbought Band (80.0)', defaultParam: '80', icon: '🔢' },
+        { id: 'val_custom', name: 'Custom Numerical Value', defaultParam: '100', icon: '🔢' }
+      ]
+    };
+
+    // State for Strategy Conditions
+    let strategyConditionsState = {
+      confluenceMode: 'AND',
+      editingConditionId: null,
+      entryConditions: [
+        {
+          id: 'cond_entry_1',
+          type: 'entry',
+          left: { tab: 'indicator', id: 'ema', name: 'Exponential Moving Average (EMA)', param: '9', tf: '5m', shift: 0 },
+          operator: { name: 'crosses above', symbol: '↑' },
+          right: { tab: 'indicator', id: 'ema', name: 'Exponential Moving Average (EMA)', param: '21', tf: '5m', shift: 0 },
+          formula: 'EMA(9, 5m, Shift 0) crosses above EMA(21, 5m, Shift 0)'
+        },
+        {
+          id: 'cond_entry_2',
+          type: 'entry',
+          left: { tab: 'indicator', id: 'rsi', name: 'Relative Strength Index (RSI)', param: '14', tf: '5m', shift: 0 },
+          operator: { name: 'is above', symbol: '>' },
+          right: { tab: 'value', id: 'val_50', name: 'Value (50)', param: '50', tf: 'Current', shift: 0 },
+          formula: 'RSI(14, 5m, Shift 0) is above 50'
+        }
+      ],
+      exitConditions: [
+        {
+          id: 'cond_exit_1',
+          type: 'exit',
+          left: { tab: 'indicator', id: 'rsi', name: 'Relative Strength Index (RSI)', param: '14', tf: '5m', shift: 0 },
+          operator: { name: 'is above', symbol: '>' },
+          right: { tab: 'value', id: 'val_80', name: 'Value (80)', param: '80', tf: 'Current', shift: 0 },
+          formula: 'RSI(14, 5m, Shift 0) is above 80 (Overbought Square-Off)'
+        }
+      ]
+    };
+
+    // Active Builder Working State (Current Modal Session)
+    let builderWorkingState = {
+      targetType: 'entry',
+      left: { tab: 'indicator', id: 'accelerator', param: '', tf: 'Current', shift: 0 },
+      operator: { name: 'is above', symbol: '>' },
+      right: { tab: 'indicator', id: 'accelerator', param: '', tf: 'Current', shift: 0 }
+    };
+
+    function initConditionBuilder() {
+      renderConditionCards();
+      syncConditionsToStrategyRules();
+    }
+
+    function openConditionBuilderModal(targetType = 'entry', conditionId = null) {
+      const modal = document.getElementById('modal-condition-builder');
+      if (!modal) return;
+
+      builderWorkingState.targetType = targetType;
+      strategyConditionsState.editingConditionId = conditionId;
+
+      const radios = document.querySelectorAll('input[name="builder-target-rule-type"]');
+      radios.forEach(r => { r.checked = (r.value === targetType); });
+
+      if (conditionId) {
+        // Load existing condition
+        const allConds = [...strategyConditionsState.entryConditions, ...strategyConditionsState.exitConditions];
+        const targetCond = allConds.find(c => c.id === conditionId);
+        if (targetCond) {
+          builderWorkingState.left = JSON.parse(JSON.stringify(targetCond.left));
+          builderWorkingState.operator = JSON.parse(JSON.stringify(targetCond.operator));
+          builderWorkingState.right = JSON.parse(JSON.stringify(targetCond.right));
+          builderWorkingState.targetType = targetCond.type;
+          radios.forEach(r => { r.checked = (r.value === targetCond.type); });
+        }
+      } else {
+        // Defaults matching screenshot
+        builderWorkingState.left = { tab: 'indicator', id: 'accelerator', param: '', tf: 'Current', shift: 0 };
+        builderWorkingState.operator = { name: 'is above', symbol: '>' };
+        builderWorkingState.right = { tab: 'indicator', id: 'accelerator', param: '', tf: 'Current', shift: 0 };
+      }
+
+      // Sync tabs and lists
+      switchBuilderLeftTab(builderWorkingState.left.tab, false);
+      switchBuilderRightTab(builderWorkingState.right.tab, false);
+      selectBuilderOperator(builderWorkingState.operator.name, builderWorkingState.operator.symbol, false);
+
+      const lTf = document.getElementById('builder-left-tf');
+      if (lTf) lTf.value = builderWorkingState.left.tf || 'Current';
+      const lShift = document.getElementById('builder-left-shift');
+      if (lShift) lShift.value = builderWorkingState.left.shift || 0;
+
+      const rTf = document.getElementById('builder-right-tf');
+      if (rTf) rTf.value = builderWorkingState.right.tf || 'Current';
+      const rShift = document.getElementById('builder-right-shift');
+      if (rShift) rShift.value = builderWorkingState.right.shift || 0;
+
+      updateBuilderFormulaPreview();
+      modal.classList.remove('hidden');
+    }
+
+    function closeConditionBuilderModal() {
+      const modal = document.getElementById('modal-condition-builder');
+      if (modal) modal.classList.add('hidden');
+      strategyConditionsState.editingConditionId = null;
+    }
+
+    function switchBuilderLeftTab(tab, updatePreview = true) {
+      builderWorkingState.left.tab = tab;
+      const tabs = ['indicator', 'price', 'candlestick', 'sr', 'value'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`btn-tab-left-${t}`);
+        if (btn) {
+          if (t === tab) {
+            btn.className = "w-full text-left px-2.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-white text-emerald-800 shadow-xs border border-emerald-300";
+          } else {
+            btn.className = "w-full text-left px-2.5 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5";
+          }
+        }
+      });
+
+      // Default item for tab if not matching
+      const items = BUILDER_CATALOG[tab] || [];
+      if (!items.find(i => i.id === builderWorkingState.left.id)) {
+        if (items.length > 0) {
+          builderWorkingState.left.id = items[0].id;
+          builderWorkingState.left.param = items[0].defaultParam || '';
+        }
+      }
+
+      renderBuilderLeftList();
+      renderBuilderLeftCustomParams();
+      if (updatePreview) updateBuilderFormulaPreview();
+    }
+
+    function switchBuilderRightTab(tab, updatePreview = true) {
+      builderWorkingState.right.tab = tab;
+      const tabs = ['indicator', 'price', 'candlestick', 'sr', 'value'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`btn-tab-right-${t}`);
+        if (btn) {
+          if (t === tab) {
+            btn.className = "w-full text-left px-2.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-white text-indigo-800 shadow-xs border border-indigo-300";
+          } else {
+            btn.className = "w-full text-left px-2.5 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5";
+          }
+        }
+      });
+
+      const items = BUILDER_CATALOG[tab] || [];
+      if (!items.find(i => i.id === builderWorkingState.right.id)) {
+        if (items.length > 0) {
+          builderWorkingState.right.id = items[0].id;
+          builderWorkingState.right.param = items[0].defaultParam || '';
+        }
+      }
+
+      renderBuilderRightList();
+      renderBuilderRightCustomParams();
+      if (updatePreview) updateBuilderFormulaPreview();
+    }
+
+    function renderBuilderLeftList() {
+      const container = document.getElementById('builder-left-list-container');
+      if (!container) return;
+      const search = (document.getElementById('builder-left-search')?.value || '').toLowerCase().trim();
+      const items = BUILDER_CATALOG[builderWorkingState.left.tab] || [];
+      const filtered = items.filter(i => i.name.toLowerCase().includes(search));
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="p-3 text-xs text-slate-400 text-center">No matching items found</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const isSelected = (item.id === builderWorkingState.left.id);
+        const activeClass = isSelected ? 'bg-emerald-50 text-emerald-900 font-bold border-l-4 border-emerald-500' : 'text-slate-700 hover:bg-slate-50';
+        return `
+          <div onclick="selectBuilderLeftItem('${item.id}')" class="px-3 py-2 text-xs flex items-center gap-2 cursor-pointer transition ${activeClass}">
+            <span class="text-amber-500 text-xs shrink-0">${item.icon || '⚡'}</span>
+            <span class="truncate">${item.name}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderBuilderRightList() {
+      const container = document.getElementById('builder-right-list-container');
+      if (!container) return;
+      const search = (document.getElementById('builder-right-search')?.value || '').toLowerCase().trim();
+      const items = BUILDER_CATALOG[builderWorkingState.right.tab] || [];
+      const filtered = items.filter(i => i.name.toLowerCase().includes(search));
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="p-3 text-xs text-slate-400 text-center">No matching items found</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const isSelected = (item.id === builderWorkingState.right.id);
+        const activeClass = isSelected ? 'bg-indigo-50 text-indigo-900 font-bold border-l-4 border-indigo-500' : 'text-slate-700 hover:bg-slate-50';
+        return `
+          <div onclick="selectBuilderRightItem('${item.id}')" class="px-3 py-2 text-xs flex items-center gap-2 cursor-pointer transition ${activeClass}">
+            <span class="text-amber-500 text-xs shrink-0">${item.icon || '⚡'}</span>
+            <span class="truncate">${item.name}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterBuilderLeftList() {
+      renderBuilderLeftList();
+    }
+
+    function filterBuilderRightList() {
+      renderBuilderRightList();
+    }
+
+    function selectBuilderLeftItem(id) {
+      builderWorkingState.left.id = id;
+      const items = BUILDER_CATALOG[builderWorkingState.left.tab] || [];
+      const item = items.find(i => i.id === id);
+      if (item && item.defaultParam !== undefined) {
+        builderWorkingState.left.param = item.defaultParam;
+      }
+      renderBuilderLeftList();
+      renderBuilderLeftCustomParams();
+      updateBuilderFormulaPreview();
+    }
+
+    function selectBuilderRightItem(id) {
+      builderWorkingState.right.id = id;
+      const items = BUILDER_CATALOG[builderWorkingState.right.tab] || [];
+      const item = items.find(i => i.id === id);
+      if (item && item.defaultParam !== undefined) {
+        builderWorkingState.right.param = item.defaultParam;
+      }
+      renderBuilderRightList();
+      renderBuilderRightCustomParams();
+      updateBuilderFormulaPreview();
+    }
+
+    function renderBuilderLeftCustomParams() {
+      const container = document.getElementById('builder-left-custom-params');
+      if (!container) return;
+      const items = BUILDER_CATALOG[builderWorkingState.left.tab] || [];
+      const item = items.find(i => i.id === builderWorkingState.left.id);
+      if (!item || !item.paramLabel) {
+        container.innerHTML = '';
+        return;
+      }
+      container.innerHTML = `
+        <div class="col-span-2">
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">${item.paramLabel}</label>
+          <input type="text" id="builder-left-param-input" value="${builderWorkingState.left.param || item.defaultParam || ''}" oninput="builderWorkingState.left.param = this.value; updateBuilderFormulaPreview();" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-mono">
+        </div>
+      `;
+    }
+
+    function renderBuilderRightCustomParams() {
+      const container = document.getElementById('builder-right-custom-params');
+      if (!container) return;
+
+      if (builderWorkingState.right.tab === 'value') {
+        container.innerHTML = `
+          <div class="col-span-2 space-y-1.5">
+            <label class="block text-[10px] font-bold text-slate-500 uppercase">Fixed Value Amount</label>
+            <input type="number" step="any" id="builder-right-param-input" value="${builderWorkingState.right.param || '50'}" oninput="builderWorkingState.right.param = this.value; updateBuilderFormulaPreview();" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-mono font-bold">
+            <div class="flex flex-wrap gap-1 pt-1">
+              ${[0, 20, 30, 50, 70, 80, 100].map(v => `
+                <button type="button" onclick="builderWorkingState.right.param='${v}'; document.getElementById('builder-right-param-input').value='${v}'; updateBuilderFormulaPreview();" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-mono rounded border border-slate-200 font-bold">${v}</button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const items = BUILDER_CATALOG[builderWorkingState.right.tab] || [];
+      const item = items.find(i => i.id === builderWorkingState.right.id);
+      if (!item || !item.paramLabel) {
+        container.innerHTML = '';
+        return;
+      }
+      container.innerHTML = `
+        <div class="col-span-2">
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">${item.paramLabel}</label>
+          <input type="text" id="builder-right-param-input" value="${builderWorkingState.right.param || item.defaultParam || ''}" oninput="builderWorkingState.right.param = this.value; updateBuilderFormulaPreview();" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-mono">
+        </div>
+      `;
+    }
+
+    function selectBuilderOperator(opName, symbol, updatePreview = true) {
+      builderWorkingState.operator = { name: opName, symbol: symbol };
+      
+      const badge = document.getElementById('builder-operator-symbol-badge');
+      if (badge) badge.innerText = symbol;
+
+      const buttons = document.querySelectorAll('.builder-op-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-op') === opName) {
+          btn.className = "builder-op-btn w-full py-1 px-1.5 text-[11px] rounded-lg transition font-mono bg-emerald-50 text-emerald-800 font-bold border border-emerald-300";
+        } else {
+          btn.className = "builder-op-btn w-full py-1 px-1.5 text-[11px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100";
+        }
+      });
+
+      if (updatePreview) updateBuilderFormulaPreview();
+    }
+
+    function getOperandSummary(opState) {
+      const items = BUILDER_CATALOG[opState.tab] || [];
+      const item = items.find(i => i.id === opState.id) || { name: opState.id };
+      
+      if (opState.tab === 'value') {
+        return `Value (${opState.param || '50'})`;
+      }
+
+      const paramStr = opState.param ? `(${opState.param})` : '';
+      const tfStr = opState.tf && opState.tf !== 'Current' ? `, ${opState.tf}` : '';
+      const shiftStr = (opState.shift !== undefined && opState.shift !== '' && opState.shift !== 0) ? `, Shift: ${opState.shift}` : '';
+      
+      return `${item.name}${paramStr}${tfStr}${shiftStr}`;
+    }
+
+    function updateBuilderFormulaPreview() {
+      // Read current input controls
+      const lTf = document.getElementById('builder-left-tf')?.value || 'Current';
+      const lShift = parseInt(document.getElementById('builder-left-shift')?.value || '0', 10);
+      builderWorkingState.left.tf = lTf;
+      builderWorkingState.left.shift = lShift;
+
+      const rTf = document.getElementById('builder-right-tf')?.value || 'Current';
+      const rShift = parseInt(document.getElementById('builder-right-shift')?.value || '0', 10);
+      builderWorkingState.right.tf = rTf;
+      builderWorkingState.right.shift = rShift;
+
+      const checkedRule = document.querySelector('input[name="builder-target-rule-type"]:checked');
+      if (checkedRule) builderWorkingState.targetType = checkedRule.value;
+
+      const leftText = getOperandSummary(builderWorkingState.left);
+      const rightText = getOperandSummary(builderWorkingState.right);
+      const opText = builderWorkingState.operator.name;
+
+      const formula = `[ ${leftText} ]  ${opText}  [ ${rightText} ]`;
+
+      const formulaEl = document.getElementById('builder-live-formula-text');
+      if (formulaEl) formulaEl.innerText = formula;
+
+      const leftChip = document.getElementById('builder-left-preview-chip');
+      if (leftChip) leftChip.innerText = leftText;
+
+      const rightChip = document.getElementById('builder-right-preview-chip');
+      if (rightChip) rightChip.innerText = rightText;
+    }
+
+    function saveConditionFromBuilder() {
+      updateBuilderFormulaPreview();
+
+      const leftItems = BUILDER_CATALOG[builderWorkingState.left.tab] || [];
+      const leftObj = leftItems.find(i => i.id === builderWorkingState.left.id) || { name: builderWorkingState.left.id };
+      
+      const rightItems = BUILDER_CATALOG[builderWorkingState.right.tab] || [];
+      const rightObj = rightItems.find(i => i.id === builderWorkingState.right.id) || { name: builderWorkingState.right.id };
+
+      const leftSummary = getOperandSummary(builderWorkingState.left);
+      const rightSummary = getOperandSummary(builderWorkingState.right);
+      const formulaStr = `${leftSummary} ${builderWorkingState.operator.name} ${rightSummary}`;
+
+      const conditionObj = {
+        id: strategyConditionsState.editingConditionId || `cond_${Date.now()}`,
+        type: builderWorkingState.targetType,
+        left: { ...builderWorkingState.left, name: leftObj.name },
+        operator: { ...builderWorkingState.operator },
+        right: { ...builderWorkingState.right, name: rightObj.name },
+        formula: formulaStr
+      };
+
+      if (strategyConditionsState.editingConditionId) {
+        // Edit in place
+        const entryIdx = strategyConditionsState.entryConditions.findIndex(c => c.id === conditionObj.id);
+        if (entryIdx !== -1) strategyConditionsState.entryConditions.splice(entryIdx, 1);
+
+        const exitIdx = strategyConditionsState.exitConditions.findIndex(c => c.id === conditionObj.id);
+        if (exitIdx !== -1) strategyConditionsState.exitConditions.splice(exitIdx, 1);
+      }
+
+      if (conditionObj.type === 'exit') {
+        strategyConditionsState.exitConditions.push(conditionObj);
+      } else {
+        strategyConditionsState.entryConditions.push(conditionObj);
+      }
+
+      closeConditionBuilderModal();
+      renderConditionCards();
+      syncConditionsToStrategyRules();
+      showToast(`Saved condition: ${formulaStr.substring(0, 45)}...`);
+    }
+
+    function renderConditionCards() {
+      const entryContainer = document.getElementById('entry-conditions-list');
+      const exitContainer = document.getElementById('exit-conditions-list');
+      const countEl = document.getElementById('conditions-summary-count');
+
+      if (countEl) {
+        countEl.innerText = `${strategyConditionsState.entryConditions.length} Entry Rules • ${strategyConditionsState.exitConditions.length} Exit Rules active`;
+      }
+
+      if (entryContainer) {
+        if (strategyConditionsState.entryConditions.length === 0) {
+          entryContainer.innerHTML = `
+            <div class="p-3 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center text-xs text-slate-400">
+              No entry conditions added. Click <strong>+ Add Entry Condition</strong> to build one.
+            </div>
+          `;
+        } else {
+          entryContainer.innerHTML = strategyConditionsState.entryConditions.map((cond, idx) => {
+            const confluenceTag = idx > 0 ? `
+              <span class="px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-600 font-mono font-bold text-[10px] uppercase">
+                ${strategyConditionsState.confluenceMode}
+              </span>
+            ` : '';
+
+            return `
+              ${confluenceTag ? `<div class="flex items-center justify-center my-1">${confluenceTag}</div>` : ''}
+              <div class="p-3 bg-white border border-slate-200 rounded-xl flex flex-wrap items-center justify-between gap-2 shadow-2xs hover:border-emerald-400 transition group">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center justify-center shrink-0 font-mono">
+                    #${idx + 1}
+                  </span>
+                  <div class="min-w-0">
+                    <div class="text-xs font-mono font-bold text-slate-900 group-hover:text-emerald-900 transition truncate">
+                      ${cond.formula}
+                    </div>
+                    <div class="text-[10px] text-slate-400 font-mono flex items-center gap-1.5 mt-0.5">
+                      <span class="text-emerald-700 font-semibold">${cond.operator.name} (${cond.operator.symbol})</span>
+                      <span>•</span>
+                      <span>TF: ${cond.left.tf || 'Current'}</span>
+                      <span>•</span>
+                      <span>Shift: ${cond.left.shift || 0}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button type="button" onclick="openConditionBuilderModal('entry', '${cond.id}')" class="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 text-xs transition cursor-pointer" title="Edit Condition">
+                    ✏️
+                  </button>
+                  <button type="button" onclick="deleteCondition('${cond.id}')" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs transition cursor-pointer" title="Delete Condition">
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      if (exitContainer) {
+        if (strategyConditionsState.exitConditions.length === 0) {
+          exitContainer.innerHTML = `
+            <div class="p-3 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center text-xs text-slate-400">
+              No custom exit rules defined (using default Target Profit & Stop Loss).
+            </div>
+          `;
+        } else {
+          exitContainer.innerHTML = strategyConditionsState.exitConditions.map((cond, idx) => {
+            return `
+              <div class="p-3 bg-white border border-slate-200 rounded-xl flex flex-wrap items-center justify-between gap-2 shadow-2xs hover:border-rose-400 transition group">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <span class="w-6 h-6 rounded-lg bg-rose-50 text-rose-800 border border-rose-200 text-xs font-bold flex items-center justify-center shrink-0 font-mono">
+                    E${idx + 1}
+                  </span>
+                  <div class="min-w-0">
+                    <div class="text-xs font-mono font-bold text-slate-900 group-hover:text-rose-900 transition truncate">
+                      ${cond.formula}
+                    </div>
+                    <div class="text-[10px] text-slate-400 font-mono flex items-center gap-1.5 mt-0.5">
+                      <span class="text-rose-700 font-semibold">${cond.operator.name}</span>
+                      <span>•</span>
+                      <span>TF: ${cond.left.tf || 'Current'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button type="button" onclick="openConditionBuilderModal('exit', '${cond.id}')" class="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 text-xs transition cursor-pointer" title="Edit Condition">
+                    ✏️
+                  </button>
+                  <button type="button" onclick="deleteCondition('${cond.id}')" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs transition cursor-pointer" title="Delete Condition">
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+    }
+
+    function deleteCondition(id) {
+      strategyConditionsState.entryConditions = strategyConditionsState.entryConditions.filter(c => c.id !== id);
+      strategyConditionsState.exitConditions = strategyConditionsState.exitConditions.filter(c => c.id !== id);
+      renderConditionCards();
+      syncConditionsToStrategyRules();
+      showToast('Condition removed from strategy.');
+    }
+
+    function toggleConfluenceMode(mode) {
+      strategyConditionsState.confluenceMode = mode;
+      const andBtn = document.getElementById('btn-confluence-and');
+      const orBtn = document.getElementById('btn-confluence-or');
+      if (mode === 'AND') {
+        if (andBtn) andBtn.className = "px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-600 text-white shadow-2xs";
+        if (orBtn) orBtn.className = "px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100";
+      } else {
+        if (andBtn) andBtn.className = "px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100";
+        if (orBtn) orBtn.className = "px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-600 text-white shadow-2xs";
+      }
+      renderConditionCards();
+      syncConditionsToStrategyRules();
+      showToast(`Confluence set to: ${mode === 'AND' ? 'All conditions required (AND)' : 'Any condition triggers (OR)'}`);
+    }
+
+    function syncConditionsToStrategyRules() {
+      const mode = strategyConditionsState.confluenceMode;
+      const entryStrings = strategyConditionsState.entryConditions.map(c => c.formula);
+      const exitStrings = strategyConditionsState.exitConditions.map(c => c.formula);
+
+      let ruleSummary = '';
+      if (entryStrings.length > 0) {
+        ruleSummary += `ENTRY (${mode}): ` + entryStrings.join(` ${mode} `);
+      }
+      if (exitStrings.length > 0) {
+        if (ruleSummary) ruleSummary += ' | ';
+        ruleSummary += 'EXIT: ' + exitStrings.join(' OR ');
+      }
+
+      if (!ruleSummary) {
+        ruleSummary = 'Direct momentum entry with confluence filters.';
+      }
+
+      // Sync into customStrategyState & preview DOM elements
+      if (typeof customStrategyState !== 'undefined') {
+        customStrategyState.entryRule = ruleSummary;
+      }
+      const editRules = document.getElementById('edit-strat-rules');
+      if (editRules) editRules.value = ruleSummary;
+
+      const previewRules = document.getElementById('yt-preview-rules');
+      if (previewRules) previewRules.innerText = ruleSummary;
+    }
+
+    // Auto-initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initConditionBuilder);
+    } else {
+      setTimeout(initConditionBuilder, 100);
+    }
+  </script>
+
 </body>
 </html>
