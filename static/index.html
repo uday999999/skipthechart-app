@@ -1341,16 +1341,21 @@
               </div>
 
               <!-- Interactive Chart Legend / Stats Footer -->
-              <div class="bg-slate-900/95 border-t border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-400">
-                <div class="flex items-center gap-3">
-                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Green Candle: Close &gt; Open</span>
-                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Red Candle: Close &lt; Open</span>
+              <div class="bg-slate-900/95 border-t border-slate-800 px-4 py-2.5 sm:px-5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-400">
+                <div class="flex items-center gap-3 flex-wrap">
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Green Candle: Close &gt; Open</span>
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Red Candle: Close &lt; Open</span>
                   <span id="canvas-crossover-status" class="text-emerald-400 font-bold">▲ Golden Cross Active (SMA 5 &gt; SMA 20)</span>
                 </div>
                 <div class="flex items-center gap-2.5">
-                  <span class="hidden sm:inline text-[10px] text-slate-500">Live Plotting •</span>
-                  <button type="button" onclick="openConditionBuilderModal('entry')" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500 text-xs font-mono font-bold text-emerald-400 hover:text-emerald-300 transition shadow-sm flex items-center gap-1.5 cursor-pointer">
-                    <span>🛠️</span>
+                  <!-- Clear All Button -->
+                  <button type="button" onclick="clearAllChartIndicators()" class="py-2 px-3.5 sm:px-4 rounded-xl bg-slate-800/90 hover:bg-rose-950/40 text-slate-300 hover:text-rose-400 border border-slate-700/80 hover:border-rose-500/50 font-mono font-bold text-xs transition-all shadow-sm flex items-center gap-1.5 cursor-pointer active:scale-95" title="Clear all active indicators from chart">
+                    <span>🗑️</span>
+                    <span>Clear All</span>
+                  </button>
+                  <!-- Enriched Bigger Fine-Tune in Builder Button -->
+                  <button type="button" onclick="openConditionBuilderModal('entry')" class="py-2.5 px-5 sm:px-6 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-500 hover:via-teal-500 hover:to-emerald-500 text-white border border-emerald-400/40 font-mono font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-emerald-950/50 hover:shadow-emerald-500/25 transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer">
+                    <span class="text-base sm:text-lg">🛠️</span>
                     <span>Fine-Tune in Builder</span>
                   </button>
                 </div>
