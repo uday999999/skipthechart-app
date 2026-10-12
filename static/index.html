@@ -1336,8 +1336,22 @@
               </div>
 
               <!-- Canvas element -->
-              <div class="w-full h-[520px] sm:h-[580px] lg:h-[620px] relative">
+              <div id="algo-candlestick-wrapper" class="w-full h-[520px] sm:h-[580px] lg:h-[620px] relative">
                 <canvas id="algo-candlestick-canvas" class="w-full h-full block cursor-crosshair"></canvas>
+                
+                <!-- Floating Action Controls inside Candle Area (Clear All + Fine-Tune in Builder) -->
+                <div id="chart-candle-floating-actions" class="absolute z-20 flex items-center gap-2 p-1.5 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200/90 shadow-md transition-all duration-150 pointer-events-auto" style="right: 70px; bottom: 16px;">
+                  <!-- Clear All Button -->
+                  <button type="button" onclick="clearAllChartIndicators()" class="py-2 px-3 sm:px-3.5 rounded-xl bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-600 border border-slate-300 hover:border-rose-300 font-mono font-bold text-xs transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer active:scale-95" title="Clear all active indicators from chart">
+                    <span>🗑️</span>
+                    <span>Clear All</span>
+                  </button>
+                  <!-- Enriched Bigger Fine-Tune in Builder Button -->
+                  <button type="button" onclick="openConditionBuilderModal('entry')" class="py-2.5 px-4 sm:px-5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-700 hover:via-teal-700 hover:to-emerald-700 text-white border border-emerald-500 font-mono font-black text-xs sm:text-sm tracking-wide shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer">
+                    <span class="text-base sm:text-lg">🛠️</span>
+                    <span>Fine-Tune in Builder</span>
+                  </button>
+                </div>
               </div>
 
               <!-- Interactive Chart Legend / Stats Footer (Clean Theme) -->
@@ -1346,18 +1360,6 @@
                   <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-white border border-slate-400"></span> White: Bullish</span>
                   <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-slate-200 border border-slate-400"></span> Light Grey: Bearish</span>
                   <span id="canvas-crossover-status" class="text-emerald-700 font-bold">▲ Golden Cross Active (SMA 5 &gt; SMA 20)</span>
-                </div>
-                <div class="flex items-center gap-2.5">
-                  <!-- Clear All Button -->
-                  <button type="button" onclick="clearAllChartIndicators()" class="py-2 px-3.5 sm:px-4 rounded-xl bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 hover:border-rose-300 font-mono font-bold text-xs transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95" title="Clear all active indicators from chart">
-                    <span>🗑️</span>
-                    <span>Clear All</span>
-                  </button>
-                  <!-- Enriched Bigger Fine-Tune in Builder Button -->
-                  <button type="button" onclick="openConditionBuilderModal('entry')" class="py-2.5 px-5 sm:px-6 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-700 hover:via-teal-700 hover:to-emerald-700 text-white border border-emerald-500 font-mono font-black text-xs sm:text-sm tracking-wide shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer">
-                    <span class="text-base sm:text-lg">🛠️</span>
-                    <span>Fine-Tune in Builder</span>
-                  </button>
                 </div>
               </div>
             </div>
@@ -12655,6 +12657,16 @@
       const mainChartHeight = hasRSI ? height - rsiPanelHeight - 26 : height - 26;
       const rsiTop = mainChartHeight + 14;
       const rsiHeight = rsiPanelHeight;
+
+      // Dynamically position floating action controls in candle area (above RSI sub-panel if present)
+      const floatingActions = document.getElementById('chart-candle-floating-actions');
+      if (floatingActions) {
+        if (hasRSI && rsiHeight > 20) {
+          floatingActions.style.bottom = `${rsiPanelHeight + 22}px`;
+        } else {
+          floatingActions.style.bottom = '16px';
+        }
+      }
 
       // Price Bounds
       let minP = Math.min(...candles.map(c => c.low));
