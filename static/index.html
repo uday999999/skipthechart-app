@@ -715,15 +715,12 @@
             <span>3 Creation Options</span>
           </button>
           <span class="text-slate-300">→</span>
-          <button type="button" onclick="showStratWizard('chart')" id="wizard-crumb-chart" class="flex items-center gap-1.5 text-slate-500 font-medium shrink-0 hover:underline">
-            <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[10px] font-bold border border-slate-200">📈</span>
-            <span>Chart & Indicators</span>
-          </button>
-            <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-black">1</span>
-            <span>3 Creation Options</span>
+          <button type="button" onclick="showStratWizard('builder')" id="wizard-crumb-chart" class="flex items-center gap-1.5 text-slate-500 font-medium shrink-0 hover:underline">
+            <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[10px] font-bold border border-slate-200">🛠️</span>
+            <span>Fine-Tune Builder</span>
           </button>
           <span class="text-slate-300">→</span>
-          <button type="button" onclick="showStratWizard('chart')" id="wizard-crumb-asset" class="flex items-center gap-1.5 text-slate-500 font-medium shrink-0 hover:underline">
+          <button type="button" onclick="showStratWizard('asset')" id="wizard-crumb-asset" class="flex items-center gap-1.5 text-slate-500 font-medium shrink-0 hover:underline">
             <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[10px] font-bold border border-slate-200">A</span>
             <span>Asset</span>
           </button>
@@ -770,8 +767,8 @@
             <div class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm ms-glass-card" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 20px -2px rgba(15, 23, 42, 0.04);">
               <!-- 3 Interactive Creation Panels (Moved to Top) -->
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Option 1: Build Your Strategy by Your Own (100+ Indicators) -->
-                <div onclick="showStratWizard('chart')" id="card-option-candlestick-studio" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[400px]">
+                <!-- Option 1: Build Your Strategy by Your Own (No-Code Quant Engine) -->
+                <div onclick="showStratWizard('builder')" id="card-option-candlestick-studio" class="bg-white border-2 border-slate-200/90 hover:border-emerald-500 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group shadow-sm ms-glass-card min-h-[400px]">
                   <div class="space-y-4">
                     <div class="flex items-center justify-between">
                       <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center justify-center text-2xl sm:text-3xl shadow-xs group-hover:scale-105 transition-transform duration-300">
@@ -782,27 +779,27 @@
                     <div class="space-y-1.5">
                       <h4 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-emerald-700 transition tracking-tight">Build Your Strategy by Your Own</h4>
                       <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
-                        Pick your asset, choose Buying/Selling/Hedged Spreads, customize Wings (Iron Butterfly), and select up to 5 indicators (or 0 for pure price action).
+                        Fine-tune your custom strategy in our visual quantitative builder. Select indicators, comparative operators, multi-timeframe rules, and options spreads without manual chart staring.
                       </p>
                     </div>
                     <!-- Feature Highlights Pills -->
                     <div class="pt-2 space-y-2 border-t border-slate-100 text-xs">
                       <div class="flex items-center gap-2 text-slate-700 font-medium">
                         <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
-                        <span>100+ Indicators & Pure Price Action</span>
+                        <span>100+ Quantitative Indicators & Price Action</span>
                       </div>
                       <div class="flex items-center gap-2 text-slate-700 font-medium">
                         <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
-                        <span>Options Spreads, Straddles & Wings</span>
+                        <span>Visual Mathematical Rule & Condition Builder</span>
                       </div>
                       <div class="flex items-center gap-2 text-slate-700 font-medium">
                         <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span>
-                        <span>Instant 31-Confluence Mathematical Agent</span>
+                        <span>Instant 31-Confluence Mathematical Agent & Spreads</span>
                       </div>
                     </div>
                   </div>
-                  <button type="button" onclick="showStratWizard('chart'); event.stopPropagation();" class="w-full py-4 px-5 bg-emerald-600 group-hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md shadow-emerald-600/20 group-hover:shadow-lg group-hover:shadow-emerald-600/30 transition flex items-center justify-center gap-2 cursor-pointer">
-                    <span>📈 Open Candlestick Chart & Build with Indicators</span>
+                  <button type="button" onclick="showStratWizard('builder'); event.stopPropagation();" class="w-full py-4 px-5 bg-emerald-600 group-hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md shadow-emerald-600/20 group-hover:shadow-lg group-hover:shadow-emerald-600/30 transition flex items-center justify-center gap-2 cursor-pointer">
+                    <span>🛠️ Open Fine-Tune Strategy Builder</span>
                     <span class="group-hover:translate-x-1 transition-transform">→</span>
                   </button>
                 </div>
@@ -1236,237 +1233,387 @@
           <!-- =================================================================== -->
           
           <!-- =================================================================== -->
-          <!-- CANDLESTICK CHART STUDIO: PLOT INDICATORS -> BOT BUILDS STRATEGY   -->
+          <!-- FINE-TUNE QUANTITATIVE STRATEGY BUILDER STUDIO (SKIPTHECHART NO-CODE)-->
           <!-- =================================================================== -->
-          <div id="strat-panel-chart" class="hidden bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-7 space-y-5 shadow-sm ms-glass-card" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 20px -2px rgba(15, 23, 42, 0.04);">
+          <div id="strat-panel-chart" class="hidden bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-7 space-y-6 shadow-sm ms-glass-card" style="box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 20px -2px rgba(15, 23, 42, 0.04);">
             
             <!-- Header Bar -->
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div>
                 <div class="flex items-center gap-2">
-                  <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10.5px] font-mono font-bold uppercase">
-                    Interactive Chart-to-Algo Studio
+                  <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10.5px] font-mono font-bold uppercase tracking-wider">
+                    ⚡ QUANTITATIVE NO-CODE ENGINE • SkipTheChart Architecture
                   </span>
                   <span class="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-200 text-[10px] font-mono font-bold">
                     Autonomous Bot Synthesis
                   </span>
                 </div>
                 <h3 class="text-xl sm:text-2xl font-black text-slate-900 mt-1 tracking-tight">
-                  Plot Indicators on Live Candlestick Chart — Bot Builds Strategy
+                  Visual Strategy &amp; Indicator Condition Builder
                 </h3>
-                <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
-                  Apply your favorite indicators (SMA, RSI, Ichimoku Cloud) directly on the chart like TradingView. AlgoForge AI automatically extracts the signals and writes the algorithmic bot execution rules!
+                <p class="text-xs sm:text-sm text-slate-500 mt-0.5 leading-relaxed">
+                  Build exact mathematical comparative conditions between indicators, prices, candlesticks &amp; levels — evaluated tick-by-tick without manual chart staring.
                 </p>
               </div>
 
-              <!-- Quick Presets -->
+              <!-- Asset Selector & Live Spot Badge -->
               <div class="flex flex-wrap items-center gap-2">
-                <button type="button" onclick="applyChartPreset('sma_rsi_ichimoku')" class="px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-black transition shadow-sm flex items-center gap-1.5 cursor-pointer">
-                  <span>⚡ Preset: Dual SMA (5/20) + RSI + Ichimoku</span>
+                <div class="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-200 shadow-2xs font-mono font-bold text-xs">
+                  <button type="button" onclick="setSbAsset('NIFTY 50')" id="btn-sb-asset-nifty" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white shadow-xs">NIFTY 50</button>
+                  <button type="button" onclick="setSbAsset('BANK NIFTY')" id="btn-sb-asset-bank" class="px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition">BANK NIFTY</button>
+                  <button type="button" onclick="setSbAsset('SENSEX')" id="btn-sb-asset-sensex" class="px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition">SENSEX</button>
+                </div>
+                <span id="sb-spot-badge" class="px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-xl font-mono font-bold text-xs shadow-2xs">
+                  Spot: 22,458.10 (Live NSE Feed)
+                </span>
+              </div>
+            </div>
+
+            <!-- Quick Presets Toolbar ("Quick-Start Packs" for instant ease) -->
+            <div class="p-3.5 bg-gradient-to-r from-emerald-50/70 via-indigo-50/50 to-slate-50 border border-emerald-200/70 rounded-2xl space-y-2 shadow-2xs">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-black text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+                  <span>⚡ 1-Click Popular Quant Presets:</span>
+                  <span class="text-[10px] text-slate-500 font-normal font-sans">(Click any preset to auto-load rules)</span>
+                </span>
+                <span class="text-[10px] font-mono text-emerald-700 font-bold bg-white px-2 py-0.5 rounded-md border border-emerald-200">Zero Code Required</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <button type="button" onclick="applySbPreset('dual_sma')" class="px-3 py-1.5 bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 rounded-xl text-xs font-bold transition shadow-2xs cursor-pointer flex items-center gap-1.5 active:scale-95">
+                  <span>⚡ Dual SMA (5/20) Cross [5m]</span>
                 </button>
-                <button type="button" onclick="applyChartPreset('golden_cross')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition cursor-pointer">
-                  <span>Golden Cross (50/200)</span>
+                <button type="button" onclick="applySbPreset('golden_cross')" class="px-3 py-1.5 bg-white hover:bg-emerald-50 text-slate-800 border border-slate-300 hover:border-emerald-300 rounded-xl text-xs font-bold transition shadow-2xs cursor-pointer flex items-center gap-1.5 active:scale-95">
+                  <span>🌟 Golden Cross (50/200) [15m]</span>
                 </button>
-                <button type="button" onclick="applyChartPreset('supertrend_vwap')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition cursor-pointer">
-                  <span>Supertrend + VWAP</span>
+                <button type="button" onclick="applySbPreset('rsi_bounce')" class="px-3 py-1.5 bg-white hover:bg-indigo-50 text-indigo-900 border border-indigo-200 rounded-xl text-xs font-bold transition shadow-2xs cursor-pointer flex items-center gap-1.5 active:scale-95">
+                  <span>🟣 RSI Momentum Oversold (14 &lt; 30)</span>
+                </button>
+                <button type="button" onclick="applySbPreset('supertrend')" class="px-3 py-1.5 bg-white hover:bg-emerald-50 text-slate-800 border border-slate-300 hover:border-emerald-300 rounded-xl text-xs font-bold transition shadow-2xs cursor-pointer flex items-center gap-1.5 active:scale-95">
+                  <span>🟢 Supertrend Trend Follow (10, 3)</span>
+                </button>
+                <button type="button" onclick="applySbPreset('ichimoku')" class="px-3 py-1.5 bg-white hover:bg-teal-50 text-teal-900 border border-teal-200 rounded-xl text-xs font-bold transition shadow-2xs cursor-pointer flex items-center gap-1.5 active:scale-95">
+                  <span>☁️ Ichimoku Cloud Breakout</span>
+                </button>
+                <button type="button" onclick="applySbPreset('bollinger')" class="px-3 py-1.5 bg-white hover:bg-purple-50 text-purple-900 border border-purple-200 rounded-xl text-xs font-bold transition shadow-2xs cursor-pointer flex items-center gap-1.5 active:scale-95">
+                  <span>🔮 Bollinger Mean Reversion (20, 2)</span>
                 </button>
               </div>
             </div>
 
-            <!-- Chart Toolbar (Assets, Timeframes & Add Indicator) -->
-            <div class="p-3 bg-slate-50/90 rounded-2xl border border-slate-200/90 flex flex-wrap items-center justify-between gap-3 text-xs">
-              
-              <!-- Asset Selector & Spot Price -->
-              <div class="flex items-center gap-2">
-                <span class="text-slate-500 font-bold uppercase text-[10px]">Asset:</span>
-                <div class="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs font-mono font-bold">
-                  <button type="button" onclick="setChartAsset('NIFTY 50')" id="btn-chart-asset-nifty" class="px-3 py-1 rounded-lg bg-emerald-600 text-white shadow-xs">NIFTY 50</button>
-                  <button type="button" onclick="setChartAsset('BANK NIFTY')" id="btn-chart-asset-bank" class="px-3 py-1 rounded-lg text-slate-600 hover:bg-slate-100">BANK NIFTY</button>
-                  <button type="button" onclick="setChartAsset('SENSEX')" id="btn-chart-asset-sensex" class="px-3 py-1 rounded-lg text-slate-600 hover:bg-slate-100">SENSEX</button>
+            <!-- Live Strategy Telemetry HUD (Heads-Up Display for Pro Quants) -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl border border-indigo-900/80 shadow-md text-white">
+              <div class="flex flex-wrap items-center justify-between gap-3 border-b border-indigo-800/60 pb-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 flex items-center justify-center font-bold text-sm">📊</span>
+                  <div>
+                    <h4 class="text-xs sm:text-sm font-black text-white tracking-wide">Live Strategy Telemetry &amp; Quant Metrics HUD</h4>
+                    <span class="text-[10px] text-indigo-300">Autonomously evaluated against 3-year historical tick backtests</span>
+                  </div>
                 </div>
-                <span id="chart-spot-badge" class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-xl font-mono font-bold text-xs">
-                  Spot: 22,458.10 (Live Feed)
+                <div class="flex items-center gap-2">
+                  <span id="sb-confluence-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-mono font-bold">
+                    31-Confluence Mathematical Agent: Ready
+                  </span>
+                </div>
+              </div>
+
+              <!-- 4 Telemetry Metrics Grid -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3">
+                <div class="p-2.5 bg-slate-950/70 rounded-xl border border-indigo-900/50 text-center">
+                  <span class="text-[10px] text-slate-400 uppercase font-mono block">Simulated Win Rate</span>
+                  <strong id="sb-hud-winrate" class="text-base sm:text-lg font-black text-emerald-400 font-mono">74.8%</strong>
+                  <span class="text-[9.5px] text-emerald-500/90 block mt-0.5">▲ High Confluence</span>
+                </div>
+                <div class="p-2.5 bg-slate-950/70 rounded-xl border border-indigo-900/50 text-center">
+                  <span class="text-[10px] text-slate-400 uppercase font-mono block">Profit Factor</span>
+                  <strong id="sb-hud-pf" class="text-base sm:text-lg font-black text-white font-mono">2.42</strong>
+                  <span class="text-[9.5px] text-slate-400 block mt-0.5">Gross Win / Gross Loss</span>
+                </div>
+                <div class="p-2.5 bg-slate-950/70 rounded-xl border border-indigo-900/50 text-center">
+                  <span class="text-[10px] text-slate-400 uppercase font-mono block">Risk-to-Reward</span>
+                  <strong id="sb-hud-rr" class="text-base sm:text-lg font-black text-sky-400 font-mono">1 : 2.5</strong>
+                  <span class="text-[9.5px] text-sky-400/90 block mt-0.5">Target Profit vs SL</span>
+                </div>
+                <div class="p-2.5 bg-slate-950/70 rounded-xl border border-indigo-900/50 text-center">
+                  <span class="text-[10px] text-slate-400 uppercase font-mono block">Max Drawdown</span>
+                  <strong id="sb-hud-dd" class="text-base sm:text-lg font-black text-rose-400 font-mono">3.6%</strong>
+                  <span class="text-[9.5px] text-slate-400 block mt-0.5">Trailing Peak-to-Valley</span>
+                </div>
+              </div>
+              <div class="text-[9.5px] text-indigo-300/80 pt-2 text-right">
+                *Illustrative simulated baseline. Past performance does not guarantee future results. Not financial advice.
+              </div>
+            </div>
+
+            <!-- =========================================================== -->
+            <!-- 3-COLUMN VISUAL COMPARATIVE BUILDER ENGINE (INLINE)         -->
+            <!-- =========================================================== -->
+            <div class="bg-slate-50/80 rounded-2xl border border-slate-200/90 p-4 sm:p-5 space-y-4 shadow-xs">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
+                <span class="text-xs font-black text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Build Comparative Rule: [ Left Operand ] ➔ [ Operator ] ➔ [ Right Operand ]
+                </span>
+                <span class="text-[11px] font-mono text-slate-500">
+                  Evaluated Tick-by-Tick upon Order Execution
                 </span>
               </div>
 
-              <!-- Timeframe Selector -->
-              <div class="flex items-center gap-2">
-                <span class="text-slate-500 font-bold uppercase text-[10px]">Timeframe:</span>
-                <div class="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs font-mono text-[11px] font-bold">
-                  <button type="button" onclick="setChartTimeframe('1m')" id="btn-chart-tf-1m" class="px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-100">1m</button>
-                  <button type="button" onclick="setChartTimeframe('3m')" id="btn-chart-tf-3m" class="px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-100">3m</button>
-                  <button type="button" onclick="setChartTimeframe('5m')" id="btn-chart-tf-5m" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white shadow-xs">5m</button>
-                  <button type="button" onclick="setChartTimeframe('15m')" id="btn-chart-tf-15m" class="px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-100">15m</button>
-                  <button type="button" onclick="setChartTimeframe('Daily')" id="btn-chart-tf-daily" class="px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-100">Daily</button>
-                </div>
-              </div>
-
-              <!-- Add Indicator Dropdown -->
-              <div class="flex items-center gap-2">
-                <div class="relative">
-                  <select id="select-add-chart-indicator" onchange="handleAddChartIndicatorSelect(this)" class="bg-white border-2 border-emerald-500 text-emerald-900 font-extrabold text-xs rounded-xl px-3 py-1.5 shadow-xs cursor-pointer focus:outline-none">
-                    <option value="">⚡ + Add Indicator to Chart...</option>
-                    <option value="sma_5">🔵 SMA (5) — Fast Trend Line</option>
-                    <option value="sma_20">🟠 SMA (20) — Baseline Trend Line</option>
-                    <option value="sma_50">🟡 SMA (50) — Medium Trend</option>
-                    <option value="sma_200">🔴 SMA (200) — Major Trend</option>
-                    <option value="rsi_14">🟣 RSI (14) — Relative Strength Index</option>
-                    <option value="ichimoku">☁️ Ichimoku Cloud (9, 26, 52)</option>
-                    <option value="supertrend">🟢 Supertrend (10, 3)</option>
-                    <option value="bollinger">🔮 Bollinger Bands (20, 2.0)</option>
-                    <option value="vwap">⭐ VWAP (Volume Weighted Price)</option>
-                    <option value="macd">📊 MACD (12, 26, 9)</option>
-                  </select>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- Active Indicators Legend & Chips Bar -->
-            <div class="p-3 bg-white rounded-xl border border-slate-200/90 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
-              <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                <span>Active Chart Indicators:</span>
-              </div>
-              <div id="chart-active-indicators-chips" class="flex flex-wrap items-center gap-2">
-                <!-- Dynamically rendered indicator chips -->
-              </div>
-              <button type="button" onclick="clearAllChartIndicators()" class="text-[11px] text-rose-600 hover:text-rose-800 underline font-semibold cursor-pointer">
-                Clear All
-              </button>
-            </div>
-
-            <!-- Candlestick Chart Canvas Container (SkipTheChart White Theme) -->
-            <div class="relative bg-white rounded-2xl border-2 border-slate-200 overflow-hidden shadow-xs flex flex-col">
-              
-              <!-- Chart Watermark / Symbol Header -->
-              <div class="absolute top-3 left-4 z-10 pointer-events-none flex items-center gap-3">
-                <span id="canvas-symbol-label" class="text-sm font-black text-slate-800 font-mono tracking-wider">NIFTY 50 • 5m</span>
-                <span class="text-[11px] text-emerald-700 font-mono font-bold" id="canvas-live-price">22,458.10 (+142.30 +0.64%)</span>
-                <span class="text-[10px] text-slate-500 font-mono bg-slate-100/90 px-2 py-0.5 rounded border border-slate-200">SkipTheChart Mode: White &amp; Light Grey</span>
-              </div>
-
-              <!-- Canvas element -->
-              <div id="algo-candlestick-wrapper" class="w-full h-[520px] sm:h-[580px] lg:h-[620px] relative">
-                <canvas id="algo-candlestick-canvas" class="w-full h-full block cursor-crosshair"></canvas>
+              <!-- 3-Column Grid -->
+              <div class="grid grid-cols-1 lg:grid-cols-11 gap-3 sm:gap-4 items-stretch">
                 
-                <!-- Floating Action Controls inside Candle Area (Clear All + Fine-Tune in Builder) -->
-                <div id="chart-candle-floating-actions" class="absolute z-20 flex items-center gap-2 p-1.5 bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200/90 shadow-md transition-all duration-150 pointer-events-auto" style="right: 70px; bottom: 16px;">
-                  <!-- Clear All Button -->
-                  <button type="button" onclick="clearAllChartIndicators()" class="py-2 px-3 sm:px-3.5 rounded-xl bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-600 border border-slate-300 hover:border-rose-300 font-mono font-bold text-xs transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer active:scale-95" title="Clear all active indicators from chart">
-                    <span>🗑️</span>
-                    <span>Clear All</span>
-                  </button>
-                  <!-- Enriched Bigger Fine-Tune in Builder Button -->
-                  <button type="button" onclick="openConditionBuilderModal('entry')" class="py-2.5 px-4 sm:px-5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-700 hover:via-teal-700 hover:to-emerald-700 text-white border border-emerald-500 font-mono font-black text-xs sm:text-sm tracking-wide shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer">
-                    <span class="text-base sm:text-lg">🛠️</span>
-                    <span>Fine-Tune in Builder</span>
+                <!-- LEFT OPERAND (5 Columns) -->
+                <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/90 shadow-xs flex flex-col overflow-hidden">
+                  <div class="bg-slate-100/80 px-3.5 py-2 border-b border-slate-200 flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+                      <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Left Operand
+                    </span>
+                    <span id="sb-left-preview-chip" class="text-[11px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-bold border border-emerald-200 truncate max-w-[200px]">
+                      Simple Moving Average (SMA)(5)
+                    </span>
+                  </div>
+
+                  <div class="flex flex-1 min-h-[320px]">
+                    <!-- Category Tabs (Left Edge) -->
+                    <div class="w-24 sm:w-28 bg-slate-50 border-r border-slate-200 p-1.5 space-y-1 shrink-0 flex flex-col">
+                      <button type="button" onclick="switchSbLeftTab('indicator')" id="btn-sb-tab-left-indicator" class="w-full text-left px-2 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-white text-emerald-800 shadow-xs border border-emerald-300">
+                        <span>⚡</span> Indicator
+                      </button>
+                      <button type="button" onclick="switchSbLeftTab('price')" id="btn-sb-tab-left-price" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                        <span>📈</span> Price
+                      </button>
+                      <button type="button" onclick="switchSbLeftTab('candlestick')" id="btn-sb-tab-left-candlestick" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                        <span>🕯️</span> Candle
+                      </button>
+                      <button type="button" onclick="switchSbLeftTab('sr')" id="btn-sb-tab-left-sr" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                        <span>🎯</span> S / R
+                      </button>
+                      <button type="button" onclick="switchSbLeftTab('value')" id="btn-sb-tab-left-value" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                        <span>🔢</span> Value
+                      </button>
+                    </div>
+
+                    <!-- Content Area -->
+                    <div class="flex-1 p-3 flex flex-col justify-between overflow-hidden">
+                      <div class="space-y-2 flex-1 flex flex-col overflow-hidden">
+                        <input type="text" id="sb-left-search" oninput="renderSbLeftList()" placeholder="Search left operand..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-emerald-500 outline-none">
+                        <div id="sb-left-list-container" class="flex-1 overflow-y-auto max-h-44 border border-slate-200 rounded-xl divide-y divide-slate-100 bg-white">
+                          <!-- Populated dynamically -->
+                        </div>
+                      </div>
+
+                      <!-- Parameters & Timeframe Controls -->
+                      <div class="pt-2.5 mt-2 border-t border-slate-100 space-y-2 text-xs">
+                        <div class="grid grid-cols-2 gap-2">
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Time Frame</label>
+                            <select id="sb-left-tf" onchange="updateSbFormulaPreview()" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-medium">
+                              <option value="1m">1 Minute</option>
+                              <option value="3m">3 Minutes</option>
+                              <option value="5m" selected>5 Minutes</option>
+                              <option value="15m">15 Minutes</option>
+                              <option value="1h">1 Hour</option>
+                              <option value="Daily">Daily</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Shift (Bars Ago)</label>
+                            <div class="flex items-center gap-1">
+                              <input type="number" id="sb-left-shift" value="0" min="0" max="50" oninput="updateSbFormulaPreview()" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-mono text-center">
+                              <span class="text-[10px] text-slate-400 font-mono" title="0 = live tick, 1 = confirmed closed candle (prevents repainting)">0=live</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="sb-left-custom-params" class="grid grid-cols-2 gap-2">
+                          <!-- Dynamically populated parameters (e.g. Period 5) -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- OPERATOR (1 Column) -->
+                <div class="lg:col-span-1 bg-white rounded-2xl border border-slate-200/90 shadow-xs p-2 flex flex-col items-center justify-between gap-2">
+                  <div class="text-[10px] font-bold text-slate-500 uppercase text-center">Operator</div>
+                  <div id="sb-operator-symbol-badge" class="w-12 h-12 rounded-2xl bg-indigo-50 border-2 border-indigo-500 text-indigo-700 flex items-center justify-center text-xl font-black shadow-inner">
+                    ↑
+                  </div>
+                  <div id="sb-operator-list" class="w-full space-y-1 text-center font-medium">
+                    <button type="button" onclick="selectSbOperator('crosses above', '↑')" data-sb-op="crosses above" class="sb-op-btn w-full py-1 px-1 text-[10.5px] rounded-lg transition font-mono bg-emerald-50 text-emerald-800 font-bold border border-emerald-300">crosses above</button>
+                    <button type="button" onclick="selectSbOperator('crosses below', '↓')" data-sb-op="crosses below" class="sb-op-btn w-full py-1 px-1 text-[10.5px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">crosses below</button>
+                    <button type="button" onclick="selectSbOperator('is above', '>')" data-sb-op="is above" class="sb-op-btn w-full py-1 px-1 text-[10.5px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">is above</button>
+                    <button type="button" onclick="selectSbOperator('is below', '<')" data-sb-op="is below" class="sb-op-btn w-full py-1 px-1 text-[10.5px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">is below</button>
+                    <button type="button" onclick="selectSbOperator('is equal to', '==')" data-sb-op="is equal to" class="sb-op-btn w-full py-1 px-1 text-[10.5px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">is equal to</button>
+                    <button type="button" onclick="selectSbOperator('is not equal to', '!=')" data-sb-op="is not equal to" class="sb-op-btn w-full py-1 px-1 text-[10.5px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">not equal</button>
+                    <button type="button" onclick="selectSbOperator('>=', '>=')" data-sb-op=">=" class="sb-op-btn w-full py-1 px-1 text-[10.5px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">&gt;=</button>
+                    <button type="button" onclick="selectSbOperator('<=', '<=')" data-sb-op="<=" class="sb-op-btn w-full py-1 px-1 text-[10.5px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100">&lt;=</button>
+                  </div>
+                </div>
+
+                <!-- RIGHT OPERAND (5 Columns) -->
+                <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/90 shadow-xs flex flex-col overflow-hidden">
+                  <div class="bg-slate-100/80 px-3.5 py-2 border-b border-slate-200 flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+                      <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Right Operand
+                    </span>
+                    <span id="sb-right-preview-chip" class="text-[11px] font-mono text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded font-bold border border-indigo-200 truncate max-w-[200px]">
+                      Simple Moving Average (SMA)(20)
+                    </span>
+                  </div>
+
+                  <div class="flex flex-1 min-h-[320px]">
+                    <!-- Content Area -->
+                    <div class="flex-1 p-3 flex flex-col justify-between overflow-hidden">
+                      <div class="space-y-2 flex-1 flex flex-col overflow-hidden">
+                        <input type="text" id="sb-right-search" oninput="renderSbRightList()" placeholder="Search right operand..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-indigo-500 outline-none">
+                        <div id="sb-right-list-container" class="flex-1 overflow-y-auto max-h-44 border border-slate-200 rounded-xl divide-y divide-slate-100 bg-white">
+                          <!-- Populated dynamically -->
+                        </div>
+                      </div>
+
+                      <!-- Parameters & Timeframe Controls -->
+                      <div class="pt-2.5 mt-2 border-t border-slate-100 space-y-2 text-xs">
+                        <div class="grid grid-cols-2 gap-2" id="sb-right-time-controls">
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Time Frame</label>
+                            <select id="sb-right-tf" onchange="updateSbFormulaPreview()" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-medium">
+                              <option value="1m">1 Minute</option>
+                              <option value="3m">3 Minutes</option>
+                              <option value="5m" selected>5 Minutes</option>
+                              <option value="15m">15 Minutes</option>
+                              <option value="1h">1 Hour</option>
+                              <option value="Daily">Daily</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Shift (Bars Ago)</label>
+                            <div class="flex items-center gap-1">
+                              <input type="number" id="sb-right-shift" value="0" min="0" max="50" oninput="updateSbFormulaPreview()" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-mono text-center">
+                              <span class="text-[10px] text-slate-400 font-mono">0=live</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="sb-right-custom-params" class="grid grid-cols-2 gap-2">
+                          <!-- Dynamically populated parameters (e.g. Period 20) -->
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Category Tabs (Right Edge) -->
+                    <div class="w-24 sm:w-28 bg-slate-50 border-l border-slate-200 p-1.5 space-y-1 shrink-0 flex flex-col">
+                      <button type="button" onclick="switchSbRightTab('indicator')" id="btn-sb-tab-right-indicator" class="w-full text-left px-2 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-white text-indigo-800 shadow-xs border border-indigo-300">
+                        <span>⚡</span> Indicator
+                      </button>
+                      <button type="button" onclick="switchSbRightTab('price')" id="btn-sb-tab-right-price" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                        <span>📈</span> Price
+                      </button>
+                      <button type="button" onclick="switchSbRightTab('candlestick')" id="btn-sb-tab-right-candlestick" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                        <span>🕯️</span> Candle
+                      </button>
+                      <button type="button" onclick="switchSbRightTab('sr')" id="btn-sb-tab-right-sr" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                        <span>🎯</span> S / R
+                      </button>
+                      <button type="button" onclick="switchSbRightTab('value')" id="btn-sb-tab-right-value" class="w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5">
+                        <span>🔢</span> Value
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Mathematical Preview & Plain-English Translation Banner -->
+              <div class="p-4 bg-slate-900 rounded-2xl border border-slate-800 text-white space-y-3 shadow-inner">
+                <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <span class="text-slate-400 font-mono uppercase text-[11px] font-bold">Rule Action Type:</span>
+                  <div class="flex items-center gap-3">
+                    <label class="flex items-center gap-1.5 text-slate-200 cursor-pointer text-xs font-bold">
+                      <input type="radio" name="sb-rule-type" value="entry" checked onchange="updateSbFormulaPreview()" class="text-emerald-500">
+                      <span class="text-emerald-400">🟢 Entry Signal (Buy / Long Trigger)</span>
+                    </label>
+                    <span class="text-slate-600">|</span>
+                    <label class="flex items-center gap-1.5 text-slate-200 cursor-pointer text-xs font-bold">
+                      <input type="radio" name="sb-rule-type" value="exit" onchange="updateSbFormulaPreview()" class="text-rose-500">
+                      <span class="text-rose-400">🛑 Exit Rule (Square-Off Trigger)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Code Block -->
+                <div id="sb-live-formula-text" class="text-sm sm:text-base font-mono font-bold text-emerald-400 bg-slate-950 p-3 rounded-xl border border-slate-800 tracking-wide text-center">
+                  [ Simple Moving Average (SMA)(5), 5m ] crosses above [ Simple Moving Average (SMA)(20), 5m ]
+                </div>
+
+                <!-- Plain-English Translation -->
+                <div class="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700/80 flex items-start gap-2.5 text-xs">
+                  <span class="text-emerald-400 text-base shrink-0">💬</span>
+                  <div class="min-w-0">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 block">Plain-English Translation:</span>
+                    <span id="sb-plain-english-text" class="text-slate-200 font-medium leading-relaxed">
+                      "When 5-minute SMA(5) crosses above 5-minute SMA(20), generate a Bullish Entry signal (Options CE Buy / Long Spread)."
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Add Button -->
+                <div class="pt-1 flex items-center justify-end">
+                  <button type="button" onclick="saveConditionFromSb()" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+                    <span>⚡ + Add / Save This Rule to Strategy Stack</span>
                   </button>
                 </div>
               </div>
 
-              <!-- Interactive Chart Legend / Stats Footer (Clean Theme) -->
-              <div class="bg-slate-50/95 border-t border-slate-200 px-4 py-2.5 sm:px-5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-600">
-                <div class="flex items-center gap-3 flex-wrap">
-                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-white border border-slate-400"></span> White: Bullish</span>
-                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-slate-200 border border-slate-400"></span> Light Grey: Bearish</span>
-                  <span id="canvas-crossover-status" class="text-emerald-700 font-bold">▲ Golden Cross Active (SMA 5 &gt; SMA 20)</span>
+            </div>
+
+            <!-- Active Strategy Rules Stack (Modular Cards with Confluence) -->
+            <div class="p-5 bg-white rounded-2xl border-2 border-emerald-500/80 shadow-md space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-2xl p-2 bg-emerald-50 border border-emerald-200 rounded-xl">📋</span>
+                  <div>
+                    <h4 class="text-base font-black text-slate-900">Active Strategy Rules Stack</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">Rules currently active in your quantitative automated execution bot:</p>
+                  </div>
+                </div>
+
+                <!-- Confluence Mode Switcher -->
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-600 font-bold">Rule Confluence:</span>
+                  <button type="button" onclick="toggleConfluenceMode('AND')" id="btn-confluence-and" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-600 text-white shadow-2xs">ALL Must Match (AND)</button>
+                  <button type="button" onclick="toggleConfluenceMode('OR')" id="btn-confluence-or" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100">ANY Can Trigger (OR)</button>
+                </div>
+              </div>
+
+              <!-- Entry Rules Stack -->
+              <div class="space-y-2">
+                <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Entry Signal Rules (Buy / Long Trigger):
+                </span>
+                <div id="entry-conditions-list" class="space-y-2">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Exit Rules Stack -->
+              <div class="space-y-2 pt-2 border-t border-slate-100">
+                <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-rose-500"></span> Exit / Square-Off Rules (Take Profit / Trend Reversal):
+                </span>
+                <div id="exit-conditions-list" class="space-y-2">
+                  <!-- Populated dynamically -->
                 </div>
               </div>
             </div>
 
-            <!-- =============================================================== -->
-            <!-- AUTONOMOUS BOT STRATEGY SYNTHESIZER CARD (READS FROM CHART)     -->
-            <!-- =============================================================== -->
-            <div class="p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-3xl border border-indigo-900/60 shadow-xl text-white space-y-4">
-              
-              <div class="flex flex-wrap items-center justify-between gap-3 border-b border-indigo-900/80 pb-3">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-xl text-emerald-400 shadow-inner">
-                    🤖
-                  </div>
-                  <div>
-                    <div class="flex items-center gap-2">
-                      <h4 class="text-base sm:text-lg font-black text-white">AlgoForge Bot Strategy Synthesizer</h4>
-                      <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-mono font-bold uppercase">
-                        Autonomously Generated from Chart
-                      </span>
-                    </div>
-                    <p class="text-xs text-indigo-200">
-                      Our quant engine analyzed the indicators you placed on the chart and constructed this execution strategy:
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Generated Strategy Title & Description -->
-              <div class="p-4 bg-slate-950/80 rounded-2xl border border-indigo-900/50 space-y-3">
-                <div class="flex flex-wrap items-center justify-between gap-2">
-                  <span class="text-xs font-mono font-bold text-indigo-300 uppercase">Synthesized Strategy:</span>
-                  <span id="synthesized-strat-badge" class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-mono text-xs font-bold rounded-lg">
-                    Confluence Confirmed
-                  </span>
-                </div>
-                <h3 id="synthesized-strat-title" class="text-lg font-black text-emerald-400 font-mono tracking-tight">
-                  Dual SMA (5/20) Trend Cross + Ichimoku Cloud Filter + RSI (14) Momentum
-                </h3>
-
-                <!-- Rules Breakdown Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs font-mono">
-                  <!-- Entry Rules -->
-                  <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-800 space-y-1.5">
-                    <span class="text-emerald-400 font-bold uppercase flex items-center gap-1.5 text-[11px]">
-                      <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Algorithmic Entry Signal (Buy CE / Long):
-                    </span>
-                    <div id="synthesized-entry-rules" class="text-slate-300 text-[11px] leading-relaxed">
-                      [SMA(5) crosses above SMA(20)] AND [Price &gt; Ichimoku Cloud] AND [RSI(14) &gt; 50]
-                    </div>
-                  </div>
-
-                  <!-- Exit Rules -->
-                  <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-800 space-y-1.5">
-                    <span class="text-rose-400 font-bold uppercase flex items-center gap-1.5 text-[11px]">
-                      <span class="w-2 h-2 rounded-full bg-rose-400"></span> Algorithmic Exit Signal (Square-Off):
-                    </span>
-                    <div id="synthesized-exit-rules" class="text-slate-300 text-[11px] leading-relaxed">
-                      [SMA(5) crosses below SMA(20)] OR [RSI(14) &gt; 75 Overbought] OR SL (1.8%) / TP (4.5%)
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Estimated Performance Preview Grid -->
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-mono">
-                <div class="p-2.5 bg-slate-950/70 rounded-xl border border-indigo-900/40 text-center">
-                  <span class="text-slate-400 text-[10px] block">Simulated Win Rate</span>
-                  <strong class="text-emerald-400 text-sm font-black" id="synthesized-winrate">71.4%</strong>
-                </div>
-                <div class="p-2.5 bg-slate-950/70 rounded-xl border border-indigo-900/40 text-center">
-                  <span class="text-slate-400 text-[10px] block">Profit Factor</span>
-                  <strong class="text-white text-sm font-black" id="synthesized-pf">2.38</strong>
-                </div>
-                <div class="p-2.5 bg-slate-950/70 rounded-xl border border-indigo-900/40 text-center">
-                  <span class="text-slate-400 text-[10px] block">Trailing Net Return</span>
-                  <strong class="text-emerald-400 text-sm font-black" id="synthesized-pnl">+ ₹34,850</strong>
-                </div>
-                <div class="p-2.5 bg-slate-950/70 rounded-xl border border-indigo-900/40 text-center">
-                  <span class="text-slate-400 text-[10px] block">Max Drawdown</span>
-                  <strong class="text-rose-400 text-sm font-black" id="synthesized-dd">3.8%</strong>
-                </div>
-              </div>
-
-              <!-- Action Bar to Proceed -->
-              <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-indigo-900/60">
-                <button type="button" onclick="showStratWizard('options')" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-1.5 cursor-pointer">
-                  <span>←</span> Back to Options
-                </button>
-                <div class="flex items-center gap-3">
-                  <button type="button" onclick="applyChartStrategyAndProceed('asset')" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center gap-2 cursor-pointer">
-                    <span>🚀 Apply Chart Strategy & Choose Wings</span>
-                    <span>→</span>
-                  </button>
-                </div>
-              </div>
-
+            <!-- Bottom Action Bar to Proceed -->
+            <div class="pt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200">
+              <button type="button" onclick="showStratWizard('options')" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+                <span>←</span> Back to Options
+              </button>
+              <button type="button" onclick="applyBuilderStrategyAndProceed('asset')" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center gap-2 cursor-pointer active:scale-95">
+                <span>🚀 Lock Strategy Rules &amp; Choose Wings / Spreads</span>
+                <span>→</span>
+              </button>
             </div>
 
           </div>
@@ -7279,31 +7426,34 @@
     }
 
     function showStratWizard(stage) {
+      if (stage === 'chart') stage = 'builder';
       const panels = {
         options: document.getElementById('strat-panel-three-options'),
+        builder: document.getElementById('strat-panel-chart'),
         chart: document.getElementById('strat-panel-chart'),
         asset: document.getElementById('strat-panel-asset'),
         payoff: document.getElementById('strat-panel-payoff'),
         indicators: document.getElementById('strat-panel-indicators')
       };
       
+      const activePanel = panels[stage] || panels.builder;
       Object.keys(panels).forEach(k => {
-        if (panels[k]) {
-          if (k === stage) {
-            panels[k].classList.remove('hidden');
-            panels[k].scrollIntoView({ behavior: 'smooth', block: 'start' });
-            if (stage === 'chart') {
-              setTimeout(() => { if (typeof renderAlgoCandlestickChart === 'function') renderAlgoCandlestickChart(); }, 50);
-              setTimeout(() => { if (typeof renderAlgoCandlestickChart === 'function') renderAlgoCandlestickChart(); }, 200);
-            }
-          }
-          else panels[k].classList.add('hidden');
+        if (panels[k] && panels[k] !== activePanel) {
+          panels[k].classList.add('hidden');
         }
       });
+      if (activePanel) {
+        activePanel.classList.remove('hidden');
+        activePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (stage === 'builder' || stage === 'chart') {
+          setTimeout(() => { if (typeof initSbBuilder === 'function') initSbBuilder(); }, 50);
+        }
+      }
       
       // Update Crumbs
       const crumbs = {
         options: document.getElementById('wizard-crumb-options'),
+        builder: document.getElementById('wizard-crumb-chart'),
         chart: document.getElementById('wizard-crumb-chart'),
         asset: document.getElementById('wizard-crumb-asset'),
         payoff: document.getElementById('wizard-crumb-payoff'),
@@ -7312,7 +7462,7 @@
       Object.keys(crumbs).forEach(k => {
         const c = crumbs[k];
         if (c) {
-          if (k === stage) {
+          if (k === stage || (stage === 'builder' && k === 'chart')) {
             c.className = "flex items-center gap-1.5 text-emerald-700 font-bold shrink-0 hover:underline";
             const badge = c.querySelector('span:first-child');
             if (badge) badge.className = "w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-black shadow-xs";
@@ -12469,905 +12619,493 @@
 
 
   <!-- ========================================================================= -->
-  <!-- SCRIPT: CANDLESTICK CHART STUDIO ENGINE & AUTONOMOUS BOT SYNTHESIS        -->
+  <!-- SCRIPT: FINE-TUNE QUANTITATIVE STRATEGY BUILDER STUDIO ENGINE (NO-CODE)   -->
   <!-- ========================================================================= -->
   <script>
-    // State for Chart Studio
-    let chartStudioState = {
+    // Active Working State for the Main Inline Strategy Builder
+    let sbWorkingState = {
       asset: 'NIFTY 50',
-      timeframe: '5m',
-      basePrice: 22458.10,
-      activeIndicators: [
-        { id: 'sma_5', name: 'SMA (5)', type: 'sma', period: 5, color: '#0284c7', label: 'Fast Trend' },
-        { id: 'sma_20', name: 'SMA (20)', type: 'sma', period: 20, color: '#ea580c', label: 'Baseline Trend' },
-        { id: 'rsi_14', name: 'RSI (14)', type: 'rsi', period: 14, color: '#9333ea', label: 'Momentum Filter' },
-        { id: 'ichimoku', name: 'Ichimoku Cloud', type: 'ichimoku', tenkan: 9, kijun: 26, span: 52, color: '#0d9488', label: 'Cloud Filter' }
-      ],
-      candles: []
+      targetType: 'entry',
+      left: { tab: 'indicator', id: 'sma', param: '5', tf: '5m', shift: 0 },
+      operator: { name: 'crosses above', symbol: '↑' },
+      right: { tab: 'indicator', id: 'sma', param: '20', tf: '5m', shift: 0 }
     };
 
-    // Generate Realistic Intraday Candles
-    function generateCandlesData(asset = 'NIFTY 50', tf = '5m') {
-      let base = 22458.10;
-      let volatility = 18;
-      if (asset === 'BANK NIFTY') { base = 54966.65; volatility = 55; }
-      if (asset === 'SENSEX') { base = 72247.15; volatility = 70; }
+    // Initialize the Strategy Builder Studio
+    function initSbBuilder() {
+      // Set asset buttons
+      setSbAsset(sbWorkingState.asset || 'NIFTY 50', false);
 
-      chartStudioState.basePrice = base;
-      const count = 55;
-      const candles = [];
-      let currentPrice = base - (volatility * 4);
+      // Render tab selections
+      switchSbLeftTab(sbWorkingState.left.tab || 'indicator', false);
+      switchSbRightTab(sbWorkingState.right.tab || 'indicator', false);
+      selectSbOperator(sbWorkingState.operator.name || 'crosses above', sbWorkingState.operator.symbol || '↑', false);
 
-      // Base timestamp (today 09:15 IST)
-      const now = new Date();
-      now.setHours(9, 15, 0, 0);
+      // Render controls
+      const lTf = document.getElementById('sb-left-tf');
+      if (lTf) lTf.value = sbWorkingState.left.tf || '5m';
+      const lShift = document.getElementById('sb-left-shift');
+      if (lShift) lShift.value = sbWorkingState.left.shift || 0;
 
-      for (let i = 0; i < count; i++) {
-        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-        now.setMinutes(now.getMinutes() + 5);
+      const rTf = document.getElementById('sb-right-tf');
+      if (rTf) rTf.value = sbWorkingState.right.tf || '5m';
+      const rShift = document.getElementById('sb-right-shift');
+      if (rShift) rShift.value = sbWorkingState.right.shift || 0;
 
-        // Trend wave + noise
-        const wave = Math.sin(i / 6) * (volatility * 1.6);
-        const noise = (Math.random() - 0.48) * (volatility * 0.9);
-        const change = (wave * 0.15) + noise;
-
-        const open = currentPrice;
-        const close = open + change;
-        const high = Math.max(open, close) + Math.random() * (volatility * 0.6);
-        const low = Math.min(open, close) - Math.random() * (volatility * 0.6);
-
-        candles.push({
-          time: timeStr,
-          open: parseFloat(open.toFixed(2)),
-          high: parseFloat(high.toFixed(2)),
-          low: parseFloat(low.toFixed(2)),
-          close: parseFloat(close.toFixed(2)),
-          volume: Math.floor(15000 + Math.random() * 80000)
-        });
-
-        currentPrice = close;
-      }
-
-      // Ensure last candle matches live price
-      candles[candles.length - 1].close = base;
-      return candles;
+      // Sync active rules & HUD
+      renderConditionCards();
+      updateSbFormulaPreview();
+      updateSbTelemetryHUD();
     }
 
-    // Calculate Indicators (Dynamic Multi-Indicator Engine)
-    function computeIndicators(candles) {
-      const closes = candles.map(c => c.close);
-      const highs = candles.map(c => c.high);
-      const lows = candles.map(c => c.low);
+    // Set Active Trading Asset in Builder
+    function setSbAsset(asset, updatePreview = true) {
+      sbWorkingState.asset = asset;
+      const bNifty = document.getElementById('btn-sb-asset-nifty');
+      const bBank = document.getElementById('btn-sb-asset-bank');
+      const bSensex = document.getElementById('btn-sb-asset-sensex');
+      const badge = document.getElementById('sb-spot-badge');
 
-      // Dynamic SMA for any period
-      function calcSMA(period) {
-        return closes.map((val, idx, arr) => {
-          if (idx < period - 1) return null;
-          const slice = arr.slice(idx - period + 1, idx + 1);
-          const sum = slice.reduce((a, b) => a + b, 0);
-          return parseFloat((sum / period).toFixed(2));
-        });
-      }
+      let spotText = 'Spot: 22,458.10 (Live NSE Feed)';
+      if (asset === 'BANK NIFTY') spotText = 'Spot: 54,966.65 (Live NSE Feed)';
+      if (asset === 'SENSEX') spotText = 'Spot: 72,247.15 (Live BSE Feed)';
 
-      // Dynamic EMA for any period
-      function calcEMA(period) {
-        const k = 2 / (period + 1);
-        const ema = [];
-        let prev = null;
-        for (let i = 0; i < closes.length; i++) {
-          if (i < period - 1) {
-            ema.push(null);
-          } else if (prev === null) {
-            const sum = closes.slice(i - period + 1, i + 1).reduce((a, b) => a + b, 0);
-            prev = sum / period;
-            ema.push(parseFloat(prev.toFixed(2)));
-          } else {
-            prev = (closes[i] * k) + (prev * (1 - k));
-            ema.push(parseFloat(prev.toFixed(2)));
-          }
-        }
-        return ema;
-      }
+      [bNifty, bBank, bSensex].forEach(b => { if (b) b.className = 'px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition'; });
+      if (asset === 'BANK NIFTY' && bBank) bBank.className = 'px-3 py-1.5 rounded-lg bg-emerald-600 text-white shadow-xs';
+      else if (asset === 'SENSEX' && bSensex) bSensex.className = 'px-3 py-1.5 rounded-lg bg-emerald-600 text-white shadow-xs';
+      else if (bNifty) bNifty.className = 'px-3 py-1.5 rounded-lg bg-emerald-600 text-white shadow-xs';
 
-      // Bollinger Bands (20, 2)
-      function calcBollinger(period = 20, stdMult = 2) {
-        const middle = calcSMA(period);
-        const upper = [];
-        const lower = [];
-        for (let i = 0; i < closes.length; i++) {
-          if (middle[i] === null) {
-            upper.push(null);
-            lower.push(null);
-          } else {
-            const slice = closes.slice(i - period + 1, i + 1);
-            const mean = middle[i];
-            const variance = slice.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / period;
-            const sd = Math.sqrt(variance);
-            upper.push(parseFloat((mean + stdMult * sd).toFixed(2)));
-            lower.push(parseFloat((mean - stdMult * sd).toFixed(2)));
-          }
-        }
-        return { upper, middle, lower };
-      }
-
-      // Supertrend (10, 3)
-      function calcSupertrend(period = 10, mult = 3) {
-        const st = [];
-        let dir = 1;
-        for (let i = 0; i < candles.length; i++) {
-          const hl2 = (candles[i].high + candles[i].low) / 2;
-          const atrEst = (candles[i].high - candles[i].low) * 0.75;
-          const upperBand = hl2 + (mult * atrEst);
-          const lowerBand = hl2 - (mult * atrEst);
-          if (candles[i].close > hl2) dir = 1; else dir = -1;
-          st.push({
-            value: parseFloat((dir === 1 ? lowerBand : upperBand).toFixed(2)),
-            direction: dir
-          });
-        }
-        return st;
-      }
-
-      // VWAP
-      function calcVWAP() {
-        let cumVol = 0;
-        let cumPv = 0;
-        return candles.map(c => {
-          const typ = (c.high + c.low + c.close) / 3;
-          cumVol += c.volume;
-          cumPv += typ * c.volume;
-          return parseFloat((cumPv / (cumVol || 1)).toFixed(2));
-        });
-      }
-
-      // RSI
-      function calcRSI(period = 14) {
-        const rsi = [];
-        let gains = 0, losses = 0;
-        for (let i = 0; i < closes.length; i++) {
-          if (i === 0) { rsi.push(50); continue; }
-          const diff = closes[i] - closes[i - 1];
-          if (i <= period) {
-            if (diff >= 0) gains += diff; else losses -= diff;
-            if (i === period) {
-              const avgG = gains / period;
-              const avgL = losses / period || 0.0001;
-              const rs = avgG / avgL;
-              rsi.push(parseFloat((100 - (100 / (1 + rs))).toFixed(1)));
-            } else {
-              rsi.push(50);
-            }
-          } else {
-            const curG = diff > 0 ? diff : 0;
-            const curL = diff < 0 ? -diff : 0;
-            gains = (gains * (period - 1) + curG) / period;
-            losses = (losses * (period - 1) + curL) / period;
-            const rs = gains / (losses || 0.0001);
-            rsi.push(parseFloat((100 - (100 / (1 + rs))).toFixed(1)));
-          }
-        }
-        return rsi;
-      }
-
-      // Ichimoku Cloud
-      function calcIchimoku(tPeriod = 9, kPeriod = 26, sPeriod = 52) {
-        const tenkan = [];
-        const kijun = [];
-        const spanA = [];
-        const spanB = [];
-
-        for (let i = 0; i < candles.length; i++) {
-          if (i >= tPeriod - 1) {
-            const h = Math.max(...highs.slice(i - tPeriod + 1, i + 1));
-            const l = Math.min(...lows.slice(i - tPeriod + 1, i + 1));
-            tenkan.push(parseFloat(((h + l) / 2).toFixed(2)));
-          } else { tenkan.push(null); }
-
-          if (i >= kPeriod - 1) {
-            const h = Math.max(...highs.slice(i - kPeriod + 1, i + 1));
-            const l = Math.min(...lows.slice(i - kPeriod + 1, i + 1));
-            kijun.push(parseFloat(((h + l) / 2).toFixed(2)));
-          } else { kijun.push(null); }
-
-          if (tenkan[i] !== null && kijun[i] !== null) {
-            spanA.push(parseFloat(((tenkan[i] + kijun[i]) / 2).toFixed(2)));
-          } else { spanA.push(null); }
-
-          const sSliceStart = Math.max(0, i - sPeriod + 1);
-          const sH = Math.max(...highs.slice(sSliceStart, i + 1));
-          const sL = Math.min(...lows.slice(sSliceStart, i + 1));
-          spanB.push(parseFloat(((sH + sL) / 2).toFixed(2)));
-        }
-
-        return { tenkan, kijun, spanA, spanB };
-      }
-
-      // Collect results dynamically based on active indicators
-      const result = {
-        calcSMA,
-        calcEMA,
-        bollinger: calcBollinger(20, 2),
-        supertrend: calcSupertrend(10, 3),
-        vwap: calcVWAP(),
-        rsi: calcRSI(14),
-        ichimoku: calcIchimoku(9, 26, 52),
-        series: {}
-      };
-
-      // Pre-compute series for each active indicator
-      chartStudioState.activeIndicators.forEach(ind => {
-        if (ind.type === 'sma') {
-          result.series[ind.id] = calcSMA(ind.period || 20);
-        } else if (ind.type === 'ema') {
-          result.series[ind.id] = calcEMA(ind.period || 9);
-        } else if (ind.type === 'rsi') {
-          result.series[ind.id] = calcRSI(ind.period || 14);
-        }
-      });
-
-      return result;
+      if (badge) badge.innerText = spotText;
+      if (typeof wizardState !== 'undefined') wizardState.asset = asset;
+      if (updatePreview) updateSbFormulaPreview();
     }
 
-        // Render Canvas Candlestick Chart
-    function renderAlgoCandlestickChart() {
-      const canvas = document.getElementById('algo-candlestick-canvas');
-      if (!canvas) return;
-
-      if (!chartStudioState.candles || chartStudioState.candles.length === 0) {
-        chartStudioState.candles = generateCandlesData(chartStudioState.asset, chartStudioState.timeframe);
-      }
-
-      const rect = canvas.getBoundingClientRect();
-      const parentW = canvas.parentElement ? canvas.parentElement.clientWidth : 0;
-      const parentH = canvas.parentElement ? canvas.parentElement.clientHeight : 0;
-      const width = parentW || rect.width || 800;
-      const height = parentH || rect.height || 580;
-      const dpr = window.devicePixelRatio || 1;
-
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-
-      const ctx = canvas.getContext('2d');
-      ctx.scale(dpr, dpr);
-
-      // Clear crisp white background (SkipTheChart White Theme)
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, width, height);
-
-      const candles = chartStudioState.candles;
-      const indicators = computeIndicators(candles);
-
-      // Check if RSI is active - generous panel height
-      const hasRSI = chartStudioState.activeIndicators.some(i => i.type === 'rsi');
-      const rsiPanelHeight = hasRSI ? Math.min(160, Math.max(125, height * 0.28)) : 0;
-      const mainChartHeight = hasRSI ? height - rsiPanelHeight - 26 : height - 26;
-      const rsiTop = mainChartHeight + 14;
-      const rsiHeight = rsiPanelHeight;
-
-      // Dynamically position floating action controls in candle area (above RSI sub-panel if present)
-      const floatingActions = document.getElementById('chart-candle-floating-actions');
-      if (floatingActions) {
-        if (hasRSI && rsiHeight > 20) {
-          floatingActions.style.bottom = `${rsiPanelHeight + 22}px`;
-        } else {
-          floatingActions.style.bottom = '16px';
-        }
-      }
-
-      // Price Bounds
-      let minP = Math.min(...candles.map(c => c.low));
-      let maxP = Math.max(...candles.map(c => c.high));
-
-      // Include active SMAs & Ichimoku in bounds
-      chartStudioState.activeIndicators.forEach(ind => {
-        if (ind.type === 'sma') {
-          const arr = indicators[`sma${ind.period}`] || [];
-          arr.forEach(v => { if (v) { minP = Math.min(minP, v); maxP = Math.max(maxP, v); } });
-        }
-        if (ind.type === 'ichimoku') {
-          indicators.ichimoku.spanA.forEach(v => { if (v) { minP = Math.min(minP, v); maxP = Math.max(maxP, v); } });
-          indicators.ichimoku.spanB.forEach(v => { if (v) { minP = Math.min(minP, v); maxP = Math.max(maxP, v); } });
-        }
-      });
-
-      const pPad = (maxP - minP) * 0.08 || 10;
-      minP -= pPad;
-      maxP += pPad;
-
-      function priceToY(p) {
-        return 20 + (maxP - p) / (maxP - minP) * (mainChartHeight - 35);
-      }
-
-      // Horizontal Grid Lines (Subtle Light Grey on White)
-      ctx.strokeStyle = '#f1f5f9';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([4, 4]);
-      const gridSteps = 5;
-      for (let g = 0; g <= gridSteps; g++) {
-        const y = 20 + (mainChartHeight - 35) * (g / gridSteps);
-        const pVal = maxP - ((maxP - minP) * (g / gridSteps));
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width - 60, y);
-        ctx.stroke();
-
-        // Right axis price label
-        ctx.fillStyle = '#64748b';
-        ctx.font = '10px JetBrains Mono, monospace';
-        ctx.textAlign = 'right';
-        ctx.fillText(pVal.toFixed(1), width - 8, y + 3);
-      }
-      ctx.setLineDash([]);
-
-      const barWidth = Math.max(4, (width - 70) / candles.length);
-      const candleWidth = Math.max(2.5, barWidth * 0.65);
-
-      // Draw Ichimoku Kumo Cloud (Behind candles)
-      const hasIchimoku = chartStudioState.activeIndicators.some(i => i.type === 'ichimoku');
-      if (hasIchimoku) {
-        const { spanA, spanB, tenkan, kijun } = indicators.ichimoku;
-
-        // Cloud fill
-        ctx.beginPath();
-        let firstIdx = -1;
-        for (let i = 0; i < candles.length; i++) {
-          if (spanA[i] !== null && spanB[i] !== null) {
-            const x = i * barWidth + barWidth / 2;
-            const yA = priceToY(spanA[i]);
-            if (firstIdx === -1) { ctx.moveTo(x, yA); firstIdx = i; } else { ctx.lineTo(x, yA); }
-          }
-        }
-        for (let i = candles.length - 1; i >= 0; i--) {
-          if (spanA[i] !== null && spanB[i] !== null) {
-            const x = i * barWidth + barWidth / 2;
-            const yB = priceToY(spanB[i]);
-            ctx.lineTo(x, yB);
-          }
-        }
-        ctx.closePath();
-        ctx.fillStyle = 'rgba(13, 148, 136, 0.15)'; // Translucent teal cloud
-        ctx.fill();
-
-        // Tenkan line (blue)
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        let tStarted = false;
-        candles.forEach((_, i) => {
-          if (tenkan[i] !== null) {
-            const x = i * barWidth + barWidth / 2;
-            const y = priceToY(tenkan[i]);
-            if (!tStarted) { ctx.moveTo(x, y); tStarted = true; } else { ctx.lineTo(x, y); }
-          }
-        });
-        ctx.stroke();
-
-        // Kijun line (rose/red)
-        ctx.strokeStyle = '#f43f5e';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        let kStarted = false;
-        candles.forEach((_, i) => {
-          if (kijun[i] !== null) {
-            const x = i * barWidth + barWidth / 2;
-            const y = priceToY(kijun[i]);
-            if (!kStarted) { ctx.moveTo(x, y); kStarted = true; } else { ctx.lineTo(x, y); }
-          }
-        });
-        ctx.stroke();
-      }
-
-      // Draw Candlesticks in SkipTheChart Theme (White & Light Grey with lighter grey outlines)
-      candles.forEach((c, i) => {
-        const x = i * barWidth + barWidth / 2;
-        const isBullish = c.close >= c.open;
-        
-        // White for bullish (close >= open), light grey for bearish (close < open)
-        const bodyFillColor = isBullish ? '#ffffff' : '#e2e8f0';
-        const outlineColor = '#64748b'; // Lighter, refined slate-grey outline
-        const wickColor = '#64748b';    // Matching lighter grey wicks
-
-        // Upper & Lower Shadows (Wicks)
-        ctx.strokeStyle = wickColor;
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        ctx.moveTo(x, priceToY(c.high));
-        ctx.lineTo(x, priceToY(c.low));
-        ctx.stroke();
-
-        // Candle Body
-        const topY = priceToY(Math.max(c.open, c.close));
-        const botY = priceToY(Math.min(c.open, c.close));
-        const bodyHeight = Math.max(2.2, botY - topY);
-        const bodyX = x - candleWidth / 2;
-
-        // 1. Fill candle body (white or light grey)
-        ctx.fillStyle = bodyFillColor;
-        ctx.fillRect(bodyX, topY, candleWidth, bodyHeight);
-
-        // 2. Stroke lighter grey outline around the body
-        ctx.strokeStyle = outlineColor;
-        ctx.lineWidth = 1.1;
-        ctx.strokeRect(bodyX, topY, candleWidth, bodyHeight);
-      });
-
-      // Draw Bollinger Bands (if active)
-      const hasBollinger = chartStudioState.activeIndicators.some(i => i.type === 'bollinger');
-      if (hasBollinger && indicators.bollinger) {
-        const { upper, lower, middle } = indicators.bollinger;
-        // Channel shading
-        ctx.beginPath();
-        let bStart = -1;
-        for (let i = 0; i < candles.length; i++) {
-          if (upper[i] !== null && lower[i] !== null) {
-            const x = i * barWidth + barWidth / 2;
-            const yU = priceToY(upper[i]);
-            if (bStart === -1) { ctx.moveTo(x, yU); bStart = i; } else { ctx.lineTo(x, yU); }
-          }
-        }
-        for (let i = candles.length - 1; i >= 0; i--) {
-          if (upper[i] !== null && lower[i] !== null) {
-            const x = i * barWidth + barWidth / 2;
-            const yL = priceToY(lower[i]);
-            ctx.lineTo(x, yL);
-          }
-        }
-        ctx.closePath();
-        ctx.fillStyle = 'rgba(139, 92, 246, 0.08)';
-        ctx.fill();
-
-        // Upper & Lower band lines
-        [upper, lower].forEach((band, bIdx) => {
-          ctx.strokeStyle = '#a855f7';
-          ctx.lineWidth = 1.2;
-          ctx.setLineDash([2, 3]);
-          ctx.beginPath();
-          let started = false;
-          candles.forEach((_, i) => {
-            if (band[i] !== null) {
-              const x = i * barWidth + barWidth / 2;
-              const y = priceToY(band[i]);
-              if (!started) { ctx.moveTo(x, y); started = true; } else { ctx.lineTo(x, y); }
-            }
-          });
-          ctx.stroke();
-          ctx.setLineDash([]);
-        });
-      }
-
-      // Draw Supertrend (if active)
-      const hasSupertrend = chartStudioState.activeIndicators.some(i => i.type === 'supertrend');
-      if (hasSupertrend && indicators.supertrend) {
-        ctx.lineWidth = 2.2;
-        for (let i = 1; i < candles.length; i++) {
-          const pt = indicators.supertrend[i];
-          const prevPt = indicators.supertrend[i - 1];
-          if (pt && prevPt && pt.direction === prevPt.direction) {
-            const x1 = (i - 1) * barWidth + barWidth / 2;
-            const y1 = priceToY(prevPt.value);
-            const x2 = i * barWidth + barWidth / 2;
-            const y2 = priceToY(pt.value);
-            ctx.strokeStyle = pt.direction === 1 ? '#10b981' : '#f43f5e';
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.stroke();
-          }
-        }
-      }
-
-      // Draw VWAP (if active)
-      const hasVWAP = chartStudioState.activeIndicators.some(i => i.type === 'vwap');
-      if (hasVWAP && indicators.vwap) {
-        ctx.strokeStyle = '#f59e0b';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([4, 4]);
-        ctx.beginPath();
-        let vStarted = false;
-        candles.forEach((_, i) => {
-          const val = indicators.vwap[i];
-          if (val) {
-            const x = i * barWidth + barWidth / 2;
-            const y = priceToY(val);
-            if (!vStarted) { ctx.moveTo(x, y); vStarted = true; } else { ctx.lineTo(x, y); }
-          }
-        });
-        ctx.stroke();
-        ctx.setLineDash([]);
-      }
-
-      // Draw Active Moving Averages (SMAs & EMAs)
-      const maList = chartStudioState.activeIndicators.filter(i => i.type === 'sma' || i.type === 'ema');
-      maList.forEach(ind => {
-        const arr = indicators.series[ind.id] || (ind.type === 'sma' ? indicators.calcSMA(ind.period) : indicators.calcEMA(ind.period));
-        if (!arr) return;
-
-        ctx.strokeStyle = ind.color || '#3b82f6';
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        let started = false;
-        candles.forEach((_, i) => {
-          if (arr[i] !== null && arr[i] !== undefined) {
-            const x = i * barWidth + barWidth / 2;
-            const y = priceToY(arr[i]);
-            if (!started) { ctx.moveTo(x, y); started = true; } else { ctx.lineTo(x, y); }
-          }
-        });
-        ctx.stroke();
-      });
-
-      // Highlight Moving Average Crossovers if at least two MAs are active
-      if (maList.length >= 2) {
-        const sortedMAs = [...maList].sort((a, b) => (a.period || 0) - (b.period || 0));
-        const fast = sortedMAs[0];
-        const slow = sortedMAs[1];
-        const fastArr = indicators.series[fast.id] || (fast.type === 'sma' ? indicators.calcSMA(fast.period) : indicators.calcEMA(fast.period));
-        const slowArr = indicators.series[slow.id] || (slow.type === 'sma' ? indicators.calcSMA(slow.period) : indicators.calcEMA(slow.period));
-
-        let lastCross = 'none';
-        if (fastArr && slowArr) {
-          for (let i = 1; i < candles.length; i++) {
-            if (fastArr[i] && slowArr[i] && fastArr[i - 1] && slowArr[i - 1]) {
-              const prevDiff = fastArr[i - 1] - slowArr[i - 1];
-              const curDiff = fastArr[i] - slowArr[i];
-
-              // Bullish Crossover
-              if (prevDiff <= 0 && curDiff > 0) {
-                lastCross = 'bullish';
-                const x = i * barWidth + barWidth / 2;
-                const y = priceToY(candles[i].low) + 16;
-
-                ctx.fillStyle = '#10b981';
-                ctx.beginPath();
-                ctx.moveTo(x, y - 8);
-                ctx.lineTo(x - 6, y + 2);
-                ctx.lineTo(x + 6, y + 2);
-                ctx.fill();
-
-                ctx.font = 'bold 9px JetBrains Mono, monospace';
-                ctx.textAlign = 'center';
-                ctx.fillText(`▲ BUY (${fast.name}>${slow.name})`, x, y + 14);
-              }
-              // Bearish Crossover
-              else if (prevDiff >= 0 && curDiff < 0) {
-                lastCross = 'bearish';
-                const x = i * barWidth + barWidth / 2;
-                const y = priceToY(candles[i].high) - 16;
-
-                ctx.fillStyle = '#f43f5e';
-                ctx.beginPath();
-                ctx.moveTo(x, y + 8);
-                ctx.lineTo(x - 6, y - 2);
-                ctx.lineTo(x + 6, y - 2);
-                ctx.fill();
-
-                ctx.font = 'bold 9px JetBrains Mono, monospace';
-                ctx.textAlign = 'center';
-                ctx.fillText(`▼ SELL (${fast.name}<${slow.name})`, x, y - 6);
-              }
-            }
-          }
-        }
-
-        const crossStatus = document.getElementById('canvas-crossover-status');
-        if (crossStatus) {
-          if (lastCross === 'bullish') {
-            crossStatus.className = 'text-emerald-400 font-bold';
-            crossStatus.innerText = `▲ Bullish Signal: ${fast.name} > ${slow.name}`;
-          } else if (lastCross === 'bearish') {
-            crossStatus.className = 'text-rose-400 font-bold';
-            crossStatus.innerText = `▼ Bearish Signal: ${fast.name} < ${slow.name}`;
+    // Tab switcher for Left Operand
+    function switchSbLeftTab(tab, updatePreview = true) {
+      sbWorkingState.left.tab = tab;
+      const tabs = ['indicator', 'price', 'candlestick', 'sr', 'value'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`btn-sb-tab-left-${t}`);
+        if (btn) {
+          if (t === tab) {
+            btn.className = "w-full text-left px-2 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-white text-emerald-800 shadow-xs border border-emerald-300";
           } else {
-            crossStatus.innerText = `Alignment: ${fast.name} & ${slow.name}`;
+            btn.className = "w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5";
           }
+        }
+      });
+
+      const items = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[tab] || []) : [];
+      if (!items.find(i => i.id === sbWorkingState.left.id)) {
+        if (items.length > 0) {
+          sbWorkingState.left.id = items[0].id;
+          sbWorkingState.left.param = items[0].defaultParam || '';
         }
       }
 
-            // Draw RSI Oscillator Panel (if active)
-      if (hasRSI && rsiHeight > 20) {
-        // Divider (Clean Light Theme)
-        ctx.strokeStyle = '#e2e8f0';
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        ctx.moveTo(0, rsiTop - 6);
-        ctx.lineTo(width - 60, rsiTop - 6);
-        ctx.stroke();
-
-        // Background panel tint (Subtle soft slate-white)
-        ctx.fillStyle = '#f8fafc';
-        ctx.fillRect(0, rsiTop - 5, width - 60, rsiHeight + 10);
-
-        // 70 & 30 Reference Bands with internal breathing room
-        function rsiToY(v) { return (rsiTop + 14) + (100 - v) / 100 * (rsiHeight - 28); }
-
-        // Shaded neutral channel (30 to 70)
-        ctx.fillStyle = 'rgba(147, 51, 234, 0.05)';
-        ctx.fillRect(0, rsiToY(70), width - 60, rsiToY(30) - rsiToY(70));
-
-        // 70, 50, 30 Reference Lines
-        ctx.strokeStyle = '#cbd5e1';
-        ctx.setLineDash([3, 4]);
-        ctx.beginPath();
-        ctx.moveTo(0, rsiToY(70)); ctx.lineTo(width - 60, rsiToY(70));
-        ctx.moveTo(0, rsiToY(50)); ctx.lineTo(width - 60, rsiToY(50));
-        ctx.moveTo(0, rsiToY(30)); ctx.lineTo(width - 60, rsiToY(30));
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Axis Labels
-        ctx.fillStyle = '#64748b';
-        ctx.font = '10px JetBrains Mono, monospace';
-        ctx.textAlign = 'right';
-        ctx.fillText('70 OB', width - 8, rsiToY(70) + 3);
-        ctx.fillText('50 Mid', width - 8, rsiToY(50) + 3);
-        ctx.fillText('30 OS', width - 8, rsiToY(30) + 3);
-
-        // Sub-panel indicator title
-        ctx.fillStyle = '#7c3aed';
-        ctx.font = 'bold 10px JetBrains Mono, monospace';
-        ctx.textAlign = 'left';
-        ctx.fillText('RSI (14)', 12, rsiTop + 8);
-
-        // RSI Line (Vibrant Purple)
-        ctx.strokeStyle = '#9333ea';
-        ctx.lineWidth = 2.4;
-        ctx.beginPath();
-        let rStarted = false;
-        candles.forEach((_, i) => {
-          const val = indicators.rsi[i];
-          if (val !== undefined && val !== null) {
-            const x = i * barWidth + barWidth / 2;
-            const y = rsiToY(val);
-            if (!rStarted) { ctx.moveTo(x, y); rStarted = true; } else { ctx.lineTo(x, y); }
-          }
-        });
-        ctx.stroke();
-      }
-
-      renderChartActiveIndicatorChips();
-      synthesizeStrategyFromChart();
+      renderSbLeftList();
+      renderSbLeftCustomParams();
+      if (updatePreview) updateSbFormulaPreview();
     }
 
-    // Render Active Indicator Chips
-    function renderChartActiveIndicatorChips() {
-      const container = document.getElementById('chart-active-indicators-chips');
+    // Tab switcher for Right Operand
+    function switchSbRightTab(tab, updatePreview = true) {
+      sbWorkingState.right.tab = tab;
+      const tabs = ['indicator', 'price', 'candlestick', 'sr', 'value'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`btn-sb-tab-right-${t}`);
+        if (btn) {
+          if (t === tab) {
+            btn.className = "w-full text-left px-2 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-white text-indigo-800 shadow-xs border border-indigo-300";
+          } else {
+            btn.className = "w-full text-left px-2 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-white transition flex items-center gap-1.5";
+          }
+        }
+      });
+
+      const items = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[tab] || []) : [];
+      if (!items.find(i => i.id === sbWorkingState.right.id)) {
+        if (items.length > 0) {
+          sbWorkingState.right.id = items[0].id;
+          sbWorkingState.right.param = items[0].defaultParam || '';
+        }
+      }
+
+      renderSbRightList();
+      renderSbRightCustomParams();
+      if (updatePreview) updateSbFormulaPreview();
+    }
+
+    // Render list for Left Operand
+    function renderSbLeftList() {
+      const container = document.getElementById('sb-left-list-container');
       if (!container) return;
+      const search = (document.getElementById('sb-left-search')?.value || '').toLowerCase().trim();
+      const items = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[sbWorkingState.left.tab] || []) : [];
+      const filtered = items.filter(i => i.name.toLowerCase().includes(search));
 
-      if (chartStudioState.activeIndicators.length === 0) {
-        container.innerHTML = '<span class="text-xs text-slate-400 italic font-mono">No indicators on chart (Pure Price Action)</span>';
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="p-3 text-xs text-slate-400 text-center">No matching items found</div>';
         return;
       }
 
-      container.innerHTML = chartStudioState.activeIndicators.map(ind => {
+      container.innerHTML = filtered.map(item => {
+        const isSelected = (item.id === sbWorkingState.left.id);
+        const activeClass = isSelected ? 'bg-emerald-50 text-emerald-900 font-bold border-l-4 border-emerald-500' : 'text-slate-700 hover:bg-slate-50';
         return `
-          <span class="px-2.5 py-1 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 shadow-2xs border bg-slate-50 border-slate-200 text-slate-800">
-            <span class="w-2 h-2 rounded-full" style="background-color: ${ind.color || '#10b981'};"></span>
-            <span>${ind.name}</span>
-            <span class="text-[10px] text-slate-400 font-normal">(${ind.label || ''})</span>
-            <button type="button" onclick="removeChartIndicator('${ind.id}')" class="text-rose-500 hover:text-rose-700 ml-1 font-bold cursor-pointer" title="Remove from chart">×</button>
-          </span>
+          <div onclick="selectSbLeftItem('${item.id}')" class="px-3 py-2 text-xs flex items-center gap-2 cursor-pointer transition ${activeClass}">
+            <span class="text-emerald-600 text-xs shrink-0">${item.icon || '⚡'}</span>
+            <span class="truncate">${item.name}</span>
+          </div>
         `;
       }).join('');
     }
 
-    // Add Indicator to Chart
-    function handleAddChartIndicatorSelect(selectEl) {
-      const val = selectEl.value;
-      if (!val) return;
+    // Render list for Right Operand
+    function renderSbRightList() {
+      const container = document.getElementById('sb-right-list-container');
+      if (!container) return;
+      const search = (document.getElementById('sb-right-search')?.value || '').toLowerCase().trim();
+      const items = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[sbWorkingState.right.tab] || []) : [];
+      const filtered = items.filter(i => i.name.toLowerCase().includes(search));
 
-      const map = {
-        sma_5: { id: 'sma_5', name: 'SMA (5)', type: 'sma', period: 5, color: '#0284c7', label: 'Fast Trend' },
-        sma_20: { id: 'sma_20', name: 'SMA (20)', type: 'sma', period: 20, color: '#ea580c', label: 'Baseline Trend' },
-        sma_50: { id: 'sma_50', name: 'SMA (50)', type: 'sma', period: 50, color: '#eab308', label: 'Medium Trend' },
-        sma_200: { id: 'sma_200', name: 'SMA (200)', type: 'sma', period: 200, color: '#ef4444', label: 'Major Trend' },
-        rsi_14: { id: 'rsi_14', name: 'RSI (14)', type: 'rsi', period: 14, color: '#9333ea', label: 'Momentum Filter' },
-        ichimoku: { id: 'ichimoku', name: 'Ichimoku Cloud', type: 'ichimoku', tenkan: 9, kijun: 26, span: 52, color: '#0d9488', label: 'Cloud Filter' },
-        supertrend: { id: 'supertrend', name: 'Supertrend (10, 3)', type: 'supertrend', color: '#10b981', label: 'Trend Envelope' },
-        bollinger: { id: 'bollinger', name: 'Bollinger Bands (20, 2)', type: 'bollinger', color: '#8b5cf6', label: 'Volatility Channel' },
-        vwap: { id: 'vwap', name: 'VWAP', type: 'vwap', color: '#f59e0b', label: 'Volume Benchmark' },
-        macd: { id: 'macd', name: 'MACD (12, 26, 9)', type: 'macd', color: '#06b6d4', label: 'Trend Oscillator' }
-      };
-
-      const target = map[val];
-      if (target && !chartStudioState.activeIndicators.some(i => i.id === target.id)) {
-        chartStudioState.activeIndicators.push(target);
-        renderAlgoCandlestickChart();
-        showToast(`Plotted ${target.name} onto chart!`);
-      }
-
-      selectEl.value = '';
-    }
-
-    function removeChartIndicator(id) {
-      chartStudioState.activeIndicators = chartStudioState.activeIndicators.filter(i => i.id !== id);
-      renderAlgoCandlestickChart();
-    }
-
-    function clearAllChartIndicators() {
-      chartStudioState.activeIndicators = [];
-      renderAlgoCandlestickChart();
-      showToast('Cleared all indicators from chart.');
-    }
-
-    // Quick Presets
-    function applyChartPreset(key) {
-      if (key === 'sma_rsi_ichimoku') {
-        chartStudioState.activeIndicators = [
-          { id: 'sma_5', name: 'SMA (5)', type: 'sma', period: 5, color: '#0284c7', label: 'Fast Trend' },
-          { id: 'sma_20', name: 'SMA (20)', type: 'sma', period: 20, color: '#ea580c', label: 'Baseline Trend' },
-          { id: 'rsi_14', name: 'RSI (14)', type: 'rsi', period: 14, color: '#9333ea', label: 'Momentum Filter' },
-          { id: 'ichimoku', name: 'Ichimoku Cloud', type: 'ichimoku', tenkan: 9, kijun: 26, span: 52, color: '#0d9488', label: 'Cloud Filter' }
-        ];
-        showToast('Applied Dual SMA (5/20) + RSI + Ichimoku Cloud!');
-      } else if (key === 'golden_cross') {
-        chartStudioState.activeIndicators = [
-          { id: 'sma_50', name: 'SMA (50)', type: 'sma', period: 50, color: '#eab308', label: 'Medium Trend' },
-          { id: 'sma_200', name: 'SMA (200)', type: 'sma', period: 200, color: '#ef4444', label: 'Major Trend' },
-          { id: 'rsi_14', name: 'RSI (14)', type: 'rsi', period: 14, color: '#9333ea', label: 'Momentum Filter' }
-        ];
-        showToast('Applied Golden Cross (50/200 SMA) + RSI!');
-      } else if (key === 'supertrend_vwap') {
-        chartStudioState.activeIndicators = [
-          { id: 'supertrend', name: 'Supertrend (10, 3)', type: 'supertrend', color: '#10b981', label: 'Trend Envelope' },
-          { id: 'vwap', name: 'VWAP', type: 'vwap', color: '#f59e0b', label: 'Volume Benchmark' },
-          { id: 'sma_5', name: 'SMA (5)', type: 'sma', period: 5, color: '#0284c7', label: 'Fast Trend' }
-        ];
-        showToast('Applied Supertrend + VWAP + 5 SMA!');
-      }
-      renderAlgoCandlestickChart();
-    }
-
-    function setChartAsset(asset) {
-      chartStudioState.asset = asset;
-      const bNifty = document.getElementById('btn-chart-asset-nifty');
-      const bBank = document.getElementById('btn-chart-asset-bank');
-      const bSensex = document.getElementById('btn-chart-asset-sensex');
-      const badge = document.getElementById('chart-spot-badge');
-      const label = document.getElementById('canvas-symbol-label');
-
-      [bNifty, bBank, bSensex].forEach(b => { if (b) b.className = 'px-3 py-1 rounded-lg text-slate-600 hover:bg-slate-100'; });
-
-      let spotText = 'Spot: 22,458.10 (Live Feed)';
-      if (asset === 'BANK NIFTY') {
-        if (bBank) bBank.className = 'px-3 py-1 rounded-lg bg-emerald-600 text-white shadow-xs';
-        spotText = 'Spot: 54,966.65 (Live Feed)';
-      } else if (asset === 'SENSEX') {
-        if (bSensex) bSensex.className = 'px-3 py-1 rounded-lg bg-emerald-600 text-white shadow-xs';
-        spotText = 'Spot: 72,247.15 (Live Feed)';
-      } else {
-        if (bNifty) bNifty.className = 'px-3 py-1 rounded-lg bg-emerald-600 text-white shadow-xs';
-      }
-
-      if (badge) badge.innerText = spotText;
-      if (label) label.innerText = `${asset} • ${chartStudioState.timeframe}`;
-
-      chartStudioState.candles = generateCandlesData(asset, chartStudioState.timeframe);
-      renderAlgoCandlestickChart();
-    }
-
-    function setChartTimeframe(tf) {
-      chartStudioState.timeframe = tf;
-      ['1m', '3m', '5m', '15m', 'Daily'].forEach(t => {
-        const btn = document.getElementById(`btn-chart-tf-${t.toLowerCase()}`);
-        if (btn) {
-          if (t === tf) btn.className = 'px-2.5 py-1 rounded-lg bg-emerald-600 text-white shadow-xs';
-          else btn.className = 'px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-100';
-        }
-      });
-      const label = document.getElementById('canvas-symbol-label');
-      if (label) label.innerText = `${chartStudioState.asset} • ${tf}`;
-
-      chartStudioState.candles = generateCandlesData(chartStudioState.asset, tf);
-      renderAlgoCandlestickChart();
-    }
-
-    // =========================================================================
-    // AUTONOMOUS BOT STRATEGY SYNTHESIS (EXTRACTS RULES FROM APPLIED INDICATORS)
-    // =========================================================================
-    function synthesizeStrategyFromChart() {
-      const active = chartStudioState.activeIndicators;
-      const titleEl = document.getElementById('synthesized-strat-title');
-      const entryEl = document.getElementById('synthesized-entry-rules');
-      const exitEl = document.getElementById('synthesized-exit-rules');
-      const wrEl = document.getElementById('synthesized-winrate');
-      const pfEl = document.getElementById('synthesized-pf');
-      const pnlEl = document.getElementById('synthesized-pnl');
-      const ddEl = document.getElementById('synthesized-dd');
-
-      if (active.length === 0) {
-        if (titleEl) titleEl.innerText = `${chartStudioState.asset} Pure Price Action Breakout Strategy`;
-        if (entryEl) entryEl.innerText = `Buy CE when [Candle High breaks above 5-bar High] with Volume Expansion`;
-        if (exitEl) exitEl.innerText = `Square-Off when [Opposite Candle Breakout occurs] OR SL 1.8% / TP 4.5%`;
-        if (wrEl) wrEl.innerText = '64.8%';
-        if (pfEl) pfEl.innerText = '1.92';
-        if (pnlEl) pnlEl.innerText = '+ ₹22,400';
-        if (ddEl) ddEl.innerText = '4.5%';
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="p-3 text-xs text-slate-400 text-center">No matching items found</div>';
         return;
       }
 
-      const names = active.map(a => a.name);
-      const title = `${names.join(' + ')} Algorithmic Confluence Strategy`;
-
-      // Build Entry Rules
-      const entryRules = [];
-      const exitRules = [];
-
-      // Dual SMA check
-      const smaList = active.filter(a => a.type === 'sma').sort((a, b) => a.period - b.period);
-      if (smaList.length >= 2) {
-        const fast = smaList[0];
-        const slow = smaList[1];
-        entryRules.push(`[${fast.name} crosses above ${slow.name}]`);
-        exitRules.push(`[${fast.name} crosses below ${slow.name}]`);
-      } else if (smaList.length === 1) {
-        entryRules.push(`[Price Close is above ${smaList[0].name}]`);
-        exitRules.push(`[Price Close falls below ${smaList[0].name}]`);
-      }
-
-      // Ichimoku check
-      if (active.some(a => a.type === 'ichimoku')) {
-        entryRules.push(`[Price > Ichimoku Kumo Cloud & Tenkan > Kijun]`);
-        exitRules.push(`[Price drops into Kumo Cloud or Tenkan < Kijun]`);
-      }
-
-      // RSI check
-      if (active.some(a => a.type === 'rsi')) {
-        entryRules.push(`[RSI(14) > 50 (Bullish Momentum)]`);
-        exitRules.push(`[RSI(14) > 75 (Overbought Profit Lock) or RSI < 45]`);
-      }
-
-      // Supertrend check
-      if (active.some(a => a.type === 'supertrend')) {
-        entryRules.push(`[Price > Supertrend Green Signal Line]`);
-        exitRules.push(`[Supertrend flips Red]`);
-      }
-
-      // VWAP check
-      if (active.some(a => a.type === 'vwap')) {
-        entryRules.push(`[Price > VWAP Benchmark]`);
-      }
-
-      // Default SL/TP
-      exitRules.push(`Stop-Loss (-1.8%) or Target (+4.5%) hit`);
-
-      const entryStr = entryRules.join(' AND ');
-      const exitStr = exitRules.join(' OR ');
-
-      if (titleEl) titleEl.innerText = title;
-      if (entryEl) entryEl.innerText = entryStr;
-      if (exitEl) exitEl.innerText = exitStr;
-
-      // Realistic quantitative metrics based on indicator synergy
-      let baseWr = 66.0 + (active.length * 2.2);
-      let basePf = 1.95 + (active.length * 0.16);
-      let basePnl = 26000 + (active.length * 4200);
-      let baseDd = Math.max(3.1, 4.8 - (active.length * 0.35));
-
-      if (wrEl) wrEl.innerText = `${baseWr.toFixed(1)}%`;
-      if (pfEl) pfEl.innerText = basePf.toFixed(2);
-      if (pnlEl) pnlEl.innerText = `+ ₹${Math.round(basePnl).toLocaleString('en-IN')}`;
-      if (ddEl) ddEl.innerText = `${baseDd.toFixed(1)}%`;
+      container.innerHTML = filtered.map(item => {
+        const isSelected = (item.id === sbWorkingState.right.id);
+        const activeClass = isSelected ? 'bg-indigo-50 text-indigo-900 font-bold border-l-4 border-indigo-500' : 'text-slate-700 hover:bg-slate-50';
+        return `
+          <div onclick="selectSbRightItem('${item.id}')" class="px-3 py-2 text-xs flex items-center gap-2 cursor-pointer transition ${activeClass}">
+            <span class="text-indigo-600 text-xs shrink-0">${item.icon || '⚡'}</span>
+            <span class="truncate">${item.name}</span>
+          </div>
+        `;
+      }).join('');
     }
 
-    // Apply Chart Strategy and Proceed to Next Wizard Step
-    function applyChartStrategyAndProceed(nextStage = 'asset') {
-      const title = document.getElementById('synthesized-strat-title')?.innerText || 'Chart Algorithmic Strategy';
-      const entryRule = document.getElementById('synthesized-entry-rules')?.innerText || 'Direct momentum confluence.';
+    function selectSbLeftItem(id) {
+      sbWorkingState.left.id = id;
+      const items = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[sbWorkingState.left.tab] || []) : [];
+      const item = items.find(i => i.id === id);
+      if (item && item.defaultParam !== undefined) {
+        sbWorkingState.left.param = item.defaultParam;
+      }
+      renderSbLeftList();
+      renderSbLeftCustomParams();
+      updateSbFormulaPreview();
+    }
 
-      // Synchronize into customStrategyState & wizardState
+    function selectSbRightItem(id) {
+      sbWorkingState.right.id = id;
+      const items = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[sbWorkingState.right.tab] || []) : [];
+      const item = items.find(i => i.id === id);
+      if (item && item.defaultParam !== undefined) {
+        sbWorkingState.right.param = item.defaultParam;
+      }
+      renderSbRightList();
+      renderSbRightCustomParams();
+      updateSbFormulaPreview();
+    }
+
+    function renderSbLeftCustomParams() {
+      const container = document.getElementById('sb-left-custom-params');
+      if (!container) return;
+      const items = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[sbWorkingState.left.tab] || []) : [];
+      const item = items.find(i => i.id === sbWorkingState.left.id);
+      if (!item || !item.paramLabel) {
+        container.innerHTML = '';
+        return;
+      }
+      container.innerHTML = `
+        <div class="col-span-2">
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">${item.paramLabel}</label>
+          <input type="text" id="sb-left-param-input" value="${sbWorkingState.left.param || item.defaultParam || ''}" oninput="sbWorkingState.left.param = this.value; updateSbFormulaPreview();" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-mono">
+        </div>
+      `;
+    }
+
+    function renderSbRightCustomParams() {
+      const container = document.getElementById('sb-right-custom-params');
+      if (!container) return;
+
+      if (sbWorkingState.right.tab === 'value') {
+        container.innerHTML = `
+          <div class="col-span-2 space-y-1.5">
+            <label class="block text-[10px] font-bold text-slate-500 uppercase">Fixed Value Amount</label>
+            <input type="number" step="any" id="sb-right-param-input" value="${sbWorkingState.right.param || '50'}" oninput="sbWorkingState.right.param = this.value; updateSbFormulaPreview();" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-mono font-bold">
+            <div class="flex flex-wrap gap-1 pt-1">
+              ${[0, 20, 30, 50, 70, 80, 100].map(v => `
+                <button type="button" onclick="sbWorkingState.right.param='${v}'; const inp = document.getElementById('sb-right-param-input'); if (inp) inp.value='${v}'; updateSbFormulaPreview();" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-mono rounded border border-slate-200 font-bold">${v}</button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const items = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[sbWorkingState.right.tab] || []) : [];
+      const item = items.find(i => i.id === sbWorkingState.right.id);
+      if (!item || !item.paramLabel) {
+        container.innerHTML = '';
+        return;
+      }
+      container.innerHTML = `
+        <div class="col-span-2">
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">${item.paramLabel}</label>
+          <input type="text" id="sb-right-param-input" value="${sbWorkingState.right.param || item.defaultParam || ''}" oninput="sbWorkingState.right.param = this.value; updateSbFormulaPreview();" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 font-mono">
+        </div>
+      `;
+    }
+
+    function selectSbOperator(opName, symbol, updatePreview = true) {
+      sbWorkingState.operator = { name: opName, symbol: symbol };
+      const badge = document.getElementById('sb-operator-symbol-badge');
+      if (badge) badge.innerText = symbol;
+
+      const buttons = document.querySelectorAll('.sb-op-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-sb-op') === opName) {
+          btn.className = "sb-op-btn w-full py-1 px-1 text-[10.5px] rounded-lg transition font-mono bg-emerald-50 text-emerald-800 font-bold border border-emerald-300";
+        } else {
+          btn.className = "sb-op-btn w-full py-1 px-1 text-[10.5px] rounded-lg transition font-mono text-slate-600 hover:bg-slate-100";
+        }
+      });
+
+      if (updatePreview) updateSbFormulaPreview();
+    }
+
+    function getSbOperandSummary(opState) {
+      const items = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[opState.tab] || []) : [];
+      const item = items.find(i => i.id === opState.id) || { name: opState.id };
+      
+      if (opState.tab === 'value') {
+        return `Value (${opState.param || '50'})`;
+      }
+
+      const paramStr = opState.param ? `(${opState.param})` : '';
+      const tfStr = opState.tf && opState.tf !== 'Current' ? `, ${opState.tf}` : '';
+      const shiftStr = (opState.shift !== undefined && opState.shift !== '' && opState.shift !== 0) ? `, Shift: ${opState.shift}` : '';
+      
+      return `${item.name}${paramStr}${tfStr}${shiftStr}`;
+    }
+
+    // Generate Plain-English Translation from Structured Rule
+    function generatePlainEnglishTranslation(leftSummary, opName, rightSummary, targetType) {
+      const isEntry = targetType === 'entry';
+      const action = isEntry ? 'generate a Bullish Entry signal (Options CE Buy / Long Spread)' : 'execute Exit & Square-Off order';
+
+      if (opName === 'crosses above') {
+        return `"When ${leftSummary} crosses above ${rightSummary}, ${action}."`;
+      }
+      if (opName === 'crosses below') {
+        const exitAction = isEntry ? 'generate a Bearish Signal (Options PE Buy / Short Spread)' : 'trigger Exit & Square-Off immediately';
+        return `"When ${leftSummary} crosses below ${rightSummary}, ${exitAction}."`;
+      }
+      if (opName === 'is above') {
+        return `"Check that ${leftSummary} remains above ${rightSummary} as a trend confirmation filter before placing orders."`;
+      }
+      if (opName === 'is below') {
+        return `"Check that ${leftSummary} is below ${rightSummary} to ensure momentum alignment."`;
+      }
+      if (opName === 'is equal to') {
+        return `"Trigger when ${leftSummary} matches ${rightSummary} precisely."`;
+      }
+      return `"When ${leftSummary} is ${opName} ${rightSummary}, autonomously trigger ${isEntry ? 'Entry' : 'Exit Square-Off'}."`;
+    }
+
+    function updateSbFormulaPreview() {
+      // Read current input controls
+      const lTf = document.getElementById('sb-left-tf')?.value || '5m';
+      const lShift = parseInt(document.getElementById('sb-left-shift')?.value || '0', 10);
+      sbWorkingState.left.tf = lTf;
+      sbWorkingState.left.shift = lShift;
+
+      const rTf = document.getElementById('sb-right-tf')?.value || '5m';
+      const rShift = parseInt(document.getElementById('sb-right-shift')?.value || '0', 10);
+      sbWorkingState.right.tf = rTf;
+      sbWorkingState.right.shift = rShift;
+
+      const checkedRule = document.querySelector('input[name="sb-rule-type"]:checked');
+      if (checkedRule) sbWorkingState.targetType = checkedRule.value;
+
+      const leftText = getSbOperandSummary(sbWorkingState.left);
+      const rightText = getSbOperandSummary(sbWorkingState.right);
+      const opText = sbWorkingState.operator.name;
+
+      const formula = `[ ${leftText} ]  ${opText}  [ ${rightText} ]`;
+      const plainEnglish = generatePlainEnglishTranslation(leftText, opText, rightText, sbWorkingState.targetType);
+
+      const formulaEl = document.getElementById('sb-live-formula-text');
+      if (formulaEl) formulaEl.innerText = formula;
+
+      const englishEl = document.getElementById('sb-plain-english-text');
+      if (englishEl) englishEl.innerText = plainEnglish;
+
+      const leftChip = document.getElementById('sb-left-preview-chip');
+      if (leftChip) leftChip.innerText = leftText;
+
+      const rightChip = document.getElementById('sb-right-preview-chip');
+      if (rightChip) rightChip.innerText = rightText;
+    }
+
+    // Apply 1-Click Popular Quant Presets
+    function applySbPreset(key) {
+      if (key === 'dual_sma') {
+        sbWorkingState.left = { tab: 'indicator', id: 'sma', param: '5', tf: '5m', shift: 0 };
+        sbWorkingState.operator = { name: 'crosses above', symbol: '↑' };
+        sbWorkingState.right = { tab: 'indicator', id: 'sma', param: '20', tf: '5m', shift: 0 };
+        sbWorkingState.targetType = 'entry';
+        showToast('Loaded Dual SMA (5/20) Momentum Cross Preset!');
+      } else if (key === 'golden_cross') {
+        sbWorkingState.left = { tab: 'indicator', id: 'sma', param: '50', tf: '15m', shift: 0 };
+        sbWorkingState.operator = { name: 'crosses above', symbol: '↑' };
+        sbWorkingState.right = { tab: 'indicator', id: 'sma', param: '200', tf: '15m', shift: 0 };
+        sbWorkingState.targetType = 'entry';
+        showToast('Loaded Golden Cross (50/200 SMA) Preset!');
+      } else if (key === 'rsi_bounce') {
+        sbWorkingState.left = { tab: 'indicator', id: 'rsi', param: '14', tf: '5m', shift: 0 };
+        sbWorkingState.operator = { name: 'crosses above', symbol: '↑' };
+        sbWorkingState.right = { tab: 'value', id: 'val_30', param: '30', tf: '5m', shift: 0 };
+        sbWorkingState.targetType = 'entry';
+        showToast('Loaded RSI Momentum Oversold Bounce (14 < 30) Preset!');
+      } else if (key === 'supertrend') {
+        sbWorkingState.left = { tab: 'price', id: 'close', param: '', tf: '5m', shift: 0 };
+        sbWorkingState.operator = { name: 'crosses above', symbol: '↑' };
+        sbWorkingState.right = { tab: 'indicator', id: 'supertrend', param: '10, 3', tf: '5m', shift: 0 };
+        sbWorkingState.targetType = 'entry';
+        showToast('Loaded Supertrend (10, 3) Trend Follow Preset!');
+      } else if (key === 'ichimoku') {
+        sbWorkingState.left = { tab: 'price', id: 'close', param: '', tf: '5m', shift: 0 };
+        sbWorkingState.operator = { name: 'is above', symbol: '>' };
+        sbWorkingState.right = { tab: 'indicator', id: 'ichimoku', param: '9, 26, 52', tf: '5m', shift: 0 };
+        sbWorkingState.targetType = 'entry';
+        showToast('Loaded Ichimoku Cloud Breakout Preset!');
+      } else if (key === 'bollinger') {
+        sbWorkingState.left = { tab: 'price', id: 'close', param: '', tf: '5m', shift: 0 };
+        sbWorkingState.operator = { name: 'is below', symbol: '<' };
+        sbWorkingState.right = { tab: 'indicator', id: 'bollinger_lower', param: '20, 2.0', tf: '5m', shift: 0 };
+        sbWorkingState.targetType = 'entry';
+        showToast('Loaded Bollinger Band Mean Reversion Preset!');
+      }
+
+      // Sync UI elements
+      switchSbLeftTab(sbWorkingState.left.tab, false);
+      switchSbRightTab(sbWorkingState.right.tab, false);
+      selectSbOperator(sbWorkingState.operator.name, sbWorkingState.operator.symbol, false);
+
+      const lTf = document.getElementById('sb-left-tf');
+      if (lTf) lTf.value = sbWorkingState.left.tf || '5m';
+      const rTf = document.getElementById('sb-right-tf');
+      if (rTf) rTf.value = sbWorkingState.right.tf || '5m';
+
+      const radios = document.querySelectorAll('input[name="sb-rule-type"]');
+      radios.forEach(r => { r.checked = (r.value === sbWorkingState.targetType); });
+
+      updateSbFormulaPreview();
+      updateSbTelemetryHUD();
+    }
+
+    // Save Condition from Studio Builder
+    function saveConditionFromSb() {
+      updateSbFormulaPreview();
+
+      const leftItems = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[sbWorkingState.left.tab] || []) : [];
+      const leftObj = leftItems.find(i => i.id === sbWorkingState.left.id) || { name: sbWorkingState.left.id };
+      
+      const rightItems = (typeof BUILDER_CATALOG !== 'undefined') ? (BUILDER_CATALOG[sbWorkingState.right.tab] || []) : [];
+      const rightObj = rightItems.find(i => i.id === sbWorkingState.right.id) || { name: sbWorkingState.right.id };
+
+      const leftSummary = getSbOperandSummary(sbWorkingState.left);
+      const rightSummary = getSbOperandSummary(sbWorkingState.right);
+      const formulaStr = `${leftSummary} ${sbWorkingState.operator.name} ${rightSummary}`;
+
+      const conditionObj = {
+        id: `cond_${Date.now()}`,
+        type: sbWorkingState.targetType,
+        left: { ...sbWorkingState.left, name: leftObj.name },
+        operator: { ...sbWorkingState.operator },
+        right: { ...sbWorkingState.right, name: rightObj.name },
+        formula: formulaStr
+      };
+
+      if (conditionObj.type === 'exit') {
+        strategyConditionsState.exitConditions.push(conditionObj);
+      } else {
+        strategyConditionsState.entryConditions.push(conditionObj);
+      }
+
+      renderConditionCards();
+      syncConditionsToStrategyRules();
+      updateSbTelemetryHUD();
+      showToast(`Rule successfully added to your strategy stack!`);
+    }
+
+    // Dynamic HUD Telemetry Recalculation
+    function updateSbTelemetryHUD() {
+      const entryCount = (typeof strategyConditionsState !== 'undefined' && strategyConditionsState.entryConditions) ? strategyConditionsState.entryConditions.length : 2;
+      const exitCount = (typeof strategyConditionsState !== 'undefined' && strategyConditionsState.exitConditions) ? strategyConditionsState.exitConditions.length : 1;
+      const totalCount = entryCount + exitCount;
+      const isAnd = (typeof strategyConditionsState !== 'undefined') ? (strategyConditionsState.confluenceMode === 'AND') : true;
+
+      let winRate = 67.5;
+      let pf = 2.05;
+      let rr = '1 : 2.2';
+      let dd = 4.2;
+
+      if (totalCount === 2) {
+        winRate = isAnd ? 74.8 : 71.2;
+        pf = 2.42;
+        rr = '1 : 2.5';
+        dd = 3.6;
+      } else if (totalCount >= 3) {
+        winRate = isAnd ? 78.6 : 73.8;
+        pf = 2.68;
+        rr = '1 : 2.8';
+        dd = 3.1;
+      }
+
+      const wrEl = document.getElementById('sb-hud-winrate');
+      if (wrEl) wrEl.innerText = `${winRate.toFixed(1)}%`;
+
+      const pfEl = document.getElementById('sb-hud-pf');
+      if (pfEl) pfEl.innerText = pf.toFixed(2);
+
+      const rrEl = document.getElementById('sb-hud-rr');
+      if (rrEl) rrEl.innerText = rr;
+
+      const ddEl = document.getElementById('sb-hud-dd');
+      if (ddEl) ddEl.innerText = `${dd.toFixed(1)}%`;
+
+      const confBadge = document.getElementById('sb-confluence-badge');
+      if (confBadge) {
+        const mode = (typeof strategyConditionsState !== 'undefined') ? strategyConditionsState.confluenceMode : 'AND';
+        confBadge.innerText = `${totalCount} Active Rules • ${mode} Confluence Engine`;
+      }
+    }
+
+    // Lock Strategy and Proceed to Asset / Wings
+    function applyBuilderStrategyAndProceed(nextStage = 'asset') {
+      const asset = sbWorkingState.asset || 'NIFTY 50';
+      const stratTitle = `${asset} Fine-Tuned Quantitative Strategy`;
+
       if (typeof customStrategyState !== 'undefined') {
-        customStrategyState.name = title;
-        customStrategyState.entryRule = entryRule;
-        customStrategyState.indicators = chartStudioState.activeIndicators.map(i => i.type);
+        customStrategyState.name = stratTitle;
       }
       if (typeof wizardState !== 'undefined') {
-        wizardState.strategyName = title;
-        wizardState.asset = chartStudioState.asset;
+        wizardState.strategyName = stratTitle;
+        wizardState.asset = asset;
       }
 
-      showToast(`Strategy "${title}" locked & ready! Moving to Asset & Spreads.`);
+      showToast(`Strategy locked! Proceeding to Trading Asset & Spreads.`);
       showStratWizard(nextStage);
     }
+
+    // Legacy no-op stubs for backward safety
+    function renderAlgoCandlestickChart() { /* Candlestick chart replaced by visual quantitative builder */ }
+    function applyChartStrategyAndProceed(stage = 'asset') { applyBuilderStrategyAndProceed(stage); }
   </script>
 
 </body>
