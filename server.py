@@ -1070,6 +1070,21 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "is_live": False,
                 "message": "No active live Flattrade session"
             })
+        elif parsed.path == "/api/broker/flattrade/auth-url":
+            creds = get_saved_broker_credentials()
+            api_key = creds.get("api_key", "").strip() if creds else ""
+            if not api_key:
+                self.send_json_response(400, {
+                    "success": False,
+                    "error": "Broker API Key not found. Please save your API credentials first."
+                })
+                return
+            auth_url = f"https://auth.flattrade.in/?app_key={urllib.parse.quote(api_key)}"
+            self.send_json_response(200, {
+                "success": True,
+                "auth_url": auth_url,
+                "api_key_masked": (api_key[:4] + "***") if len(api_key) >= 4 else "***"
+            })
         elif parsed.path == "/api/broker/credentials":
             creds = get_saved_broker_credentials()
 
@@ -1768,6 +1783,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                             "success": True,
                             "message": f"Flattrade Live Session Successfully Authenticated for {client_id}!",
                             "client_id": client_id,
+                            "token": session_token,
                             "funds_available": cash_val,
                             "is_live": True
                         })

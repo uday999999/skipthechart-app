@@ -3709,7 +3709,7 @@
             <button type="button" onclick="openApiCredentialsModal()" id="dash-btn-open-creds" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-xs transition cursor-pointer">
               <span>🔑</span> <span id="dash-btn-creds-text">Configure API Keys</span>
             </button>
-            <span id="dash-cloud-worker-badge" class="text-[10px] text-emerald-700 font-mono font-bold bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">✓ Cloud Node: ONLINE (SAMPLE / DEMO)</span>
+            <span id="dash-cloud-worker-badge" class="text-[10px] text-emerald-700 font-mono font-bold bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">✓ Cloud Node: ONLINE (LIVE EXECUTION)</span>
           </div>
         </div>
 
@@ -3969,7 +3969,7 @@
         <!-- Metric 1: Live Z-Score Divergence -->
         <div class="p-4 bg-white border border-slate-200/90 rounded-2xl space-y-1 shadow-sm ms-glass-card">
           <div class="flex items-center justify-between">
-            <div class="text-xs text-slate-500 font-medium">LIVE Z-SCORE (SAMPLE / DEMO)</div>
+            <div class="text-xs text-slate-500 font-medium" id="dash-zscore-title">LIVE Z-SCORE (EXCHANGE TICK)</div>
             <span class="text-[10px] font-mono font-bold bg-indigo-50 border border-indigo-200 text-indigo-700 px-1.5 py-0.2 rounded" id="card-threshold-tag">Threshold: ±3.000σ</span>
           </div>
           <div class="text-2xl font-black text-emerald-700 font-mono" id="dash-z-score">-1.000</div>
@@ -4001,7 +4001,7 @@
 
         <!-- Metric 4: Broker Wallet Balance -->
         <div class="p-4 bg-white border border-slate-200/90 rounded-2xl space-y-1 shadow-sm ms-glass-card">
-          <div class="text-xs text-slate-500 font-medium">BROKER WALLET BALANCE <span class="text-[10px] text-amber-700 bg-amber-50 px-1 rounded border border-amber-200">SAMPLE / DEMO</span></div>
+          <div class="text-xs text-slate-500 font-medium">BROKER WALLET BALANCE <span id="dash-wallet-tag" class="text-[10px] text-emerald-700 bg-emerald-50 px-1 rounded border border-emerald-200 font-bold">FLATTRADE LIVE OMS</span></div>
           <div class="text-2xl font-black text-emerald-700 font-mono" id="dash-wallet-bal">₹ 2,00,000</div>
           <div class="text-[11px] text-slate-400 font-mono">Available for Execution</div>
         </div>
@@ -4011,9 +4011,9 @@
       <div class="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-3 shadow-sm ms-glass-card">
         <div class="flex items-center justify-between border-b border-slate-100 pb-2">
           <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-            <span>📊</span> Price Tracker & Math Engine (SAMPLE / DEMO)
+            <span>📊</span> <span id="dash-tracker-title">Price Tracker & Math Engine (LIVE EXCHANGE TICK)</span>
           </h3>
-          <span class="text-xs text-emerald-700 font-mono font-bold" id="dash-live-clock">Clock: 1:27:51 PM (SAMPLE / DEMO)</span>
+          <span class="text-xs text-emerald-700 font-mono font-bold" id="dash-live-clock">Live: 15:29:38 IST</span>
         </div>
 
         <div class="overflow-x-auto">
@@ -4021,7 +4021,7 @@
             <thead>
               <tr class="text-slate-500 border-b border-slate-200 bg-slate-50/80">
                 <th class="py-2.5 px-3">ASSET LEG</th>
-                <th class="py-2.5 px-3">MARK PRICE (SAMPLE / DEMO)</th>
+                <th class="py-2.5 px-3" id="dash-table-mark-col">MARK PRICE (LIVE EXCHANGE)</th>
                 <th class="py-2.5 px-3">CURRENT RATIO</th>
                 <th class="py-2.5 px-3">120M MEAN RATIO</th>
                 <th class="py-2.5 px-3">SIGMA DEVIATION</th>
@@ -4044,9 +4044,9 @@
       <div class="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-3 shadow-sm ms-glass-card">
         <div class="flex items-center justify-between border-b border-slate-100 pb-2">
           <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-            <span>📋</span> Strategy Trade Execution History (SAMPLE / DEMO)
+            <span>📋</span> <span id="dash-history-title">Strategy Trade Execution History (LIVE OMS)</span>
           </h3>
-          <span class="text-xs text-emerald-700 font-mono font-bold">Broker Order Routing: Active (SAMPLE / DEMO)</span>
+          <span class="text-xs text-emerald-700 font-mono font-bold" id="dash-routing-tag">Broker Order Routing: Active (LIVE OMS)</span>
         </div>
 
         <div class="overflow-x-auto">
@@ -4103,9 +4103,9 @@
       <div class="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-2 shadow-sm ms-glass-card">
         <div class="flex items-center justify-between">
           <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider font-mono flex items-center gap-2">
-            <span>💻</span> SYSTEM EXECUTION LOGS (SAMPLE / DEMO)
+            <span>💻</span> <span id="dash-system-logs-title">SYSTEM EXECUTION LOGS (LIVE OMS)</span>
           </h3>
-          <span class="text-[10px] text-emerald-700 font-mono font-bold" id="dash-node-badge">CLOUD NODE ACTIVE (SAMPLE / DEMO)</span>
+          <span class="text-[10px] text-emerald-700 font-mono font-bold" id="dash-node-badge">CLOUD NODE ACTIVE (LIVE OMS)</span>
         </div>
         <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-[11px] text-emerald-400/90 h-36 overflow-y-auto space-y-1.5 leading-relaxed" id="dash-terminal-logs">
           <div><span class="text-slate-500">12:01:43</span> [SYSTEM] Execution node online. Session verified.</div>
@@ -10400,21 +10400,62 @@
       if (typeof renderBrokerGuide === 'function') {
         renderBrokerGuide(userState.selectedBroker || 'flattrade');
       }
+
+      syncDashboardModeLabels(userState.isLive !== false ? 'live' : 'paper');
     }
 
     function setExecutionMode(mode) {
+      userState.isLive = (mode === 'live');
+      saveState();
       const p = document.getElementById('toggle-paper');
       const l = document.getElementById('toggle-live');
       if (mode === 'paper') {
-        p.className = "px-3 py-1 rounded-lg bg-cyan-600 text-white shadow font-bold";
-        l.className = "px-3 py-1 rounded-lg text-slate-400 font-normal";
+        if (p) p.className = "px-3 py-1 rounded-lg bg-cyan-600 text-white shadow font-bold";
+        if (l) l.className = "px-3 py-1 rounded-lg text-slate-400 font-normal";
       } else {
-        l.className = "px-3 py-1 rounded-lg bg-rose-600 text-white shadow font-bold flex items-center gap-1.5";
-        p.className = "px-3 py-1 rounded-lg text-slate-400 font-normal";
+        if (l) l.className = "px-3 py-1 rounded-lg bg-rose-600 text-white shadow font-bold flex items-center gap-1.5";
+        if (p) p.className = "px-3 py-1 rounded-lg text-slate-400 font-normal";
       }
+      syncDashboardModeLabels(mode);
     }
 
-    function generateDailyToken() {
+    function syncDashboardModeLabels(mode) {
+      const isLive = (mode === 'live');
+      const suffix = isLive ? 'LIVE OMS' : 'PAPER TRADING';
+      const tickSuffix = isLive ? 'LIVE EXCHANGE TICK' : 'PAPER SIMULATION';
+
+      const badge = document.getElementById('dash-cloud-worker-badge');
+      if (badge) badge.innerText = `✓ Cloud Node: ONLINE (${isLive ? 'LIVE EXECUTION' : 'PAPER TRADING'})`;
+
+      const zEl = document.getElementById('dash-zscore-title');
+      if (zEl) zEl.innerText = `LIVE Z-SCORE (${tickSuffix})`;
+
+      const wTag = document.getElementById('dash-wallet-tag');
+      if (wTag) {
+        wTag.innerText = isLive ? (userState.selectedBrokerName || 'FLATTRADE').toUpperCase() + ' LIVE OMS' : 'PAPER VIRTUAL';
+        wTag.className = isLive ? 'text-[10px] text-emerald-700 bg-emerald-50 px-1 rounded border border-emerald-200 font-bold' : 'text-[10px] text-cyan-700 bg-cyan-50 px-1 rounded border border-cyan-200 font-bold';
+      }
+
+      const tTitle = document.getElementById('dash-tracker-title');
+      if (tTitle) tTitle.innerText = `Price Tracker & Math Engine (${tickSuffix})`;
+
+      const mCol = document.getElementById('dash-table-mark-col');
+      if (mCol) mCol.innerText = `MARK PRICE (${isLive ? 'LIVE EXCHANGE' : 'PAPER SIMULATION'})`;
+
+      const hTitle = document.getElementById('dash-history-title');
+      if (hTitle) hTitle.innerText = `Strategy Trade Execution History (${suffix})`;
+
+      const rTag = document.getElementById('dash-routing-tag');
+      if (rTag) rTag.innerText = `Broker Order Routing: Active (${suffix})`;
+
+      const lTitle = document.getElementById('dash-system-logs-title');
+      if (lTitle) lTitle.innerText = `SYSTEM EXECUTION LOGS (${suffix})`;
+
+      const nBadge = document.getElementById('dash-node-badge');
+      if (nBadge) nBadge.innerText = `CLOUD NODE ACTIVE (${suffix})`;
+    }
+
+    async function generateDailyToken() {
       const broker = (userState.selectedBroker || 'flattrade').toLowerCase();
       if (!userState.hasBrokerCredentials) {
         openApiCredentialsModal();
@@ -10422,6 +10463,16 @@
         return;
       }
       if (broker === 'flattrade') {
+        showToast('🚀 Fetching your morning Flattrade auth portal...');
+        try {
+          const res = await fetch('/api/broker/flattrade/auth-url');
+          const data = await res.json();
+          if (data.success && data.auth_url) {
+            const w = window.open(data.auth_url, '_blank');
+            if (!w) window.location.href = data.auth_url;
+            return;
+          }
+        } catch (e) {}
         const authUrl = "https://auth.flattrade.in/";
         const w = window.open(authUrl, "_blank");
         if (!w) window.location.href = authUrl;
