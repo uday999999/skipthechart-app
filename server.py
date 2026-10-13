@@ -1216,14 +1216,12 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             })
         elif parsed.path == "/api/auth/config":
             client_id = os.environ.get("GOOGLE_CLIENT_ID", "659688440036-kl32fpdig9j46rqbl03om4vvhv2s204n.apps.googleusercontent.com")
-            sess = self.get_authenticated_session()
             resp_data = {
                 "success": True,
                 "google_client_id": client_id,
-                "app_domain": "skipthechart.com"
+                "app_domain": "skipthechart.com",
+                "assigned_droplet_ip": ACTIVE_SESSION.get("assigned_droplet_ip") or DROPLET_STATIC_IP
             }
-            if sess:
-                resp_data["assigned_droplet_ip"] = ACTIVE_SESSION.get("assigned_droplet_ip", DROPLET_STATIC_IP)
             self.send_json_response(200, resp_data)
         elif parsed.path == "/api/auth/totp/setup":
             email = ACTIVE_SESSION.get("user_email") or "trader.rahul@gmail.com"

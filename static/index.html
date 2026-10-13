@@ -5416,15 +5416,15 @@
   <!-- ========================================================================= -->
   <script>
     // Server config for dedicated execution droplet node (loaded dynamically from server config)
-    window.SERVER_CONFIG_NODE_IP = "";
+    window.SERVER_CONFIG_NODE_IP = "139.59.8.234";
     fetch('/api/auth/config')
       .then(r => r.json())
       .then(d => {
         if (d && d.assigned_droplet_ip) {
           window.SERVER_CONFIG_NODE_IP = d.assigned_droplet_ip;
-          const ipEl = document.getElementById('modal-node-ip-display');
-          if (ipEl && ipEl.innerText === 'Loading...') ipEl.innerText = d.assigned_droplet_ip;
         }
+        const ipEl = document.getElementById('modal-node-ip-display');
+        if (ipEl) ipEl.innerText = window.SERVER_CONFIG_NODE_IP || "139.59.8.234";
       })
       .catch(() => {});
 
@@ -9964,7 +9964,7 @@
       brokerKey = (brokerKey || userState.selectedBroker || 'flattrade').toLowerCase();
       const guide = BROKER_GUIDES[brokerKey] || BROKER_GUIDES.flattrade;
       const bName = guide.name || userState.selectedBrokerName || 'Flattrade';
-      const nodeIp = window.SERVER_CONFIG_NODE_IP || 'IP unavailable - contact support';
+      const nodeIp = window.SERVER_CONFIG_NODE_IP || '139.59.8.234';
 
       // 1. Update Dropdown
       const bSelect = document.getElementById('guide-broker-select');
@@ -10168,7 +10168,7 @@
       document.getElementById('modal-api-totp').value = '';
 
       const ipEl = document.getElementById('modal-node-ip-display');
-      if (ipEl) ipEl.innerText = window.SERVER_CONFIG_NODE_IP || 'IP unavailable - contact support';
+      if (ipEl) ipEl.innerText = window.SERVER_CONFIG_NODE_IP || '139.59.8.234';
 
       const btnSaveText = document.getElementById('btn-modal-save-text');
       if (btnSaveText) {
@@ -10378,7 +10378,7 @@
       const step1Status = document.getElementById('dash-step1-status');
       const step1BtnText = document.getElementById('dash-step1-btn-text');
 
-      if (ipDisp) ipDisp.innerText = window.SERVER_CONFIG_NODE_IP || 'IP unavailable - contact support';
+      if (ipDisp) ipDisp.innerText = window.SERVER_CONFIG_NODE_IP || '139.59.8.234';
 
       if (userState.hasBrokerCredentials || userState.brokerClientMasked) {
         const masked = userState.brokerClientMasked || 'Linked';
@@ -10698,15 +10698,16 @@
     }
 
     function copyNodeStaticIp() {
-      const ip = document.getElementById('modal-node-ip-display')?.innerText || window.SERVER_CONFIG_NODE_IP;
+      const ip = (window.SERVER_CONFIG_NODE_IP && !window.SERVER_CONFIG_NODE_IP.includes('unavailable')) ? window.SERVER_CONFIG_NODE_IP : "139.59.8.234";
       navigator.clipboard.writeText(ip).then(() => {
         const text = document.getElementById('btn-copy-ip-text');
         if (text) {
-          text.innerText = "✓ Copied IP!";
-          setTimeout(() => { text.innerText = "Copy Allowed IP"; }, 2000);
+          text.innerText = "✓ Copied (" + ip + ")!";
+          setTimeout(() => { text.innerText = "Copy Allowed IP"; }, 2500);
         }
+        showToast("✓ Copied Allowed IP: " + ip);
       }).catch(() => {
-        alert("Copied IP: " + ip);
+        alert("Allowed IP to whitelist: " + ip);
       });
     }
 
