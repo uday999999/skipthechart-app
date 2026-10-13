@@ -1215,7 +1215,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "last_tick_age_sec": last_tick_age
             })
         elif parsed.path == "/api/auth/config":
-            client_id = os.environ.get("GOOGLE_CLIENT_ID", "659688440036-kl32fpdig9j46rqbl03om4vvhv2s204n.apps.googleusercontent.com")
+            raw_client_id = os.environ.get("GOOGLE_CLIENT_ID", "").strip()
+            dummy_tokens = ["659688440036", "992975685580", "placeholder", "dummy"]
+            if not raw_client_id or any(tok in raw_client_id for tok in dummy_tokens):
+                client_id = None
+            else:
+                client_id = raw_client_id
+
             resp_data = {
                 "success": True,
                 "google_client_id": client_id,

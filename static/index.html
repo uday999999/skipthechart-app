@@ -6683,11 +6683,6 @@
         const input = document.getElementById('custom-google-email');
         if (input) setTimeout(() => input.focus(), 150);
       }
-      if (window.google && window.google.accounts && window.GOOGLE_CLIENT_ID_CONFIGURED) {
-        try {
-          window.google.accounts.id.prompt();
-        } catch(e) {}
-      }
     }
 
     function closeGoogleSignInModal() {
@@ -6945,14 +6940,17 @@
         
         const statusEl = document.getElementById('google-client-id-status');
         const inputEl = document.getElementById('input-google-client-id');
-        if (config.google_client_id) {
+        const dummyTokens = ['659688440036', '992975685580', 'placeholder', 'dummy'];
+        const isValidGoogleClient = config.google_client_id && !dummyTokens.some(t => config.google_client_id.includes(t));
+
+        if (isValidGoogleClient) {
           if (statusEl) statusEl.innerHTML = `<span class="text-emerald-700 font-bold">🟢 Active:</span> <span class="text-slate-800 font-mono font-semibold">${config.google_client_id.slice(0, 18)}...</span>`;
           if (inputEl && !inputEl.value) inputEl.value = config.google_client_id;
         } else {
-          if (statusEl) statusEl.innerHTML = `<span class="text-amber-700 font-bold">⚪ Not Configured</span> <span class="text-slate-500">(Using 1-Click Demo / Email)</span>`;
+          if (statusEl) statusEl.innerHTML = `<span class="text-amber-700 font-bold">⚪ Direct Auth Mode</span> <span class="text-slate-500">(1-Click Profile / Email)</span>`;
         }
 
-        if (config.google_client_id) {
+        if (isValidGoogleClient) {
           // If google script is still downloading in background, wait & retry up to 25 times (2.5s)
           if (!window.google || !window.google.accounts) {
             if (googleAuthRetryCount < 25) {
@@ -6981,16 +6979,13 @@
                 shape: 'rectangular',
                 logo_alignment: 'left'
               });
-              // Hide fallback custom button since official Google button is loaded and active!
               const customBtn = document.getElementById('btn-google-signin');
               if (customBtn) customBtn.classList.add('hidden');
             }
-
-            // Also request prompt cleanly
-            try {
-              window.google.accounts.id.prompt();
-            } catch (e) {}
           }
+        } else {
+          const customBtn = document.getElementById('btn-google-signin');
+          if (customBtn) customBtn.classList.remove('hidden');
         }
       } catch (e) {}
     }
