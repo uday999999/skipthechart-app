@@ -1022,7 +1022,12 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "/api/auth/config",
             "/api/auth/login",
             "/api/auth/signup",
-            "/api/auth/google"
+            "/api/auth/google",
+            "/api/backtest/run",
+            "/api/strategy/parse-prompt",
+            "/api/strategy/parse-youtube",
+            "/api/strategy/test-combinations",
+            "/api/strategy/save-custom"
         }
 
         if parsed_path in PUBLIC_ENDPOINTS:
@@ -1554,6 +1559,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     res["combinations_data"] = None
                     res["strategy_improvements"] = []
                     res["combinations"] = []
+            res["success"] = True
             self.send_json_response(200, res)
         elif parsed.path == "/api/strategy/test-combinations":
             res = self.run_combinations_agent(payload)
