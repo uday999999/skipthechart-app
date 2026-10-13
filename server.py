@@ -235,9 +235,9 @@ def hash_pw(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
 USERS_DB = {
-    "trader.rahul@gmail.com": {
-        "name": "Rahul Sharma",
-        "email": "trader.rahul@gmail.com",
+    "demo.rahul@example.com": {
+        "name": "Rahul Sharma (Demo)",
+        "email": "demo.rahul@example.com",
         "phone": "+91 98765 43210",
         "password_hash": hash_pw("Trader@123"),
         "created_at": "2026-09-15 10:30:00 IST"
@@ -1250,7 +1250,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             }
             self.send_json_response(200, resp_data)
         elif parsed.path == "/api/auth/totp/setup":
-            email = ACTIVE_SESSION.get("user_email") or "trader.rahul@gmail.com"
+            email = ACTIVE_SESSION.get("user_email") or "demo.rahul@example.com"
             user = USERS_DB.get(email)
             if not user:
                 user = {
@@ -1475,7 +1475,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "message": "Logged out successfully."
             }, extra_headers={"Set-Cookie": "session_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"})
         elif parsed.path == "/api/auth/totp/verify":
-            email = ACTIVE_SESSION.get("user_email") or payload.get("email", "").strip().lower() or "trader.rahul@gmail.com"
+            email = ACTIVE_SESSION.get("user_email") or payload.get("email", "").strip().lower() or "demo.rahul@example.com"
             user = USERS_DB.get(email)
             if not user:
                 user = {
