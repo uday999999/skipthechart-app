@@ -379,13 +379,13 @@
           <span>Continue with Google (Gmail)</span>
         </button>
 
-        <!-- Quick 1-Click Trader Profiles -->
+        <!-- Quick 1-Click Demo Profiles -->
         <div class="grid grid-cols-2 gap-2">
-          <button type="button" onclick="performGoogleSignIn('filmmakeruday@gmail.com', 'Uday (Filmmaker)')" class="py-2 px-2 bg-emerald-50 hover:bg-emerald-100/90 text-emerald-900 border border-emerald-300 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs truncate">
-            <span>👤 filmmakeruday</span>
+          <button type="button" onclick="performGoogleSignIn('demo.trader@example.com', 'Demo Trader')" class="py-2 px-2 bg-slate-100 hover:bg-slate-200/90 text-slate-800 border border-slate-300 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs truncate">
+            <span>👤 Demo Account A</span>
           </button>
-          <button type="button" onclick="performGoogleSignIn('invincibleuday@gmail.com', 'Uday (Invincible)')" class="py-2 px-2 bg-emerald-50 hover:bg-emerald-100/90 text-emerald-900 border border-emerald-300 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs truncate">
-            <span>👤 invincibleuday</span>
+          <button type="button" onclick="performGoogleSignIn('guest.quant@example.com', 'Guest Quant')" class="py-2 px-2 bg-slate-100 hover:bg-slate-200/90 text-slate-800 border border-slate-300 rounded-xl font-bold text-[11px] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs truncate">
+            <span>👤 Demo Account B</span>
           </button>
         </div>
 
@@ -1011,20 +1011,25 @@
                     </div>
                   </div>
 
-                  <div class="grid grid-cols-3 gap-2.5 text-center text-xs font-mono">
+                  <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono">
                     <div class="p-2 bg-slate-50 rounded-xl border border-slate-200">
-                      <span class="text-slate-500 block text-[10.5px]">Avg Win / Trade</span>
-                      <strong class="text-emerald-700 font-bold text-sm">+ ₹ 6,800</strong>
+                      <span class="text-slate-500 block text-[10px]">Model Expectancy</span>
+                      <strong class="text-emerald-700 font-bold text-xs">+1.8% to +2.5%</strong>
+                      <span class="text-[9px] text-slate-400 block">Hypothetical</span>
                     </div>
                     <div class="p-2 bg-slate-50 rounded-xl border border-slate-200">
-                      <span class="text-slate-500 block text-[10.5px]">Max Spread Risk (Illustrative)</span>
-                      <strong class="text-rose-600 font-bold text-sm">- ₹ 3,200 Capped</strong>
+                      <span class="text-slate-500 block text-[10px]">Max Spread Risk</span>
+                      <strong class="text-rose-600 font-bold text-xs">Defined Capped</strong>
+                      <span class="text-[9px] text-slate-400 block">Hedged Spread</span>
                     </div>
                     <div class="p-2 bg-slate-50 rounded-xl border border-slate-200">
-                      <span class="text-slate-500 block text-[10.5px]">POP (Illustrative)</span>
-                      <strong class="text-slate-900 font-bold text-sm">76.4%</strong>
+                      <span class="text-slate-500 block text-[10px]">Simulated Win Rate</span>
+                      <strong class="text-slate-900 font-bold text-xs">~68% - 72%</strong>
+                      <span class="text-[9px] text-slate-400 block">Sample Backtest</span>
                     </div>
-                      <div class="col-span-3 text-[9px] text-slate-400 font-normal italic text-center">Illustrative, not predictions</div>
+                    <div class="col-span-3 text-[10px] text-amber-900 bg-amber-50 p-2 rounded-xl border border-amber-200 font-normal text-center leading-tight">
+                      ⚠️ <strong>Illustrative only.</strong> Past simulated performance is not indicative of future results. Derivative trading involves substantial risk of loss. Not investment advice.
+                    </div>
                   </div>
 
                   <div class="text-xs text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100 flex items-center gap-1.5">
@@ -1196,10 +1201,10 @@
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
                     <span class="text-slate-500 font-medium mr-1">💡 Quick Examples:</span>
-                    <button type="button" onclick="quickFillWords('Trade Nifty ↔ BankNifty statistical pairs arbitrage with z-score mean reversion targeting 112% annual gain and 70% capital buffer')" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 hover:text-indigo-950 transition font-bold cursor-pointer">⚡ Nifty ↔ BankNifty Arbitrage (112% / yr)</button>
-                    <button type="button" onclick="quickFillWords('Trade BankNifty 4-leg Iron Butterfly with 300pt wings and theta compounding targeting 108% annual gain with VWAP filter')" class="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 hover:text-emerald-950 transition font-medium cursor-pointer">🛡️ BankNifty Iron Butterfly (108% / yr)</button>
-                    <button type="button" onclick="quickFillWords('Nifty Bull Put Credit Spread with Supertrend and 20 EMA targeting 115% annual gain with strict stop-loss')" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-800 hover:text-teal-950 transition font-medium cursor-pointer">🟢 Nifty Bull Put Credit Spread (115% / yr)</button>
-                    <button type="button" onclick="quickFillWords('BankNifty trend following with Supertrend and VWAP targeting 135% annual gain with hard 1% stop-loss and trailing profit')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium cursor-pointer">🎯 BankNifty Trend Following (135% / yr)</button>
+                    <button type="button" onclick="quickFillWords('Trade Nifty ↔ BankNifty statistical pairs arbitrage with z-score mean reversion and 70% capital buffer')" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 hover:text-indigo-950 transition font-bold cursor-pointer">⚡ Nifty ↔ BankNifty Pairs Arbitrage</button>
+                    <button type="button" onclick="quickFillWords('Trade BankNifty 4-leg Iron Butterfly with 300pt wings and theta compounding with VWAP filter')" class="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 hover:text-emerald-950 transition font-medium cursor-pointer">🛡️ BankNifty Iron Butterfly (Hedged)</button>
+                    <button type="button" onclick="quickFillWords('Nifty Bull Put Credit Spread with Supertrend and 20 EMA with strict stop-loss')" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-800 hover:text-teal-950 transition font-medium cursor-pointer">🟢 Nifty Bull Put Credit Spread</button>
+                    <button type="button" onclick="quickFillWords('BankNifty trend following with Supertrend and VWAP with hard 1% stop-loss and trailing profit')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-900 transition font-medium cursor-pointer">🎯 BankNifty Trend Following</button>
                   </div>
                   <button type="button" onclick="parsePlainWordsStrategy('payoff')" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
                     <span>✨ Create Strategy from Words</span>
@@ -1580,172 +1585,6 @@
                 <div class="text-[10px] text-slate-600 font-mono bg-indigo-50/50 p-2 rounded-lg border border-indigo-100 flex justify-between">
                   <span>Min Capital (+30% Buffer):</span>
                   <strong class="text-indigo-800">₹ 1,00,000</strong>
-                </div>
-              </div>
-            </div>
-
-            <!-- =================================================================== -->
-            <!-- STATISTICAL ARBITRAGE & PAIRS TRADING (NIFTY ↔ BANKNIFTY) PANEL     -->
-            <!-- Embedded directly on Choose Your Trading Asset page                -->
-            <!-- =================================================================== -->
-            <div id="asset-step-arbitrage-panel" class="mt-4 pt-4 border-t border-slate-100 space-y-3.5">
-              <div class="flex flex-wrap items-center justify-between border-b border-indigo-200/80 pb-2.5 pt-1 gap-2">
-                <div class="flex items-center gap-2">
-                  <span class="w-3.5 h-3.5 rounded-full bg-indigo-600 shadow-xs flex items-center justify-center text-white text-[9px] font-bold">⚡</span>
-                  <h4 class="text-base font-black text-slate-900 tracking-tight flex items-center gap-1.5">
-                    <span>⚡</span> Statistical Arbitrage &amp; Pairs Trading (Nifty ↔ BankNifty)
-                  </h4>
-                </div>
-                <span class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-300 text-[10.5px] font-mono font-bold">
-                  Divergence Engine designed to reduce directional exposure • Delta-Hedged Spreads
-                </span>
-              </div>
-
-              <!-- Easy Explainer Banner -->
-              <div class="p-3.5 bg-gradient-to-r from-indigo-50/90 via-sky-50/60 to-slate-50 border border-indigo-200 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs shadow-xs">
-                <div class="flex items-start sm:items-center gap-2.5">
-                  <span class="text-2xl shrink-0">📐</span>
-                  <div>
-                    <div class="font-bold text-slate-900 text-xs sm:text-sm">How Pairs Arbitrage Works in 1 Simple Sentence:</div>
-                    <p class="text-[11.5px] text-slate-600 mt-0.5 leading-relaxed">
-                      Nifty and BankNifty historically exhibit high statistical co-movement. When their normalized price ratio stretches beyond <strong class="text-indigo-700">±3.000σ</strong>, the strategy enters hedged spreads on both indices aiming to capture mean reversion as the spread normalizes.
-                    </p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2 text-[10.5px] font-mono text-indigo-800 font-bold bg-white px-3 py-1 rounded-xl border border-indigo-200 shrink-0 shadow-xs">
-                  <span>⏰ 09:30 AM Start (15-min Morning Filter Active)</span>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Arbitrage Card: Nifty ↔ BankNifty Statistical Arbitrage (Z-Score) -->
-                <div onclick="selectWizardAsset('NIFTY ↔ BANKNIFTY Arbitrage', 25, 70000, 100000)" class="p-4 bg-white border-2 border-indigo-500 rounded-2xl cursor-pointer space-y-3 transition-all shadow-xs" title="Click to select Arbitrage strategy">
-                  <div class="flex items-center justify-between">
-                    <div class="space-y-0.5">
-                      <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
-                        <h4 class="text-base font-black text-slate-900">Nifty ↔ BankNifty Statistical Arbitrage</h4>
-                      </div>
-                      <p class="text-[11px] text-slate-500 font-normal">Designed to reduce directional exposure • 4-Leg Hedged Spreads • Pure Mathematical Z-Score (0 Indicators)</p>
-                    </div>
-                    <span class="px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200 text-[10px] text-indigo-900 font-mono font-bold">Pure Z-Score (0 Indicators)</span>
-                  </div>
-
-                  <!-- Crystal Clear Strategy Rules Box -->
-                  <div class="space-y-1.5 bg-slate-50/90 p-2.5 rounded-xl border border-slate-200/80 text-[11px] leading-relaxed">
-                    <div class="flex items-center justify-between text-indigo-900 font-bold">
-                      <span class="flex items-center gap-1.5"><span>📈 Upper Spike (Z &ge; +3.000σ):</span> <span class="font-normal text-slate-700">Short BankNifty / Long Nifty Spread</span></span>
-                      <span class="text-[10px] font-mono bg-indigo-100 text-indigo-900 px-1.5 py-0.5 rounded font-bold">Reversion Profit</span>
-                    </div>
-                    <div class="flex items-center justify-between text-indigo-900 font-bold">
-                      <span class="flex items-center gap-1.5"><span>📉 Lower Dip (Z &le; -3.000σ):</span> <span class="font-normal text-slate-700">Long BankNifty / Short Nifty Spread</span></span>
-                      <span class="text-[10px] font-mono bg-indigo-100 text-indigo-900 px-1.5 py-0.5 rounded font-bold">Reversion Profit</span>
-                    </div>
-                    <div class="flex items-center justify-between text-slate-600 pt-1 border-t border-slate-200/60 text-[10.5px]">
-                      <span class="flex items-center gap-1.5"><span>🛡️ Safety Execution:</span> <span class="font-normal">Limit Orders only (LMT) • Flattrade RMS Safe</span></span>
-                      <span class="text-[10px] font-mono text-emerald-700 font-bold">Zero-Balance Ready</span>
-                    </div>
-                  </div>
-
-                  <!-- Visual Z-Score Bell Curve / Divergence Diagram -->
-                  <div class="p-2.5 bg-slate-50/90 rounded-xl border border-slate-200">
-                    <svg viewBox="0 0 240 68" class="w-full h-16 overflow-visible">
-                      <rect x="70" y="8" width="100" height="52" fill="#f8fafc" stroke="#e2e8f0" rx="6" />
-                      <line x1="120" y1="8" x2="120" y2="60" stroke="#059669" stroke-width="1.5" stroke-dasharray="3,3" />
-                      <text x="120" y="66" fill="#047857" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">Mean (Z = 0.00)</text>
-
-                      <line x1="30" y1="8" x2="30" y2="60" stroke="#6366f1" stroke-width="2" />
-                      <text x="30" y="6" fill="#4f46e5" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">-3.000σ Trigger</text>
-
-                      <line x1="210" y1="8" x2="210" y2="60" stroke="#6366f1" stroke-width="2" />
-                      <text x="210" y="6" fill="#4f46e5" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">+3.000σ Trigger</text>
-
-                      <path d="M 10 34 Q 30 14 50 34 T 90 34 T 130 34 T 170 34 Q 190 54 210 34 T 235 34" fill="none" stroke="#94a3b8" stroke-width="2" />
-                      <circle cx="30" cy="22" r="3.5" fill="#4f46e5" />
-                      <circle cx="210" cy="46" r="3.5" fill="#4f46e5" />
-                    </svg>
-                    <div class="mt-1 text-center text-[10px] font-mono text-slate-600 bg-white py-1 px-2 rounded border border-slate-200/80 font-semibold flex items-center justify-center gap-1.5">
-                      <span>⚡</span> <span>Bot trades when Z-score crosses threshold &amp; exits when ratio reverts to 0</span>
-                    </div>
-                  </div>
-
-                  <!-- Interactive Editable Z-Score Stepper Box for Subscribers -->
-                  <div class="p-2.5 bg-indigo-50/70 rounded-xl border border-indigo-200 space-y-1.5" onclick="event.stopPropagation()">
-                    <div class="flex items-center justify-between text-[11px]">
-                      <span class="font-bold text-indigo-950 flex items-center gap-1">
-                        <span>⚙️</span> Customize Z-Score Divergence Threshold:
-                      </span>
-                      <span id="asset-wizard-zscore-badge" class="font-mono text-indigo-700 font-bold bg-white px-2 py-0.5 rounded border border-indigo-200">±3.000σ</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <button type="button" onclick="adjustWizardZScore(-0.25)" class="w-8 h-8 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 font-bold text-sm shadow-2xs flex items-center justify-center cursor-pointer">-</button>
-                      <input type="number" step="0.05" min="1.50" max="5.00" id="asset-wizard-zscore-input" value="3.000" onchange="setWizardZScore(this.value)" class="flex-1 bg-white border border-indigo-300 focus:border-indigo-600 rounded-lg p-1.5 text-center font-mono font-bold text-indigo-950 text-xs shadow-2xs">
-                      <button type="button" onclick="adjustWizardZScore(0.25)" class="w-8 h-8 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 font-bold text-sm shadow-2xs flex items-center justify-center cursor-pointer">+</button>
-                    </div>
-                    <div class="flex items-center justify-between text-[9.5px] text-indigo-800/80 font-mono">
-                      <button type="button" onclick="setWizardZScore(2.500)" class="hover:underline">Quick: 2.500σ</button>
-                      <button type="button" onclick="setWizardZScore(2.750)" class="hover:underline">Quick: 2.750σ</button>
-                      <button type="button" onclick="setWizardZScore(3.000)" class="hover:underline font-bold text-indigo-950">Default: 3.000σ</button>
-                      <button type="button" onclick="setWizardZScore(3.500)" class="hover:underline">Quick: 3.500σ</button>
-                    </div>
-                  </div>
-
-                  <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
-                    <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                      <span class="text-slate-500 block text-[10px]">Avg Win / Trade</span>
-                      <strong class="text-emerald-700 font-bold text-xs">+ ₹ 6,800</strong>
-                    </div>
-                    <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                      <span class="text-slate-500 block text-[10px]">Max Spread Risk (Illustrative)</span>
-                      <strong class="text-rose-600 font-bold text-xs">- ₹ 3,200 Capped</strong>
-                    </div>
-                    <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                      <span class="text-slate-500 block text-[10px]">POP (Illustrative)</span>
-                      <strong class="text-slate-900 font-bold text-xs">76.4%</strong>
-                    </div>
-                      <div class="col-span-3 text-[9px] text-slate-400 font-normal italic text-center">Illustrative, not predictions</div>
-                  </div>
-
-                  <div class="text-[10.5px] text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100 flex items-center gap-1.5">
-                    <span class="text-indigo-600 font-bold">💡 Best For:</span>
-                    <span>Traders seeking spread strategies designed to reduce directional exposure for mean-reversion modeling.</span>
-                  </div>
-                </div>
-
-                <!-- Right Side: Quant Overview and Quick Start -->
-                <div class="p-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl flex flex-col justify-between space-y-3">
-                  <div class="space-y-2.5">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[10.5px] font-mono font-bold text-indigo-800 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-full uppercase">Pairs Trading Model</span>
-                      <span class="text-[10.5px] font-mono text-emerald-700 font-bold">● Auto Rebalancing</span>
-                    </div>
-                    <h5 class="text-sm font-black text-slate-900">Why Trade Arbitrage Instead of Directional?</h5>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                      Options buying often experiences time decay (theta decay). Nifty-BankNifty pairs arbitrage attempts to capture mispricing spreads with 4-leg delta hedges designed to reduce directional exposure across directional trends.
-                    </p>
-                    <div class="space-y-1.5 pt-1.5 border-t border-slate-200 text-xs">
-                      <div class="flex items-center gap-2 text-slate-700">
-                        <span class="w-4 h-4 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center text-[10px] font-bold">✓</span>
-                        <span>09:30 AM Volatility Filter (skips erratic open)</span>
-                      </div>
-                      <div class="flex items-center gap-2 text-slate-700">
-                        <span class="w-4 h-4 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center text-[10px] font-bold">✓</span>
-                        <span>Strict Limit Orders on Flattrade (limit orders only)</span>
-                      </div>
-                      <div class="flex items-center gap-2 text-slate-700">
-                        <span class="w-4 h-4 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center text-[10px] font-bold">✓</span>
-                        <span>Auto 15:15 IST Square-off (No overnight position holding)</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="pt-2 border-t border-slate-200 flex items-center justify-between gap-2">
-                    <span class="text-xs text-slate-500 font-medium">Ready to trade arbitrage?</span>
-                    <button type="button" onclick="selectWizardAsset('NIFTY ↔ BANKNIFTY Arbitrage', 25, 70000, 100000, true)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                      <span>Select &amp; Proceed to Backtest</span>
-                      <span>→</span>
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -2674,18 +2513,23 @@
 
                     <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] font-mono">
                       <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                        <span class="text-slate-500 block text-[10px]">Avg Win / Trade</span>
-                        <strong class="text-emerald-700 font-bold text-xs">+ ₹ 6,800</strong>
+                        <span class="text-slate-500 block text-[10px]">Model Expectancy</span>
+                        <strong class="text-emerald-700 font-bold text-xs">+1.8% to +2.5%</strong>
+                        <span class="text-[9px] text-slate-400 block font-normal">Hypothetical</span>
                       </div>
                       <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                        <span class="text-slate-500 block text-[10px]">Max Spread Risk (Illustrative)</span>
-                        <strong class="text-rose-600 font-bold text-xs">- ₹ 3,200 Capped</strong>
+                        <span class="text-slate-500 block text-[10px]">Max Spread Risk</span>
+                        <strong class="text-rose-600 font-bold text-xs">Defined Capped</strong>
+                        <span class="text-[9px] text-slate-400 block font-normal">Hedged Spread</span>
                       </div>
                       <div class="p-1.5 bg-slate-50 rounded border border-slate-200">
-                        <span class="text-slate-500 block text-[10px]">POP (Illustrative)</span>
-                        <strong class="text-slate-900 font-bold text-xs">76.4%</strong>
+                        <span class="text-slate-500 block text-[10px]">Simulated Win Rate</span>
+                        <strong class="text-slate-900 font-bold text-xs">~68% - 72%</strong>
+                        <span class="text-[9px] text-slate-400 block font-normal">Sample Backtest</span>
                       </div>
-                      <div class="col-span-3 text-[9px] text-slate-400 font-normal italic text-center">Illustrative, not predictions</div>
+                      <div class="col-span-3 text-[10px] text-amber-900 bg-amber-50 p-2 rounded-xl border border-amber-200 font-normal text-center leading-tight">
+                        ⚠️ <strong>Illustrative only.</strong> Past simulated performance is not indicative of future results. Derivative trading involves substantial risk of loss. Not investment advice.
+                      </div>
                     </div>
 
                     <div class="text-[10.5px] text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100 flex items-center gap-1.5">
@@ -3269,10 +3113,18 @@
           </div>
         </div>
 
-        <!-- 6 Core Backtest Metrics -->
-        <div class="flex items-center justify-between pb-1">
-          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 font-mono">SAMPLE / DEMO BACKTEST MODEL</span>
-          <span class="text-[11px] text-slate-500 font-mono">Based on ₹ 1,00,000 Initial Capital</span>
+        <!-- 6 Core Backtest Metrics with Prominent Statutory Notice -->
+        <div class="p-3 bg-amber-50/80 border border-amber-300 rounded-xl text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
+          <div class="flex items-center gap-2">
+            <span class="text-base">⚠️</span>
+            <span class="font-medium"><strong>Illustrative Historical Simulation Only:</strong> Past simulated performance is strictly not indicative of future results. All figures are hypothetical model estimations on past session data and do not guarantee profits. Derivatives trading involves substantial risk of capital loss. Not investment advice.</span>
+          </div>
+          <span class="text-[10px] font-mono font-bold bg-amber-100 text-amber-900 px-2 py-0.5 rounded border border-amber-300 shrink-0">SEBI NON-ADVISORY COMPLIANCE</span>
+        </div>
+
+        <div class="flex items-center justify-between pb-1 pt-1">
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 font-mono">HYPOTHETICAL HISTORICAL MODEL</span>
+          <span class="text-[11px] text-slate-500 font-mono">Calculated on Initial Margin Allotment</span>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           <div class="p-3 bg-slate-50/90 rounded-xl border border-slate-200/90">
@@ -4318,6 +4170,17 @@
           <span><strong>Why TOTP is needed:</strong> Enables your dedicated node to authenticate automatically at 08:45 AM each morning without requiring manual phone SMS OTPs.</span>
         </div>
 
+        <!-- Strict Security & Sensitive Data Handling Notice -->
+        <div class="p-3 bg-emerald-50/70 border border-emerald-300 rounded-xl text-[11px] text-slate-700 space-y-1">
+          <div class="flex items-center gap-1.5 font-bold text-emerald-950">
+            <span>🔒</span>
+            <span>Security Architecture &amp; Sensitive Credential Protection:</span>
+          </div>
+          <p class="leading-relaxed text-slate-600">
+            Real broker API keys, API secrets, and TOTP secrets must <strong>never</strong> be stored only in the browser or persisted in client-side <code>localStorage</code> in production. All credentials submitted here are transmitted securely via TLS and encrypted at rest on the backend server using <strong>AES-256-GCM</strong>. Order execution and exchange handshakes are executed strictly server-side by your isolated droplet instance. Plaintext secrets are immediately cleared from browser memory upon submission.
+          </p>
+        </div>
+
         <!-- Interactive 3-Tab Guide inside Modal -->
         <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2.5 text-xs">
           <div class="flex items-center justify-between border-b border-slate-200/80 pb-2">
@@ -4654,26 +4517,26 @@
       <div class="space-y-3 text-xs">
         <p class="text-slate-600">Choose how you want to sign in with Google:</p>
 
-        <!-- User Profile 1: filmmakeruday -->
-        <button type="button" onclick="performGoogleSignIn('filmmakeruday@gmail.com', 'Uday (Filmmaker)')" class="w-full p-3 bg-emerald-50/70 hover:bg-emerald-100/80 border border-emerald-300 rounded-2xl flex items-center gap-3 text-left transition group cursor-pointer shadow-xs">
-          <div class="w-9 h-9 rounded-full bg-emerald-700 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-xs">
-            U
+        <!-- Demo Profile 1 -->
+        <button type="button" onclick="performGoogleSignIn('demo.trader@example.com', 'Demo Trader')" class="w-full p-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-2xl flex items-center gap-3 text-left transition group cursor-pointer shadow-xs">
+          <div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-xs">
+            D
           </div>
           <div class="flex-1 min-w-0">
-            <div class="font-bold text-slate-900 text-xs group-hover:text-emerald-900 transition">Uday (Project Owner)</div>
-            <div class="text-[11px] text-emerald-800 font-mono truncate">filmmakeruday@gmail.com</div>
+            <div class="font-bold text-slate-900 text-xs group-hover:text-slate-900 transition">Demo Trader (Simulated Profile)</div>
+            <div class="text-[11px] text-slate-500 font-mono truncate">demo.trader@example.com</div>
           </div>
-          <span class="text-emerald-800 text-xs font-bold shrink-0">Sign In →</span>
+          <span class="text-slate-700 text-xs font-bold shrink-0">Sign In →</span>
         </button>
 
-        <!-- User Profile 2: invincibleuday -->
-        <button type="button" onclick="performGoogleSignIn('invincibleuday@gmail.com', 'Uday (Invincible)')" class="w-full p-3 bg-slate-50 hover:bg-emerald-50/60 border border-slate-200 hover:border-emerald-400 rounded-2xl flex items-center gap-3 text-left transition group cursor-pointer shadow-xs">
+        <!-- Demo Profile 2 -->
+        <button type="button" onclick="performGoogleSignIn('guest.quant@example.com', 'Guest Quant')" class="w-full p-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-2xl flex items-center gap-3 text-left transition group cursor-pointer shadow-xs">
           <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-xs">
-            U
+            G
           </div>
           <div class="flex-1 min-w-0">
-            <div class="font-bold text-slate-900 text-xs group-hover:text-emerald-800 transition">Uday (Invincible)</div>
-            <div class="text-[11px] text-slate-500 font-mono truncate">invincibleuday@gmail.com</div>
+            <div class="font-bold text-slate-900 text-xs group-hover:text-indigo-900 transition">Guest Quant (Simulated Profile)</div>
+            <div class="text-[11px] text-slate-500 font-mono truncate">guest.quant@example.com</div>
           </div>
           <span class="text-indigo-700 text-xs font-bold shrink-0">Sign In →</span>
         </button>
@@ -5591,81 +5454,81 @@
     // Strategy Configurations & Exact Margin Requirements (with 30% cash buffer)
     const STRATEGY_DATA = {
       pairs_arbitrage: {
-        name: "Nifty ↔ BankNifty Statistical Arbitrage (112% Target)",
+        name: "Nifty ↔ BankNifty Statistical Arbitrage",
         icon: "⚡",
         baseMargin: 70000,
         minCapital: 100000,
         bufferAmount: 30000,
         dataset: "nifty_banknifty_pairs",
-        style: "Statistical Co-Integration Spread (112% Annual Target)",
+        style: "Statistical Co-Integration Delta-Hedged Spread",
         entry: "Calculates Z-score on Nifty/BankNifty ratio. Triggers at ±3.000σ anomaly after 09:30 AM filter.",
         sl: "Mean deviation exit at ±4.200σ or daily stop-loss.",
-        tp: "Target snap-back to 0.00 mean ratio (112% annualized return).",
+        tp: "Target snap-back to 0.00 mean ratio (Mean Reversion Target).",
         exit: "Mean reversion or 3:15 PM IST square-off."
       },
       iron_butterfly: {
-        name: "Iron Butterfly - 4 Legs (108% Target)",
+        name: "Iron Butterfly (4 Legs Defined Risk)",
         icon: "🦋",
         baseMargin: 45000,
         minCapital: 65000,
         bufferAmount: 20000,
         dataset: "nifty50",
-        style: "Delta Neutral Defined Risk (108% Annual Target)",
+        style: "Delta Neutral Defined Risk Strategy",
         entry: "Sell ATM Straddle, buy OTM wings at 200pt delta hedge.",
         sl: "Premium SL 25% on sold legs.",
-        tp: "Theta decay harvest targeting 108% annualized gain.",
+        tp: "Theta decay harvest within 200pt hedge boundaries.",
         exit: "Auto square-off at 3:15 PM IST."
       },
       trend_rider: {
-        name: "Nifty Trend Rider (115% Target)",
+        name: "Nifty Trend Rider (Directional Buying)",
         icon: "🚀",
         baseMargin: 17500,
         minCapital: 25000,
         bufferAmount: 7500,
         dataset: "nifty50",
-        style: "Automatic 2-Way CE/PE (115% Annual Target)",
+        style: "Automatic Dual-Direction CE/PE Momentum",
         entry: "Buys Nifty ATM Call (CE) when 7-EMA crosses above 50-EMA on 5-min chart. Buys Put (PE) on bear crossover.",
         sl: "Strict 2.0% stop-loss from entry premium price.",
-        tp: "5.0% profit target with trailing stop-loss (115% annualized gain).",
+        tp: "5.0% profit target with trailing stop-loss protection.",
         exit: "Intraday auto-square off at 3:15 PM IST."
       },
       theta_harvester: {
-        name: "Intraday Theta Harvester (170% Target)",
+        name: "Intraday Theta Harvester (Hedged Straddle)",
         icon: "💰",
         baseMargin: 70000,
         minCapital: 100000,
         bufferAmount: 30000,
         dataset: "nifty50",
-        style: "Non-Directional Hedged Straddle (170% Annual Target)",
+        style: "Non-Directional Hedged Range Straddle",
         entry: "Sells 1 OTM Call and 1 OTM Put at 9:20 AM with bought hedge wings, collecting daily theta decay.",
         sl: "Combined premium stop-loss of 25% on each leg.",
-        tp: "Pockets daily theta decay if index stays within range (170% annualized gain).",
+        tp: "Pockets daily theta decay if index stays within range.",
         exit: "Auto square-off at 3:15 PM IST or target hit."
       },
       banknifty_scalp: {
-        name: "BankNifty Fast Scalper (180%+ Target)",
+        name: "BankNifty Fast Scalper (Intraday Momentum)",
         icon: "⚡",
         baseMargin: 35000,
         minCapital: 50000,
         bufferAmount: 15000,
         dataset: "banknifty",
-        style: "Momentum Breakouts (180%+ Annual Target)",
+        style: "Intraday Breakout Momentum Scalping",
         entry: "Fast 15-minute high/low breakout momentum trigger on BankNifty index.",
         sl: "Tight 1.5% trailing stop-loss to protect against reversals.",
-        tp: "Quick 3.5% momentum target strike (180%+ annualized gain).",
+        tp: "Quick 3.5% momentum target strike with trailing SL.",
         exit: "Square-off at 3:15 PM IST."
       },
       expiry_hunter: {
-        name: "FinNifty & Midcap Expiry Hunter (200%+ Target)",
+        name: "FinNifty & Midcap Expiry Hunter (Gamma Breakout)",
         icon: "🎯",
         baseMargin: 10500,
         minCapital: 15000,
         bufferAmount: 4500,
         dataset: "nifty50",
-        style: "Expiry Breakouts CE/PE (200%+ Annual Target)",
+        style: "Weekly Expiry Gamma Breakouts CE/PE",
         entry: "Explosive gamma breakout trades on Monday Midcap & Tuesday FinNifty expiries.",
         sl: "Risk capped at max 3.0% premium loss.",
-        tp: "Gamma spike target of 8.0%+ with trailing protection (200%+ annualized gain).",
+        tp: "Gamma spike target with trailing profit lock.",
         exit: "Expiry day square-off at 3:20 PM IST."
       },
       pairs_hedge: {

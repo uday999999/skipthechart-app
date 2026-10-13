@@ -982,9 +982,14 @@ HISTORICAL_NIFTY = HISTORICAL_DATASETS["nifty50"]["candles"]
 
 class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
-        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
-        self.send_header("Pragma", "no-cache")
-        self.send_header("Expires", "0")
+        req_path = getattr(self, "path", "")
+        # Enable efficient browser caching for static assets while keeping APIs and dynamic pages uncached
+        if any(req_path.endswith(ext) for ext in [".js", ".css", ".png", ".jpg", ".svg", ".ico", ".woff", ".woff2"]):
+            self.send_header("Cache-Control", "public, max-age=86400, stale-while-revalidate=3600")
+        else:
+            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
         super().end_headers()
 
     def get_authenticated_session(self):
