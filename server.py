@@ -200,7 +200,7 @@ def get_saved_broker_credentials():
 
 # Default Google OAuth Client ID if not set in environment
 if not os.environ.get("GOOGLE_CLIENT_ID"):
-    os.environ["GOOGLE_CLIENT_ID"] = "659688440036-kl32fpdig9j46rqbl03om4vvhv2s204n.apps.googleusercontent.com"
+    os.environ["GOOGLE_CLIENT_ID"] = "992975685580-jhd12p2p47vir6cgtn377c1o0npsiemn.apps.googleusercontent.com"
 
 # RFC 6238 TOTP Helpers for Google Authenticator (Zero External Dependencies)
 def generate_totp_secret():
@@ -1256,13 +1256,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "last_tick_age_sec": last_tick_age
             })
         elif parsed.path == "/api/auth/config":
-            raw_client_id = os.environ.get("GOOGLE_CLIENT_ID", "").strip()
-            dummy_tokens = ["659688440036", "992975685580", "placeholder", "dummy"]
-            if not raw_client_id or any(tok in raw_client_id for tok in dummy_tokens):
-                client_id = None
-            else:
-                client_id = raw_client_id
-
+            client_id = os.environ.get("GOOGLE_CLIENT_ID", "992975685580-jhd12p2p47vir6cgtn377c1o0npsiemn.apps.googleusercontent.com").strip()
             resp_data = {
                 "success": True,
                 "google_client_id": client_id,
@@ -1424,13 +1418,29 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             }, extra_headers={"Set-Cookie": f"session_token={session_token}; Path=/; HttpOnly; SameSite=Lax"})
         elif parsed.path == "/api/auth/google":
             credential = payload.get("credential", "")
+            access_token = payload.get("access_token", "")
             raw_email = payload.get("email", "").strip().lower()
             name = payload.get("name", "").strip()
             picture = payload.get("picture", "")
             email = ""
 
-            # 1. If Google JWT token provided, decode and verify claims
-            if credential:
+            # 1. If OAuth2 access_token provided, verify with Google UserInfo endpoint
+            if access_token:
+                try:
+                    import urllib.request
+                    req = urllib.request.Request("https://www.googleapis.com/oauth2/v3/userinfo")
+                    req.add_header("Authorization", f"Bearer {access_token}")
+                    with urllib.request.urlopen(req, timeout=6) as ures:
+                        uinfo = json.loads(ures.read().decode("utf-8"))
+                        if uinfo.get("email"):
+                            email = uinfo.get("email", "").strip().lower()
+                            name = uinfo.get("name", "") or name
+                            picture = uinfo.get("picture", "") or picture
+                except Exception as e:
+                    print(f"Error validating Google access_token: {e}")
+
+            # 2. If Google JWT token provided, decode and verify claims
+            if not email and credential:
                 try:
                     parts = credential.split(".")
                     if len(parts) >= 2:
