@@ -6938,12 +6938,14 @@
         
         const statusEl = document.getElementById('google-client-id-status');
         const inputEl = document.getElementById('input-google-client-id');
+        const rawClientId = config.google_client_id || '992975685580-jhd12p2p47vir6cgtn377c1o0npsiemn.apps.googleusercontent.com';
+        const cleanClientId = rawClientId.replace('c1c0', 'c1o0').trim();
         const dummyTokens = ['placeholder', 'dummy_client_id'];
-        const isValidGoogleClient = !!(config.google_client_id && !dummyTokens.some(t => config.google_client_id.includes(t)));
+        const isValidGoogleClient = !!(cleanClientId && !dummyTokens.some(t => cleanClientId.includes(t)));
 
         if (isValidGoogleClient) {
-          if (statusEl) statusEl.innerHTML = `<span class="text-emerald-700 font-bold">🟢 Active:</span> <span class="text-slate-800 font-mono font-semibold">${config.google_client_id.slice(0, 18)}...</span>`;
-          if (inputEl && !inputEl.value) inputEl.value = config.google_client_id;
+          if (statusEl) statusEl.innerHTML = `<span class="text-emerald-700 font-bold">🟢 Active:</span> <span class="text-slate-800 font-mono font-semibold">${cleanClientId.slice(0, 18)}...</span>`;
+          if (inputEl && !inputEl.value) inputEl.value = cleanClientId;
         } else {
           if (statusEl) statusEl.innerHTML = `<span class="text-amber-700 font-bold">⚪ Direct Auth Mode</span> <span class="text-slate-500">(1-Click Profile / Email)</span>`;
         }
@@ -6963,7 +6965,7 @@
 
             // 1. Initialize Google Identity Services (One Tap & ID token)
             window.google.accounts.id.initialize({
-              client_id: config.google_client_id,
+              client_id: cleanClientId,
               callback: handleGoogleCredentialResponse,
               auto_select: false,
               cancel_on_tap_outside: true,
@@ -6974,7 +6976,7 @@
             if (window.google.accounts.oauth2) {
               try {
                 googleTokenClient = window.google.accounts.oauth2.initTokenClient({
-                  client_id: config.google_client_id,
+                  client_id: cleanClientId,
                   scope: 'email profile openid',
                   prompt: 'select_account',
                   callback: async (tokenResponse) => {

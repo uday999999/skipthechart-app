@@ -198,9 +198,10 @@ def get_saved_broker_credentials():
             pass
     return {}
 
-# Default Google OAuth Client ID if not set in environment
-if not os.environ.get("GOOGLE_CLIENT_ID"):
-    os.environ["GOOGLE_CLIENT_ID"] = "992975685580-jhd12p2p47vir6cgtn377c1o0npsiemn.apps.googleusercontent.com"
+# Active Google OAuth Client ID
+CORRECT_GOOGLE_CLIENT_ID = "992975685580-jhd12p2p47vir6cgtn377c1o0npsiemn.apps.googleusercontent.com"
+if not os.environ.get("GOOGLE_CLIENT_ID") or "c1c0" in os.environ.get("GOOGLE_CLIENT_ID", ""):
+    os.environ["GOOGLE_CLIENT_ID"] = CORRECT_GOOGLE_CLIENT_ID
 
 # RFC 6238 TOTP Helpers for Google Authenticator (Zero External Dependencies)
 def generate_totp_secret():
@@ -1256,7 +1257,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "last_tick_age_sec": last_tick_age
             })
         elif parsed.path == "/api/auth/config":
-            client_id = os.environ.get("GOOGLE_CLIENT_ID", "992975685580-jhd12p2p47vir6cgtn377c1o0npsiemn.apps.googleusercontent.com").strip()
+            raw_id = os.environ.get("GOOGLE_CLIENT_ID", CORRECT_GOOGLE_CLIENT_ID).strip()
+            client_id = raw_id.replace("c1c0", "c1o0") if "c1c0" in raw_id else raw_id
             resp_data = {
                 "success": True,
                 "google_client_id": client_id,
