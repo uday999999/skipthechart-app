@@ -230,19 +230,40 @@ def verify_totp_code(secret, user_code, window=8):
         print("TOTP verification error:", e)
     return False
 
-# Registered Users Database (in-memory with default demo account)
+# Registered Users Database (persisted with default demo account)
 def hash_pw(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
-USERS_DB = {
-    "demo.rahul@example.com": {
-        "name": "Rahul Sharma (Demo)",
-        "email": "demo.rahul@example.com",
-        "phone": "+91 98765 43210",
-        "password_hash": hash_pw("Trader@123"),
-        "created_at": "2026-09-15 10:30:00 IST"
+USERS_DB_FILE = os.path.join(os.path.dirname(__file__), "users_db.json")
+
+def load_users_db():
+    defaults = {
+        "demo.rahul@example.com": {
+            "name": "Rahul Sharma (Demo)",
+            "email": "demo.rahul@example.com",
+            "phone": "+91 98765 43210",
+            "password_hash": hash_pw("Trader@123"),
+            "created_at": "2026-09-15 10:30:00 IST"
+        }
     }
-}
+    if os.path.exists(USERS_DB_FILE):
+        try:
+            with open(USERS_DB_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    defaults.update(data)
+        except Exception as e:
+            print(f"Error reading {USERS_DB_FILE}: {e}")
+    return defaults
+
+def save_users_db(users_dict):
+    try:
+        with open(USERS_DB_FILE, "w", encoding="utf-8") as f:
+            json.dump(users_dict, f, indent=2)
+    except Exception as e:
+        print(f"Error writing {USERS_DB_FILE}: {e}")
+
+USERS_DB = load_users_db()
 
 ACTIVE_SESSION = {
     "user_email": "",
@@ -1337,6 +1358,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "password_hash": hash_pw(password),
                 "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
             }
+            save_users_db(USERS_DB)
             session_token = secrets.token_hex(24)
             AUTH_SESSIONS[session_token] = {
                 "user_email": email,
@@ -1377,6 +1399,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
                 }
                 USERS_DB[email] = user
+                save_users_db(USERS_DB)
             elif user.get("password_hash") and user["password_hash"] != hash_pw(password):
                 self.send_json_response(401, {"success": False, "error": "Incorrect password. Please verify your credentials."})
                 return
@@ -1401,12 +1424,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             }, extra_headers={"Set-Cookie": f"session_token={session_token}; Path=/; HttpOnly; SameSite=Lax"})
         elif parsed.path == "/api/auth/google":
             credential = payload.get("credential", "")
-            email = payload.get("email", "").strip().lower()
-            name = payload.get("name", "")
+            raw_email = payload.get("email", "").strip().lower()
+            name = payload.get("name", "").strip()
             picture = payload.get("picture", "")
+            email = ""
 
-            # If Google JWT token provided, decode payload
-            if credential and not email:
+            # 1. If Google JWT token provided, decode and verify claims
+            if credential:
                 try:
                     parts = credential.split(".")
                     if len(parts) >= 2:
@@ -1414,14 +1438,33 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                         claims_raw = base64.urlsafe_b64decode(parts[1] + padding).decode("utf-8")
                         claims = json.loads(claims_raw)
                         email = claims.get("email", "").strip().lower()
-                        name = claims.get("name", "")
-                        picture = claims.get("picture", "")
+                        name = claims.get("name", "") or name
+                        picture = claims.get("picture", "") or picture
                 except Exception as e:
                     print(f"Error decoding Google credential: {e}")
 
+            # 2. Whitelist of generic simulated demo accounts (only permitted without Google credential)
+            ALLOWED_DEMO_EMAILS = {
+                "demo.trader@example.com": "Demo Trader",
+                "guest.quant@example.com": "Guest Quant",
+                "demo.rahul@example.com": "Rahul Sharma (Demo)"
+            }
+
+            # 3. Security Enforcement:
+            # If no Google JWT credential was provided, ONLY the predefined demo accounts are permitted!
+            # Any arbitrary email (e.g. uday@gmail.com) without Google credential is REJECTED.
             if not email:
-                self.send_json_response(400, {"success": False, "error": "Unable to extract email from Google identity token."})
-                return
+                if raw_email in ALLOWED_DEMO_EMAILS:
+                    email = raw_email
+                    if not name:
+                        name = ALLOWED_DEMO_EMAILS[raw_email]
+                else:
+                    self.send_json_response(401, {
+                        "success": False,
+                        "error": "Google identity token required. For personal accounts, please sign in using your account password."
+                    })
+                    return
+
             if not name:
                 name = email.split("@")[0].capitalize()
 
@@ -1434,6 +1477,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     "password_hash": "",
                     "created_at": time.strftime("%Y-%m-%d %H:%M:%S IST")
                 }
+                save_users_db(USERS_DB)
+
             session_token = secrets.token_hex(24)
             AUTH_SESSIONS[session_token] = {
                 "user_email": email,

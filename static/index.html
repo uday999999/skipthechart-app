@@ -4616,20 +4616,24 @@
           <span class="text-slate-500 text-xs font-bold shrink-0">Select →</span>
         </button>
 
-        <!-- Option 2: Enter Custom Gmail -->
-        <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-          <label class="block text-[11px] font-bold text-slate-700">Or Enter Your Own Gmail:</label>
-          <div class="flex gap-2">
-            <input type="email" id="custom-google-email" placeholder="your.name@gmail.com" onkeydown="if(event.key==='Enter') submitCustomGoogleEmail()" class="flex-1 bg-white border border-slate-300 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs text-slate-900 outline-none font-mono shadow-xs">
-            <button type="button" onclick="submitCustomGoogleEmail()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shrink-0 transition shadow-xs cursor-pointer">
-              Sign In
-            </button>
+        <!-- Option 2: Sign In with Personal / Company Account -->
+        <div class="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-2xl space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="text-sm">🔐</span>
+            <span class="font-bold text-emerald-950 text-xs">Signing in with your personal account?</span>
           </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">
+            To safeguard broker API keys and automated trade orders, personal and corporate accounts authenticate securely via password.
+          </p>
+          <button type="button" onclick="closeGoogleSignInModal(); const e = document.getElementById('signin-email'); if(e){e.focus(); e.scrollIntoView({behavior:'smooth', block:'center'});}" class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+            <span>Sign In with Email &amp; Password</span>
+            <span>→</span>
+          </button>
         </div>
 
         <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-[10.5px] text-slate-500 flex items-start gap-2">
-          <span class="text-emerald-700">💡</span>
-          <span><strong>One-Tap Google SDK Ready:</strong> Google one-tap authentication is enabled for registered users.</span>
+          <span class="text-emerald-700">🛡️</span>
+          <span><strong>Zero-Trust Security:</strong> Arbitrary email bypass without passwords or Google OAuth JWT tokens is disabled.</span>
         </div>
       </div>
     </div>
@@ -6606,8 +6610,6 @@
       if (modal) {
         modal.classList.remove('hidden');
         modal.style.display = 'flex';
-        const input = document.getElementById('custom-google-email');
-        if (input) setTimeout(() => input.focus(), 150);
       }
     }
 
@@ -6617,18 +6619,6 @@
         modal.classList.add('hidden');
         modal.style.display = 'none';
       }
-    }
-
-    function submitCustomGoogleEmail() {
-      const input = document.getElementById('custom-google-email');
-      const email = (input?.value || '').trim();
-      if (!email || !email.includes('@')) {
-        alert('Please enter a valid Gmail address.');
-        return;
-      }
-      const name = email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      closeGoogleSignInModal();
-      performGoogleSignIn(email, name);
     }
 
     // Google JWT Token Decoder (Client-side RFC 7519 compliant)
@@ -6666,15 +6656,19 @@
           })
         });
         const data = await res.json();
-        if (data.email) userEmail = data.email;
-        if (data.name) userName = data.name;
-      } catch (e) {}
-
-      closeGoogleSignInModal();
-      applyLoggedInUser(userEmail, userName);
+        if (res.ok && data.success && data.email) {
+          closeGoogleSignInModal();
+          applyLoggedInUser(data.email, data.name || name);
+          showToast(`Welcome back, ${data.name || name}!`);
+        } else {
+          showAuthAlert(data.error || "Google authentication failed.");
+        }
+      } catch (e) {
+        showAuthAlert("Error validating Google authentication token.");
+      }
     }
 
-    // Unified Google Sign-In Execution
+    // Unified Google Sign-In Execution (For Simulated Demo Profiles)
     async function performGoogleSignIn(customEmail, customName) {
       closeGoogleSignInModal();
       const email = customEmail || 'demo.rahul@example.com';
@@ -6683,11 +6677,8 @@
       const btn = document.getElementById('btn-google-signin');
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = `<span class="animate-spin text-sm">↻</span> <span>Signing in with Google...</span>`;
+        btn.innerHTML = `<span class="animate-spin text-sm">↻</span> <span>Authenticating...</span>`;
       }
-
-      let userEmail = email;
-      let userName = name;
 
       try {
         const res = await fetch('/api/auth/google', {
@@ -6696,25 +6687,28 @@
           body: JSON.stringify({ email: email, name: name })
         });
         const data = await res.json();
-        if (data.email) userEmail = data.email;
-        if (data.name) userName = data.name;
-      } catch (e) {}
-
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = `
-          <svg class="w-4 h-4" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-          </svg>
-          <span>Continue with Google (Gmail)</span>
-        `;
+        if (res.ok && data.success && data.email) {
+          applyLoggedInUser(data.email, data.name || name);
+          showToast(`Logged in as ${data.name || name}`);
+        } else {
+          showAuthAlert(data.error || "Authentication failed. For personal accounts, please sign in with your email and password.");
+        }
+      } catch (e) {
+        showAuthAlert("Authentication error. Please sign in using your account password.");
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `
+            <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Continue with Google (Gmail)</span>
+          `;
+        }
       }
-
-      applyLoggedInUser(userEmail, userName);
-    }
 
     // =========================================================================
     // GOOGLE AUTHENTICATOR (TOTP) 2FA ENGINE
