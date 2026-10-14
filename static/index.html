@@ -3915,13 +3915,24 @@
         </div>
 
         <!-- Metric 4: Broker Wallet Balance -->
-        <div class="p-4 bg-white border border-slate-200/90 rounded-2xl space-y-1 shadow-sm ms-glass-card">
+        <div class="p-4 bg-white border border-slate-200/90 rounded-2xl space-y-1 shadow-sm ms-glass-card relative">
           <div class="text-xs text-slate-500 font-medium flex items-center justify-between">
-            <span>BROKER WALLET BALANCE</span>
+            <span class="flex items-center gap-1.5">
+              <span>BROKER WALLET BALANCE</span>
+              <button type="button" onclick="refreshBrokerBalance(this)" title="Sync latest equity / pay-in from Flattrade" class="text-xs text-slate-400 hover:text-emerald-600 transition cursor-pointer p-0.5 rounded hover:bg-slate-100 flex items-center justify-center">
+                <span id="bal-refresh-icon">🔄</span>
+              </button>
+            </span>
             <span id="dash-wallet-tag" class="text-[10px] text-emerald-700 bg-emerald-50 px-1 rounded border border-emerald-200 font-bold">FLATTRADE LIVE OMS</span>
           </div>
-          <div class="text-2xl font-black text-emerald-700 font-mono" id="dash-wallet-bal">₹ 2,00,000</div>
-          <div class="text-[11px] text-slate-400 font-mono" id="dash-wallet-sub">Available for Execution</div>
+          <div class="flex items-baseline justify-between gap-1">
+            <div class="text-2xl font-black text-emerald-700 font-mono" id="dash-wallet-bal">₹ 2,00,000</div>
+            <div id="dash-payin-badge" class="text-[10px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full font-bold font-mono hidden">+₹0 pay-in</div>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-400 font-mono">
+            <span id="dash-wallet-sub">Available for Execution</span>
+            <span id="dash-wallet-sync" class="text-[10px] text-slate-400">Auto-sync: 20s</span>
+          </div>
         </div>
       </div>
 
@@ -10589,6 +10600,42 @@
       }
     }
 
+    async function refreshBrokerBalance(btn) {
+      const icon = document.getElementById('bal-refresh-icon');
+      if (icon) icon.classList.add('animate-spin');
+      showToast('🔄 Syncing real-time equity & pay-in from Flattrade...');
+      try {
+        const res = await fetch('/api/broker/flattrade/refresh-balance');
+        const data = await res.json();
+        if (data.success && data.funds_available) {
+          const wb = document.getElementById('dash-wallet-bal');
+          if (wb) wb.innerText = data.funds_available;
+          const ws = document.getElementById('dash-wallet-sub');
+          if (ws) ws.innerText = `Flattrade Live Margin (${data.client_id || 'Active'})`;
+          const syncEl = document.getElementById('dash-wallet-sync');
+          if (syncEl && data.last_synced) syncEl.innerText = `Synced: ${data.last_synced}`;
+          const payinBadge = document.getElementById('dash-payin-badge');
+          if (payinBadge) {
+            if (data.payin && data.payin !== '₹ 0.00' && data.payin !== '₹ 0') {
+              payinBadge.innerText = `${data.payin} pay-in`;
+              payinBadge.classList.remove('hidden');
+            } else {
+              payinBadge.classList.add('hidden');
+            }
+          }
+          showToast(`✓ Flattrade Equity Updated! Available Margin: ${data.funds_available}`);
+        } else {
+          showToast(`⚠️ Flattrade: ${data.error || 'Could not sync balance. Click "GET TODAY\'S TOKEN"'}`);
+        }
+      } catch (e) {
+        showToast('⚠️ Could not connect to OMS gateway.');
+      } finally {
+        setTimeout(() => {
+          if (icon) icon.classList.remove('animate-spin');
+        }, 600);
+      }
+    }
+
     function pauseBotLive() {
       alert("⏸️ Bot execution safely paused. Open positions protected with broker trailing stop-loss.");
     }
@@ -10705,7 +10752,18 @@
             const wb = document.getElementById('dash-wallet-bal');
             if (wb) wb.innerText = data.broker_wallet_balance;
             const ws = document.getElementById('dash-wallet-sub');
-            if (ws) ws.innerText = 'Flattrade Live Margin';
+            if (ws) ws.innerText = `Flattrade Live Margin (${data.flattrade_client_id || 'Active'})`;
+            const syncEl = document.getElementById('dash-wallet-sync');
+            if (syncEl && data.flattrade_synced_at) syncEl.innerText = `Synced: ${data.flattrade_synced_at}`;
+            const payinBadge = document.getElementById('dash-payin-badge');
+            if (payinBadge) {
+              if (data.flattrade_payin && data.flattrade_payin !== '₹ 0.00' && data.flattrade_payin !== '₹ 0') {
+                payinBadge.innerText = `${data.flattrade_payin} pay-in`;
+                payinBadge.classList.remove('hidden');
+              } else {
+                payinBadge.classList.add('hidden');
+              }
+            }
           }
         } catch (e) {}
       }, 3000);

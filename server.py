@@ -231,6 +231,81 @@ def verify_totp_code(secret, user_code, window=8):
         print("TOTP verification error:", e)
     return False
 
+# Live Flattrade Equity / Margin Engine
+LAST_LIMITS_FETCH_TIME = 0
+CACHED_FLATTRADE_LIMITS = {}
+
+def fetch_flattrade_limits_live(force=False):
+    """Fetches real-time equity & margin limits from Flattrade PiConnect API.
+    Caches for 20 seconds to prevent rate-limiting, or immediately refetches if force=True."""
+    global LAST_LIMITS_FETCH_TIME, CACHED_FLATTRADE_LIMITS
+    now = time.time()
+    if not force and CACHED_FLATTRADE_LIMITS and (now - LAST_LIMITS_FETCH_TIME < 20):
+        return CACHED_FLATTRADE_LIMITS
+
+    session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
+    if not os.path.exists(session_file):
+        return None
+
+    try:
+        with open(session_file, "r") as sf:
+            sdata = json.load(sf)
+
+        client_id = sdata.get("client_id")
+        session_token = sdata.get("session_token")
+        if not client_id or not session_token:
+            return None
+
+        limits_url = "https://piconnect.flattrade.in/PiConnectAPI/Limits"
+        limits_body = f"jData={json.dumps({'uid': client_id, 'actid': client_id})}&jKey={session_token}"
+        limits_req = urllib.request.Request(
+            limits_url,
+            data=limits_body.encode("utf-8"),
+            headers={"Content-Type": "application/x-www-form-urlencoded"}
+        )
+        with urllib.request.urlopen(limits_req, timeout=6) as lresp:
+            lres = json.loads(lresp.read().decode("utf-8"))
+            if lres.get("stat") == "Ok":
+                # Flattrade response fields:
+                # - net: Total net margin available including added equity / pay-in
+                # - cash: Opening cash balance
+                # - payin: Fresh equity deposited today
+                # - marginused: Blocked margin in positions
+                cash = float(lres.get("cash", 0) or 0)
+                payin = float(lres.get("payin", 0) or 0)
+                raw_net = lres.get("net")
+                net = float(raw_net) if raw_net is not None and str(raw_net).strip() != "" else (cash + payin)
+                marginused = float(lres.get("marginused", 0) or 0)
+
+                # Total equity available reflects opening cash + freshly added pay-in equity
+                total_equity = net if net > 0 else max(cash + payin, 0)
+                formatted_bal = f"₹ {total_equity:,.2f}"
+
+                sdata["funds_available"] = formatted_bal
+                sdata["cash"] = f"₹ {cash:,.2f}"
+                sdata["payin"] = f"₹ {payin:,.2f}"
+                sdata["marginused"] = f"₹ {marginused:,.2f}"
+                sdata["last_synced_at"] = time.strftime("%H:%M:%S IST")
+
+                with open(session_file, "w") as sf:
+                    json.dump(sdata, sf, indent=2)
+
+                LAST_LIMITS_FETCH_TIME = now
+                CACHED_FLATTRADE_LIMITS = {
+                    "funds_available": formatted_bal,
+                    "cash": f"₹ {cash:,.2f}",
+                    "payin": f"₹ {payin:,.2f}",
+                    "net": f"₹ {net:,.2f}",
+                    "marginused": f"₹ {marginused:,.2f}",
+                    "client_id": client_id,
+                    "last_synced": sdata["last_synced_at"]
+                }
+                return CACHED_FLATTRADE_LIMITS
+    except Exception as e:
+        print("Error fetching Flattrade live limits:", e)
+
+    return CACHED_FLATTRADE_LIMITS if CACHED_FLATTRADE_LIMITS else None
+
 # Registered Users Database (persisted with default demo account)
 def hash_pw(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
@@ -1058,7 +1133,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "/api/market/live-feed",
             "/api/broker/flattrade/status",
             "/api/broker/flattrade/exchange-token",
-            "/api/broker/flattrade/set-token"
+            "/api/broker/flattrade/set-token",
+            "/api/broker/flattrade/refresh-balance"
         }
 
         if parsed_path in PUBLIC_ENDPOINTS:
@@ -1101,6 +1177,18 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "is_live": False,
                 "message": "No active live Flattrade session"
             })
+        elif parsed.path == "/api/broker/flattrade/refresh-balance":
+            limits = fetch_flattrade_limits_live(force=True)
+            if limits:
+                self.send_json_response(200, {
+                    "success": True,
+                    **limits
+                })
+            else:
+                self.send_json_response(400, {
+                    "success": False,
+                    "error": "Could not sync live limits from Flattrade. Ensure active morning session token is linked."
+                })
         elif parsed.path == "/api/broker/flattrade/auth-url":
             creds = get_saved_broker_credentials()
             api_key = creds.get("api_key", "").strip() if creds else ""
@@ -1199,19 +1287,10 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             global LAST_MARKET_TICK_TIME
             LAST_MARKET_TICK_TIME = time.time()
 
-            # Check for active live Flattrade session and funds
-            session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
-            has_live_session = False
-            live_wallet_balance = "₹ 2,00,000.00"
-            if os.path.exists(session_file):
-                try:
-                    with open(session_file, "r") as sf:
-                        sdata = json.load(sf)
-                        if sdata.get("funds_available"):
-                            live_wallet_balance = sdata["funds_available"]
-                            has_live_session = True
-                except Exception:
-                    pass
+            # Query or use cached live Flattrade equity (auto-refreshes every 20s)
+            flattrade_limits = fetch_flattrade_limits_live(force=False)
+            has_live_session = bool(flattrade_limits)
+            live_wallet_balance = flattrade_limits["funds_available"] if flattrade_limits else "₹ 2,00,000.00"
 
             self.send_json_response(200, {
                 "market_status": "OPEN (REAL-TIME EXCHANGE FEED)" if market_open else "MARKET CLOSED (Off-Hours)",
@@ -1223,6 +1302,9 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "target_reversion": 0.00,
                 "broker_wallet_balance": live_wallet_balance,
                 "has_live_session": has_live_session,
+                "flattrade_client_id": flattrade_limits.get("client_id", "") if flattrade_limits else "",
+                "flattrade_payin": flattrade_limits.get("payin", "") if flattrade_limits else "",
+                "flattrade_synced_at": flattrade_limits.get("last_synced", "") if flattrade_limits else "",
                 "available_margin": live_wallet_balance,
                 "current_ratio": ratio,
                 "mean_ratio_120m": mean_ratio,
@@ -1892,42 +1974,26 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 })
                 return
 
-            cash_val = None
-            try:
-                limits_url = "https://piconnect.flattrade.in/PiConnectAPI/Limits"
-                limits_body = f"jData={json.dumps({'uid': client_id, 'actid': client_id})}&jKey={token}"
-                limits_req = urllib.request.Request(
-                    limits_url,
-                    data=limits_body.encode("utf-8"),
-                    headers={"Content-Type": "application/x-www-form-urlencoded"}
-                )
-                with urllib.request.urlopen(limits_req, timeout=7) as lresp:
-                    lres = json.loads(lresp.read().decode("utf-8"))
-                    if lres.get("stat") == "Ok":
-                        raw_cash = lres.get("cash") or lres.get("net") or "0"
-                        cash_val = f"₹ {float(raw_cash):,.2f}"
-            except Exception as e:
-                print("Flattrade limits query error:", e)
+            session_data = {
+                "client_id": client_id,
+                "api_key": api_key,
+                "session_token": token,
+                "funds_available": "₹ 0.00",
+                "authenticated_at": time.time(),
+                "is_live": True
+            }
+            session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
+            with open(session_file, "w") as sf:
+                json.dump(session_data, sf, indent=2)
 
-            if cash_val:
-                session_data = {
-                    "client_id": client_id,
-                    "api_key": api_key,
-                    "session_token": token,
-                    "funds_available": cash_val,
-                    "authenticated_at": time.time(),
-                    "is_live": True
-                }
-                session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
-                with open(session_file, "w") as sf:
-                    json.dump(session_data, sf, indent=2)
-
+            limits = fetch_flattrade_limits_live(force=True)
+            if limits and limits.get("funds_available"):
                 self.send_json_response(200, {
                     "success": True,
-                    "message": f"Flattrade Live Session active! Live Funds: {cash_val}",
+                    "message": f"Flattrade Live Session active! Total Equity: {limits['funds_available']}",
                     "client_id": client_id,
                     "token": token,
-                    "funds_available": cash_val,
+                    **limits,
                     "is_live": True
                 })
             else:
