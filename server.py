@@ -1054,7 +1054,11 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             "/api/strategy/parse-prompt",
             "/api/strategy/parse-youtube",
             "/api/strategy/test-combinations",
-            "/api/strategy/save-custom"
+            "/api/strategy/save-custom",
+            "/api/market/live-feed",
+            "/api/broker/flattrade/status",
+            "/api/broker/flattrade/exchange-token",
+            "/api/broker/flattrade/set-token"
         }
 
         if parsed_path in PUBLIC_ENDPOINTS:
@@ -1195,6 +1199,20 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             global LAST_MARKET_TICK_TIME
             LAST_MARKET_TICK_TIME = time.time()
 
+            # Check for active live Flattrade session and funds
+            session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
+            has_live_session = False
+            live_wallet_balance = "₹ 2,00,000.00"
+            if os.path.exists(session_file):
+                try:
+                    with open(session_file, "r") as sf:
+                        sdata = json.load(sf)
+                        if sdata.get("funds_available"):
+                            live_wallet_balance = sdata["funds_available"]
+                            has_live_session = True
+                except Exception:
+                    pass
+
             self.send_json_response(200, {
                 "market_status": "OPEN (REAL-TIME EXCHANGE FEED)" if market_open else "MARKET CLOSED (Off-Hours)",
                 "nifty_mark": n_curr,
@@ -1203,8 +1221,9 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "z_score": z_curr,
                 "z_score_threshold": BOT_RUNTIME_STATE.get("z_score_threshold", 3.000),
                 "target_reversion": 0.00,
-                "broker_wallet_balance": "₹ 2,00,000.00",
-                "available_margin": "₹ 1,75,000.00",
+                "broker_wallet_balance": live_wallet_balance,
+                "has_live_session": has_live_session,
+                "available_margin": live_wallet_balance,
                 "current_ratio": ratio,
                 "mean_ratio_120m": mean_ratio,
                 "sigma_deviation": z_curr,
@@ -1859,6 +1878,62 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_json_response(500, {
                     "success": False,
                     "error": str(e)
+                })
+        elif parsed.path == "/api/broker/flattrade/set-token":
+            token = payload.get("token", "").strip()
+            creds = get_saved_broker_credentials()
+            client_id = creds.get("client_code", "").strip() if creds else ""
+            api_key = creds.get("api_key", "").strip() if creds else ""
+
+            if not token or token == "No session token active":
+                self.send_json_response(400, {
+                    "success": False,
+                    "error": "Please click 'GET TODAY\'S TOKEN' to generate a valid Flattrade session token."
+                })
+                return
+
+            cash_val = None
+            try:
+                limits_url = "https://piconnect.flattrade.in/PiConnectAPI/Limits"
+                limits_body = f"jData={json.dumps({'uid': client_id, 'actid': client_id})}&jKey={token}"
+                limits_req = urllib.request.Request(
+                    limits_url,
+                    data=limits_body.encode("utf-8"),
+                    headers={"Content-Type": "application/x-www-form-urlencoded"}
+                )
+                with urllib.request.urlopen(limits_req, timeout=7) as lresp:
+                    lres = json.loads(lresp.read().decode("utf-8"))
+                    if lres.get("stat") == "Ok":
+                        raw_cash = lres.get("cash") or lres.get("net") or "0"
+                        cash_val = f"₹ {float(raw_cash):,.2f}"
+            except Exception as e:
+                print("Flattrade limits query error:", e)
+
+            if cash_val:
+                session_data = {
+                    "client_id": client_id,
+                    "api_key": api_key,
+                    "session_token": token,
+                    "funds_available": cash_val,
+                    "authenticated_at": time.time(),
+                    "is_live": True
+                }
+                session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
+                with open(session_file, "w") as sf:
+                    json.dump(session_data, sf, indent=2)
+
+                self.send_json_response(200, {
+                    "success": True,
+                    "message": f"Flattrade Live Session active! Live Funds: {cash_val}",
+                    "client_id": client_id,
+                    "token": token,
+                    "funds_available": cash_val,
+                    "is_live": True
+                })
+            else:
+                self.send_json_response(400, {
+                    "success": False,
+                    "error": "Could not verify live limits. Session token may be expired. Click 'GET TODAY\'S TOKEN' to generate a fresh token."
                 })
         elif parsed.path == "/api/broker/flattrade/status":
             session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")

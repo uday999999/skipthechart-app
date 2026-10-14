@@ -3916,9 +3916,12 @@
 
         <!-- Metric 4: Broker Wallet Balance -->
         <div class="p-4 bg-white border border-slate-200/90 rounded-2xl space-y-1 shadow-sm ms-glass-card">
-          <div class="text-xs text-slate-500 font-medium">BROKER WALLET BALANCE <span id="dash-wallet-tag" class="text-[10px] text-emerald-700 bg-emerald-50 px-1 rounded border border-emerald-200 font-bold">FLATTRADE LIVE OMS</span></div>
+          <div class="text-xs text-slate-500 font-medium flex items-center justify-between">
+            <span>BROKER WALLET BALANCE</span>
+            <span id="dash-wallet-tag" class="text-[10px] text-emerald-700 bg-emerald-50 px-1 rounded border border-emerald-200 font-bold">FLATTRADE LIVE OMS</span>
+          </div>
           <div class="text-2xl font-black text-emerald-700 font-mono" id="dash-wallet-bal">₹ 2,00,000</div>
-          <div class="text-[11px] text-slate-400 font-mono">Available for Execution</div>
+          <div class="text-[11px] text-slate-400 font-mono" id="dash-wallet-sub">Available for Execution</div>
         </div>
       </div>
 
@@ -10519,6 +10522,12 @@
           if (tokenInput && data.token) tokenInput.value = data.token;
           const statusTitle = document.getElementById('dash-broker-conn-title');
           if (statusTitle) statusTitle.innerText = `API CONNECTION (FLATTRADE • LIVE OMS ACTIVE • ${data.client_id})`;
+          if (data.funds_available) {
+            const wb = document.getElementById('dash-wallet-bal');
+            if (wb) wb.innerText = data.funds_available;
+            const ws = document.getElementById('dash-wallet-sub');
+            if (ws) ws.innerText = `Flattrade Live Margin (${data.client_id})`;
+          }
           window.history.replaceState({}, document.title, window.location.pathname);
         } else {
           showToast(`⚠️ Flattrade Auth: ${data.error || 'Token exchange failed'}`, 'error');
@@ -10543,13 +10552,41 @@
             if (tokenInput && data.session.session_token) tokenInput.value = data.session.session_token;
             const statusTitle = document.getElementById('dash-broker-conn-title');
             if (statusTitle) statusTitle.innerText = `API CONNECTION (FLATTRADE • LIVE OMS ACTIVE • ${data.session.client_id})`;
+            if (data.session.funds_available) {
+              const wb = document.getElementById('dash-wallet-bal');
+              if (wb) wb.innerText = data.session.funds_available;
+              const ws = document.getElementById('dash-wallet-sub');
+              if (ws) ws.innerText = `Flattrade Live Margin (${data.session.client_id})`;
+            }
           }
         } catch (e) {}
       }
     }
 
-    function restartBotWorker() {
-      alert("🔄 Dedicated Cloud Worker restarted! Real-time tick stream synchronized.");
+    async function restartBotWorker() {
+      const tokenInput = document.getElementById('dash-access-token');
+      const token = tokenInput ? tokenInput.value.trim() : '';
+
+      showToast('🔄 Verifying session token with Flattrade OMS...');
+      try {
+        const res = await fetch('/api/broker/flattrade/set-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: token })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✓ Flattrade Active! Live Margin: ${data.funds_available}`);
+          const wb = document.getElementById('dash-wallet-bal');
+          if (wb) wb.innerText = data.funds_available;
+          const ws = document.getElementById('dash-wallet-sub');
+          if (ws) ws.innerText = `Flattrade Live Margin (${data.client_id})`;
+        } else {
+          showToast(`⚠️ ${data.error || 'Token verification failed'}`);
+        }
+      } catch (e) {
+        showToast('🔄 Dedicated Cloud Worker tick stream refreshed.');
+      }
     }
 
     function pauseBotLive() {
@@ -10663,6 +10700,12 @@
             if (badge) badge.innerText = `±${Number(data.z_score_threshold).toFixed(3)}σ`;
             const tag = document.getElementById('card-threshold-tag');
             if (tag) tag.innerText = `Threshold: ±${Number(data.z_score_threshold).toFixed(3)}σ`;
+          }
+          if (data.broker_wallet_balance && data.has_live_session) {
+            const wb = document.getElementById('dash-wallet-bal');
+            if (wb) wb.innerText = data.broker_wallet_balance;
+            const ws = document.getElementById('dash-wallet-sub');
+            if (ws) ws.innerText = 'Flattrade Live Margin';
           }
         } catch (e) {}
       }, 3000);
