@@ -243,7 +243,9 @@ def fetch_flattrade_limits_live(force=False):
     if not force and CACHED_FLATTRADE_LIMITS and (now - LAST_LIMITS_FETCH_TIME < 20):
         return CACHED_FLATTRADE_LIMITS
 
-    session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
+    session_file = "/var/www/skipthechart/flattrade_session.json"
+    if not os.path.exists(session_file):
+        session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
     if not os.path.exists(session_file):
         return None
 
@@ -305,6 +307,55 @@ def fetch_flattrade_limits_live(force=False):
         print("Error fetching Flattrade live limits:", e)
 
     return CACHED_FLATTRADE_LIMITS if CACHED_FLATTRADE_LIMITS else None
+
+# Live Flattrade TradeBook Engine (Real Executed Orders)
+LAST_TRADES_FETCH_TIME = 0
+CACHED_FLATTRADE_TRADES = []
+
+def fetch_flattrade_trades_live(force=False):
+    """Fetches real-time executed trades from Flattrade TradeBook API.
+    Returns real trades list or empty list if no trades executed today."""
+    global LAST_TRADES_FETCH_TIME, CACHED_FLATTRADE_TRADES
+    now = time.time()
+    if not force and CACHED_FLATTRADE_TRADES is not None and (now - LAST_TRADES_FETCH_TIME < 15):
+        return CACHED_FLATTRADE_TRADES
+
+    session_file = "/var/www/skipthechart/flattrade_session.json"
+    if not os.path.exists(session_file):
+        session_file = os.path.join(os.path.dirname(__file__), "flattrade_session.json")
+    if not os.path.exists(session_file):
+        return []
+
+    try:
+        with open(session_file, "r") as sf:
+            sdata = json.load(sf)
+
+        client_id = sdata.get("client_id")
+        session_token = sdata.get("session_token")
+        if not client_id or not session_token:
+            return []
+
+        tb_url = "https://piconnect.flattrade.in/PiConnectAPI/TradeBook"
+        tb_body = f"jData={json.dumps({'uid': client_id, 'actid': client_id})}&jKey={session_token}"
+        tb_req = urllib.request.Request(
+            tb_url,
+            data=tb_body.encode("utf-8"),
+            headers={"Content-Type": "application/x-www-form-urlencoded"}
+        )
+        with urllib.request.urlopen(tb_req, timeout=5) as tresp:
+            tdata = json.loads(tresp.read().decode("utf-8"))
+            trades = []
+            if isinstance(tdata, list):
+                trades = tdata
+            elif isinstance(tdata, dict) and tdata.get("stat") == "Ok" and "values" in tdata:
+                trades = tdata.get("values", [])
+            LAST_TRADES_FETCH_TIME = now
+            CACHED_FLATTRADE_TRADES = trades
+            return trades
+    except Exception as e:
+        print("Flattrade live TradeBook fetch status:", e)
+
+    return CACHED_FLATTRADE_TRADES if CACHED_FLATTRADE_TRADES else []
 
 # Registered Users Database (persisted with default demo account)
 def hash_pw(password: str) -> str:
@@ -1189,6 +1240,13 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     "success": False,
                     "error": "Could not sync live limits from Flattrade. Ensure active morning session token is linked."
                 })
+        elif parsed.path == "/api/broker/flattrade/trades":
+            trades = fetch_flattrade_trades_live(force=True)
+            self.send_json_response(200, {
+                "success": True,
+                "trades": trades,
+                "count": len(trades)
+            })
         elif parsed.path == "/api/broker/flattrade/auth-url":
             creds = get_saved_broker_credentials()
             api_key = creds.get("api_key", "").strip() if creds else ""
@@ -1287,10 +1345,11 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
             global LAST_MARKET_TICK_TIME
             LAST_MARKET_TICK_TIME = time.time()
 
-            # Query or use cached live Flattrade equity (auto-refreshes every 20s)
+            # Query or use cached live Flattrade equity & trades (auto-refreshes every 15-20s)
             flattrade_limits = fetch_flattrade_limits_live(force=False)
             has_live_session = bool(flattrade_limits)
             live_wallet_balance = flattrade_limits["funds_available"] if flattrade_limits else "₹ 2,00,000.00"
+            real_live_trades = fetch_flattrade_trades_live(force=False) if has_live_session else []
 
             self.send_json_response(200, {
                 "market_status": "OPEN (REAL-TIME EXCHANGE FEED)" if market_open else "MARKET CLOSED (Off-Hours)",
@@ -1305,6 +1364,8 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "flattrade_client_id": flattrade_limits.get("client_id", "") if flattrade_limits else "",
                 "flattrade_payin": flattrade_limits.get("payin", "") if flattrade_limits else "",
                 "flattrade_synced_at": flattrade_limits.get("last_synced", "") if flattrade_limits else "",
+                "live_trades": real_live_trades,
+                "live_trades_count": len(real_live_trades),
                 "available_margin": live_wallet_balance,
                 "current_ratio": ratio,
                 "mean_ratio_120m": mean_ratio,
@@ -1316,7 +1377,7 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                     f"{time.strftime('%b %d %H:%M:%S', ist_time)} [FEED] Real-time NSE tick received: Nifty {n_curr:,.2f} | BankNifty {bn_curr:,.2f}",
                     f"{time.strftime('%b %d %H:%M:%S', ist_time)} [WORKER] Math engine z-score: {z_curr:+.3f}σ (Threshold: ±{BOT_RUNTIME_STATE.get('z_score_threshold', 3.000):.3f}σ)",
                     f"{time.strftime('%b %d %H:%M:%S', ist_time)} [WORKER] Real-time ratio: {ratio:.5f} (Mean: {mean_ratio:.5f})",
-                    f"{time.strftime('%b %d %H:%M:%S', ist_time)} [WORKER] Flattrade OMS status: LIMIT orders verified. Process active."
+                    f"{time.strftime('%b %d %H:%M:%S', ist_time)} [GATEWAY] Flattrade OMS: Standby ({len(real_live_trades)} active orders). Monitoring tick stream."
                 ]
             })
         elif parsed.path == "/api/strategy/update-zscore":

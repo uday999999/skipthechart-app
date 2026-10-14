@@ -4017,11 +4017,13 @@
         <div class="border-t border-slate-100 pt-2.5 flex items-center justify-between text-[11px] text-slate-500">
           <span class="flex items-center gap-1.5 text-slate-400">
             <span>🛡️</span>
-            <span>Zero unapproved orders: Capital remains safely in your broker.</span>
+            <span id="dash-trade-history-footer">Zero unapproved orders: Capital remains safely in your broker.</span>
           </span>
-          <button type="button" onclick="toggleSampleTradePreview()" class="text-emerald-700 hover:text-emerald-800 font-bold hover:underline cursor-pointer">
-            <span id="btn-sample-trades-text">Show Illustrative Sample Trades ▾</span>
-          </button>
+          <div id="btn-sample-trades-container">
+            <button type="button" onclick="toggleSampleTradePreview()" class="text-emerald-700 hover:text-emerald-800 font-bold hover:underline cursor-pointer">
+              <span id="btn-sample-trades-text">Show Illustrative Sample Trades ▾</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -10475,6 +10477,16 @@
         wTag.className = isLive ? 'text-[10px] text-emerald-700 bg-emerald-50 px-1 rounded border border-emerald-200 font-bold' : 'text-[10px] text-cyan-700 bg-cyan-50 px-1 rounded border border-cyan-200 font-bold';
       }
 
+      // Wallet balance card display in Live vs Paper
+      const wb = document.getElementById('dash-wallet-bal');
+      const ws = document.getElementById('dash-wallet-sub');
+      if (!isLive) {
+        if (wb && (wb.innerText === '₹ 0.00' || wb.innerText === '₹ 0')) {
+          wb.innerText = '₹ 2,00,000';
+        }
+        if (ws) ws.innerText = 'Available Paper Virtual Margin';
+      }
+
       const tTitle = document.getElementById('dash-tracker-title');
       if (tTitle) tTitle.innerText = `Price Tracker & Math Engine (${tickSuffix})`;
 
@@ -10482,7 +10494,7 @@
       if (mCol) mCol.innerText = `MARK PRICE (${isLive ? 'LIVE EXCHANGE' : 'PAPER SIMULATION'})`;
 
       const hTitle = document.getElementById('dash-history-title');
-      if (hTitle) hTitle.innerText = `Strategy Trade Execution History (${suffix})`;
+      if (hTitle) hTitle.innerText = isLive ? 'Real-Time Flattrade Trade Book (LIVE OMS)' : 'Strategy Trade Execution History (PAPER TRADING)';
 
       const rTag = document.getElementById('dash-routing-tag');
       if (rTag) {
@@ -10500,6 +10512,22 @@
 
       const nBadge = document.getElementById('dash-node-badge');
       if (nBadge) nBadge.innerText = `CLOUD NODE ACTIVE (${suffix})`;
+
+      // In Live Mode: strictly show real data. Hide sample trades toggle button!
+      const sampleBtnBox = document.getElementById('btn-sample-trades-container');
+      const footerNote = document.getElementById('dash-trade-history-footer');
+      if (isLive) {
+        if (sampleBtnBox) sampleBtnBox.classList.add('hidden');
+        if (footerNote) footerNote.innerText = "Live Broker Feed: Zero unapproved orders. Capital remains safely in your broker.";
+        showingSampleTrades = false;
+        renderRealLiveTrades(latestLiveTrades, userState.brokerClientMasked);
+      } else {
+        if (sampleBtnBox) sampleBtnBox.classList.remove('hidden');
+        if (footerNote) footerNote.innerText = "Paper Simulation: Zero real money risk.";
+        if (!showingSampleTrades) {
+          renderEmptyTradeHistory(false);
+        }
+      }
     }
 
     async function generateDailyToken() {
@@ -10648,8 +10676,13 @@
     }
 
     let showingSampleTrades = false;
+    let latestLiveTrades = [];
 
     function toggleSampleTradePreview() {
+      if (userState.isLive) {
+        showToast("ℹ️ Live Execution Mode shows real broker trades only.");
+        return;
+      }
       const tbody = document.getElementById('dash-trade-history-rows');
       const btnText = document.getElementById('btn-sample-trades-text');
       if (!tbody) return;
@@ -10694,33 +10727,88 @@
         `;
         if (btnText) btnText.innerText = "Hide Illustrative Sample Trades ▴";
       } else {
-        renderEmptyTradeHistory();
+        renderEmptyTradeHistory(false);
         if (btnText) btnText.innerText = "Show Illustrative Sample Trades ▾";
       }
     }
 
-    function renderEmptyTradeHistory() {
+    function renderRealLiveTrades(trades, clientId) {
+      latestLiveTrades = trades || [];
       const tbody = document.getElementById('dash-trade-history-rows');
       if (!tbody) return;
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="8" class="py-8 px-4 text-center">
-            <div class="space-y-2 max-w-md mx-auto">
-              <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 text-lg border border-emerald-200">
-                🟢
+      if (!trades || trades.length === 0) {
+        renderEmptyTradeHistory(true);
+        return;
+      }
+      tbody.innerHTML = trades.map(t => {
+        const trantype = (t.trantype || '').toUpperCase();
+        const isBuy = trantype === 'B';
+        const sideBadge = isBuy
+          ? '<span class="text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded text-[10px]">BUY</span>'
+          : '<span class="text-rose-600 font-bold bg-rose-50 border border-rose-200 px-2 py-0.5 rounded text-[10px]">SELL</span>';
+        const sym = t.tsym || t.token || 'NSE SCRIP';
+        const fillTime = t.fltm || t.norentm || '--:--:--';
+        const fillPrice = t.flprc || t.prc || '0.00';
+        const qty = t.qty || '0';
+        return `
+          <tr class="hover:bg-slate-50">
+            <td class="py-2.5 px-3 text-slate-500 font-mono">${fillTime}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-900 font-mono">${sym}</td>
+            <td class="py-2.5 px-3">${sideBadge}</td>
+            <td class="py-2.5 px-3 text-slate-700 font-mono">₹ ${fillPrice}</td>
+            <td class="py-2.5 px-3 text-slate-500 font-mono">Qty: ${qty}</td>
+            <td class="py-2.5 px-3 text-slate-800 font-mono">₹ ${fillPrice}</td>
+            <td class="py-2.5 px-3 text-emerald-700 font-bold">--</td>
+            <td class="py-2.5 px-3"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded text-[10px] font-bold">FILLED (FLATTRADE)</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderEmptyTradeHistory(isLive) {
+      const tbody = document.getElementById('dash-trade-history-rows');
+      if (!tbody) return;
+      if (isLive) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-8 px-4 text-center">
+              <div class="space-y-2 max-w-md mx-auto">
+                <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 text-lg border border-emerald-200">
+                  🟢
+                </div>
+                <div class="text-xs font-bold text-slate-800">No Trades Executed Today</div>
+                <p class="text-[11px] text-slate-500 leading-relaxed font-sans">
+                  Your Flattrade account is connected in <strong>Live Standby Mode</strong>. The quantitative arbitrage engine is actively monitoring Nifty 50 &amp; BankNifty live ticks. Orders will only trigger when the live Z-score breaches your configured threshold (<strong>±3.000σ</strong>).
+                </p>
+                <div class="pt-1 flex items-center justify-center gap-2">
+                  <span class="inline-block text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full font-mono font-bold">Real Broker Orderbook: Empty</span>
+                  <span class="inline-block text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-mono">0 Open Trades</span>
+                </div>
               </div>
-              <div class="text-xs font-bold text-slate-800">No Open Trades Yet Today</div>
-              <p class="text-[11px] text-slate-500 leading-relaxed font-sans">
-                Your Flattrade account is connected in <strong>Safe Standby Mode</strong>. The quantitative arbitrage engine is actively monitoring Nifty 50 &amp; BankNifty live ticks. Orders will only trigger when the live Z-score breaches your configured threshold (<strong>±3.000σ</strong>).
-              </p>
-              <div class="pt-1 flex items-center justify-center gap-2">
-                <span class="inline-block text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full font-mono font-bold">100% Client Directed</span>
-                <span class="inline-block text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-mono">Zero Market Risk Currently</span>
+            </td>
+          </tr>
+        `;
+      } else {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-8 px-4 text-center">
+              <div class="space-y-2 max-w-md mx-auto">
+                <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-cyan-50 text-cyan-700 text-lg border border-cyan-200">
+                  📊
+                </div>
+                <div class="text-xs font-bold text-slate-800">No Open Trades Yet Today (Paper Simulation)</div>
+                <p class="text-[11px] text-slate-500 leading-relaxed font-sans">
+                  Paper trading engine is monitoring simulated market ticks. No simulated strategy triggers have fired yet today.
+                </p>
+                <div class="pt-1 flex items-center justify-center gap-2">
+                  <span class="inline-block text-[10px] bg-cyan-50 text-cyan-800 border border-cyan-200 px-2.5 py-0.5 rounded-full font-mono font-bold">Zero Financial Risk</span>
+                  <span class="inline-block text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-mono">0 Paper Orders</span>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      `;
+            </td>
+          </tr>
+        `;
+      }
     }
 
     function pauseBotLive() {
@@ -10835,21 +10923,39 @@
             const tag = document.getElementById('card-threshold-tag');
             if (tag) tag.innerText = `Threshold: ±${Number(data.z_score_threshold).toFixed(3)}σ`;
           }
-          if (data.broker_wallet_balance && data.has_live_session) {
+          if (userState.isLive) {
             const wb = document.getElementById('dash-wallet-bal');
-            if (wb) wb.innerText = data.broker_wallet_balance;
             const ws = document.getElementById('dash-wallet-sub');
-            if (ws) ws.innerText = `Flattrade Live Margin (${data.flattrade_client_id || 'Active'})`;
-            const syncEl = document.getElementById('dash-wallet-sync');
-            if (syncEl && data.flattrade_synced_at) syncEl.innerText = `Synced: ${data.flattrade_synced_at}`;
-            const payinBadge = document.getElementById('dash-payin-badge');
-            if (payinBadge) {
-              if (data.flattrade_payin && data.flattrade_payin !== '₹ 0.00' && data.flattrade_payin !== '₹ 0') {
-                payinBadge.innerText = `${data.flattrade_payin} pay-in`;
-                payinBadge.classList.remove('hidden');
-              } else {
-                payinBadge.classList.add('hidden');
+            if (data.has_live_session && data.broker_wallet_balance) {
+              if (wb) wb.innerText = data.broker_wallet_balance;
+              if (ws) ws.innerText = `Flattrade Live Margin (${data.flattrade_client_id || 'Active'})`;
+              const syncEl = document.getElementById('dash-wallet-sync');
+              if (syncEl && data.flattrade_synced_at) syncEl.innerText = `Synced: ${data.flattrade_synced_at}`;
+              const payinBadge = document.getElementById('dash-payin-badge');
+              if (payinBadge) {
+                if (data.flattrade_payin && data.flattrade_payin !== '₹ 0.00' && data.flattrade_payin !== '₹ 0') {
+                  payinBadge.innerText = `${data.flattrade_payin} pay-in`;
+                  payinBadge.classList.remove('hidden');
+                } else {
+                  payinBadge.classList.add('hidden');
+                }
               }
+            } else {
+              if (wb) wb.innerText = '₹ 0.00';
+              if (ws) ws.innerText = 'Flattrade Session Required';
+            }
+
+            // Real Live Trades from Flattrade TradeBook
+            const trades = data.live_trades || [];
+            latestLiveTrades = trades;
+            renderRealLiveTrades(trades, data.flattrade_client_id);
+          }
+
+          if (data.terminal_logs && Array.isArray(data.terminal_logs)) {
+            const logsEl = document.getElementById('dash-terminal-logs');
+            if (logsEl && logsEl.dataset.initialized !== 'true') {
+              logsEl.innerHTML = data.terminal_logs.map(l => `<div>${l}</div>`).join('');
+              logsEl.dataset.initialized = 'true';
             }
           }
         } catch (e) {}
