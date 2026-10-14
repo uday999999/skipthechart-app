@@ -3596,11 +3596,11 @@
 
           <!-- Paper Trading vs Live Execution Toggle -->
           <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-mono font-bold">
-            <button type="button" id="toggle-paper" onclick="setExecutionMode('paper')" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">
+            <button type="button" id="toggle-paper" onclick="setExecutionMode('paper')" class="px-3 py-1 rounded-lg bg-cyan-600 text-white shadow font-bold transition">
               PAPER TRADING
             </button>
-            <button type="button" id="toggle-live" onclick="setExecutionMode('live')" class="px-3 py-1 rounded-lg bg-rose-600 text-white shadow-xs transition flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+            <button type="button" id="toggle-live" onclick="setExecutionMode('live')" class="px-3 py-1 rounded-lg text-slate-500 hover:text-slate-900 transition flex items-center gap-1.5 font-normal">
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
               LIVE EXECUTION
             </button>
           </div>
@@ -3973,9 +3973,9 @@
       <div class="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-3 shadow-sm ms-glass-card">
         <div class="flex items-center justify-between border-b border-slate-100 pb-2">
           <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-            <span>📋</span> <span id="dash-history-title">Strategy Trade Execution History (LIVE OMS)</span>
+            <span>📋</span> <span id="dash-history-title">Strategy Trade Execution History (PAPER TRADING)</span>
           </h3>
-          <span class="text-xs text-emerald-700 font-mono font-bold" id="dash-routing-tag">Broker Order Routing: Active (LIVE OMS)</span>
+          <span class="text-xs text-cyan-800 bg-cyan-50 border border-cyan-200 px-2.5 py-0.5 rounded-md font-mono font-bold" id="dash-routing-tag">Paper Simulation (Zero Real Money Risk)</span>
         </div>
 
         <div class="overflow-x-auto">
@@ -5410,7 +5410,8 @@
         botRunning: false,
         dailySwitchesRemaining: 3,
         hasBrokerCredentials: false,
-        brokerClientMasked: ''
+        brokerClientMasked: '',
+        isLive: false
       };
     }
 
@@ -10434,21 +10435,16 @@
         renderBrokerGuide(userState.selectedBroker || 'flattrade');
       }
 
-      syncDashboardModeLabels(userState.isLive !== false ? 'live' : 'paper');
+      syncDashboardModeLabels(userState.isLive === true ? 'live' : 'paper');
     }
 
     function setExecutionMode(mode) {
+      if (mode === 'live' && !userState.isLive) {
+        const ok = confirm("⚠️ Switch to Live Execution Mode?\n\nIn Live Mode, when market Z-Score breaches your strategy threshold (±3.000σ), orders can be routed through your broker.\n\nNote: If no strategy triggers occur, zero orders are placed.\n\nClick OK to switch to Live Execution, or Cancel to stay in safe Paper Simulation.");
+        if (!ok) return;
+      }
       userState.isLive = (mode === 'live');
       saveState();
-      const p = document.getElementById('toggle-paper');
-      const l = document.getElementById('toggle-live');
-      if (mode === 'paper') {
-        if (p) p.className = "px-3 py-1 rounded-lg bg-cyan-600 text-white shadow font-bold";
-        if (l) l.className = "px-3 py-1 rounded-lg text-slate-400 font-normal";
-      } else {
-        if (l) l.className = "px-3 py-1 rounded-lg bg-rose-600 text-white shadow font-bold flex items-center gap-1.5";
-        if (p) p.className = "px-3 py-1 rounded-lg text-slate-400 font-normal";
-      }
       syncDashboardModeLabels(mode);
     }
 
@@ -10457,8 +10453,18 @@
       const suffix = isLive ? 'LIVE OMS' : 'PAPER TRADING';
       const tickSuffix = isLive ? 'LIVE EXCHANGE TICK' : 'PAPER SIMULATION';
 
+      const p = document.getElementById('toggle-paper');
+      const l = document.getElementById('toggle-live');
+      if (isLive) {
+        if (l) l.className = "px-3 py-1 rounded-lg bg-rose-600 text-white shadow font-bold flex items-center gap-1.5 transition";
+        if (p) p.className = "px-3 py-1 rounded-lg text-slate-500 hover:text-slate-900 transition font-normal";
+      } else {
+        if (p) p.className = "px-3 py-1 rounded-lg bg-cyan-600 text-white shadow font-bold transition";
+        if (l) l.className = "px-3 py-1 rounded-lg text-slate-500 hover:text-slate-900 transition flex items-center gap-1.5 font-normal";
+      }
+
       const badge = document.getElementById('dash-cloud-worker-badge');
-      if (badge) badge.innerText = `✓ Cloud Node: ONLINE (${isLive ? 'LIVE EXECUTION' : 'PAPER TRADING'})`;
+      if (badge) badge.innerText = `✓ Cloud Node: ONLINE (${isLive ? 'LIVE OMS READY' : 'PAPER TRADING'})`;
 
       const zEl = document.getElementById('dash-zscore-title');
       if (zEl) zEl.innerText = `LIVE Z-SCORE (${tickSuffix})`;
@@ -10479,7 +10485,15 @@
       if (hTitle) hTitle.innerText = `Strategy Trade Execution History (${suffix})`;
 
       const rTag = document.getElementById('dash-routing-tag');
-      if (rTag) rTag.innerText = `Broker Order Routing: Active (${suffix})`;
+      if (rTag) {
+        if (isLive) {
+          rTag.innerText = "Gateway: Flattrade Standby (Monitoring Trigger ±3.000σ • No Orders Placed)";
+          rTag.className = "text-xs text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-md font-mono font-bold";
+        } else {
+          rTag.innerText = "Paper Simulation (Zero Real Money Risk)";
+          rTag.className = "text-xs text-cyan-800 bg-cyan-50 border border-cyan-200 px-2.5 py-0.5 rounded-md font-mono font-bold";
+        }
+      }
 
       const lTitle = document.getElementById('dash-system-logs-title');
       if (lTitle) lTitle.innerText = `SYSTEM EXECUTION LOGS (${suffix})`;
