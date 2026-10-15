@@ -176,26 +176,61 @@ def decrypt_credentials(encrypted_data: dict) -> dict:
 DROPLET_STATIC_IP = os.environ.get("DROPLET_STATIC_IP", "139.59.8.234")
 
 def get_saved_broker_credentials():
-    """Retrieves and decrypts stored broker credentials from AES-256-GCM encrypted storage."""
-    creds_enc_file = os.path.join(os.path.dirname(__file__), "broker_credentials.enc.json")
-    creds_file = os.path.join(os.path.dirname(__file__), "broker_credentials.json")
-    if os.path.exists(creds_enc_file):
-        try:
-            with open(creds_enc_file, "r") as cf:
-                data = json.load(cf)
-                return decrypt_credentials(data)
-        except Exception as e:
-            print(f"Error decrypting broker credentials from {creds_enc_file}: {e}")
-    if os.path.exists(creds_file):
-        try:
-            with open(creds_file, "r") as cf:
-                data = json.load(cf)
-                if isinstance(data, dict):
-                    if "ciphertext" in data:
-                        return decrypt_credentials(data)
-                    return data
-        except Exception:
-            pass
+    """Retrieves and decrypts stored broker credentials from AES-256-GCM encrypted storage or session."""
+    paths_enc = [
+        "/var/www/skipthechart/broker_credentials.enc.json",
+        os.path.join(os.path.dirname(__file__), "broker_credentials.enc.json")
+    ]
+    for p in paths_enc:
+        if os.path.exists(p):
+            try:
+                with open(p, "r") as cf:
+                    data = json.load(cf)
+                    res = decrypt_credentials(data)
+                    if res and res.get("api_key"):
+                        return res
+            except Exception as e:
+                print(f"Error decrypting broker credentials from {p}: {e}")
+
+    paths_plain = [
+        "/var/www/skipthechart/broker_credentials.json",
+        os.path.join(os.path.dirname(__file__), "broker_credentials.json")
+    ]
+    for p in paths_plain:
+        if os.path.exists(p):
+            try:
+                with open(p, "r") as cf:
+                    data = json.load(cf)
+                    if isinstance(data, dict):
+                        if "ciphertext" in data:
+                            res = decrypt_credentials(data)
+                            if res and res.get("api_key"):
+                                return res
+                        if data.get("api_key"):
+                            return data
+            except Exception:
+                pass
+
+    paths_session = [
+        "/var/www/skipthechart/flattrade_session.json",
+        os.path.join(os.path.dirname(__file__), "flattrade_session.json")
+    ]
+    for p in paths_session:
+        if os.path.exists(p):
+            try:
+                with open(p, "r") as sf:
+                    sdata = json.load(sf)
+                    if sdata.get("api_key"):
+                        return {
+                            "broker": "flattrade",
+                            "client_code": sdata.get("client_id", ""),
+                            "api_key": sdata.get("api_key", ""),
+                            "api_secret": sdata.get("api_secret", ""),
+                            "totp_secret": sdata.get("totp_secret", "")
+                        }
+            except Exception:
+                pass
+
     return {}
 
 # Active Google OAuth Client ID
@@ -1262,6 +1297,19 @@ class AlgoForgeHandler(http.server.SimpleHTTPRequestHandler):
                 "auth_url": auth_url,
                 "api_key_masked": (api_key[:4] + "***") if len(api_key) >= 4 else "***"
             })
+        elif parsed.path == "/api/broker/flattrade/callback":
+            query = parse_qs(parsed.query)
+            code = query.get("code", [""])[0] or query.get("request_code", [""])[0]
+            if code:
+                self.send_response(302)
+                self.send_header("Location", f"/?code={urllib.parse.quote(code)}")
+                self.end_headers()
+                return
+            else:
+                self.send_response(302)
+                self.send_header("Location", "/")
+                self.end_headers()
+                return
         elif parsed.path == "/api/broker/credentials":
             creds = get_saved_broker_credentials()
 
